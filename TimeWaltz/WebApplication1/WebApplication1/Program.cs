@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Models.Entity;
+
 namespace WebApplication1
 {
     public class Program
@@ -8,7 +11,7 @@ namespace WebApplication1
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddDbContext<TimeWaltzContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("TimeWaltz")));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
