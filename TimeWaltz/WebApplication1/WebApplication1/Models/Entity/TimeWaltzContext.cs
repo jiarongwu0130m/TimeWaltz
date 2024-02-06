@@ -287,6 +287,7 @@ public partial class TimeWaltzContext : DbContext
             entity.Property(e => e.Reason).HasMaxLength(50);
             entity.Property(e => e.StartTime).HasColumnType("datetime");
             entity.Property(e => e.VacationDetailsId).HasColumnName("VacationDetailsID");
+            
 
             entity.HasOne(d => d.AgentEmployee).WithMany(p => p.LeaveRequestAgentEmployees)
                 .HasForeignKey(d => d.AgentEmployeeId)
