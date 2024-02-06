@@ -11,5 +11,5 @@ public partial class RequestStatus
 
     public int TableId { get; set; }
 
-    public int? Status { get; set; }
+    public int Status { get; set; }
 }

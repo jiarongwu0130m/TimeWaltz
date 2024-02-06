@@ -19,9 +19,13 @@ public partial class User
 
     public bool Stop { get; set; }
 
+    public string Salt { get; set; } = null!;
+
     public virtual Department Department { get; set; } = null!;
 
-    public virtual Employee? Employees { get; set; }
+    public virtual UserOfDepartment Id1 { get; set; } = null!;
+
+    public virtual Employee IdNavigation { get; set; } = null!;
 
     public virtual ICollection<UserRoleBind> UserRoleBinds { get; set; } = new List<UserRoleBind>();
 }

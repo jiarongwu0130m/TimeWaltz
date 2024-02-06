@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WebApplication1.Models.Entity;
 
-public partial class CompRequest
+public partial class CompLeave
 {
     public int Id { get; set; }
 
@@ -13,7 +13,7 @@ public partial class CompRequest
 
     public int CompMin { get; set; }
 
-    public virtual OvertiomeApplication Overtime { get; set; } = null!;
+    public virtual ICollection<CompLeaveUseRecord> CompLeaveUseRecords { get; set; } = new List<CompLeaveUseRecord>();
 
-    public virtual VacationDetail VacationDetails { get; set; } = null!;
+    public virtual OvertimeApplication IdNavigation { get; set; } = null!;
 }

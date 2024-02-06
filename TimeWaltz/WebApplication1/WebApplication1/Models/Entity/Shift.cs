@@ -13,8 +13,6 @@ public partial class Shift
 
     public int ShiftScheduleId { get; set; }
 
-    public int MaxAdditionalClockIn { get; set; }
-
     public virtual Employee Employees { get; set; } = null!;
 
     public virtual ShiftSchedule ShiftSchedule { get; set; } = null!;

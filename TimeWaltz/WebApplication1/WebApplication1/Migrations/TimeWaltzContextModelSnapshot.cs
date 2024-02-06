@@ -130,11 +130,51 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AgentEmployeesId");
+                    b.HasIndex(new[] { "AgentEmployeesId" }, "IX_AgentEmployees_AgentEmployeesID");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_AgentEmployees_EmployeesID");
 
                     b.ToTable("AgentEmployees");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.AllLeaveDay", b =>
+                {
+                    b.Property<int>("BereavementLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnName("EmployeeID");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<int>("MaternityCheckUpLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaternityLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PeriodLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonalLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SickLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Special")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WeddingLeave")
+                        .HasColumnType("int");
+
+                    b.ToTable("AllLeaveDays");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.Approval", b =>
@@ -234,14 +274,12 @@ namespace WebApplication1.Migrations
                     b.ToTable("Clock", (string)null);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Entity.CompRequest", b =>
+            modelBuilder.Entity("WebApplication1.Models.Entity.CompLeave", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompMin")
                         .HasColumnType("int");
@@ -254,13 +292,40 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("VacationDetailsID");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_CompRequest");
 
                     b.HasIndex(new[] { "OvertimeId" }, "IX_CompRequest_OvertimeID");
 
                     b.HasIndex(new[] { "VacationDetailsId" }, "IX_CompRequest_VacationDetailsID");
 
-                    b.ToTable("CompRequest", (string)null);
+                    b.ToTable("CompLeave", (string)null);
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.CompLeaveUseRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<int>("CompLeaveId")
+                        .HasColumnType("int")
+                        .HasColumnName("CompLeaveID");
+
+                    b.Property<int>("LeaveRequestId")
+                        .HasColumnType("int")
+                        .HasColumnName("LeaveRequestID");
+
+                    b.Property<int>("UsedTime")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompLeaveId");
+
+                    b.HasIndex("LeaveRequestId");
+
+                    b.ToTable("CompLeaveUseRecord", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.CompanyLocation", b =>
@@ -309,9 +374,6 @@ namespace WebApplication1.Migrations
                     b.Property<int>("EmployeesId")
                         .HasColumnType("int")
                         .HasColumnName("EmployeesID");
-
-                    b.Property<int>("Hierarchy")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -441,7 +503,7 @@ namespace WebApplication1.Migrations
                     b.ToTable("LeaveRequest", (string)null);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Entity.OvertiomeApplication", b =>
+            modelBuilder.Entity("WebApplication1.Models.Entity.OvertimeApplication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -450,8 +512,9 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApprovalEmployee")
-                        .HasColumnType("int");
+                    b.Property<int>("ApprovalEmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnName("ApprovalEmployeeID");
 
                     b.Property<int>("EmployeesId")
                         .HasColumnType("int")
@@ -471,11 +534,14 @@ namespace WebApplication1.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_OvertiomeApplication");
+
+                    b.HasIndex("ApprovalEmployeeId");
 
                     b.HasIndex(new[] { "EmployeesId" }, "IX_OvertiomeApplication_EmployeesID");
 
-                    b.ToTable("OvertiomeApplication", (string)null);
+                    b.ToTable("OvertimeApplication", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.PublicHoliday", b =>
@@ -509,7 +575,7 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<int>("TableId")
@@ -556,9 +622,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("EmployeesID");
 
-                    b.Property<int>("MaxAdditionalClockIn")
-                        .HasColumnType("int");
-
                     b.Property<int>("ShiftScheduleId")
                         .HasColumnType("int")
                         .HasColumnName("ShiftScheduleID");
@@ -589,6 +652,9 @@ namespace WebApplication1.Migrations
 
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("MaxAdditionalClockIn")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ShiftsName")
                         .HasColumnType("datetime");
@@ -630,8 +696,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Account")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -647,11 +711,16 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("PasswordDate")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValueSql("(N'')");
 
                     b.Property<bool>("Stop")
                         .HasColumnType("bit");
@@ -663,6 +732,21 @@ namespace WebApplication1.Migrations
                     b.HasIndex(new[] { "EmployeesId" }, "IX_User_EmployeesID");
 
                     b.ToTable("User", (string)null);
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.UserOfDepartment", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserOfDepartment", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.UserRoleBind", b =>
@@ -747,13 +831,13 @@ namespace WebApplication1.Migrations
                         .WithMany("AdditionalClockInApprovalEmployees")
                         .HasForeignKey("ApprovalEmployeeId")
                         .IsRequired()
-                        .HasConstraintName("FK_AdditionalClockIn_Employees1");
+                        .HasConstraintName("FK_AdditionalClockIn_Employees3");
 
                     b.HasOne("WebApplication1.Models.Entity.Employee", "Employees")
                         .WithMany("AdditionalClockInEmployees")
                         .HasForeignKey("EmployeesId")
                         .IsRequired()
-                        .HasConstraintName("FK_AdditionalClockIn_Employees");
+                        .HasConstraintName("FK_AdditionalClockIn_Employees2");
 
                     b.Navigation("ApprovalEmployee");
 
@@ -801,23 +885,34 @@ namespace WebApplication1.Migrations
                     b.Navigation("Employees");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Entity.CompRequest", b =>
+            modelBuilder.Entity("WebApplication1.Models.Entity.CompLeave", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Entity.OvertiomeApplication", "Overtime")
-                        .WithMany("CompRequests")
-                        .HasForeignKey("OvertimeId")
+                    b.HasOne("WebApplication1.Models.Entity.OvertimeApplication", "IdNavigation")
+                        .WithOne("CompLeave")
+                        .HasForeignKey("WebApplication1.Models.Entity.CompLeave", "Id")
                         .IsRequired()
-                        .HasConstraintName("FK_CompRequest_OvertiomeApplication");
+                        .HasConstraintName("FK_CompLeave_OvertimeApplication");
 
-                    b.HasOne("WebApplication1.Models.Entity.VacationDetail", "VacationDetails")
-                        .WithMany("CompRequests")
-                        .HasForeignKey("VacationDetailsId")
+                    b.Navigation("IdNavigation");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.CompLeaveUseRecord", b =>
+                {
+                    b.HasOne("WebApplication1.Models.Entity.CompLeave", "CompLeave")
+                        .WithMany("CompLeaveUseRecords")
+                        .HasForeignKey("CompLeaveId")
                         .IsRequired()
-                        .HasConstraintName("FK_CompRequest_VacationDetails");
+                        .HasConstraintName("FK_CompLeaveUseRecord_CompLeave");
 
-                    b.Navigation("Overtime");
+                    b.HasOne("WebApplication1.Models.Entity.LeaveRequest", "LeaveRequest")
+                        .WithMany("CompLeaveUseRecords")
+                        .HasForeignKey("LeaveRequestId")
+                        .IsRequired()
+                        .HasConstraintName("FK_CompLeaveUseRecord_LeaveRequest");
 
-                    b.Navigation("VacationDetails");
+                    b.Navigation("CompLeave");
+
+                    b.Navigation("LeaveRequest");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.Department", b =>
@@ -884,13 +979,21 @@ namespace WebApplication1.Migrations
                     b.Navigation("VacationDetails");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Entity.OvertiomeApplication", b =>
+            modelBuilder.Entity("WebApplication1.Models.Entity.OvertimeApplication", b =>
                 {
+                    b.HasOne("WebApplication1.Models.Entity.Employee", "ApprovalEmployee")
+                        .WithMany("OvertimeApplicationApprovalEmployees")
+                        .HasForeignKey("ApprovalEmployeeId")
+                        .IsRequired()
+                        .HasConstraintName("FK_OvertimeApplication_Employees");
+
                     b.HasOne("WebApplication1.Models.Entity.Employee", "Employees")
-                        .WithMany("OvertiomeApplications")
+                        .WithMany("OvertimeApplicationEmployees")
                         .HasForeignKey("EmployeesId")
                         .IsRequired()
                         .HasConstraintName("FK_OvertiomeApplication_Employees");
+
+                    b.Navigation("ApprovalEmployee");
 
                     b.Navigation("Employees");
                 });
@@ -922,14 +1025,23 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_User_Department");
 
-                    b.HasOne("WebApplication1.Models.Entity.Employee", "Employees")
-                        .WithMany("Users")
-                        .HasForeignKey("EmployeesId")
-                        .HasConstraintName("FK_User_Employees");
+                    b.HasOne("WebApplication1.Models.Entity.Employee", "IdNavigation")
+                        .WithOne("User")
+                        .HasForeignKey("WebApplication1.Models.Entity.User", "Id")
+                        .IsRequired()
+                        .HasConstraintName("FK_User_Employees1");
+
+                    b.HasOne("WebApplication1.Models.Entity.UserOfDepartment", "Id1")
+                        .WithOne("User")
+                        .HasForeignKey("WebApplication1.Models.Entity.User", "Id")
+                        .IsRequired()
+                        .HasConstraintName("FK_User_UserOfDepartment");
 
                     b.Navigation("Department");
 
-                    b.Navigation("Employees");
+                    b.Navigation("Id1");
+
+                    b.Navigation("IdNavigation");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.UserRoleBind", b =>
@@ -954,6 +1066,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Access", b =>
                 {
                     b.Navigation("AccessRoleBinds");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.CompLeave", b =>
+                {
+                    b.Navigation("CompLeaveUseRecords");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.Department", b =>
@@ -985,16 +1102,23 @@ namespace WebApplication1.Migrations
 
                     b.Navigation("LeaveRequestEmployees");
 
-                    b.Navigation("OvertiomeApplications");
+                    b.Navigation("OvertimeApplicationApprovalEmployees");
+
+                    b.Navigation("OvertimeApplicationEmployees");
 
                     b.Navigation("Shifts");
 
-                    b.Navigation("Users");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Entity.OvertiomeApplication", b =>
+            modelBuilder.Entity("WebApplication1.Models.Entity.LeaveRequest", b =>
                 {
-                    b.Navigation("CompRequests");
+                    b.Navigation("CompLeaveUseRecords");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.OvertimeApplication", b =>
+                {
+                    b.Navigation("CompLeave");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.Role", b =>
@@ -1016,10 +1140,13 @@ namespace WebApplication1.Migrations
                     b.Navigation("UserRoleBinds");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.Entity.UserOfDepartment", b =>
+                {
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Entity.VacationDetail", b =>
                 {
-                    b.Navigation("CompRequests");
-
                     b.Navigation("LeaveRequests");
                 });
 #pragma warning restore 612, 618

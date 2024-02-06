@@ -17,7 +17,5 @@ public partial class VacationDetail
 
     public decimal MinVacationDays { get; set; }
 
-    public virtual ICollection<CompRequest> CompRequests { get; set; } = new List<CompRequest>();
-
     public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
 }

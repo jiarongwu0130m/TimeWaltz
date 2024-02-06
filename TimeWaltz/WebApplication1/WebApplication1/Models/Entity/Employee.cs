@@ -41,11 +41,13 @@ public partial class Employee
 
     public virtual ICollection<LeaveRequest> LeaveRequestEmployees { get; set; } = new List<LeaveRequest>();
 
-    public virtual ICollection<OvertiomeApplication> OvertiomeApplications { get; set; } = new List<OvertiomeApplication>();
+    public virtual ICollection<OvertimeApplication> OvertimeApplicationApprovalEmployees { get; set; } = new List<OvertimeApplication>();
+
+    public virtual ICollection<OvertimeApplication> OvertimeApplicationEmployees { get; set; } = new List<OvertimeApplication>();
 
     public virtual ShiftSchedule ShiftSchedule { get; set; } = null!;
 
     public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
 
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    public virtual User? User { get; set; }
 }

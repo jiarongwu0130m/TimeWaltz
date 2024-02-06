@@ -29,6 +29,8 @@ public partial class LeaveRequest
 
     public virtual Employee ApprovalEmployee { get; set; } = null!;
 
+    public virtual ICollection<CompLeaveUseRecord> CompLeaveUseRecords { get; set; } = new List<CompLeaveUseRecord>();
+
     public virtual Employee Employees { get; set; } = null!;
 
     public virtual VacationDetail VacationDetails { get; set; } = null!;

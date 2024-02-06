@@ -11,8 +11,6 @@ public partial class Department
 
     public int EmployeesId { get; set; }
 
-    public int Hierarchy { get; set; }
-
     public int? DepartmentId { get; set; }
 
     public virtual Department? DepartmentNavigation { get; set; }

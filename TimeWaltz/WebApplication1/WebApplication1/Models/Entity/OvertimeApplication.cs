@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WebApplication1.Models.Entity;
 
-public partial class OvertiomeApplication
+public partial class OvertimeApplication
 {
     public int Id { get; set; }
 
@@ -17,9 +17,11 @@ public partial class OvertiomeApplication
 
     public bool Status { get; set; }
 
-    public int ApprovalEmployee { get; set; }
+    public int ApprovalEmployeeId { get; set; }
 
-    public virtual ICollection<CompRequest> CompRequests { get; set; } = new List<CompRequest>();
+    public virtual Employee ApprovalEmployee { get; set; } = null!;
+
+    public virtual CompLeave? CompLeave { get; set; }
 
     public virtual Employee Employees { get; set; } = null!;
 }

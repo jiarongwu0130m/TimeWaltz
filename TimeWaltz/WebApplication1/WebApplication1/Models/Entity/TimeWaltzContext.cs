@@ -23,13 +23,17 @@ public partial class TimeWaltzContext : DbContext
 
     public virtual DbSet<AgentEmployee> AgentEmployees { get; set; }
 
+    public virtual DbSet<AllLeaveDay> AllLeaveDays { get; set; }
+
     public virtual DbSet<Approval> Approvals { get; set; }
 
     public virtual DbSet<Billboard> Billboards { get; set; }
 
     public virtual DbSet<Clock> Clocks { get; set; }
 
-    public virtual DbSet<CompRequest> CompRequests { get; set; }
+    public virtual DbSet<CompLeave> CompLeaves { get; set; }
+
+    public virtual DbSet<CompLeaveUseRecord> CompLeaveUseRecords { get; set; }
 
     public virtual DbSet<CompanyLocation> CompanyLocations { get; set; }
 
@@ -41,7 +45,7 @@ public partial class TimeWaltzContext : DbContext
 
     public virtual DbSet<LeaveRequest> LeaveRequests { get; set; }
 
-    public virtual DbSet<OvertiomeApplication> OvertiomeApplications { get; set; }
+    public virtual DbSet<OvertimeApplication> OvertimeApplications { get; set; }
 
     public virtual DbSet<PublicHoliday> PublicHolidays { get; set; }
 
@@ -57,11 +61,15 @@ public partial class TimeWaltzContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserOfDepartment> UserOfDepartments { get; set; }
+
     public virtual DbSet<UserRoleBind> UserRoleBinds { get; set; }
 
     public virtual DbSet<VacationDetail> VacationDetails { get; set; }
 
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=TimeWaltz;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -115,16 +123,20 @@ public partial class TimeWaltzContext : DbContext
             entity.HasOne(d => d.ApprovalEmployee).WithMany(p => p.AdditionalClockInApprovalEmployees)
                 .HasForeignKey(d => d.ApprovalEmployeeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AdditionalClockIn_Employees1");
+                .HasConstraintName("FK_AdditionalClockIn_Employees3");
 
             entity.HasOne(d => d.Employees).WithMany(p => p.AdditionalClockInEmployees)
                 .HasForeignKey(d => d.EmployeesId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AdditionalClockIn_Employees");
+                .HasConstraintName("FK_AdditionalClockIn_Employees2");
         });
 
         modelBuilder.Entity<AgentEmployee>(entity =>
         {
+            entity.HasIndex(e => e.AgentEmployeesId, "IX_AgentEmployees_AgentEmployeesID");
+
+            entity.HasIndex(e => e.EmployeesId, "IX_AgentEmployees_EmployeesID");
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AgentEmployeesId).HasColumnName("AgentEmployeesID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
@@ -138,6 +150,14 @@ public partial class TimeWaltzContext : DbContext
                 .HasForeignKey(d => d.EmployeesId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AgentEmployees_Employees");
+        });
+
+        modelBuilder.Entity<AllLeaveDay>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+            entity.Property(e => e.Id).HasColumnName("ID");
         });
 
         modelBuilder.Entity<Approval>(entity =>
@@ -185,27 +205,47 @@ public partial class TimeWaltzContext : DbContext
                 .HasConstraintName("FK_Clock_Employees");
         });
 
-        modelBuilder.Entity<CompRequest>(entity =>
+        modelBuilder.Entity<CompLeave>(entity =>
         {
-            entity.ToTable("CompRequest");
+            entity.HasKey(e => e.Id).HasName("PK_CompRequest");
+
+            entity.ToTable("CompLeave");
 
             entity.HasIndex(e => e.OvertimeId, "IX_CompRequest_OvertimeID");
 
             entity.HasIndex(e => e.VacationDetailsId, "IX_CompRequest_VacationDetailsID");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ID");
             entity.Property(e => e.OvertimeId).HasColumnName("OvertimeID");
             entity.Property(e => e.VacationDetailsId).HasColumnName("VacationDetailsID");
 
-            entity.HasOne(d => d.Overtime).WithMany(p => p.CompRequests)
-                .HasForeignKey(d => d.OvertimeId)
+            entity.HasOne(d => d.IdNavigation).WithOne(p => p.CompLeave)
+                .HasForeignKey<CompLeave>(d => d.Id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CompRequest_OvertiomeApplication");
+                .HasConstraintName("FK_CompLeave_OvertimeApplication");
+        });
 
-            entity.HasOne(d => d.VacationDetails).WithMany(p => p.CompRequests)
-                .HasForeignKey(d => d.VacationDetailsId)
+        modelBuilder.Entity<CompLeaveUseRecord>(entity =>
+        {
+            entity.ToTable("CompLeaveUseRecord");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.CompLeaveId).HasColumnName("CompLeaveID");
+            entity.Property(e => e.LeaveRequestId).HasColumnName("LeaveRequestID");
+
+            entity.HasOne(d => d.CompLeave).WithMany(p => p.CompLeaveUseRecords)
+                .HasForeignKey(d => d.CompLeaveId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CompRequest_VacationDetails");
+                .HasConstraintName("FK_CompLeaveUseRecord_CompLeave");
+
+            entity.HasOne(d => d.LeaveRequest).WithMany(p => p.CompLeaveUseRecords)
+                .HasForeignKey(d => d.LeaveRequestId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CompLeaveUseRecord_LeaveRequest");
         });
 
         modelBuilder.Entity<CompanyLocation>(entity =>
@@ -287,7 +327,6 @@ public partial class TimeWaltzContext : DbContext
             entity.Property(e => e.Reason).HasMaxLength(50);
             entity.Property(e => e.StartTime).HasColumnType("datetime");
             entity.Property(e => e.VacationDetailsId).HasColumnName("VacationDetailsID");
-            
 
             entity.HasOne(d => d.AgentEmployee).WithMany(p => p.LeaveRequestAgentEmployees)
                 .HasForeignKey(d => d.AgentEmployeeId)
@@ -310,19 +349,27 @@ public partial class TimeWaltzContext : DbContext
                 .HasConstraintName("FK_LeaveRequest_VacationDetails");
         });
 
-        modelBuilder.Entity<OvertiomeApplication>(entity =>
+        modelBuilder.Entity<OvertimeApplication>(entity =>
         {
-            entity.ToTable("OvertiomeApplication");
+            entity.HasKey(e => e.Id).HasName("PK_OvertiomeApplication");
+
+            entity.ToTable("OvertimeApplication");
 
             entity.HasIndex(e => e.EmployeesId, "IX_OvertiomeApplication_EmployeesID");
 
             entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ApprovalEmployeeId).HasColumnName("ApprovalEmployeeID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.Reason).HasMaxLength(50);
             entity.Property(e => e.StartTime).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Employees).WithMany(p => p.OvertiomeApplications)
+            entity.HasOne(d => d.ApprovalEmployee).WithMany(p => p.OvertimeApplicationApprovalEmployees)
+                .HasForeignKey(d => d.ApprovalEmployeeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OvertimeApplication_Employees");
+
+            entity.HasOne(d => d.Employees).WithMany(p => p.OvertimeApplicationEmployees)
                 .HasForeignKey(d => d.EmployeesId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OvertiomeApplication_Employees");
@@ -404,21 +451,38 @@ public partial class TimeWaltzContext : DbContext
 
             entity.HasIndex(e => e.EmployeesId, "IX_User_EmployeesID");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ID");
             entity.Property(e => e.Account).HasMaxLength(50);
             entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
-            entity.Property(e => e.Password).HasMaxLength(50);
             entity.Property(e => e.PasswordDate).HasColumnType("datetime");
+            entity.Property(e => e.Salt).HasDefaultValueSql("(N'')");
 
             entity.HasOne(d => d.Department).WithMany(p => p.Users)
                 .HasForeignKey(d => d.DepartmentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_User_Department");
 
-            entity.HasOne(d => d.Employees).WithMany(p => p.Users)
-                .HasForeignKey(d => d.EmployeesId)
-                .HasConstraintName("FK_User_Employees");
+            entity.HasOne(d => d.IdNavigation).WithOne(p => p.User)
+                .HasForeignKey<User>(d => d.Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_User_Employees1");
+
+            entity.HasOne(d => d.Id1).WithOne(p => p.User)
+                .HasForeignKey<User>(d => d.Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_User_UserOfDepartment");
+        });
+
+        modelBuilder.Entity<UserOfDepartment>(entity =>
+        {
+            entity.ToTable("UserOfDepartment");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
         });
 
         modelBuilder.Entity<UserRoleBind>(entity =>

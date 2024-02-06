@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApplication1.Migrations
 {
     /// <inheritdoc />
-    public partial class resetdatabase : Migration
+    public partial class NewDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,26 @@ namespace WebApplication1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Access", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AllLeaveDays",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
+                    WeddingLeave = table.Column<int>(type: "int", nullable: false),
+                    BereavementLeave = table.Column<int>(type: "int", nullable: false),
+                    SickLeave = table.Column<int>(type: "int", nullable: false),
+                    PersonalLeave = table.Column<int>(type: "int", nullable: false),
+                    PeriodLeave = table.Column<int>(type: "int", nullable: false),
+                    MaternityLeave = table.Column<int>(type: "int", nullable: false),
+                    MaternityCheckUpLeave = table.Column<int>(type: "int", nullable: false),
+                    Special = table.Column<int>(type: "int", nullable: false),
+                    CompLeave = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +113,7 @@ namespace WebApplication1.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TableType = table.Column<int>(type: "int", nullable: false),
                     TableID = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: true)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,7 +142,8 @@ namespace WebApplication1.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     EndTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     ShiftsName = table.Column<DateTime>(type: "datetime", nullable: true),
-                    BreakTime = table.Column<int>(type: "int", nullable: true)
+                    BreakTime = table.Column<int>(type: "int", nullable: true),
+                    MaxAdditionalClockIn = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -141,6 +162,18 @@ namespace WebApplication1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SpacialVacation", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserOfDepartment",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserOfDepartment", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -224,12 +257,12 @@ namespace WebApplication1.Migrations
                 {
                     table.PrimaryKey("PK_AdditionalClockIn", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_AdditionalClockIn_Employees",
+                        name: "FK_AdditionalClockIn_Employees2",
                         column: x => x.EmployeesID,
                         principalTable: "Employees",
                         principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_AdditionalClockIn_Employees1",
+                        name: "FK_AdditionalClockIn_Employees3",
                         column: x => x.ApprovalEmployeeID,
                         principalTable: "Employees",
                         principalColumn: "ID");
@@ -312,7 +345,6 @@ namespace WebApplication1.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DepartmentName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
-                    Hierarchy = table.Column<int>(type: "int", nullable: false),
                     DepartmentID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -343,7 +375,8 @@ namespace WebApplication1.Migrations
                     Reason = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     FileRoute = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     AgentEmployeeID = table.Column<int>(type: "int", nullable: false),
-                    ApprovalEmployeeID = table.Column<int>(type: "int", nullable: false)
+                    ApprovalEmployeeID = table.Column<int>(type: "int", nullable: false),
+                    LeaveHours = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -371,7 +404,7 @@ namespace WebApplication1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OvertiomeApplication",
+                name: "OvertimeApplication",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -381,11 +414,16 @@ namespace WebApplication1.Migrations
                     EndTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    ApprovalEmployee = table.Column<int>(type: "int", nullable: false)
+                    ApprovalEmployeeID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OvertiomeApplication", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_OvertimeApplication_Employees",
+                        column: x => x.ApprovalEmployeeID,
+                        principalTable: "Employees",
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_OvertiomeApplication_Employees",
                         column: x => x.EmployeesID,
@@ -401,8 +439,7 @@ namespace WebApplication1.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ShiftsDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
-                    ShiftScheduleID = table.Column<int>(type: "int", nullable: false),
-                    MaxAdditionalClockIn = table.Column<int>(type: "int", nullable: false)
+                    ShiftScheduleID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -423,14 +460,14 @@ namespace WebApplication1.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ID = table.Column<int>(type: "int", nullable: false),
                     EmployeesID = table.Column<int>(type: "int", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: false),
                     Account = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Stop = table.Column<bool>(type: "bit", nullable: false)
+                    Stop = table.Column<bool>(type: "bit", nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValueSql: "(N'')")
                 },
                 constraints: table =>
                 {
@@ -441,18 +478,22 @@ namespace WebApplication1.Migrations
                         principalTable: "Department",
                         principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_User_Employees",
-                        column: x => x.EmployeesID,
+                        name: "FK_User_Employees1",
+                        column: x => x.ID,
                         principalTable: "Employees",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_User_UserOfDepartment",
+                        column: x => x.ID,
+                        principalTable: "UserOfDepartment",
                         principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "CompRequest",
+                name: "CompLeave",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ID = table.Column<int>(type: "int", nullable: false),
                     VacationDetailsID = table.Column<int>(type: "int", nullable: false),
                     OvertimeID = table.Column<int>(type: "int", nullable: false),
                     CompMin = table.Column<int>(type: "int", nullable: false)
@@ -461,14 +502,9 @@ namespace WebApplication1.Migrations
                 {
                     table.PrimaryKey("PK_CompRequest", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_CompRequest_OvertiomeApplication",
-                        column: x => x.OvertimeID,
-                        principalTable: "OvertiomeApplication",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_CompRequest_VacationDetails",
-                        column: x => x.VacationDetailsID,
-                        principalTable: "VacationDetails",
+                        name: "FK_CompLeave_OvertimeApplication",
+                        column: x => x.ID,
+                        principalTable: "OvertimeApplication",
                         principalColumn: "ID");
                 });
 
@@ -493,6 +529,30 @@ namespace WebApplication1.Migrations
                         name: "FK_UserRoleBind_User",
                         column: x => x.UserID,
                         principalTable: "User",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompLeaveUseRecord",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false),
+                    LeaveRequestID = table.Column<int>(type: "int", nullable: false),
+                    UsedTime = table.Column<int>(type: "int", nullable: false),
+                    CompLeaveID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompLeaveUseRecord", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CompLeaveUseRecord_CompLeave",
+                        column: x => x.CompLeaveID,
+                        principalTable: "CompLeave",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_CompLeaveUseRecord_LeaveRequest",
+                        column: x => x.LeaveRequestID,
+                        principalTable: "LeaveRequest",
                         principalColumn: "ID");
                 });
 
@@ -538,13 +598,23 @@ namespace WebApplication1.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_CompRequest_OvertimeID",
-                table: "CompRequest",
+                table: "CompLeave",
                 column: "OvertimeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CompRequest_VacationDetailsID",
-                table: "CompRequest",
+                table: "CompLeave",
                 column: "VacationDetailsID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompLeaveUseRecord_CompLeaveID",
+                table: "CompLeaveUseRecord",
+                column: "CompLeaveID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompLeaveUseRecord_LeaveRequestID",
+                table: "CompLeaveUseRecord",
+                column: "LeaveRequestID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Department_DepartmentID",
@@ -582,8 +652,13 @@ namespace WebApplication1.Migrations
                 column: "VacationDetailsID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OvertimeApplication_ApprovalEmployeeID",
+                table: "OvertimeApplication",
+                column: "ApprovalEmployeeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OvertiomeApplication_EmployeesID",
-                table: "OvertiomeApplication",
+                table: "OvertimeApplication",
                 column: "EmployeesID");
 
             migrationBuilder.CreateIndex(
@@ -630,6 +705,9 @@ namespace WebApplication1.Migrations
                 name: "AgentEmployees");
 
             migrationBuilder.DropTable(
+                name: "AllLeaveDays");
+
+            migrationBuilder.DropTable(
                 name: "Approval");
 
             migrationBuilder.DropTable(
@@ -642,13 +720,10 @@ namespace WebApplication1.Migrations
                 name: "CompanyLocation");
 
             migrationBuilder.DropTable(
-                name: "CompRequest");
+                name: "CompLeaveUseRecord");
 
             migrationBuilder.DropTable(
                 name: "Flextime");
-
-            migrationBuilder.DropTable(
-                name: "LeaveRequest");
 
             migrationBuilder.DropTable(
                 name: "PublicHoliday");
@@ -669,10 +744,10 @@ namespace WebApplication1.Migrations
                 name: "Access");
 
             migrationBuilder.DropTable(
-                name: "OvertiomeApplication");
+                name: "CompLeave");
 
             migrationBuilder.DropTable(
-                name: "VacationDetails");
+                name: "LeaveRequest");
 
             migrationBuilder.DropTable(
                 name: "Role");
@@ -681,7 +756,16 @@ namespace WebApplication1.Migrations
                 name: "User");
 
             migrationBuilder.DropTable(
+                name: "OvertimeApplication");
+
+            migrationBuilder.DropTable(
+                name: "VacationDetails");
+
+            migrationBuilder.DropTable(
                 name: "Department");
+
+            migrationBuilder.DropTable(
+                name: "UserOfDepartment");
 
             migrationBuilder.DropTable(
                 name: "Employees");
