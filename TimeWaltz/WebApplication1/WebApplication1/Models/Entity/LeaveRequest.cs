@@ -23,6 +23,8 @@ public partial class LeaveRequest
 
     public int ApprovalEmployeeId { get; set; }
 
+    public int LeaveHours { get; set; }
+
     public virtual Employee AgentEmployee { get; set; } = null!;
 
     public virtual Employee ApprovalEmployee { get; set; } = null!;
