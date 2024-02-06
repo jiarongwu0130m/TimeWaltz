@@ -61,7 +61,7 @@ public partial class TimeWaltzContext : DbContext
 
     public virtual DbSet<VacationDetail> VacationDetails { get; set; }
 
-    
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,9 +69,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("Access");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Action).HasMaxLength(50);
             entity.Property(e => e.Controller).HasMaxLength(50);
             entity.Property(e => e.ManuName).HasMaxLength(50);
@@ -81,9 +79,11 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("AccessRoleBind");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.AccessId, "IX_AccessRoleBind_AccessID");
+
+            entity.HasIndex(e => e.RoleId, "IX_AccessRoleBind_RoleID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AccessId).HasColumnName("AccessID");
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
@@ -102,9 +102,11 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("AdditionalClockIn");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.ApprovalEmployeeId, "IX_AdditionalClockIn_ApprovalEmployeeID");
+
+            entity.HasIndex(e => e.EmployeesId, "IX_AdditionalClockIn_EmployeesID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AdditionalTime).HasColumnType("datetime");
             entity.Property(e => e.ApprovalEmployeeId).HasColumnName("ApprovalEmployeeID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
@@ -123,20 +125,26 @@ public partial class TimeWaltzContext : DbContext
 
         modelBuilder.Entity<AgentEmployee>(entity =>
         {
-            entity.HasNoKey();
-
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AgentEmployeesId).HasColumnName("AgentEmployeesID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
-            entity.Property(e => e.Id).HasColumnName("ID");
+
+            entity.HasOne(d => d.AgentEmployees).WithMany(p => p.AgentEmployeeAgentEmployees)
+                .HasForeignKey(d => d.AgentEmployeesId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AgentEmployees_Employees1");
+
+            entity.HasOne(d => d.Employees).WithMany(p => p.AgentEmployeeEmployees)
+                .HasForeignKey(d => d.EmployeesId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AgentEmployees_Employees");
         });
 
         modelBuilder.Entity<Approval>(entity =>
         {
             entity.ToTable("Approval");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Remark).HasMaxLength(50);
             entity.Property(e => e.TableId).HasColumnName("TableID");
         });
@@ -145,9 +153,9 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("Billboard");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.EmployeesId, "IX_Billboard_EmployeesID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.StartTime).HasColumnType("datetime");
@@ -163,9 +171,9 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("Clock");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.EmployeesId, "IX_Clock_EmployeesID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
             entity.Property(e => e.Latitude).HasColumnType("decimal(18, 0)");
@@ -181,9 +189,11 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("CompRequest");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.OvertimeId, "IX_CompRequest_OvertimeID");
+
+            entity.HasIndex(e => e.VacationDetailsId, "IX_CompRequest_VacationDetailsID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.OvertimeId).HasColumnName("OvertimeID");
             entity.Property(e => e.VacationDetailsId).HasColumnName("VacationDetailsID");
 
@@ -202,9 +212,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("CompanyLocation");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Latitude).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Longitude).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Name).HasMaxLength(50);
@@ -214,9 +222,11 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("Department");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.DepartmentId, "IX_Department_DepartmentID");
+
+            entity.HasIndex(e => e.EmployeesId, "IX_Department_EmployeesID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
             entity.Property(e => e.DepartmentName).HasMaxLength(50);
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
@@ -233,9 +243,9 @@ public partial class TimeWaltzContext : DbContext
 
         modelBuilder.Entity<Employee>(entity =>
         {
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.ShiftScheduleId, "IX_Employees_ShiftScheduleID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.EmployeesNo).HasMaxLength(50);
@@ -253,18 +263,22 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("Flextime");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
         });
 
         modelBuilder.Entity<LeaveRequest>(entity =>
         {
             entity.ToTable("LeaveRequest");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.AgentEmployeeId, "IX_LeaveRequest_AgentEmployeeID");
+
+            entity.HasIndex(e => e.ApprovalEmployeeId, "IX_LeaveRequest_ApprovalEmployeeID");
+
+            entity.HasIndex(e => e.EmployeesId, "IX_LeaveRequest_EmployeesID");
+
+            entity.HasIndex(e => e.VacationDetailsId, "IX_LeaveRequest_VacationDetailsID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AgentEmployeeId).HasColumnName("AgentEmployeeID");
             entity.Property(e => e.ApprovalEmployeeId).HasColumnName("ApprovalEmployeeID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
@@ -299,9 +313,9 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("OvertiomeApplication");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.EmployeesId, "IX_OvertiomeApplication_EmployeesID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.Reason).HasMaxLength(50);
@@ -317,9 +331,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("PublicHoliday");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.HolidayName).HasMaxLength(50);
         });
@@ -328,9 +340,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("RequestStatus");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.TableId).HasColumnName("TableID");
         });
 
@@ -338,9 +348,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("Role");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.RoleName).HasMaxLength(50);
         });
 
@@ -348,9 +356,11 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("Shift");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.EmployeesId, "IX_Shift_EmployeesID");
+
+            entity.HasIndex(e => e.ShiftScheduleId, "IX_Shift_ShiftScheduleID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
             entity.Property(e => e.ShiftScheduleId).HasColumnName("ShiftScheduleID");
             entity.Property(e => e.ShiftsDate).HasColumnType("datetime");
@@ -370,9 +380,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("ShiftSchedule");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.ShiftsName).HasColumnType("datetime");
             entity.Property(e => e.StartTime).HasColumnType("datetime");
@@ -382,9 +390,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("SpacialVacation");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.SpacialVacationName).HasMaxLength(50);
         });
@@ -393,9 +399,11 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("User");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.DepartmentId, "IX_User_DepartmentID");
+
+            entity.HasIndex(e => e.EmployeesId, "IX_User_EmployeesID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Account).HasMaxLength(50);
             entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
@@ -416,9 +424,11 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("UserRoleBind");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.HasIndex(e => e.RoleId, "IX_UserRoleBind_RoleID");
+
+            entity.HasIndex(e => e.UserId, "IX_UserRoleBind_UserID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -435,9 +445,7 @@ public partial class TimeWaltzContext : DbContext
 
         modelBuilder.Entity<VacationDetail>(entity =>
         {
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.MinVacationDays).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.VacationType).HasMaxLength(20);
         });

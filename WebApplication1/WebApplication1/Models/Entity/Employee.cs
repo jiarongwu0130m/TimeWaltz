@@ -25,6 +25,10 @@ public partial class Employee
 
     public virtual ICollection<AdditionalClockIn> AdditionalClockInEmployees { get; set; } = new List<AdditionalClockIn>();
 
+    public virtual ICollection<AgentEmployee> AgentEmployeeAgentEmployees { get; set; } = new List<AgentEmployee>();
+
+    public virtual ICollection<AgentEmployee> AgentEmployeeEmployees { get; set; } = new List<AgentEmployee>();
+
     public virtual ICollection<Billboard> Billboards { get; set; } = new List<Billboard>();
 
     public virtual ICollection<Clock> Clocks { get; set; } = new List<Clock>();

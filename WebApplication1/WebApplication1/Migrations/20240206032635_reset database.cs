@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApplication1.Migrations
 {
     /// <inheritdoc />
-    public partial class adddatabaseuseentity : Migration
+    public partial class resetdatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,8 @@ namespace WebApplication1.Migrations
                 name: "Access",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ManuName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Controller = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Action = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
@@ -26,22 +27,11 @@ namespace WebApplication1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AgentEmployees",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false),
-                    EmployeesID = table.Column<int>(type: "int", nullable: false),
-                    AgentEmployeesID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Approval",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TableType = table.Column<int>(type: "int", nullable: false),
                     TableID = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: true),
@@ -56,7 +46,8 @@ namespace WebApplication1.Migrations
                 name: "CompanyLocation",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Latitude = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     Longitude = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
@@ -70,7 +61,8 @@ namespace WebApplication1.Migrations
                 name: "Flextime",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     FlexibleTime = table.Column<int>(type: "int", nullable: true),
                     MoveUp = table.Column<bool>(type: "bit", nullable: true)
                 },
@@ -83,7 +75,8 @@ namespace WebApplication1.Migrations
                 name: "PublicHoliday",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     HolidayName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -96,7 +89,8 @@ namespace WebApplication1.Migrations
                 name: "RequestStatus",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TableType = table.Column<int>(type: "int", nullable: false),
                     TableID = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: true)
@@ -110,7 +104,8 @@ namespace WebApplication1.Migrations
                 name: "Role",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -122,7 +117,8 @@ namespace WebApplication1.Migrations
                 name: "ShiftSchedule",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     StartTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     EndTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     ShiftsName = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -137,7 +133,8 @@ namespace WebApplication1.Migrations
                 name: "SpacialVacation",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     SpacialVacationName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -150,7 +147,8 @@ namespace WebApplication1.Migrations
                 name: "VacationDetails",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     VacationType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Gender = table.Column<bool>(type: "bit", nullable: false),
                     NumberOfDays = table.Column<int>(type: "int", nullable: false),
@@ -166,7 +164,8 @@ namespace WebApplication1.Migrations
                 name: "AccessRoleBind",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     AccessID = table.Column<int>(type: "int", nullable: false),
                     RoleID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -189,7 +188,8 @@ namespace WebApplication1.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ShiftScheduleID = table.Column<int>(type: "int", nullable: false),
                     DepartmentID = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -212,7 +212,8 @@ namespace WebApplication1.Migrations
                 name: "AdditionalClockIn",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
                     AdditionalTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -235,10 +236,35 @@ namespace WebApplication1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AgentEmployees",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeesID = table.Column<int>(type: "int", nullable: false),
+                    AgentEmployeesID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AgentEmployees", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_AgentEmployees_Employees",
+                        column: x => x.EmployeesID,
+                        principalTable: "Employees",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_AgentEmployees_Employees1",
+                        column: x => x.AgentEmployeesID,
+                        principalTable: "Employees",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Billboard",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartTime = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -260,7 +286,8 @@ namespace WebApplication1.Migrations
                 name: "Clock",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -281,7 +308,8 @@ namespace WebApplication1.Migrations
                 name: "Department",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     DepartmentName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
                     Hierarchy = table.Column<int>(type: "int", nullable: false),
@@ -306,7 +334,8 @@ namespace WebApplication1.Migrations
                 name: "LeaveRequest",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -345,7 +374,8 @@ namespace WebApplication1.Migrations
                 name: "OvertiomeApplication",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -367,7 +397,8 @@ namespace WebApplication1.Migrations
                 name: "Shift",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ShiftsDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
                     ShiftScheduleID = table.Column<int>(type: "int", nullable: false),
@@ -392,7 +423,8 @@ namespace WebApplication1.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeesID = table.Column<int>(type: "int", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: false),
                     Account = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -419,7 +451,8 @@ namespace WebApplication1.Migrations
                 name: "CompRequest",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     VacationDetailsID = table.Column<int>(type: "int", nullable: false),
                     OvertimeID = table.Column<int>(type: "int", nullable: false),
                     CompMin = table.Column<int>(type: "int", nullable: false)
@@ -443,7 +476,8 @@ namespace WebApplication1.Migrations
                 name: "UserRoleBind",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserID = table.Column<int>(type: "int", nullable: false),
                     RoleID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -480,6 +514,16 @@ namespace WebApplication1.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AdditionalClockIn_EmployeesID",
                 table: "AdditionalClockIn",
+                column: "EmployeesID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AgentEmployees_AgentEmployeesID",
+                table: "AgentEmployees",
+                column: "AgentEmployeesID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AgentEmployees_EmployeesID",
+                table: "AgentEmployees",
                 column: "EmployeesID");
 
             migrationBuilder.CreateIndex(

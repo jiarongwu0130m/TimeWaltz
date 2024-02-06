@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models.Entity;
 
@@ -11,9 +12,11 @@ using WebApplication1.Models.Entity;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(TimeWaltzContext))]
-    partial class TimeWaltzContextModelSnapshot : ModelSnapshot
+    [Migration("20240206032635_reset database")]
+    partial class resetdatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,8 +28,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Access", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Action")
                         .HasMaxLength(50)
@@ -49,8 +55,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.AccessRoleBind", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessId")
                         .HasColumnType("int")
@@ -62,9 +71,9 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccessId");
+                    b.HasIndex(new[] { "AccessId" }, "IX_AccessRoleBind_AccessID");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex(new[] { "RoleId" }, "IX_AccessRoleBind_RoleID");
 
                     b.ToTable("AccessRoleBind", (string)null);
                 });
@@ -72,8 +81,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.AdditionalClockIn", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AdditionalTime")
                         .HasColumnType("datetime");
@@ -95,15 +107,22 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApprovalEmployeeId");
+                    b.HasIndex(new[] { "ApprovalEmployeeId" }, "IX_AdditionalClockIn_ApprovalEmployeeID");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_AdditionalClockIn_EmployeesID");
 
                     b.ToTable("AdditionalClockIn", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.AgentEmployee", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("AgentEmployeesId")
                         .HasColumnType("int")
                         .HasColumnName("AgentEmployeesID");
@@ -112,9 +131,11 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("EmployeesID");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("ID");
+                    b.HasKey("Id");
+
+                    b.HasIndex("AgentEmployeesId");
+
+                    b.HasIndex("EmployeesId");
 
                     b.ToTable("AgentEmployees");
                 });
@@ -122,8 +143,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Approval", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Remark")
                         .HasMaxLength(50)
@@ -147,8 +171,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Billboard", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -173,7 +200,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_Billboard_EmployeesID");
 
                     b.ToTable("Billboard", (string)null);
                 });
@@ -181,8 +208,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Clock", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
@@ -202,7 +232,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_Clock_EmployeesID");
 
                     b.ToTable("Clock", (string)null);
                 });
@@ -210,8 +240,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.CompRequest", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompMin")
                         .HasColumnType("int");
@@ -226,9 +259,9 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OvertimeId");
+                    b.HasIndex(new[] { "OvertimeId" }, "IX_CompRequest_OvertimeID");
 
-                    b.HasIndex("VacationDetailsId");
+                    b.HasIndex(new[] { "VacationDetailsId" }, "IX_CompRequest_VacationDetailsID");
 
                     b.ToTable("CompRequest", (string)null);
                 });
@@ -236,8 +269,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.CompanyLocation", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(18, 0)");
@@ -258,8 +294,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Department", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int")
@@ -279,9 +318,9 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex(new[] { "DepartmentId" }, "IX_Department_DepartmentID");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_Department_EmployeesID");
 
                     b.ToTable("Department", (string)null);
                 });
@@ -289,8 +328,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Employee", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int")
@@ -322,7 +364,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ShiftScheduleId");
+                    b.HasIndex(new[] { "ShiftScheduleId" }, "IX_Employees_ShiftScheduleID");
 
                     b.ToTable("Employees");
                 });
@@ -330,8 +372,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Flextime", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("FlexibleTime")
                         .HasColumnType("int");
@@ -347,8 +392,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.LeaveRequest", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AgentEmployeeId")
                         .HasColumnType("int")
@@ -382,13 +430,13 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AgentEmployeeId");
+                    b.HasIndex(new[] { "AgentEmployeeId" }, "IX_LeaveRequest_AgentEmployeeID");
 
-                    b.HasIndex("ApprovalEmployeeId");
+                    b.HasIndex(new[] { "ApprovalEmployeeId" }, "IX_LeaveRequest_ApprovalEmployeeID");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_LeaveRequest_EmployeesID");
 
-                    b.HasIndex("VacationDetailsId");
+                    b.HasIndex(new[] { "VacationDetailsId" }, "IX_LeaveRequest_VacationDetailsID");
 
                     b.ToTable("LeaveRequest", (string)null);
                 });
@@ -396,8 +444,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.OvertiomeApplication", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ApprovalEmployee")
                         .HasColumnType("int");
@@ -422,7 +473,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_OvertiomeApplication_EmployeesID");
 
                     b.ToTable("OvertiomeApplication", (string)null);
                 });
@@ -430,8 +481,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.PublicHoliday", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
@@ -449,8 +503,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.RequestStatus", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -470,8 +527,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Role", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("RoleName")
                         .IsRequired()
@@ -486,8 +546,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.Shift", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EmployeesId")
                         .HasColumnType("int")
@@ -505,9 +568,9 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_Shift_EmployeesID");
 
-                    b.HasIndex("ShiftScheduleId");
+                    b.HasIndex(new[] { "ShiftScheduleId" }, "IX_Shift_ShiftScheduleID");
 
                     b.ToTable("Shift", (string)null);
                 });
@@ -515,8 +578,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.ShiftSchedule", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("BreakTime")
                         .HasColumnType("int");
@@ -538,8 +604,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.SpacialVacation", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
@@ -557,8 +626,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.User", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Account")
                         .IsRequired()
@@ -586,9 +658,9 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex(new[] { "DepartmentId" }, "IX_User_DepartmentID");
 
-                    b.HasIndex("EmployeesId");
+                    b.HasIndex(new[] { "EmployeesId" }, "IX_User_EmployeesID");
 
                     b.ToTable("User", (string)null);
                 });
@@ -596,8 +668,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.UserRoleBind", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int")
@@ -609,9 +684,9 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex(new[] { "RoleId" }, "IX_UserRoleBind_RoleID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex(new[] { "UserId" }, "IX_UserRoleBind_UserID");
 
                     b.ToTable("UserRoleBind", (string)null);
                 });
@@ -619,8 +694,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.VacationDetail", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Cycle")
                         .HasColumnType("int");
@@ -678,6 +756,25 @@ namespace WebApplication1.Migrations
                         .HasConstraintName("FK_AdditionalClockIn_Employees");
 
                     b.Navigation("ApprovalEmployee");
+
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.AgentEmployee", b =>
+                {
+                    b.HasOne("WebApplication1.Models.Entity.Employee", "AgentEmployees")
+                        .WithMany("AgentEmployeeAgentEmployees")
+                        .HasForeignKey("AgentEmployeesId")
+                        .IsRequired()
+                        .HasConstraintName("FK_AgentEmployees_Employees1");
+
+                    b.HasOne("WebApplication1.Models.Entity.Employee", "Employees")
+                        .WithMany("AgentEmployeeEmployees")
+                        .HasForeignKey("EmployeesId")
+                        .IsRequired()
+                        .HasConstraintName("FK_AgentEmployees_Employees");
+
+                    b.Navigation("AgentEmployees");
 
                     b.Navigation("Employees");
                 });
@@ -871,6 +968,10 @@ namespace WebApplication1.Migrations
                     b.Navigation("AdditionalClockInApprovalEmployees");
 
                     b.Navigation("AdditionalClockInEmployees");
+
+                    b.Navigation("AgentEmployeeAgentEmployees");
+
+                    b.Navigation("AgentEmployeeEmployees");
 
                     b.Navigation("Billboards");
 
