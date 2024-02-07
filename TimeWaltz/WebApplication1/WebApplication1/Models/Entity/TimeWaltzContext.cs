@@ -67,7 +67,8 @@ public partial class TimeWaltzContext : DbContext
 
     public virtual DbSet<VacationDetail> VacationDetails { get; set; }
 
-   
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Access>(entity =>
