@@ -791,7 +791,7 @@ namespace WebApplication1.Migrations
 
                     b.Property<int>("VacationType")
                         .HasMaxLength(50)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
