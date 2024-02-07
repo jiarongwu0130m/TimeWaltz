@@ -7,7 +7,7 @@ public partial class Employee
 {
     public int Id { get; set; }
 
-    public int ShiftScheduleId { get; set; }
+    public int? ShiftScheduleId { get; set; }
 
     public int DepartmentId { get; set; }
 
@@ -43,7 +43,7 @@ public partial class Employee
 
     public virtual ICollection<OvertimeApplication> OvertimeApplicationEmployees { get; set; } = new List<OvertimeApplication>();
 
-    public virtual ShiftSchedule ShiftSchedule { get; set; } = null!;
+    public virtual ShiftSchedule? ShiftSchedule { get; set; }
 
     public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
 

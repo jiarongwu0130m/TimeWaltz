@@ -67,10 +67,7 @@ public partial class TimeWaltzContext : DbContext
 
     public virtual DbSet<VacationDetail> VacationDetails { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=TimeWaltz;Integrated Security=True;Trust Server Certificate=True");
-
+   
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Access>(entity =>
@@ -157,7 +154,11 @@ public partial class TimeWaltzContext : DbContext
             entity.HasNoKey();
 
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
-            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ID");
+            entity.Property(e => e.VacationDetailsId).HasColumnName("VacationDetailsID");
+            entity.Property(e => e.VacationHoursRemain).HasDefaultValueSql("((0))");
         });
 
         modelBuilder.Entity<Approval>(entity =>
@@ -284,7 +285,6 @@ public partial class TimeWaltzContext : DbContext
 
             entity.HasOne(d => d.ShiftSchedule).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.ShiftScheduleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Employees_ShiftSchedule");
         });
 
@@ -419,7 +419,7 @@ public partial class TimeWaltzContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.EndTime).HasColumnType("datetime");
-            entity.Property(e => e.ShiftsName).HasColumnType("datetime");
+            entity.Property(e => e.ShiftsName).HasMaxLength(50);
             entity.Property(e => e.StartTime).HasColumnType("datetime");
         });
 
@@ -498,7 +498,7 @@ public partial class TimeWaltzContext : DbContext
         modelBuilder.Entity<VacationDetail>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.MinVacationDays).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.VacationType).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -7,13 +7,13 @@ public partial class ShiftSchedule
 {
     public int Id { get; set; }
 
-    public DateTime? StartTime { get; set; }
+    public DateTime StartTime { get; set; }
 
-    public DateTime? EndTime { get; set; }
+    public DateTime EndTime { get; set; }
 
-    public DateTime? ShiftsName { get; set; }
+    public string ShiftsName { get; set; } = null!;
 
-    public int? BreakTime { get; set; }
+    public int BreakTime { get; set; }
 
     public int MaxAdditionalClockIn { get; set; }
 
