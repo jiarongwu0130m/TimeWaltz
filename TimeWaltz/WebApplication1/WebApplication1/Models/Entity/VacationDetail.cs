@@ -8,7 +8,7 @@ public partial class VacationDetail
 {
     public int Id { get; set; }
 
-    public VacationTypeEnum VacationType { get; set; }
+    public string VacationType { get; set; }
 
     public bool? Gender { get; set; }
 
