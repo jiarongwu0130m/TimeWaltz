@@ -796,10 +796,9 @@ namespace WebApplication1.Migrations
                     b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
 
-                    b.Property<string>("VacationType")
-                        .IsRequired()
+                    b.Property<int>("VacationType")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

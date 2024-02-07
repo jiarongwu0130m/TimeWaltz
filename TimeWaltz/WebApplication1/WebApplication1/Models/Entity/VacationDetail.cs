@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Models.Entity;
 
@@ -7,13 +8,13 @@ public partial class VacationDetail
 {
     public int Id { get; set; }
 
-    public string VacationType { get; set; } = null!;
+    public VacationTypeEnum VacationType { get; set; }
 
     public bool Gender { get; set; }
 
     public int NumberOfDays { get; set; }
 
-    public int Cycle { get; set; }
+    public CycleEnum Cycle { get; set; }
 
     public decimal MinVacationDays { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Models.Entity;
 
@@ -11,7 +12,7 @@ public partial class AdditionalClockIn
 
     public DateTime AdditionalTime { get; set; }
 
-    public int Status { get; set; }
+    public ClockStatusEnum Status { get; set; }
 
     public string? Reason { get; set; }
 
