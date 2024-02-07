@@ -4,8 +4,6 @@
     {
         Overtime = 0,
         Leave = 1,
-        AdditionalClockIn = 2,
-        AdditionalClockOut = 3,
-
+        AdditionalClockIn = 2        
     }
 }
