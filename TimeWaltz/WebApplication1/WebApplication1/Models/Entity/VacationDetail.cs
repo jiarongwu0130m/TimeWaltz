@@ -10,13 +10,13 @@ public partial class VacationDetail
 
     public VacationTypeEnum VacationType { get; set; }
 
-    public bool Gender { get; set; }
+    public bool? Gender { get; set; }
 
     public int NumberOfDays { get; set; }
 
     public CycleEnum Cycle { get; set; }
 
-    public decimal MinVacationDays { get; set; }
+    public int MinVacationHours { get; set; }
 
     public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
 }
