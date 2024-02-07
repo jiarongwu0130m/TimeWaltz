@@ -231,9 +231,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("CompLeaveUseRecord");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CompLeaveId).HasColumnName("CompLeaveID");
             entity.Property(e => e.LeaveRequestId).HasColumnName("LeaveRequestID");
 
@@ -270,15 +268,6 @@ public partial class TimeWaltzContext : DbContext
             entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
             entity.Property(e => e.DepartmentName).HasMaxLength(50);
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
-
-            entity.HasOne(d => d.DepartmentNavigation).WithMany(p => p.InverseDepartmentNavigation)
-                .HasForeignKey(d => d.DepartmentId)
-                .HasConstraintName("FK_Department_Department");
-
-            entity.HasOne(d => d.Employees).WithMany(p => p.Departments)
-                .HasForeignKey(d => d.EmployeesId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Department_Employees");
         });
 
         modelBuilder.Entity<Employee>(entity =>
@@ -480,9 +469,7 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("UserOfDepartment");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
         });
 
         modelBuilder.Entity<UserRoleBind>(entity =>
@@ -512,7 +499,6 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.MinVacationDays).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.VacationType).HasMaxLength(20);
         });
 
         OnModelCreatingPartial(modelBuilder);

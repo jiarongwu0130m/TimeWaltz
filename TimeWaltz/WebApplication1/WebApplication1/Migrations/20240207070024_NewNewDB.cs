@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApplication1.Migrations
 {
     /// <inheritdoc />
-    public partial class NewDB : Migration
+    public partial class NewNewDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,6 +75,21 @@ namespace WebApplication1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CompanyLocation", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Department",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DepartmentName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    EmployeesID = table.Column<int>(type: "int", nullable: false),
+                    DepartmentID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Department", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -168,7 +183,8 @@ namespace WebApplication1.Migrations
                 name: "UserOfDepartment",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -182,7 +198,7 @@ namespace WebApplication1.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VacationType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    VacationType = table.Column<int>(type: "int", nullable: false),
                     Gender = table.Column<bool>(type: "bit", nullable: false),
                     NumberOfDays = table.Column<int>(type: "int", nullable: false),
                     Cycle = table.Column<int>(type: "int", nullable: false),
@@ -332,31 +348,6 @@ namespace WebApplication1.Migrations
                     table.PrimaryKey("PK_Clock", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Clock_Employees",
-                        column: x => x.EmployeesID,
-                        principalTable: "Employees",
-                        principalColumn: "ID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Department",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DepartmentName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    EmployeesID = table.Column<int>(type: "int", nullable: false),
-                    DepartmentID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Department", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Department_Department",
-                        column: x => x.DepartmentID,
-                        principalTable: "Department",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_Department_Employees",
                         column: x => x.EmployeesID,
                         principalTable: "Employees",
                         principalColumn: "ID");
@@ -536,7 +527,8 @@ namespace WebApplication1.Migrations
                 name: "CompLeaveUseRecord",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     LeaveRequestID = table.Column<int>(type: "int", nullable: false),
                     UsedTime = table.Column<int>(type: "int", nullable: false),
                     CompLeaveID = table.Column<int>(type: "int", nullable: false)

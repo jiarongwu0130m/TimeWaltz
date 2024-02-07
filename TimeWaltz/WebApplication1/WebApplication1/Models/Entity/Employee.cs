@@ -33,8 +33,6 @@ public partial class Employee
 
     public virtual ICollection<Clock> Clocks { get; set; } = new List<Clock>();
 
-    public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
-
     public virtual ICollection<LeaveRequest> LeaveRequestAgentEmployees { get; set; } = new List<LeaveRequest>();
 
     public virtual ICollection<LeaveRequest> LeaveRequestApprovalEmployees { get; set; } = new List<LeaveRequest>();

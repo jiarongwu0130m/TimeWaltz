@@ -305,8 +305,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.CompLeaveUseRecord", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompLeaveId")
                         .HasColumnType("int")
@@ -737,8 +740,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Entity.UserOfDepartment", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -797,7 +803,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("VacationType")
-                        .HasMaxLength(20)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -912,23 +917,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("CompLeave");
 
                     b.Navigation("LeaveRequest");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Entity.Department", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Entity.Department", "DepartmentNavigation")
-                        .WithMany("InverseDepartmentNavigation")
-                        .HasForeignKey("DepartmentId");
-
-                    b.HasOne("WebApplication1.Models.Entity.Employee", "Employees")
-                        .WithMany("Departments")
-                        .HasForeignKey("EmployeesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DepartmentNavigation");
-
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.Employee", b =>
@@ -1073,8 +1061,6 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Entity.Department", b =>
                 {
-                    b.Navigation("InverseDepartmentNavigation");
-
                     b.Navigation("Users");
                 });
 
@@ -1091,8 +1077,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("Billboards");
 
                     b.Navigation("Clocks");
-
-                    b.Navigation("Departments");
 
                     b.Navigation("LeaveRequestAgentEmployees");
 

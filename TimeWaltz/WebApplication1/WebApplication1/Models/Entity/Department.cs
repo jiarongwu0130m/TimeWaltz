@@ -13,11 +13,5 @@ public partial class Department
 
     public int? DepartmentId { get; set; }
 
-    public virtual Department? DepartmentNavigation { get; set; }
-
-    public virtual Employee Employees { get; set; } = null!;
-
-    public virtual ICollection<Department> InverseDepartmentNavigation { get; set; } = new List<Department>();
-
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

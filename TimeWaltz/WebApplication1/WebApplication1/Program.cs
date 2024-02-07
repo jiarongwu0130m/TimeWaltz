@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models.Entity;
 
+
 namespace WebApplication1
 {
     public class Program
