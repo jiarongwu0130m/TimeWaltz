@@ -918,14 +918,13 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.Models.Entity.Department", "DepartmentNavigation")
                         .WithMany("InverseDepartmentNavigation")
-                        .HasForeignKey("DepartmentId")
-                        .HasConstraintName("FK_Department_Department");
+                        .HasForeignKey("DepartmentId");
 
                     b.HasOne("WebApplication1.Models.Entity.Employee", "Employees")
                         .WithMany("Departments")
                         .HasForeignKey("EmployeesId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Department_Employees");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DepartmentNavigation");
 
