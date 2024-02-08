@@ -3,16 +3,10 @@ using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Helpers
 {
-    public class ViewModelToEntity
+    public class ViewModelHelper
     {
-        private readonly TimeWaltzContext _context;
-        public ViewModelToEntity(TimeWaltzContext context)
-        {
-            _context = context;
-        }
-        public static VacationDetail ConvertToEntity(VacationTypeViewModel model)
-        {
-            
+        public static VacationDetail ToEntity(VacationTypeViewModel model)
+        {            
             var entity = new VacationDetail
             {
                 VacationType = model.VacationType,

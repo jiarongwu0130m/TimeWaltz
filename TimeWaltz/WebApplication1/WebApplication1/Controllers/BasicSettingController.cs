@@ -36,6 +36,9 @@ namespace WebApplication1.Controllers
             return View(model);
         }
 
+        //[HttpGet]
+        //public IActionResult 
+
         [HttpPost]
         public IActionResult CreateVacationType(VacationTypeViewModel model)
         {
@@ -43,9 +46,33 @@ namespace WebApplication1.Controllers
             {
                 return View(model);
             }
-            var entity = ViewModelToEntity.ConvertToEntity(model);
+            var entity = ViewModelHelper.ToEntity(model);
             _vacationTypeService.CreateVacationType(entity);
-            return RedirectToAction();
+            return RedirectToAction("ListVacationType");
+        }
+
+        [HttpGet]
+        public IActionResult EditVacationType(int id)
+        {            
+            var entity = _vacationTypeService.GetVacationTypeOrNull(id);
+            if (entity == null)
+            {
+                return RedirectToAction("ListVacationType");
+            }
+            var model = EntityHelper.ToViewModel(entity);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditVacationType(VacationTypeViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _vacationTypeService.EditVacationType(model);
+            return RedirectToAction("ListVacationType");
         }
     }
 }
