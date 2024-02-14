@@ -53009,4 +53009,10 @@ a.text-muted:hover {
 .dark-mode .border-dark {
   border-color: #4b545c !important;
 }
+
+.username {
+    display: block;
+    padding-top: 0.5rem;
+    font-weight: 500;
+}
 /*# sourceMappingURL=adminlte.css.map */
