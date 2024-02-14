@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "打卡資訊";
+}
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card card-light">
+            <div class="card-header">
+                <h3 class="card-title">打卡時間</h3>
+            </div>
+            <form>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>上班時間</label>
+                        <input type="text" class="form-control">
+
+                        <label>打卡地點</label>
+                        <input type="text" class="form-control">
+
+                        <hr />
+                    </div>
+                    <div class="form-group">
+                        <label>下班時間</label>
+                        <input type="text" class="form-control">
+
+                        <label>打卡地點</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-danger">上班打卡</button>
+                    <button type="submit" class="btn btn-primary">下班打卡</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card card-light">
+            <div class="card-header">
+                <h3 class="card-title">當天班表</h3>
+            </div>
+            <form>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3">上班時間</label>
+                        <input type="text" class="col-sm-9">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3">下班時間</label>
+                        <input type="text" class="col-sm-9">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
