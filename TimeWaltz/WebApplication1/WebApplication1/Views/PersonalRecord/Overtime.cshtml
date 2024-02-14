@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "加班查詢";
+}
+
+<div class="row">
+
+    <div class="form-inline mb-3">
+        <div class="form-group">
+            <label>日期區間查詢：</label>
+            <div class="input-group col">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="far fa-calendar-alt"></i>
+                    </span>
+                </div>
+                <input type="text" id="reservation" class="form-control">
+                <button class="btn btn-outline-dark">查詢</button>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">加班日期</th>
+                <th scope="col">開始時間</th>
+                <th scope="col">結束時間</th>
+                <th scope="col">加班轉補休</th>
+                <th scope="col">詳細資料</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            <tr>
+                <th scope="row">2024/01/01</th>
+                <td>18:00</td>
+                <td>19:00</td>
+                <td>V</td>
+                <td>
+                    <button class="btn btn-outline-primary">檢視</button>
+                    <button class="btn btn-outline-secondary">刪除</button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">2024/01/01</th>
+                <td>18:00</td>
+                <td>19:00</td>
+                <td>V</td>
+                <td>
+                    <button class="btn btn-outline-primary">檢視</button>
+                    <button class="btn btn-outline-secondary">刪除</button>
+                </td>
+            </tr>
+            <tr>
+                <th>2024/01/01</th>
+                <td>18:00</td>
+                <td>19:00</td>
+                <td></td>
+                <td>
+                    <button class="btn btn-outline-primary">檢視</button>
+                    <button class="btn btn-outline-secondary">刪除</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+@section Scripts {
+    <script>
+        $('#reservation').daterangepicker()
+    </script>
+}
