@@ -34,6 +34,34 @@ namespace WebApplication1.Controllers
                     ApprovalStatus = s.Status.ToString()
                 }).ToString();
             return Json(data);
+            public IActionResult Clock()
+            {
+                return View();
+            }
+            public IActionResult Attendance()
+            {
+                return View();
+            }
+            public IActionResult Leave()
+            {
+                return View();
+            }
+            public IActionResult Overtime()
+            {
+                return View();
+            }
+            public IActionResult ShiftSchedule()
+            {
+                return View();
+            }
+            public IActionResult Approval()
+            {
+                return View();
+            }
+            public IActionResult AgentEmployeeSetting()
+            {
+                return View();
+            }
         }
     }
 }
