@@ -13,7 +13,7 @@ namespace WebApplication1.Migrations
 {
     [DbContext(typeof(TimeWaltzContext))]
     [Migration("20240207144808_t")]
-    partial class t
+    partial class T
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
