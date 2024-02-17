@@ -12,8 +12,9 @@ namespace WebApplication1.Models
         public string VacationType { get; set; }
         
         public GenderEnum? Gender { get; set; }
+        public List<SelectListItem> GenderSelectItems { get; set; }
 
-  
+
         public int NumberOfDays { get; set; }
         
         public List<SelectListItem> CycleSelectItems { get; set; }
