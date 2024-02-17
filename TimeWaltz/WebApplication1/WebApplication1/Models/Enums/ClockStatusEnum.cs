@@ -2,9 +2,9 @@
 {
     public enum ClockStatusEnum
     {
-        In = 0,
-        Out = 1,
-        OverIn = 2,
-        OverOut = 3
+        上班卡 = 0,
+        下班卡 = 1,
+        加班上班 = 2,
+        加班下班 = 3
     }
 }

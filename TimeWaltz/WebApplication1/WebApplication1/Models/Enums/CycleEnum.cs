@@ -2,8 +2,8 @@
 {
     public enum CycleEnum
     {
-        Year = 0,
-        Month = 1,
-        Week = 2
+        年 = 0,
+        月 = 1,
+        週 = 2
     }
 }

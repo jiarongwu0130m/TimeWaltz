@@ -2,8 +2,8 @@
 {
     public enum TableTypeEnum
     {
-        Overtime = 0,
-        Leave = 1,
-        AdditionalClockIn = 2        
+        加班單 = 0,
+        請假單 = 1,
+        補卡單 = 2        
     }
 }
