@@ -32,18 +32,26 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         private string GenerateSalt()
         {
-            char[] chars = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"+
-                            "abcdefghijklmnopqrstuvwxyz" +
-                    "1234567890"+
-                    "!@#$%^&*()_+").ToCharArray();
+            
             StringBuilder sb = new StringBuilder();
             var random = new Random();
             for (int i = 0; i < 13; i++)
             {
+                char[] chars = (Get_Salt(random.Next(3))).ToCharArray();
+
                 char aChar = chars[random.Next(chars.Length)];
                 sb.Append(aChar);
             }
             return sb.ToString();
+        }
+
+        private string Get_Salt(int i)
+        {
+            return i switch { 0 => "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                1 => "abcdefghijklmnopqrstuvwxyz",
+                2 => "1234567890",
+                3=> "!@#$%^&*()_+"
+            };
         }
 
         #region 帳號設定 
@@ -131,10 +139,11 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         public IActionResult Account(string id)
         {
-            AccountViewModel data;
+            //AccountViewModel data;
 
 
-            return View(data);
+            //return View(data);
+            return View();
         }
 
         #endregion
