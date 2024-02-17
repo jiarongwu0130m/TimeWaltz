@@ -11,9 +11,10 @@ namespace WebApplication1.Models
         [Required(ErrorMessage ="請填假別名稱")]
         public string VacationType { get; set; }
         
-        public bool? Gender { get; set; }
+        public GenderEnum? Gender { get; set; }
+        public List<SelectListItem> GenderSelectItems { get; set; }
 
-  
+
         public int NumberOfDays { get; set; }
         
         public List<SelectListItem> CycleSelectItems { get; set; }
