@@ -2,10 +2,9 @@
 {
     public enum ApprovalStatusEnum
     {
-        Temp = 0,
-        Approving = 1,
-        SignningOff = 2,
-        Completed = 3,
-        Failed = 4
+        暫存 = 0,
+        簽核中 = 1,
+        退回 = 2,
+        簽核完成 = 3,
     }
 }
