@@ -1,0 +1,65 @@
+﻿@model IEnumerable<WebApplication1.Models.ShiftSchedulesViewModel>
+@{
+    ViewBag.Title = "班表查詢";
+}
+
+<div class="row">
+
+    <div class="form-inline mb-3">
+        <div class="form-group">
+            <label>日期區間查詢：</label>
+            <div class="input-group col">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="far fa-calendar-alt"></i>
+                    </span>
+                </div>
+                <input type="text" id="reservation" class="form-control">
+                <button class="btn btn-outline-dark">查詢</button>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">日期</th>
+                <th scope="col">星期</th>
+                <th scope="col">上班時間<th>
+                <th scope="col">下班時間</th>
+                <th scope="col">休息時間</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DayOfWeek)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BreakTime)
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@section Scripts {
+    <script>
+        $('#reservation').daterangepicker()
+    </script>
+}

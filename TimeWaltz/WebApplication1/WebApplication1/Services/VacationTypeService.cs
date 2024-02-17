@@ -12,11 +12,11 @@ namespace WebApplication1.Services
         {
             _timeWaltzContext = timeWaltzContext;
         }
-        public int CreateVacationType(VacationDetail vacationDetail)
+        public int CreateVacationType(VacationDetail entity)
         {
-            _timeWaltzContext.VacationDetails.Add(vacationDetail);
+            _timeWaltzContext.VacationDetails.Add(entity);
             _timeWaltzContext.SaveChanges();
-            return vacationDetail.Id;
+            return entity.Id;
         }
         public VacationDetail? GetVacationTypeOrNull(int id)
         {
@@ -28,6 +28,7 @@ namespace WebApplication1.Services
         {
             var entity = _timeWaltzContext.VacationDetails.FirstOrDefault(x => x.Id == model.Id);
 
+           
             entity.VacationType = model.VacationType;
             entity.Gender = model.Gender;
             entity.NumberOfDays = model.NumberOfDays;
@@ -36,6 +37,21 @@ namespace WebApplication1.Services
 
             _timeWaltzContext.SaveChanges();
             return model.Id;
+        }
+
+        public List<VacationDetail> GetVacationDetailsList()
+        {
+            return _timeWaltzContext.VacationDetails.ToList();            
+        }
+        
+        public int DeleteVacationType(VacationDetail entity)
+        {
+            if(entity !=  null)
+            {
+                _timeWaltzContext.VacationDetails.Remove(entity);
+                _timeWaltzContext.SaveChanges();
+            }
+            return entity.Id;
         }
     }
 }
