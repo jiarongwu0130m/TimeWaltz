@@ -780,8 +780,8 @@ namespace WebApplication1.Migrations
                     b.Property<int>("Cycle")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("Gender")
-                        .HasColumnType("bit");
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<int>("MinVacationHours")
                         .HasColumnType("int");
