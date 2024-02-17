@@ -38,14 +38,14 @@ namespace WebApplication1.Controllers
         }
         public IActionResult ShiftSchedule()
         {
-            var data = _timeWaltzContext.ShiftSchedules.Select(s => new ShiftSchedulesViewModel
-            {
-                Date = s.StartTime.Date,
-                DayOfWeek = s.StartTime.DayOfWeek,
-                StartTime = s.StartTime.TimeOfDay,
-                EndTime = s.EndTime.TimeOfDay,
-                BreakTime = s.BreakTime / 60.00
-            });
+            //var data = _timeWaltzContext.ShiftSchedules.Select(s => new ShiftSchedulesViewModel
+            //{
+            //    Date = s.StartTime.Date,
+            //    DayOfWeek = s.StartTime.DayOfWeek,
+            //    StartTime = s.StartTime.TimeOfDay,
+            //    EndTime = s.EndTime.TimeOfDay,
+            //    BreakTime = s.BreakTime / 60.00
+            //});
             return View();
         }
         public IActionResult Clock()
