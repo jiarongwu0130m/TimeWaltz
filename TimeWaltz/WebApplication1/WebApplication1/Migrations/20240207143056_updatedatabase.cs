@@ -192,7 +192,7 @@ namespace WebApplication1.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VacationType = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    VacationType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Gender = table.Column<bool>(type: "bit", nullable: true),
                     NumberOfDays = table.Column<int>(type: "int", nullable: false),
                     Cycle = table.Column<int>(type: "int", nullable: false),
