@@ -36,19 +36,23 @@ namespace WebApplication1.Controllers
 
         //}
         [HttpGet]
-        public IActionResult ShiftSchedule(int Id)
+        public IActionResult ShiftSchedule()
         {
-            
+            //TODO:準備寫js將dateRengePicker的值用name之類的掛給一個hidden的input讓他跟著表單一起被送回後端，在後端用兩個dateTime(dateTime不行就用String再轉)接然後當作Where條件查
+            var Id = 1;
             var entities = _shiftScheduleService.GetPersonalShiftScheduleList(Id);
-            var models = EntityHelper.ToViewModel(entities).ToString();
+            var models = EntityHelper.ToViewModel(entities);
 
             return View(models);
         }
+
         //[HttpPost]
-        //public IActionResult ShiftSchedule()
+        //public IActionResult ShiftSchedule() 
         //{
 
         //}
+
+        
         public IActionResult Clock()
         {
             return View();
