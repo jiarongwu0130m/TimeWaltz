@@ -2,7 +2,6 @@
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
-using WebApplication1.Services;
 
 namespace WebApplication1.Helpers
 {
@@ -46,5 +45,29 @@ namespace WebApplication1.Helpers
 
             return models;
         }
+
+        public static ShiftSchedulesViewModel ToViewModel(ShiftSchedule entity)
+        {
+            var model = new ShiftSchedulesViewModel
+            {
+                Date = entity.StartTime.Date,
+                DayOfWeek = entity.StartTime.DayOfWeek,
+                StartTime = entity.StartTime.TimeOfDay,
+                EndTime = entity.EndTime.TimeOfDay,
+                BreakTime = entity.EndTime.CompareTo(entity.StartTime),
+
+            };
+            return model;
+        }
+       public static List<ShiftSchedulesViewModel> ToViewModel(List<ShiftSchedule> entities)
+       {
+            var models = new List<ShiftSchedulesViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+            
+            return models;
+       }
     }
 }

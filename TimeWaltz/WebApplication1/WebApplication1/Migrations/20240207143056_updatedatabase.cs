@@ -185,7 +185,7 @@ namespace WebApplication1.Migrations
                 {
                     table.PrimaryKey("PK_UserOfDepartment", x => x.ID);
                 });
-
+            //TODO: 將Gender改為不可NULL
             migrationBuilder.CreateTable(
                 name: "VacationDetails",
                 columns: table => new
