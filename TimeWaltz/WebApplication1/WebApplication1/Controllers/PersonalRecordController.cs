@@ -2,17 +2,20 @@
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
     public class PersonalRecordController : Controller
     {
         private readonly TimeWaltzContext _timeWaltzContext;
-        public PersonalRecordController(TimeWaltzContext timeWaltzContext)
+        private readonly ClockService _clockService;
+
+        public PersonalRecordController(TimeWaltzContext timeWaltzContext, ClockService clockService)
         {
 
             _timeWaltzContext = timeWaltzContext;
-
+            _clockService = clockService;
         }
         public IActionResult Index()
         {
@@ -34,7 +37,7 @@ namespace WebApplication1.Controllers
                     ApprovalStatus = s.Status.ToString()
                 }).ToString();
             return Json(data);
-            
+
         }
         public IActionResult ShiftSchedule()
         {
@@ -48,20 +51,51 @@ namespace WebApplication1.Controllers
             //});
             return View();
         }
+        [HttpGet]
         public IActionResult Clock()
         {
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Clock(ClockViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ErrorMessage = "請檢查表單中的錯誤。";
+                return View(model);
+            }
+            var clockData = new Clock
+            {
+                EmployeesId = model.EmployeesId,
+                Date = model.Date,
+                Status = ClockStatusEnum.上班卡,
+                Longitude = model.Longitude,
+                Latitude = model.Latitude,
+            };
+
+            //clockData.Status = ClockStatusEnum.上班卡 ;
+            //clockData.Date = model.Date;
+            //clockData.Latitude = model.Latitude;
+            //clockData.Longitude = model.Longitude;
+
+            _clockService.ClockData(clockData);
+            ViewBag.SuccessMessage = "打卡成功！";
+            return View();
+
+        }
+
         public IActionResult Attendance()
         {
             return View();
         }
-        
+
         public IActionResult Overtime()
         {
             return View();
         }
-        
+
         public IActionResult Approval()
         {
             return View();
