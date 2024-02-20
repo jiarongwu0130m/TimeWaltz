@@ -8,15 +8,18 @@
     <div class="form-inline mb-3">
         <div class="form-group">
             <label>日期區間查詢：</label>
-            <form>
+            <form asp-action="ShiftSchedule" asp-controller="PersonalRecord" method="post">
                 <div class="input-group col">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
                             <i class="far fa-calendar-alt"></i>
                         </span>
                     </div>
-                    <input type="text" id="reservation" class="form-control">
-                    <button class="btn btn-outline-dark">查詢</button>
+                    <input type="hidden" name="StartTime" id="startTime"/>
+                    <input type="hidden" name="EndTime" id="endTime" />
+
+                    <input name="dateRange" type="text" id="reservation" class="form-control">
+                    <button type="submit" class="btn btn-outline-dark">查詢</button>
                 </div>
             </form>
         </div>
@@ -62,7 +65,14 @@
 
 @section Scripts {
     <script>
-        $('#reservation').daterangepicker()
+        $('#reservation').daterangepicker({}, function (start, end, _) {
+            console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+            $('#startTime').val(start.format('YYYY-MM-DD'));
+            $('#endTime').val(end.format('YYYY-MM-DD'));
+            
+            
+        }
+        )
     </script>
 }
 

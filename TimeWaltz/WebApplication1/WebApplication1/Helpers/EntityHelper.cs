@@ -52,8 +52,8 @@ namespace WebApplication1.Helpers
             {
                 Date = entity.StartTime.Date,
                 DayOfWeek = entity.StartTime.DayOfWeek,
-                StartTime = entity.StartTime.TimeOfDay,
-                EndTime = entity.EndTime.TimeOfDay,
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
                 BreakTime = entity.EndTime.CompareTo(entity.StartTime),
 
             };

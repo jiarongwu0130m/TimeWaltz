@@ -9,10 +9,12 @@ namespace WebApplication1.Models
         public DayOfWeek DayOfWeek { get;  set; }
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
-        public TimeSpan StartTime { get;  set; }
+        public DateTime StartTime { get;  set; }
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
-        public TimeSpan EndTime { get; set; }
+        public DateTime EndTime { get; set; }
+
+        
         public double BreakTime { get; set; }
         
     }
