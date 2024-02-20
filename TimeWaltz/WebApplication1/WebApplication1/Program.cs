@@ -16,6 +16,7 @@ namespace WebApplication1
             builder.Services.AddDbContext<TimeWaltzContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("TimeWaltz")));
             builder.Services.AddTransient<VacationTypeService>();
             builder.Services.AddScoped<ShiftScheduleService>();
+            builder.Services.AddTransient<ClockService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
