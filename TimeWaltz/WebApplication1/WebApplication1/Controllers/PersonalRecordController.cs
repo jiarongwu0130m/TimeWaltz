@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
+using WebApplication1.Models;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -46,13 +47,15 @@ namespace WebApplication1.Controllers
             return View(models);
         }
 
-        //[HttpPost]
-        //public IActionResult ShiftSchedule() 
-        //{
+        [HttpPost]
+        public IActionResult ShiftSchedule(ShiftSchedulesViewModel model)
+        {
 
-        //}
+            
+            return View();
+        }
 
-        
+
         public IActionResult Clock()
         {
             return View();
