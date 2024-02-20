@@ -8,7 +8,7 @@ namespace WebApplication1.Models
     {
         public int EmployeesId { get; set; }
 
-        [Display(Name = "上班時間")]
+        [Display(Name = "打卡時間")]
         public DateTime Date { get; set; }
 
         public ClockStatusEnum Status { get; set; }

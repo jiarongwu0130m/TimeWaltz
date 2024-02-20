@@ -3,58 +3,61 @@
 }
 @model ClockViewModel
 
-<div class="row">
-    <div class="col-md-7">
+<div class="row justify-content-center">
+    <div class="col-md-6">
         <form asp-controller="PersonalRecord" asp-action="Clock" method="post">
             <div class="card card-light">
                 <div class="card-header">
                     <h3 class="card-title">打卡時間</h3>
                 </div>
+                <input asp-for="EmployeesId" type="hidden" value="1" />
                 <div class="card-body">
-                    <input asp-for="EmployeesId" type="hidden" value="1" />
-                    <div class="form-group row">
-                        <label class="col-form-label col-md-3">上班時間</label>
-                        <input asp-for="Date" type="text" class="form-control col-md-8" id="startTime" readonly>
+                    <div class="row form-group">
+                        <label class="col-form-label col-md-auto">上班時間</label>
+                        <input asp-for="Date" type="text" class="form-control col-md-5" id="startTime" readonly>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-md-3">打卡地點</label>
+                    <div class="row form-group">
+                        <label class="col-form-label col-md-auto">打卡地點</label>
                         <label class="col-form-label col-md-auto">經度：</label>
-                        <input asp-for="Longitude" type="text" class="form-control col-md-2" id="AddressLng" readonly>
-                        @* <div class="col-md-1"></div> *@
+                        <input asp-for="Longitude" type="text" class="form-control col-md-2" id="StartAddLng" readonly>
                         <label class="col-form-label col-md-auto">緯度：</label>
-                        <input asp-for="Latitude" type="text" class="form-control col-md-2" id="AddressLat" readonly>
+                        <input asp-for="Latitude" type="text" class="form-control col-md-2" id="StartAddLat" readonly>
                     </div>
-                    <hr />
-                    <div class="form-group">
-                        <label>下班時間</label>
-                        <input type="text" class="form-control" id="endTime" readonly>
+                <hr>
+                    <div class="row form-group">
+                        <label class="col-form-label col-md-auto">下班時間</label>
+                        <input asp-for="Date" type="text" class="form-control col-md-5" id="endTime" readonly>
                     </div>
-                    <div class="form-group">
-                        <label>打卡地點</label>
-                        <input type="text" class="form-control" id="endAddress" readonly>
+                    <div class="row form-group">
+                        <label class="col-form-label col-md-auto">打卡地點</label>
+                        <label class="col-form-label col-md-auto">經度：</label>
+                        <input asp-for="Longitude" type="text" class="form-control col-md-2" id="EndAddLng" readonly>
+                        <label class="col-form-label col-md-auto">緯度：</label>
+                        <input asp-for="Latitude" type="text" class="form-control col-md-2" id="EndAddLat" readonly>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <input type="submit" class="btn btn-danger" id="startClockIn" value="上班打卡">
-                    <button class="btn btn-primary" id="endClockIn">下班打卡</button>
+                    <input type="button" class="btn btn-danger" id="startClockIn" value="上班打卡" onclick="setStatus('上班打卡')">
+                    <input type="button" class="btn btn-primary" id="endClockIn" value="下班打卡" onclick="setStatus('下班打卡')">
+                    <input type="hidden" asp-for="Status" id="statusHidden">
                 </div>
-        </form>
-
-    </div>
-</div>
-<div class="col-md-5">
-    <div class="card card-light">
-        <div class="card-header">
-            <h3 class="card-title">當日班表</h3>
-        </div>
-        <div class="card-body">
-            <div class="form-group row">
-                <label class="col-form-label col-sm-3">上班時間</label>
-                <input type="text" class="col-sm-9">
             </div>
-            <div class="form-group row">
-                <label class="col-form-label col-sm-3">下班時間</label>
-                <input type="text" class="col-sm-9">
+        </form>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-light">
+            <div class="card-header">
+                <h3 class="card-title">當日班表</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">上班時間</label>
+                    <input type="text" class="col-sm-9">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">下班時間</label>
+                    <input type="text" class="col-sm-9">
+                </div>
             </div>
         </div>
     </div>
@@ -82,16 +85,6 @@
     </div>
 </div>
 
-<div class="modal-body">
-    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-    {
-        <p class="text-danger">@ViewBag.ErrorMessage</p>
-    }
-    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
-    {
-        <p>@ViewBag.SuccessMessage</p>
-    }
-</div>
 
 
 
@@ -100,6 +93,21 @@
     <script>
         var longitude;
         var latitude;
+        var status;
+        var startClock = document.getElementById('startClockIn');
+        var endClock = document.getElementById('endClockIn');
+
+        var startTime = document.getElementById('startTime');
+        var endTime = document.getElementById('endTime');
+        var options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -116,47 +124,38 @@
                 alert("無法取得位置");
             }
         }
-
         window.onload = getLocation;
 
-        var options = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric'
-        };
+        function setStatus(value) {
+            document.getElementById('statusHidden').value = value;
+        }
 
-        document.getElementById('startClockIn').addEventListener('click', function (e) {
-            // e.preventDefault();
-            document.getElementById('startTime').value = new Date().toLocaleDateString('zh-TW', options);
-            updateLocation('AddressLng', 'AddressLat');
-            document.getElementById('AddressLng').value = longitude;
-            document.getElementById('AddressLat').value = latitude;
-
-            showSuccessAlert();
-            document.forms[0].submit();  // 提交表單
-        });
-
-        document.getElementById('endClockIn').addEventListener('click', function (e) {
+        startClock.addEventListener('click', (e) => {
             e.preventDefault();
-            document.getElementById('endTime').value = new Date().toLocaleTimeString(undefined, options);
-            updateLocation('endAddress');
+            startTime.value = new Date().toLocaleString('zh-TW', options);
+            updateLocation('StartAddLng', 'StartAddLat');
+            document.getElementById('StartAddLng').value = longitude;
+            document.getElementById('StartAddLat').value = latitude;
             showSuccessAlert();
-            document.forms[0].submit();  // 提交表單
+            document.forms[0].submit();
         });
 
-        function updateLocation(lng,lat) {
+        endClock.addEventListener('click', (e) => {
+            e.preventDefault();
+            endTime.value = new Date().toLocaleString('zh-TW', options);
+            updateLocation('EndAddLng', 'EndAddLat');
+            document.getElementById('EndAddLng').value = longitude;
+            document.getElementById('EndAddLat').value = latitude;
+            showSuccessAlert();
+            document.forms[0].submit();
+        });
+
+        function updateLocation(lng, lat) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
                         latitude = position.coords.latitude;
                         longitude = position.coords.longitude;
-
-                        document.getElementById('AddressLng').value = longitude ;
-                        document.getElementById('AddressLat').value =  latitude;
                     },
                     function (error) {
                         alert("無法取得位置");
@@ -166,7 +165,6 @@
                 alert("無法取得位置");
             }
         }
-
         function showSuccessAlert() {
             $('#successModal').modal('show');
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Runtime.Intrinsics.X86;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
@@ -63,27 +64,31 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.ErrorMessage = "請檢查表單中的錯誤。";
+                ViewBag.ErrorMessage = "資料錯誤。";
                 return View(model);
             }
+
             var clockData = new Clock
             {
                 EmployeesId = model.EmployeesId,
                 Date = model.Date,
-                Status = ClockStatusEnum.上班卡,
+                Status = model.Status,
                 Longitude = model.Longitude,
                 Latitude = model.Latitude,
             };
 
-            //clockData.Status = ClockStatusEnum.上班卡 ;
-            //clockData.Date = model.Date;
-            //clockData.Latitude = model.Latitude;
-            //clockData.Longitude = model.Longitude;
-
-            _clockService.ClockData(clockData);
-            ViewBag.SuccessMessage = "打卡成功！";
-            return View();
-
+            if (model.Status == ClockStatusEnum.上班打卡)
+            {
+                _clockService.ClockData(clockData);
+                ViewBag.SuccessMessage = "上班打卡成功！";
+                return View();
+            }
+            else if (model.Status == ClockStatusEnum.下班打卡)
+            {
+                _clockService.ClockData(clockData);
+                ViewBag.SuccessMessage = "下班打卡成功！";
+            }
+                return View();
         }
 
         public IActionResult Attendance()
