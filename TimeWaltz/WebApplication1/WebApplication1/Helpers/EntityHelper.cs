@@ -2,7 +2,6 @@
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
-using WebApplication1.Services;
 
 namespace WebApplication1.Helpers
 {
@@ -14,15 +13,61 @@ namespace WebApplication1.Helpers
             {
                 Id = entity.Id,
                 VacationType = entity.VacationType,
+                Gender = entity.Gender,           
+                Cycle = entity.Cycle,
+                NumberOfDays = entity.NumberOfDays,
+                MinVacationHours = entity.MinVacationHours,
+                //
+                GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
+                {
+                    Text = c.ToString(),
+                    Value = c.ToString()
+                }).ToList(),
                 CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
                 {
                     Text = c.ToString(),
                     Value = ((int)c).ToString()
-                }).ToList(),
-                NumberOfDays = entity.NumberOfDays,
-                MinVacationHours = entity.MinVacationHours
+                }).ToList()
             };
             return model;
         }
+
+       public static List<VacationTypeViewModel> ToViewModel(List<VacationDetail> entities)
+        {
+            var models = new List<VacationTypeViewModel>();     //先準備一個空的
+            
+            foreach (var entity in entities)                    //跑迴圈
+            {
+                models.Add(ToViewModel(entity));
+            }
+            
+            //var items = entities.Select(o => ToViewModel(o)).ToList();      //LINQ寫法...
+
+            return models;
+        }
+
+        public static ShiftSchedulesViewModel ToViewModel(ShiftSchedule entity)
+        {
+            var model = new ShiftSchedulesViewModel
+            {
+                Date = entity.StartTime.Date,
+                DayOfWeek = entity.StartTime.DayOfWeek,
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
+                BreakTime = entity.EndTime.CompareTo(entity.StartTime),
+
+            };
+            return model;
+        }
+       public static List<ShiftSchedulesViewModel> ToViewModel(List<ShiftSchedule> entities)
+       {
+            var models = new List<ShiftSchedulesViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+            
+            return models;
+       }
     }
 }

@@ -18,5 +18,6 @@ public partial class Clock
 
     public decimal Longitude { get; set; }
 
-    public virtual Employee Employees { get; set; } = null!;
+    //public virtual Employee Employees { get; set; } = null!;
+    public virtual Employee Employees { get; set; }
 }

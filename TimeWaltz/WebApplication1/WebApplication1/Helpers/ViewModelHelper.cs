@@ -7,8 +7,10 @@ namespace WebApplication1.Helpers
     {
         public static VacationDetail ToEntity(VacationTypeViewModel model)
         {            
+
             var entity = new VacationDetail
             {
+                Id = model.Id,
                 VacationType = model.VacationType,
                 Gender = model.Gender,
                 NumberOfDays = model.NumberOfDays,
@@ -17,5 +19,14 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
+        //public static ShiftSchedule ToEntity(ShiftSchedulesViewModel model)
+        //{
+        //    var entity = new ShiftSchedule
+        //    {
+
+        //    };
+        //}
+
+        
     }
 }

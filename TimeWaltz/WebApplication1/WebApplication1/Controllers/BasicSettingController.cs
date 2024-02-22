@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿  using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
-using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
 using WebApplication1.Services;
 
@@ -27,17 +26,45 @@ namespace WebApplication1.Controllers
         {
             var model = new VacationTypeViewModel
             {
-                CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
+                GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
                 {
                     Text = c.ToString(),
                     Value = ((int)c).ToString()
                 }).ToList(),
+                CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
+                {
+                    Text = c.ToString(),
+                    Value = ((int)c).ToString()
+                }).ToList()
             };
             return View(model);
         }
 
-        //[HttpGet]
-        //public IActionResult 
+        [HttpGet]
+        public IActionResult ListVacationType()
+        {
+            
+            
+            var entities = _vacationTypeService.GetVacationDetailsList();
+            var model = EntityHelper.ToViewModel(entities);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult ListVacationType(VacationTypeViewModel selectedModel)
+        {
+            
+            var entities = _vacationTypeService.GetSelectedShiftScheduleList(selectedModel);
+            if(entities != null)
+            {
+                var models = EntityHelper.ToViewModel(entities);
+                return View(models);
+            }
+            else
+            {
+                return View(selectedModel);
+            }
+        }
+            
 
         [HttpPost]
         public IActionResult CreateVacationType(VacationTypeViewModel model)
@@ -48,6 +75,13 @@ namespace WebApplication1.Controllers
             }
             var entity = ViewModelHelper.ToEntity(model);
             _vacationTypeService.CreateVacationType(entity);
+            return RedirectToAction("ListVacationType");
+        }
+
+        public IActionResult DeleteVacationType(int id)
+        {
+            var entity = _vacationTypeService.GetVacationTypeOrNull(id);
+            _vacationTypeService.DeleteVacationType(entity);
             return RedirectToAction("ListVacationType");
         }
 

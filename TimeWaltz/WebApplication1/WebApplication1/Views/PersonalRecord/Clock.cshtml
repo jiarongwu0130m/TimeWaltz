@@ -1,58 +1,174 @@
 ﻿@{
     ViewBag.Title = "打卡資訊";
 }
+@model ClockViewModel
 
 <div class="row">
     <div class="col-md-7">
-        <div class="card card-light">
-            <div class="card-header">
-                <h3 class="card-title">打卡時間</h3>
-            </div>
-            <form>
+        <form asp-controller="PersonalRecord" asp-action="Clock" method="post">
+            <div class="card card-light">
+                <div class="card-header">
+                    <h3 class="card-title">打卡時間</h3>
+                </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label>上班時間</label>
-                        <input type="text" class="form-control">
-
-                        <label>打卡地點</label>
-                        <input type="text" class="form-control">
-
-                        <hr />
+                    <input asp-for="EmployeesId" type="hidden" value="1" />
+                    <div class="form-group row">
+                        <label class="col-form-label col-md-3">上班時間</label>
+                        <input asp-for="Date" type="text" class="form-control col-md-8" id="startTime" readonly>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-md-3">打卡地點</label>
+                        <label class="col-form-label col-md-auto">經度：</label>
+                        <input asp-for="Longitude" type="text" class="form-control col-md-2" id="AddressLng" readonly>
+                        @* <div class="col-md-1"></div> *@
+                        <label class="col-form-label col-md-auto">緯度：</label>
+                        <input asp-for="Latitude" type="text" class="form-control col-md-2" id="AddressLat" readonly>
+                    </div>
+                    <hr />
                     <div class="form-group">
                         <label>下班時間</label>
-                        <input type="text" class="form-control">
-
+                        <input type="text" class="form-control" id="endTime" readonly>
+                    </div>
+                    <div class="form-group">
                         <label>打卡地點</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" id="endAddress" readonly>
                     </div>
                 </div>
-
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-danger">上班打卡</button>
-                    <button type="submit" class="btn btn-primary">下班打卡</button>
+                    <input type="submit" class="btn btn-danger" id="startClockIn" value="上班打卡">
+                    <button class="btn btn-primary" id="endClockIn">下班打卡</button>
                 </div>
-            </form>
-        </div>
-    </div>
+        </form>
 
-    <div class="col-md-5">
-        <div class="card card-light">
-            <div class="card-header">
-                <h3 class="card-title">當天班表</h3>
+    </div>
+</div>
+<div class="col-md-5">
+    <div class="card card-light">
+        <div class="card-header">
+            <h3 class="card-title">當日班表</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">上班時間</label>
+                <input type="text" class="col-sm-9">
             </div>
-            <form>
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-form-label col-sm-3">上班時間</label>
-                        <input type="text" class="col-sm-9">
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-sm-3">下班時間</label>
-                        <input type="text" class="col-sm-9">
-                    </div>
-                </div>
-            </form>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">下班時間</label>
+                <input type="text" class="col-sm-9">
+            </div>
         </div>
     </div>
 </div>
+
+<div class="modal" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">打卡成功</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                {
+                    <p>@ViewBag.SuccessMessage</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">確認</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-body">
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <p class="text-danger">@ViewBag.ErrorMessage</p>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <p>@ViewBag.SuccessMessage</p>
+    }
+</div>
+
+
+
+@section Scripts {
+    <script src="@Href("https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js")"></script>
+    <script>
+        var longitude;
+        var latitude;
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        longitude = position.coords.longitude;
+                        latitude = position.coords.latitude;
+                    },
+                    function (error) {
+                        alert("無法取得位置");
+                    }
+                );
+            } else {
+                alert("無法取得位置");
+            }
+        }
+
+        window.onload = getLocation;
+
+        var options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
+
+        document.getElementById('startClockIn').addEventListener('click', function (e) {
+            // e.preventDefault();
+            document.getElementById('startTime').value = new Date().toLocaleDateString('zh-TW', options);
+            updateLocation('AddressLng', 'AddressLat');
+            document.getElementById('AddressLng').value = longitude;
+            document.getElementById('AddressLat').value = latitude;
+
+            showSuccessAlert();
+            document.forms[0].submit();  // 提交表單
+        });
+
+        document.getElementById('endClockIn').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('endTime').value = new Date().toLocaleTimeString(undefined, options);
+            updateLocation('endAddress');
+            showSuccessAlert();
+            document.forms[0].submit();  // 提交表單
+        });
+
+        function updateLocation(lng,lat) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        latitude = position.coords.latitude;
+                        longitude = position.coords.longitude;
+
+                        document.getElementById('AddressLng').value = longitude ;
+                        document.getElementById('AddressLat').value =  latitude;
+                    },
+                    function (error) {
+                        alert("無法取得位置");
+                    }
+                );
+            } else {
+                alert("無法取得位置");
+            }
+        }
+
+        function showSuccessAlert() {
+            $('#successModal').modal('show');
+        }
+    </script>
+}
