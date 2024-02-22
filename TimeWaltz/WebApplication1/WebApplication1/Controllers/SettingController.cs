@@ -15,7 +15,6 @@ namespace WebApplication1.Controllers
         {
             _db = db;
         }
-
         /// <summary>
         /// 雜湊SHA256
         /// </summary>
@@ -32,7 +31,6 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         private string GenerateSalt()
         {
-            
             StringBuilder sb = new StringBuilder();
             var random = new Random();
             for (int i = 0; i < 13; i++)
@@ -91,8 +89,10 @@ namespace WebApplication1.Controllers
             {
                 return View(model);
             }
-            //密碼加密加鹽
-            string Salts= GenerateSalt();
+            //密碼加鹽
+            string Salts = GenerateSalt();
+
+            //密碼雜湊
             model.Password = Get_SHA256_Hash(model.Password+ Salts);
 
 
@@ -112,39 +112,39 @@ namespace WebApplication1.Controllers
         }
 
 
-        /// <summary>
-        /// 帳號修改update
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public IActionResult Account(string id, AccountViewModel model)
-        {
+        ///// <summary>
+        ///// 帳號修改update
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //public IActionResult Account(string id, AccountViewModel model)
+        //{
 
-            //_db.Users.Add(new User
-            //{
-            //    Account = model.Account,
-            //    Password = model.Password,
-            //    Stop = model.Stop,
-            //    Salt = Salts,
-            //    DepartmentId = Convert.ToInt32(model.DepartmentName),
-            //    PasswordDate = DateTime.Now
-            //});
-            _db.SaveChanges();
-            return View();
-        }
-        /// <summary>
-        /// 帳號修改 依照ID給予資料
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public IActionResult Account(string id)
-        {
-            //AccountViewModel data;
+        //    //_db.Users.Add(new User
+        //    //{
+        //    //    Account = model.Account,
+        //    //    Password = model.Password,
+        //    //    Stop = model.Stop,
+        //    //    Salt = Salts,
+        //    //    DepartmentId = Convert.ToInt32(model.DepartmentName),
+        //    //    PasswordDate = DateTime.Now
+        //    //});
+        //    _db.SaveChanges();
+        //    return View();
+        //}
+        ///// <summary>
+        ///// 帳號修改 依照ID給予資料
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //public IActionResult Account(string id)
+        //{
+        //    //AccountViewModel data;
 
 
-            //return View(data);
-            return View();
-        }
+        //    //return View(data);
+        //    return View();
+        //}
 
         #endregion
 
