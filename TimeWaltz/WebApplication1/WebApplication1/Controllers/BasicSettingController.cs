@@ -9,13 +9,16 @@ namespace WebApplication1.Controllers
 {
     public class BasicSettingController : Controller
     {
-        private readonly ShiftScheduleService _shiftScheduleService;
-        private readonly VacationTypeService _vacationTypeService;
 
-        public BasicSettingController(ShiftScheduleService shiftScheduleService, VacationTypeService vacationTypeService)
+        private readonly ShiftScheduleService _shiftScheduleService;
+        private readonly VacationTypeService _vacationTypeService;      
+        private readonly PublicHolidayService _publicHolidayService;
+
+        public BasicSettingController(VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService)
         {
             _shiftScheduleService = shiftScheduleService;
             _vacationTypeService = vacationTypeService;
+            _publicHolidayService = publicHolidayService;
         }
         public IActionResult Index()
         {
@@ -34,9 +37,11 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
             var entity = ViewModelHelper.ToEntity(model);
-            _vacationTypeService.CreateVacationType(entity);
-            return RedirectToAction("ListVacationType");
+            _publicHolidayService.CreatePublicHoliday(entity);
+            return RedirectToAction("ListPublicHoliday");
         }
+
+
         public IActionResult ListShiftSchedule()
         {
 

@@ -19,14 +19,17 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-        //public static ShiftSchedule ToEntity(ShiftSchedulesViewModel model)
-        //{
-        //    var entity = new ShiftSchedule
-        //    {
+        public static PublicHoliday ToEntity(PublicHolidayViewModel model)
+        {
+            var entity = new PublicHoliday
+            {
+                Id = model.Id,
+                HolidayName = model.HolidayName,
+                Date = model.Date
+            };
+            return entity;
+        }
 
-        //    };
-        //}
 
-        
     }
 }

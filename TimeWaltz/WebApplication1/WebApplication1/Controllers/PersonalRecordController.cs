@@ -9,18 +9,18 @@ namespace WebApplication1.Controllers
 {
     public class PersonalRecordController : Controller
     {
-        
+
         private readonly ClockService _clockService;
         private readonly TimeWaltzContext _timeWaltzContext;
 
-        public PersonalRecordController(ClockService clockService,TimeWaltzContext timeWaltzContext)
+        public PersonalRecordController(ClockService clockService, TimeWaltzContext timeWaltzContext)
         {
-            
+
             _clockService = clockService;
             _timeWaltzContext = timeWaltzContext;
         }
 
-       
+
         public IActionResult Index()
         {
             return View();
@@ -43,7 +43,7 @@ namespace WebApplication1.Controllers
         //    return Json(data);
 
         //}
-        
+
 
 
         public IActionResult Clock()
