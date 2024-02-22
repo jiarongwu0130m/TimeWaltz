@@ -15,7 +15,7 @@
                             <i class="far fa-calendar-alt"></i>
                         </span>
                     </div>
-                    <input type="hidden" name="StartTime" id="startTime" value="@DateTime.Now.Date"/>
+                    <input type="hidden" name="StartTime" id="startTime" value="@DateTime.Now.Date" />
                     <input type="hidden" name="EndTime" id="endTime" value="@DateTime.Now.Date" />
                     <input type="text" id="reservation" />
                     <button type="submit" class="btn btn-outline-dark">查詢</button>
@@ -29,7 +29,8 @@
             <tr>
                 <th scope="col">日期</th>
                 <th scope="col">星期</th>
-                <th scope="col">上班時間<th>
+                <th scope="col">上班時間
+                <th>
                 <th scope="col">下班時間</th>
                 <th scope="col">休息時間</th>
 
@@ -54,7 +55,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.BreakTime)
                     </td>
-                    
+
                 </tr>
             }
         </tbody>
@@ -68,8 +69,8 @@
             console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
             $('#startTime').val(start.format('YYYY-MM-DD'));
             $('#endTime').val(end.format('YYYY-MM-DD'));
-            
-            
+
+
         }
         )
     </script>

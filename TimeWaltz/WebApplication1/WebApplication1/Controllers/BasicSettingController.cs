@@ -1,4 +1,4 @@
-﻿  using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
@@ -9,11 +9,12 @@ namespace WebApplication1.Controllers
 {
     public class BasicSettingController : Controller
     {
-
+        private readonly ShiftScheduleService _shiftScheduleService;
         private readonly VacationTypeService _vacationTypeService;
 
-        public BasicSettingController(VacationTypeService vacationTypeService)
+        public BasicSettingController(ShiftScheduleService shiftScheduleService, VacationTypeService vacationTypeService)
         {
+            _shiftScheduleService = shiftScheduleService;
             _vacationTypeService = vacationTypeService;
         }
         public IActionResult Index()
@@ -22,7 +23,7 @@ namespace WebApplication1.Controllers
         }
         [HttpGet]
         public IActionResult CreatePublicHoliday()
-        {            
+        {
             return View();
         }
         [HttpPost]
@@ -36,6 +37,24 @@ namespace WebApplication1.Controllers
             _vacationTypeService.CreateVacationType(entity);
             return RedirectToAction("ListVacationType");
         }
+        public IActionResult ListShiftSchedule()
+        {
+
+            var Id = 1;
+            var entities = _shiftScheduleService.GetPersonalShiftScheduleList(Id);
+            var models = EntityHelper.ToViewModel(entities);
+
+            return View(models);
+        }
+
+        [HttpPost]
+        public IActionResult ListShiftSchedule(ShiftSchedulesViewModel selectedModel)
+        {
+            var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
+            var models = EntityHelper.ToViewModel(entities);
+            return View(models);
+        }
+
         [HttpGet]
         public IActionResult CreateVacationType()
         {
@@ -58,8 +77,8 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult ListVacationType()
         {
-            
-            
+
+
             var entities = _vacationTypeService.GetVacationDetailsList();
             var model = EntityHelper.ToViewModel(entities);
             return View(model);
@@ -67,9 +86,9 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult ListVacationType(VacationTypeViewModel selectedModel)
         {
-            
+
             var entities = _vacationTypeService.GetSelectedShiftScheduleList(selectedModel);
-            if(entities != null)
+            if (entities != null)
             {
                 var models = EntityHelper.ToViewModel(entities);
                 return View(models);
@@ -79,12 +98,12 @@ namespace WebApplication1.Controllers
                 return View(selectedModel);
             }
         }
-            
+
 
         [HttpPost]
         public IActionResult CreateVacationType(VacationTypeViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 return View(model);
             }
@@ -102,7 +121,7 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         public IActionResult EditVacationType(int id)
-        {            
+        {
             var entity = _vacationTypeService.GetVacationTypeOrNull(id);
             if (entity == null)
             {
@@ -116,7 +135,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult EditVacationType(VacationTypeViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 return View(model);
             }
