@@ -15,10 +15,9 @@
                             <i class="far fa-calendar-alt"></i>
                         </span>
                     </div>
-                    <input type="hidden" name="StartTime" id="startTime"/>
-                    <input type="hidden" name="EndTime" id="endTime" />
+                    <input type="hidden" name="StartTime" id="startTime" value="@DateTime.Now.Date"/>
+                    <input type="hidden" name="EndTime" id="endTime" value="@DateTime.Now.Date" />
 
-                    <input name="dateRange" type="text" id="reservation" class="form-control">
                     <button type="submit" class="btn btn-outline-dark">查詢</button>
                 </div>
             </form>

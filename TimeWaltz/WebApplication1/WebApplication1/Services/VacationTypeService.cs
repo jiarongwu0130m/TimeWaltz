@@ -53,5 +53,21 @@ namespace WebApplication1.Services
             }
             return entity.Id;
         }
+
+        internal List<VacationDetail> GetSelectedShiftScheduleList(VacationTypeViewModel selectedModel)
+        {            
+            var typeName = selectedModel.VacationType;
+            if(typeName != null)
+            {
+                var entities = _timeWaltzContext.VacationDetails
+                .Where(v => v.VacationType == typeName).ToList();
+                return entities;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
     }
 }

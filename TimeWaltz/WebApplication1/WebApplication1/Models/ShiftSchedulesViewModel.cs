@@ -5,6 +5,7 @@ namespace WebApplication1.Models
 {
     public class ShiftSchedulesViewModel
     {
+        public int Id { get; set; }
         public DateTime Date { get;  set; }
         public DayOfWeek DayOfWeek { get;  set; }
         [DataType(DataType.DateTime)]

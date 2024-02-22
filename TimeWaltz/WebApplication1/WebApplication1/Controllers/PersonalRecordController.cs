@@ -54,11 +54,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult ShiftSchedule(ShiftSchedulesViewModel model)
+        public IActionResult ShiftSchedule(ShiftSchedulesViewModel selectedModel)
         {
-            //TODO: 將model接到的sta和end拿來當Where條件做出查詢功能
-            
-            return View();
+            var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
+            var models = EntityHelper.ToViewModel(entities);
+            return View(models);
         }
 
 

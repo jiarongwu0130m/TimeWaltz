@@ -4,7 +4,18 @@
     Layout = "_Layout";
     ViewData["Title"] = "假別瀏覽";
 }
-
+<div class="row">
+    <div class="form-inline mb-3">
+        <div class="form-group">
+            <label>假別名稱查詢：</label>
+            <form asp-action="ListVacationType" asp-controller="BasicSetting" method="post">
+                                   
+                    <input name="VacationType" type="text">
+                    <button type="submit" class="btn btn-outline-dark">查詢</button>
+                </div>
+            </form>
+        </div>@* 好奇怪 多了一個div排版就正常了，組長大大救我我是前端小廢物 *@
+    </div>
 <div class="card-body">
     <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
         <div class="row">

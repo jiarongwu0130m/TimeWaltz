@@ -19,6 +19,13 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
+        //public static ShiftSchedule ToEntity(ShiftSchedulesViewModel model)
+        //{
+        //    var entity = new ShiftSchedule
+        //    {
+
+        //    };
+        //}
 
         
     }

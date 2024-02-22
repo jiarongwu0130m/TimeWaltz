@@ -49,6 +49,22 @@ namespace WebApplication1.Controllers
             var model = EntityHelper.ToViewModel(entities);
             return View(model);
         }
+        [HttpPost]
+        public IActionResult ListVacationType(VacationTypeViewModel selectedModel)
+        {
+            
+            var entities = _vacationTypeService.GetSelectedShiftScheduleList(selectedModel);
+            if(entities != null)
+            {
+                var models = EntityHelper.ToViewModel(entities);
+                return View(models);
+            }
+            else
+            {
+                return View(selectedModel);
+            }
+        }
+            
 
         [HttpPost]
         public IActionResult CreateVacationType(VacationTypeViewModel model)
