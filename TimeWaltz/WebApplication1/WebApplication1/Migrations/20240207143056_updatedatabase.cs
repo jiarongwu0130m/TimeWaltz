@@ -78,7 +78,7 @@ namespace WebApplication1.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DepartmentName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    EmployeesID = table.Column<int>(type: "int", nullable: false),
+                    EmployeesID = table.Column<int>(type: "int", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -185,7 +185,6 @@ namespace WebApplication1.Migrations
                 {
                     table.PrimaryKey("PK_UserOfDepartment", x => x.ID);
                 });
-            //TODO: 將Gender改為不可NULL
             migrationBuilder.CreateTable(
                 name: "VacationDetails",
                 columns: table => new
@@ -193,7 +192,7 @@ namespace WebApplication1.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VacationType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Gender = table.Column<bool>(type: "bit", nullable: true),
+                    Gender = table.Column<bool>(type: "bit", nullable: false),
                     NumberOfDays = table.Column<int>(type: "int", nullable: false),
                     Cycle = table.Column<int>(type: "int", nullable: false),
                     MinVacationHours = table.Column<int>(type: "int", nullable: false)
@@ -334,8 +333,8 @@ namespace WebApplication1.Migrations
                     EmployeesID = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    Latitude = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
-                    Longitude = table.Column<decimal>(type: "decimal(18,0)", nullable: false)
+                    Latitude = table.Column<decimal>(type: "decimal(18,6)", nullable: false),
+                    Longitude = table.Column<decimal>(type: "decimal(18,6)", nullable: false)
                 },
                 constraints: table =>
                 {
