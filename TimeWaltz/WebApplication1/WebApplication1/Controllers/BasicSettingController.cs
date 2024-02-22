@@ -9,16 +9,35 @@ namespace WebApplication1.Controllers
 {
     public class BasicSettingController : Controller
     {
-
+        private readonly ShiftScheduleService _shiftScheduleService;
         private readonly VacationTypeService _vacationTypeService;
 
-        public BasicSettingController(VacationTypeService vacationTypeService)
+        public BasicSettingController(ShiftScheduleService shiftScheduleService, VacationTypeService vacationTypeService)
         {
+            _shiftScheduleService = shiftScheduleService;
             _vacationTypeService = vacationTypeService;
         }
         public IActionResult Index()
         {
             return View();
+        }
+        [HttpGet]
+        public IActionResult ListShiftSchedule()
+        {
+
+            var Id = 1;
+            var entities = _shiftScheduleService.GetPersonalShiftScheduleList(Id);
+            var models = EntityHelper.ToViewModel(entities);
+
+            return View(models);
+        }
+
+        [HttpPost]
+        public IActionResult ListShiftSchedule(ShiftSchedulesViewModel selectedModel)
+        {
+            var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
+            var models = EntityHelper.ToViewModel(entities);
+            return View(models);
         }
 
         [HttpGet]

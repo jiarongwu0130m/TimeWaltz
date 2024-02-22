@@ -9,13 +9,13 @@ namespace WebApplication1.Controllers
 {
     public class PersonalRecordController : Controller
     {
-        private readonly ShiftScheduleService _shiftScheduleService;
+        
         private readonly ClockService _clockService;
         private readonly TimeWaltzContext _timeWaltzContext;
 
-        public PersonalRecordController(ShiftScheduleService shiftScheduleService, ClockService clockService,TimeWaltzContext timeWaltzContext)
+        public PersonalRecordController(ClockService clockService,TimeWaltzContext timeWaltzContext)
         {
-            _shiftScheduleService = shiftScheduleService;
+            
             _clockService = clockService;
             _timeWaltzContext = timeWaltzContext;
         }
@@ -43,24 +43,7 @@ namespace WebApplication1.Controllers
         //    return Json(data);
 
         //}
-        [HttpGet]
-        public IActionResult ShiftSchedule()
-        {
-            
-            var Id = 1;
-            var entities = _shiftScheduleService.GetPersonalShiftScheduleList(Id);
-            var models = EntityHelper.ToViewModel(entities);
-
-            return View(models);
-        }
-
-        [HttpPost]
-        public IActionResult ShiftSchedule(ShiftSchedulesViewModel selectedModel)
-        {
-            var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
-            var models = EntityHelper.ToViewModel(entities);
-            return View(models);
-        }
+        
 
 
         public IActionResult Clock()
