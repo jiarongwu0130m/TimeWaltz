@@ -20,7 +20,22 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-
+        [HttpGet]
+        public IActionResult CreatePublicHoliday()
+        {            
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreatePublicHoliday(PublicHolidayViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var entity = ViewModelHelper.ToEntity(model);
+            _vacationTypeService.CreateVacationType(entity);
+            return RedirectToAction("ListVacationType");
+        }
         [HttpGet]
         public IActionResult CreateVacationType()
         {
