@@ -10,13 +10,14 @@ namespace WebApplication1.Controllers
     public class PersonalRecordController : Controller
     {
         private readonly ShiftScheduleService _shiftScheduleService;
-                private readonly ClockService _clockService;
+        private readonly ClockService _clockService;
+        private readonly TimeWaltzContext _timeWaltzContext;
 
-
-        public PersonalRecordController(ShiftScheduleService shiftScheduleService, ClockService clockService)
+        public PersonalRecordController(ShiftScheduleService shiftScheduleService, ClockService clockService,TimeWaltzContext timeWaltzContext)
         {
             _shiftScheduleService = shiftScheduleService;
             _clockService = clockService;
+            _timeWaltzContext = timeWaltzContext;
         }
 
        
