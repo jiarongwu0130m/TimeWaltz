@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Runtime.Intrinsics.X86;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
@@ -55,7 +56,37 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Clock()
         {
-            return View();
+            var toDay = DateTime.Now.Date;
+            var clockRecord = _timeWaltzContext.Clocks.FirstOrDefault(res => res.Date.Date == toDay);
+            ClockViewModel clockViewModel = null;
+
+            if (clockRecord != null)
+            {
+                clockViewModel = new ClockViewModel
+                {
+                    EmployeesId = clockRecord.EmployeesId,
+                    StartClockInDate = clockRecord.Status == ClockStatusEnum.上班打卡 ? clockRecord.Date : null,
+                    StartClockInLongitude = clockRecord.Status == ClockStatusEnum.上班打卡 ? clockRecord.Longitude : null,
+                    StartClockInLatitude = clockRecord.Status == ClockStatusEnum.上班打卡 ? clockRecord.Latitude : null,
+                    EndClockInDate = clockRecord.Status == ClockStatusEnum.下班打卡 ? clockRecord.Date : null,
+                    EndClockInLongitude = clockRecord.Status == ClockStatusEnum.下班打卡 ? clockRecord.Longitude : null,
+                    EndClockInLatitude = clockRecord.Status == ClockStatusEnum.下班打卡 ? clockRecord.Latitude : null,
+                };
+
+                var shift = _timeWaltzContext.Shifts.FirstOrDefault(workShift => workShift.ShiftsDate.Date == toDay);
+                var shiftSchedule = _timeWaltzContext.ShiftSchedules.FirstOrDefault(ShiftSchedule => ShiftSchedule.StartTime.Date == toDay);
+
+                if (shift != null && shiftSchedule != null)
+                {
+                    TimeSpan startTimeOfDay = shift.ShiftSchedule.StartTime.TimeOfDay;
+                    TimeSpan endTimeOfDay = shift.ShiftSchedule.EndTime.TimeOfDay;
+
+                    clockViewModel.ShiftScheduleStartTime = startTimeOfDay;
+                    clockViewModel.ShiftScheduleEndTime = endTimeOfDay;
+                }
+            }
+
+            return View(clockViewModel ?? new ClockViewModel());
         }
 
         [HttpPost]
@@ -71,24 +102,36 @@ namespace WebApplication1.Controllers
             var clockData = new Clock
             {
                 EmployeesId = model.EmployeesId,
-                Date = model.Date,
+                //Date = model.Date,
                 Status = model.Status,
-                Longitude = model.Longitude,
-                Latitude = model.Latitude,
+                //Longitude = model.Longitude,
+                //Latitude = model.Latitude,
             };
 
             if (model.Status == ClockStatusEnum.上班打卡)
             {
+                #region
+                clockData.Date = (DateTime)model.StartClockInDate;
+                clockData.Longitude = (decimal)model.StartClockInLongitude;
+                clockData.Latitude = (decimal)model.StartClockInLatitude;
+                #endregion
+
                 _clockService.ClockData(clockData);
                 ViewBag.SuccessMessage = "上班打卡成功！";
-                return View();
+                //return View();
             }
             else if (model.Status == ClockStatusEnum.下班打卡)
             {
+                #region
+                clockData.Date = (DateTime)model.EndClockInDate;
+                clockData.Longitude = (decimal)model.EndClockInLongitude;
+                clockData.Latitude = (decimal)model.EndClockInLatitude;
+                #endregion
+
                 _clockService.ClockData(clockData);
                 ViewBag.SuccessMessage = "下班打卡成功！";
             }
-                return View();
+            return RedirectToAction("Clock");
         }
 
         public IActionResult Attendance()

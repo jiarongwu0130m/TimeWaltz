@@ -14,26 +14,26 @@
                 <div class="card-body">
                     <div class="row form-group">
                         <label class="col-form-label col-md-auto">上班時間</label>
-                        <input asp-for="Date" type="text" class="form-control col-md-5" id="startTime" readonly>
+                        <input asp-for="StartClockInDate" type="text" class="form-control col-md-5" id="startTime" readonly>
                     </div>
                     <div class="row form-group">
                         <label class="col-form-label col-md-auto">打卡地點</label>
                         <label class="col-form-label col-md-auto">經度：</label>
-                        <input asp-for="Longitude" type="text" class="form-control col-md-2" id="StartAddLng" readonly>
+                        <input asp-for="StartClockInLongitude" type="text" class="form-control col-md-2" id="StartAddLng" readonly>
                         <label class="col-form-label col-md-auto">緯度：</label>
-                        <input asp-for="Latitude" type="text" class="form-control col-md-2" id="StartAddLat" readonly>
+                        <input asp-for="StartClockInLatitude" type="text" class="form-control col-md-2" id="StartAddLat" readonly>
                     </div>
                 <hr>
                     <div class="row form-group">
                         <label class="col-form-label col-md-auto">下班時間</label>
-                        <input asp-for="Date" type="text" class="form-control col-md-5" id="endTime" readonly>
+                        <input asp-for="EndClockInDate" type="text" class="form-control col-md-5" id="endTime" readonly>
                     </div>
                     <div class="row form-group">
                         <label class="col-form-label col-md-auto">打卡地點</label>
                         <label class="col-form-label col-md-auto">經度：</label>
-                        <input asp-for="Longitude" type="text" class="form-control col-md-2" id="EndAddLng" readonly>
+                        <input asp-for="EndClockInLongitude" type="text" class="form-control col-md-2" id="EndAddLng" readonly>
                         <label class="col-form-label col-md-auto">緯度：</label>
-                        <input asp-for="Latitude" type="text" class="form-control col-md-2" id="EndAddLat" readonly>
+                        <input asp-for="EndClockInLatitude" type="text" class="form-control col-md-2" id="EndAddLat" readonly>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -52,11 +52,11 @@
             <div class="card-body">
                 <div class="form-group row">
                     <label class="col-form-label col-sm-3">上班時間</label>
-                    <input type="text" class="col-sm-9">
+                    <input asp-for="ShiftScheduleStartTime" type="text" class="col-sm-9" readonly>
                 </div>
                 <div class="form-group row">
                     <label class="col-form-label col-sm-3">下班時間</label>
-                    <input type="text" class="col-sm-9">
+                    <input asp-for="ShiftScheduleEndTime" type=" text" class="col-sm-9" readonly>
                 </div>
             </div>
         </div>

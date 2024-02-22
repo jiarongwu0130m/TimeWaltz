@@ -1,5 +1,7 @@
-﻿using WebApplication1.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApplication1.Models;
 using WebApplication1.Models.Entity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication1.Services
 {
@@ -17,5 +19,16 @@ namespace WebApplication1.Services
             _timeWaltzDb.SaveChanges();
             return clockDb.EmployeesId;
         }
+
+        //public  GetToDayClockRecord(DateTime toDay,ClockViewModel model)
+        //{
+        //    var clockRecord = _timeWaltzDb.Clocks.FirstOrDefault(clockRes => clockRes.Date.Date == toDay.Date);
+            
+        //    if(clockRecord != null)
+        //    {
+        //        return clockRecord;  
+        //    }
+        //    return null;
+        //}
     }
 }
