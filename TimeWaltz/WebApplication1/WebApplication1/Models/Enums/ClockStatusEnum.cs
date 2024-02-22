@@ -2,7 +2,7 @@
 {
     public enum ClockStatusEnum
     {
-        上班卡 = 0,
-        下班卡 = 1,
+        上班打卡 = 0,
+        下班打卡 = 1,
     }
 }
