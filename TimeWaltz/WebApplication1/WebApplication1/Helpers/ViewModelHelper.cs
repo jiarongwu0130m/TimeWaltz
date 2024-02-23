@@ -5,7 +5,20 @@ namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
-        public static VacationDetail ToEntity(VacationTypeViewModel model)
+        public static VacationDetail ToEntity(CreateVacationTypeViewModel model)
+        {
+
+            var entity = new VacationDetail
+            {
+                VacationType = model.VacationType,
+                Gender = model.Gender,
+                NumberOfDays = model.NumberOfDays,
+                Cycle = model.Cycle,
+                MinVacationHours = model.MinVacationHours
+            };
+            return entity;
+        }
+        public static VacationDetail ToEntity(EditVacationTypeViewModel model)
         {            
 
             var entity = new VacationDetail

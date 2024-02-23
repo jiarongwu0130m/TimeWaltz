@@ -63,7 +63,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult CreateVacationType()
         {
-            var model = new VacationTypeViewModel
+            var model = new CreateVacationTypeViewModel
             {
                 GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
                 {
@@ -89,7 +89,7 @@ namespace WebApplication1.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult ListVacationType(VacationTypeViewModel selectedModel)
+        public IActionResult ListVacationType(EditVacationTypeViewModel selectedModel)
         {
 
             var entities = _vacationTypeService.GetSelectedShiftScheduleList(selectedModel);
@@ -106,7 +106,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpPost]
-        public IActionResult CreateVacationType(VacationTypeViewModel model)
+        public IActionResult CreateVacationType(CreateVacationTypeViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -138,7 +138,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditVacationType(VacationTypeViewModel model)
+        public IActionResult EditVacationType(EditVacationTypeViewModel model)
         {
             if (ModelState.IsValid)
             {

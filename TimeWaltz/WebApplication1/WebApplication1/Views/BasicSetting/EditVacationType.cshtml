@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.VacationTypeViewModel
+﻿@model WebApplication1.Models.EditVacationTypeViewModel
 
 @{
     Layout = "_Layout";
@@ -40,9 +40,9 @@
 
             <div class="card-footer">
                 <div class="row float-right">
-                    <div class="col ">
-                        <a asp-action="ListVacationType" asp-controller="BasicSetting" class="btn btn-primary">返回</a>
+                    <div class="col ">                        
                         <input type="submit" value="送出" class="btn btn-primary" />
+                        <a asp-action="ListVacationType" asp-controller="BasicSetting" class="btn btn-primary">返回</a>
                     </div>
                 </div>
             </div>
