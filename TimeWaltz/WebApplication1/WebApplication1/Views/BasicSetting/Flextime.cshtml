@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.title = "彈性上班設定";
+}
+@model FlextimeViewModel
+
+
+<div class="row">
+    <div class="col-md">
+        <form asp-controller="BasicSetting" asp-action="Flextime" method="post">
+            <input asp-for="Id" type="hidden" />
+            <div class="card-body">
+                <div class="row mb-2">
+                    <label class="col-form-label">彈性上下班時間：</label>
+                    <input asp-for="FlexibleTime" type="text" class="col-sm-1 form-control">
+                    <span class="input-group-text">分鐘</span>
+                </div>
+
+                <div class="row mb-2">
+                    <input asp-for="MoveUp" class=" mr-2" type="checkbox" id="flexCheck" value="true">
+                    <label class="col-form-label" for="flexCheck">可提前上班</label>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <input type="submit" class="btn btn-outline-danger" value="儲存" />
+                <input type="submit" class="btn btn-outline-dark" value="取消" />                
+            </div>
+
+        </form>
+    </div>
+
+</div>
