@@ -30,9 +30,9 @@ namespace WebApplication1.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreatePublicHoliday(PublicHolidayViewModel model)
+        public IActionResult CreatePublicHoliday(CreatePublicHolidayViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -41,6 +41,50 @@ namespace WebApplication1.Controllers
             return RedirectToAction("ListPublicHoliday");
         }
 
+        public IActionResult ListPublicHoliday()
+        {
+            var entities = _publicHolidayService.GetPublicHolidayList();
+            var models = EntityHelper.ToViewModel(entities);
+
+            return View(models);
+        }
+
+        [HttpPost]
+        public IActionResult ListPublicHoliday(EditPublicHolidayViewModel selectedModel)
+        {
+            var entities = _publicHolidayService.GetSelectedPublicHolidayList(selectedModel);
+            if(entities != null)
+            {
+                var models = EntityHelper.ToViewModel(entities);
+                return View(models);
+            }
+            return View(selectedModel);
+        }
+        [HttpGet]
+        public IActionResult EditPublicHoliday(int Id)
+        {
+            var entity = _publicHolidayService.GetPublicHolidayOrNull(Id);
+            var model = EntityHelper.ToViewModel(entity);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult EditPublicHoliday(EditPublicHolidayViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _publicHolidayService.EditPublicHoliday(model);
+            return RedirectToAction("ListPublicHoliday");
+        }
+
+        public IActionResult DeletePublicHoliday(int id)
+        {
+            //TODO: 驗證是否為登入者有權限的資料
+            var entity = _publicHolidayService.GetPublicHolidayOrNull(id);
+            _publicHolidayService.DeleteVacationType(entity);
+            return RedirectToAction("ListPublicHoliday");
+        }
 
         public IActionResult ListShiftSchedule()
         {
@@ -56,8 +100,12 @@ namespace WebApplication1.Controllers
         public IActionResult ListShiftSchedule(ShiftSchedulesViewModel selectedModel)
         {
             var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
-            var models = EntityHelper.ToViewModel(entities);
-            return View(models);
+            if(entities != null)
+            {
+                var models = EntityHelper.ToViewModel(entities);
+                return View(models);
+            }           
+            return View(selectedModel);
         }
 
         [HttpGet]
@@ -82,8 +130,6 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult ListVacationType()
         {
-
-
             var entities = _vacationTypeService.GetVacationDetailsList();
             var model = EntityHelper.ToViewModel(entities);
             return View(model);
@@ -91,8 +137,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult ListVacationType(EditVacationTypeViewModel selectedModel)
         {
-
-            var entities = _vacationTypeService.GetSelectedShiftScheduleList(selectedModel);
+            var entities = _vacationTypeService.GetSelectedVacationTypeList(selectedModel);
             if (entities != null)
             {
                 var models = EntityHelper.ToViewModel(entities);

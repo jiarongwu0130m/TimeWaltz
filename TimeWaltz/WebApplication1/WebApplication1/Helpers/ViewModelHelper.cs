@@ -32,11 +32,10 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-        public static PublicHoliday ToEntity(PublicHolidayViewModel model)
+        public static PublicHoliday ToEntity(CreatePublicHolidayViewModel model)
         {
             var entity = new PublicHoliday
             {
-                Id = model.Id,
                 HolidayName = model.HolidayName,
                 Date = model.Date
             };
