@@ -4,10 +4,10 @@ using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Models
 {
-    public class VacationTypeViewModel
+    public class CreateVacationTypeViewModel
     {
         
-        public int Id { get; set; }
+
         [Required(ErrorMessage ="請填假別名稱")]
         public string VacationType { get; set; }
         

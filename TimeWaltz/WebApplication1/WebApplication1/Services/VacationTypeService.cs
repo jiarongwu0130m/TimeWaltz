@@ -24,7 +24,7 @@ namespace WebApplication1.Services
            
         }
 
-        public int EditVacationType(VacationTypeViewModel model)
+        public int EditVacationType(EditVacationTypeViewModel model)
         {
             var entity = _timeWaltzContext.VacationDetails.FirstOrDefault(x => x.Id == model.Id);
 
@@ -54,7 +54,7 @@ namespace WebApplication1.Services
             return entity.Id;
         }
 
-        internal List<VacationDetail> GetSelectedShiftScheduleList(VacationTypeViewModel selectedModel)
+        public List<VacationDetail> GetSelectedShiftScheduleList(EditVacationTypeViewModel selectedModel)
         {            
             var typeName = selectedModel.VacationType;
             if(typeName != null)

@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.VacationTypeViewModel
+﻿@model WebApplication1.Models.CreateVacationTypeViewModel
 
 @{
     Layout = "_Layout";
@@ -42,6 +42,7 @@
                 <div class="row float-right">
                     <div class="col ">
                         <input type="submit" value="送出" class="btn btn-primary" />
+                        <a asp-controller="BasicSetting" asp-action="ListVacationType" class="btn btn-outline-success">返回</a>
                     </div>
                 </div>
             </div>
