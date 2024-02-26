@@ -45,7 +45,6 @@ namespace WebApplication1.Helpers
         {
             var entity = new PublicHoliday
             {
-                Id = model.Id,
                 HolidayName = model.HolidayName,
                 Date = model.Date
             };

@@ -50,11 +50,11 @@ namespace WebApplication1.Services
             _timeWaltzContext.VacationDetails.Add(entity);
             _timeWaltzContext.SaveChanges();
             return entity.Id;
-        }
+        }        
         public VacationDetail? GetVacationTypeOrNull(int id)
         {
             return _timeWaltzContext.VacationDetails.FirstOrDefault(x => x.Id == id);            
-           
+
         }
 
         public int EditVacationType(VacationTypeViewModel model)
@@ -83,8 +83,9 @@ namespace WebApplication1.Services
             {
                 _timeWaltzContext.VacationDetails.Remove(entity);
                 _timeWaltzContext.SaveChanges();
+                return entity.Id;
             }
-            return entity.Id;
+            return -1;
         }
 
         public List<VacationDetail> GetSelectedShiftScheduleList(VacationTypeViewModel selectedModel)
@@ -102,5 +103,18 @@ namespace WebApplication1.Services
             }
             
         }
+
+        public List<VacationDetail> GetSelectedVacationTypeList(EditVacationTypeViewModel selectedModel)
+        {
+            if(selectedModel.QueryVacationType != null) 
+            {
+                return _timeWaltzContext.VacationDetails.Where(v => v.VacationType.Contains(selectedModel.QueryVacationType)).ToList();
+            }
+            else
+            {
+                return _timeWaltzContext.VacationDetails.ToList();
+            }
+
+        }    
     }
 }

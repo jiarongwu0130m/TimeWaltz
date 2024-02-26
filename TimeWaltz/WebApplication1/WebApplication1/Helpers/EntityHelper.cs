@@ -7,7 +7,27 @@ namespace WebApplication1.Helpers
 {
     public class EntityHelper
     {
-        public static List<PublicHolidayViewModel> ToViewModel(List<PublicHoliday> entities)
+
+        public static EditPublicHolidayViewModel ToViewModel(PublicHoliday entity)
+        {
+            var model = new EditPublicHolidayViewModel
+            {
+                Id = entity.Id,
+                HolidayName = entity.HolidayName,
+                Date = entity.Date,
+            };
+            return model;
+        }
+        public static List<EditPublicHolidayViewModel> ToViewModel(List<PublicHoliday> entities)
+        {
+            var models = new List<EditPublicHolidayViewModel>();
+            foreach(var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+            return models;
+        }
+        public static EditVacationTypeViewModel ToViewModel(VacationDetail entity)
         {
             var models = new List<PublicHolidayViewModel>();
             foreach (var entity in entities)                    //跑迴圈

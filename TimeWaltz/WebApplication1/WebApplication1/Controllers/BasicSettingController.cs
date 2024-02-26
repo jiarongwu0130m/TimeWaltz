@@ -40,46 +40,52 @@ namespace WebApplication1.Controllers
             _publicHolidayService.CreatePublicHoliday(entity);
             return RedirectToAction("ListPublicHoliday");
         }
-        [HttpGet]
-        public IActionResult EditPublicHoliday(int id)
+
+        public IActionResult ListPublicHoliday()
         {
-            var entity = _publicHolidayService.GetPublicHolidayOrNull(id);
-            if(entity == null)
+            var entities = _publicHolidayService.GetPublicHolidayList();
+            var models = EntityHelper.ToViewModel(entities);
+
+            return View(models);
+        }
+
+        [HttpPost]
+        public IActionResult ListPublicHoliday(EditPublicHolidayViewModel selectedModel)
+        {
+            var entities = _publicHolidayService.GetSelectedPublicHolidayList(selectedModel);
+            if(entities != null)
             {
-                return RedirectToAction("ListPublicHoliday");
+                var models = EntityHelper.ToViewModel(entities);
+                return View(models);
             }
+            return View(selectedModel);
+        }
+        [HttpGet]
+        public IActionResult EditPublicHoliday(int Id)
+        {
+            var entity = _publicHolidayService.GetPublicHolidayOrNull(Id);
             var model = EntityHelper.ToViewModel(entity);
             return View(model);
         }
         [HttpPost]
-        public IActionResult EditPublicHoliday(PublicHolidayViewModel model)
+        public IActionResult EditPublicHoliday(EditPublicHolidayViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 return View(model);
             }
             _publicHolidayService.EditPublicHoliday(model);
             return RedirectToAction("ListPublicHoliday");
         }
-        public IActionResult ListPublicHoliday()
-        {
-            var entities = _publicHolidayService.GetPublicHolidayList();
-            var models = EntityHelper.ToViewModel(entities);
-            return View(models);
-        }
-        [HttpPost]
-        public IActionResult ListPublicHoliday(PublicHolidayViewModel selectedModel)
-        {
-            var entities = _publicHolidayService.GetSelectedPublicHolidayList(selectedModel);
-            var models = EntityHelper.ToViewModel(entities);
-            return View(models);
-        }
+
         public IActionResult DeletePublicHoliday(int id)
         {
-            var entity = _publicHolidayService.GetVacationTypeOrNull(id);
+            //TODO: 驗證是否為登入者有權限的資料
+            var entity = _publicHolidayService.GetPublicHolidayOrNull(id);
             _publicHolidayService.DeleteVacationType(entity);
             return RedirectToAction("ListPublicHoliday");
         }
+
         public IActionResult ListShiftSchedule()
         {
             //TODO: 將驗證資料中的員工Id帶進來
@@ -94,8 +100,12 @@ namespace WebApplication1.Controllers
         public IActionResult ListShiftSchedule(ShiftSchedulesViewModel selectedModel)
         {
             var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
-            var models = EntityHelper.ToViewModel(entities);
-            return View(models);
+            if(entities != null)
+            {
+                var models = EntityHelper.ToViewModel(entities);
+                return View(models);
+            }           
+            return View(selectedModel);
         }
 
         [HttpGet]
@@ -110,8 +120,6 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult ListVacationType()
         {
-
-
             var entities = _vacationTypeService.GetVacationDetailsList();
             var model = EntityHelper.ToViewModel(entities);
             return View(model);
@@ -119,8 +127,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult ListVacationType(VacationTypeViewModel selectedModel)
         {
-
-            var entities = _vacationTypeService.GetSelectedShiftScheduleList(selectedModel);
+            var entities = _vacationTypeService.GetSelectedVacationTypeList(selectedModel);
             if (entities != null)
             {
                 var models = EntityHelper.ToViewModel(entities);
