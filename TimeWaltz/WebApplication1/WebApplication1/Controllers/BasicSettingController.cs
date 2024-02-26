@@ -50,7 +50,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult ListPublicHoliday(EditPublicHolidayViewModel selectedModel)
+        public IActionResult ListPublicHoliday(PublicHolidayViewModel selectedModel)
         {
             var entities = _publicHolidayService.GetSelectedPublicHolidayList(selectedModel);
             if(entities != null)
@@ -135,7 +135,7 @@ namespace WebApplication1.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult ListVacationType(EditVacationTypeViewModel selectedModel)
+        public IActionResult ListVacationType(VacationTypeViewModel selectedModel)
         {
             var entities = _vacationTypeService.GetSelectedVacationTypeList(selectedModel);
             if (entities != null)

@@ -8,9 +8,9 @@ namespace WebApplication1.Helpers
     public class EntityHelper
     {
 
-        public static EditPublicHolidayViewModel ToViewModel(PublicHoliday entity)
+        public static PublicHolidayViewModel ToViewModel(PublicHoliday entity)
         {
-            var model = new EditPublicHolidayViewModel
+            var model = new PublicHolidayViewModel
             {
                 Id = entity.Id,
                 HolidayName = entity.HolidayName,
@@ -18,18 +18,18 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        public static List<EditPublicHolidayViewModel> ToViewModel(List<PublicHoliday> entities)
+        public static List<PublicHolidayViewModel> ToViewModel(List<PublicHoliday> entities)
         {
-            var models = new List<EditPublicHolidayViewModel>();
+            var models = new List<PublicHolidayViewModel>();
             foreach(var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
             return models;
         }
-        public static EditVacationTypeViewModel ToViewModel(VacationDetail entity)
+        public static VacationTypeViewModel ToViewModel(VacationDetail entity)
         {
-            var model = new EditVacationTypeViewModel
+            var model = new VacationTypeViewModel
             {
                 Id = entity.Id,
                 VacationType = entity.VacationType,
@@ -52,9 +52,9 @@ namespace WebApplication1.Helpers
             return model;
         }
 
-       public static List<EditVacationTypeViewModel> ToViewModel(List<VacationDetail> entities)
+       public static List<VacationTypeViewModel> ToViewModel(List<VacationDetail> entities)
         {
-            var models = new List<EditVacationTypeViewModel>();     //先準備一個空的
+            var models = new List<VacationTypeViewModel>();     //先準備一個空的
             
             foreach (var entity in entities)                    //跑迴圈
             {

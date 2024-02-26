@@ -23,7 +23,7 @@ namespace WebApplication1.Services
             return _timeWaltzContext.PublicHolidays.ToList();
         }
 
-        public List<PublicHoliday> GetSelectedPublicHolidayList(EditPublicHolidayViewModel selectedModel)
+        public List<PublicHoliday> GetSelectedPublicHolidayList(PublicHolidayViewModel selectedModel)
         {
             if(selectedModel.QueryHolidayName != null)
             {

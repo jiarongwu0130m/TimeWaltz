@@ -18,7 +18,7 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-        public static VacationDetail ToEntity(EditVacationTypeViewModel model)
+        public static VacationDetail ToEntity(VacationTypeViewModel model)
         {            
 
             var entity = new VacationDetail

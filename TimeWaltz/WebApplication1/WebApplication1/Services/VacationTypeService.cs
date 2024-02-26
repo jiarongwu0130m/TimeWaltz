@@ -56,7 +56,7 @@ namespace WebApplication1.Services
         }
         
 
-        public List<VacationDetail> GetSelectedVacationTypeList(EditVacationTypeViewModel selectedModel)
+        public List<VacationDetail> GetSelectedVacationTypeList(VacationTypeViewModel selectedModel)
         {
             if(selectedModel.QueryVacationType != null) 
             {
