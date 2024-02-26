@@ -10,23 +10,73 @@ namespace WebApplication1.Controllers
 {
     public class BasicSettingController : Controller
     {
-
+        private readonly SpecialHolidayService _specialHolidayService;
         private readonly ShiftScheduleService _shiftScheduleService;
         private readonly VacationTypeService _vacationTypeService;      
         private readonly PublicHolidayService _publicHolidayService;
         private readonly FlextimeService _flextimeService;
 
-        public BasicSettingController(VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService)
+        public BasicSettingController(SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService)
         {
             _shiftScheduleService = shiftScheduleService;
+            _specialHolidayService = specialHolidayService;
             _vacationTypeService = vacationTypeService;
             _publicHolidayService = publicHolidayService;
             _flextimeService = flextimeService;
         }
-        public IActionResult Index()
+        public IActionResult ListSpecialHoliday()
+        {
+            var entities = _specialHolidayService.GetSpecialHolidayList();
+            var models = EntityHelper.ToViewModel(entities);
+
+            return View(models);
+        }
+
+        [HttpPost]
+        public IActionResult ListSpecialHoliday(SpecialHolidayViewModel selectedModel)
+        {
+            var entities = _specialHolidayService.GetSelectedSpecialHolidayList(selectedModel);
+            if (entities != null)
+            {
+                var models = EntityHelper.ToViewModel(entities);
+                return View(models);
+            }
+            return View(selectedModel);
+        }
+        [HttpGet]
+        public IActionResult EditSpecialHoliday(int Id)
+        {
+            var entity = _specialHolidayService.GetSpecialHolidayOrNull(Id);
+            var model = EntityHelper.ToViewModel(entity);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult EditSpecialHoliday(EditSpecialHolidayViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _specialHolidayService.EditSpecialHoliday(model);
+            return RedirectToAction("ListPublicHoliday");
+        }
+        [HttpGet]
+        public IActionResult CreateSpecialHoliday()
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult CreateSpecialHoliday(CreateSpecialHolidayViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var entity = ViewModelHelper.ToEntity(model);
+            _specialHolidayService.CreatePublicHoliday(entity);
+            return RedirectToAction("ListSpecialHoliday");
+        }
+
         [HttpGet]
         public IActionResult CreatePublicHoliday()
         {
