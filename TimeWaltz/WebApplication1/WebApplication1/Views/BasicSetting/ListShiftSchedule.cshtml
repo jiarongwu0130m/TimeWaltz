@@ -8,7 +8,7 @@
     <div class="form-inline mb-3">
         <div class="form-group">
             <label>日期區間查詢：</label>
-            <form asp-action="ShiftSchedule" asp-controller="PersonalRecord" method="post">
+            <form asp-action="ListShiftSchedule" asp-controller="BasicSetting" method="post">
                 <div class="input-group col">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
@@ -47,10 +47,10 @@
                         @Html.DisplayFor(modelItem => item.DayOfWeek)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.StartTime)
+                        @Html.DisplayFor(modelItem => item.StartTime.TimeOfDay)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.EndTime)
+                        @Html.DisplayFor(modelItem => item.EndTime.TimeOfDay)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.BreakTime)
