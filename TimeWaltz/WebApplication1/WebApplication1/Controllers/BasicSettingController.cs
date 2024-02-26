@@ -73,7 +73,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult EditPublicHoliday(EditPublicHolidayViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -190,7 +190,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult EditVacationType(EditVacationTypeViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
