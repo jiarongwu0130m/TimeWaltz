@@ -2,18 +2,22 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Cryptography;
 using System.Text;
+using WebApplication1.Helpers;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
     public class SettingController : Controller
     {
         private readonly TimeWaltzContext _db;
+        private readonly AccountService _AccountService;
 
-        public SettingController(TimeWaltzContext db)
+        public SettingController(TimeWaltzContext db, AccountService AccountService)
         {
             _db = db;
+            _AccountService = AccountService;
         }
         /// <summary>
         /// 雜湊SHA256
@@ -57,15 +61,20 @@ namespace WebApplication1.Controllers
         /// 帳號查詢select
         /// </summary>
         /// <returns></returns>
-        public IActionResult AccountS()
+        public IActionResult Account()
         {
-            return View();
+
+            var Id = 1;
+            var entities = _AccountService.GetAccessOrNull();
+            var models = EntityHelper.ToViewModel(entities);
+
+            return View(models);
         }
         /// <summary>
         /// 帳號空白新增頁
         /// </summary>
         /// <returns></returns>
-        public IActionResult Account()
+        public IActionResult CreateAccount()
         {
             ViewBag.GenderEnum = _db.Departments.Select(se => new SelectListItem
             {
@@ -82,7 +91,7 @@ namespace WebApplication1.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Account(AccountViewModel model)
+        public IActionResult CreateAccount(AccountViewModel model)
         {
 
             if (!ModelState.IsValid)
@@ -93,16 +102,16 @@ namespace WebApplication1.Controllers
             string Salts = GenerateSalt();
 
             //密碼雜湊
-            model.Password = Get_SHA256_Hash(model.Password+ Salts);
+            //model.Password = Get_SHA256_Hash(model.Password+ Salts);
 
 
             _db.Users.Add(new User
             {
                 Account = model.Account,
-                Password = model.Password,
+                //Password = model.Password,
                 Stop = model.Stop,
                 Salt = Salts,
-                DepartmentId = Convert.ToInt32(model.DepartmentName),
+                DepartmentId = Convert.ToInt32(model.DepartmentID),
                 PasswordDate = DateTime.Now
             }) ;
             _db.SaveChanges();
@@ -112,39 +121,42 @@ namespace WebApplication1.Controllers
         }
 
 
-        ///// <summary>
-        ///// 帳號修改update
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <returns></returns>
-        //public IActionResult Account(string id, AccountViewModel model)
-        //{
+        [HttpPost]
+        /// <summary>
+        /// 帳號修改update
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult EditAccount(string id, AccountViewModel model)
+        {
 
-        //    //_db.Users.Add(new User
-        //    //{
-        //    //    Account = model.Account,
-        //    //    Password = model.Password,
-        //    //    Stop = model.Stop,
-        //    //    Salt = Salts,
-        //    //    DepartmentId = Convert.ToInt32(model.DepartmentName),
-        //    //    PasswordDate = DateTime.Now
-        //    //});
-        //    _db.SaveChanges();
-        //    return View();
-        //}
-        ///// <summary>
-        ///// 帳號修改 依照ID給予資料
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <returns></returns>
-        //public IActionResult Account(string id)
-        //{
-        //    //AccountViewModel data;
+            //_db.Users.Add(new User
+            //{
+            //    Account = model.Account,
+            //    Password = model.Password,
+            //    Stop = model.Stop,
+            //    Salt = Salts,
+            //    DepartmentId = Convert.ToInt32(model.DepartmentName),
+            //    PasswordDate = DateTime.Now
+            //});
+            _db.SaveChanges();
+            return View();
+        }
+
+        [HttpPost]
+        /// <summary>
+        /// 帳號修改 依照ID給予資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult EditAccount(string id)
+        {
+            //AccountViewModel data;
 
 
-        //    //return View(data);
-        //    return View();
-        //}
+            //return View(data);
+            return View();
+        }
 
         #endregion
 

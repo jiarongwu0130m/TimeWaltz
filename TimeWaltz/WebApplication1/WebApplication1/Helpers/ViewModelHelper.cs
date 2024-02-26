@@ -40,6 +40,20 @@ namespace WebApplication1.Helpers
         //    };
         //}
 
-        
+
+        public static User ToEntity(AccountViewModel model)
+        {
+
+            var entity = new User
+            {
+                Account = model.Account,
+                //Password = model.Password,
+                EmployeesId = model.EmployeesID.Value,
+                DepartmentId = model.DepartmentID.Value,
+                Stop = model.Stop,
+                PasswordDate = DateTime.Now
+            };
+            return entity;
+        }
     }
 }

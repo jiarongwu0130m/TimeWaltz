@@ -69,5 +69,29 @@ namespace WebApplication1.Helpers
             
             return models;
        }
+
+
+        public static AccountViewModel ToViewModel(User entity)
+        {
+            var model = new AccountViewModel
+            {
+                Id = entity.Id,
+                Account = entity.Account,
+                EmployeesID = entity.EmployeesId,
+                DepartmentID = entity.DepartmentId,
+                Stop = entity.Stop,
+            };
+            return model;
+        }
+        public static List<AccountViewModel> ToViewModel(List<User> entities)
+        {
+            var models = new List<AccountViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
     }
 }
