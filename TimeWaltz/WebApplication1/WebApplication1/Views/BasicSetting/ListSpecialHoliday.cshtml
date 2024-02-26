@@ -1,0 +1,42 @@
+﻿@model IEnumerable<WebApplication1.Models.SpecialHolidayViewModel>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "特休設定一覽";
+}
+<div class="row">   
+
+    <table class="table table-bordered">
+        <thead>
+        <thead>
+            <tr>
+                <th>
+                        @Html.DisplayNameFor(model => model.HowToGive)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.GiveDay)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+  
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HowToGive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GiveDay)
+                    </td>
+                    <td>
+                        @Html.ActionLink("詳細", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("刪除", "Delete", new { id = item.Id})
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

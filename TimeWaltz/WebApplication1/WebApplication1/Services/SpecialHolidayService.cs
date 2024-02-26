@@ -21,24 +21,37 @@ namespace WebApplication1.Services
             return entity.Id;
         }
 
-        internal void EditSpecialHoliday(EditSpecialHolidayViewModel model)
+        public int EditSpecialHoliday(EditSpecialHolidayViewModel model)
         {
-            throw new NotImplementedException();
+            var entity = GetSpecialHolidayOrNull(model.Id);
+            entity.HowToGive = model.HowToGive;
+            entity.GiveDay = model.GiveDay;
+
+            _timeWaltzContext.SaveChanges();
+            return model.Id;
         }
 
-        internal PublicHoliday GetSelectedSpecialHolidayList(SpecialHolidayViewModel selectedModel)
+        
+
+        public List<SpecialHoliday> GetSpecialHolidayList()
         {
-            throw new NotImplementedException();
+            return _timeWaltzContext.SpecialHoliday.ToList();
         }
 
-        internal PublicHoliday GetSpecialHolidayList()
+        public SpecialHoliday? GetSpecialHolidayOrNull(int id)
         {
-            throw new NotImplementedException();
+            return _timeWaltzContext.SpecialHoliday.FirstOrDefault(x => x.Id == id);
         }
 
-        internal PublicHoliday GetSpecialHolidayOrNull(int id)
+        public int DeleteSpecialHoliday(SpecialHoliday entity)
         {
-            throw new NotImplementedException();
+            if(entity != null)
+            {
+                _timeWaltzContext.SpecialHoliday.Remove(entity);
+                _timeWaltzContext.SaveChanges() ;
+                return entity.Id;
+            }
+            return -1;
         }
     }
 }

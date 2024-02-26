@@ -32,23 +32,17 @@ namespace WebApplication1.Controllers
             return View(models);
         }
 
-        [HttpPost]
-        public IActionResult ListSpecialHoliday(SpecialHolidayViewModel selectedModel)
-        {
-            var entities = _specialHolidayService.GetSelectedSpecialHolidayList(selectedModel);
-            if (entities != null)
-            {
-                var models = EntityHelper.ToViewModel(entities);
-                return View(models);
-            }
-            return View(selectedModel);
-        }
+        
         [HttpGet]
         public IActionResult EditSpecialHoliday(int Id)
         {
-            var entity = _specialHolidayService.GetSpecialHolidayOrNull(Id);
-            var model = EntityHelper.ToViewModel(entity);
-            return View(model);
+            if(Id != 0)
+            {
+                var entity = _specialHolidayService.GetSpecialHolidayOrNull(Id);
+                var model = EntityHelper.ToViewModel(entity);
+                return View(model);
+            }
+            return RedirectToAction("ListSpecialHoliday");            
         }
         [HttpPost]
         public IActionResult EditSpecialHoliday(EditSpecialHolidayViewModel model)
@@ -75,6 +69,13 @@ namespace WebApplication1.Controllers
             var entity = ViewModelHelper.ToEntity(model);
             _specialHolidayService.CreatePublicHoliday(entity);
             return RedirectToAction("ListSpecialHoliday");
+        }
+
+        public IActionResult DeleteSpecialHoliday(int id)
+        {
+            var entity = _specialHolidayService.GetSpecialHolidayOrNull(id);
+            _specialHolidayService.DeleteSpecialHoliday(entity);
+            return RedirectToAction("ListVacationType");
         }
 
         [HttpGet]
