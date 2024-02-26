@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
+using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
 using WebApplication1.Services;
 
@@ -13,12 +14,14 @@ namespace WebApplication1.Controllers
         private readonly ShiftScheduleService _shiftScheduleService;
         private readonly VacationTypeService _vacationTypeService;      
         private readonly PublicHolidayService _publicHolidayService;
+        private readonly FlextimeService _flextimeService;
 
-        public BasicSettingController(VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService)
+        public BasicSettingController(VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService)
         {
             _shiftScheduleService = shiftScheduleService;
             _vacationTypeService = vacationTypeService;
             _publicHolidayService = publicHolidayService;
+            _flextimeService = flextimeService;
         }
         public IActionResult Index()
         {
@@ -130,6 +133,8 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult ListVacationType()
         {
+
+
             var entities = _vacationTypeService.GetVacationDetailsList();
             var model = EntityHelper.ToViewModel(entities);
             return View(model);
@@ -191,6 +196,23 @@ namespace WebApplication1.Controllers
             }
             _vacationTypeService.EditVacationType(model);
             return RedirectToAction("ListVacationType");
+        }
+
+        public IActionResult Flextime()
+        {
+            var model = _flextimeService.GetFlextimeViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Flextime(FlextimeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _flextimeService.UpdateFlextime(model);
+            return View();
         }
     }
 }
