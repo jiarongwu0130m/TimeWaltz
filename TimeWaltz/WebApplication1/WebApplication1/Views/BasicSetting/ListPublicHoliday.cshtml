@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.VacationTypeViewModel>
+﻿@model IEnumerable<WebApplication1.Models.PublicHolidayViewModel>
 
 @{
     Layout = "_Layout";
@@ -7,21 +7,20 @@
 <style>
     .thinkcss-right {
         text-align: right;
-        
     }
 </style>
 <div class="row">
     <div class="form-inline col-sm-6 col-md-8">
         <div class="form-group col-sm-12">
-            <label>假別名稱查詢：</label>
-            <form asp-action="ListVacationType" asp-controller="BasicSetting" method="post">                                   
-                    <input name="VacationType" type="text">
-                    <button type="submit" class="btn btn-outline-dark">查詢</button>               
+            <label>國定假別名稱查詢：</label>
+            <form asp-action="ListPublicHoliday" asp-controller="BasicSetting" method="post">
+                <input name="HolidayName" type="text">
+                <button type="submit" class="btn btn-outline-dark">查詢</button>
             </form>
         </div>
     </div>
     <div class="col-sm-6 col-md-4 thinkcss-right">
-        <a asp-controller="BasicSetting" asp-action="CreateVacationType" class="btn btn-outline-success">新增</a>
+        <a asp-controller="BasicSetting" asp-action="CreatePublicHoliday" class="btn btn-outline-success">新增</a>
 
     </div>
 </div>
@@ -40,19 +39,10 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.VacationType)
+                                @Html.DisplayNameFor(model => model.HolidayName)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Gender)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.NumberOfDays)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Cycle)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.MinVacationHours)
+                                @Html.DisplayNameFor(model => model.Date.Date)
                             </th>
                             <th></th>
                         </tr>
@@ -60,31 +50,21 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>                                
+                            <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.VacationType)
+                                    @Html.DisplayFor(modelItem => item.HolidayName)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Gender)
+                                    @Html.DisplayFor(modelItem => item.Date.Date)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.NumberOfDays)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Cycle)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.MinVacationHours)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("詳細", "EditVacationType", new { id=item.Id }) |
-                                    @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
-                                    <a asp-action="DeleteVacationType" asp-controller="BasicSetting" asp-route-Id="@item.Id">刪除</a>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                                 </td>
                             </tr>
                         }
                     </tbody>
-                   
+
                 </table>
             </div>
         </div>
@@ -140,7 +120,7 @@
                     </div>
                 </div>
             </div>
-           
+
         </div>
     </div>
 </div>

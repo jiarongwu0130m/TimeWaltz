@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Services
 {
@@ -11,6 +13,37 @@ namespace WebApplication1.Services
         public VacationTypeService(TimeWaltzContext timeWaltzContext)
         {
             _timeWaltzContext = timeWaltzContext;
+        }
+
+        public CreateVacationTypeViewModel ReturnSelectListItem(CreateVacationTypeViewModel model)
+        {
+            model.GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
+            {
+                Text = c.ToString(),
+                Value = ((int)c).ToString()
+            }).ToList();
+            model.CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
+            {
+                Text = c.ToString(),
+                Value = ((int)c).ToString()
+            }).ToList();
+            
+            return model;
+        }
+        public VacationTypeViewModel ReturnSelectListItem(VacationTypeViewModel model)
+        {
+            model.GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
+            {
+                Text = c.ToString(),
+                Value = ((int)c).ToString()
+            }).ToList();
+            model.CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
+            {
+                Text = c.ToString(),
+                Value = ((int)c).ToString()
+            }).ToList();
+
+            return model;
         }
         public int CreateVacationType(VacationDetail entity)
         {
@@ -24,7 +57,7 @@ namespace WebApplication1.Services
            
         }
 
-        public int EditVacationType(EditVacationTypeViewModel model)
+        public int EditVacationType(VacationTypeViewModel model)
         {
             var entity = _timeWaltzContext.VacationDetails.FirstOrDefault(x => x.Id == model.Id);
 
@@ -54,7 +87,7 @@ namespace WebApplication1.Services
             return entity.Id;
         }
 
-        public List<VacationDetail> GetSelectedShiftScheduleList(EditVacationTypeViewModel selectedModel)
+        public List<VacationDetail> GetSelectedShiftScheduleList(VacationTypeViewModel selectedModel)
         {            
             var typeName = selectedModel.VacationType;
             if(typeName != null)

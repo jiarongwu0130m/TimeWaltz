@@ -18,7 +18,7 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-        public static VacationDetail ToEntity(EditVacationTypeViewModel model)
+        public static VacationDetail ToEntity(VacationTypeViewModel model)
         {            
 
             var entity = new VacationDetail
@@ -29,6 +29,15 @@ namespace WebApplication1.Helpers
                 NumberOfDays = model.NumberOfDays,
                 Cycle = model.Cycle,
                 MinVacationHours = model.MinVacationHours
+            };
+            return entity;
+        }
+        public static PublicHoliday ToEntity(CreatePublicHolidayViewModel model)
+        {
+            var entity = new PublicHoliday
+            {
+                HolidayName = model.HolidayName,
+                Date = model.Date
             };
             return entity;
         }

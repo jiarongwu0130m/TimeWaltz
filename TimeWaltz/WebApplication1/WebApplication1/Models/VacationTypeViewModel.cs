@@ -4,7 +4,7 @@ using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Models
 {
-    public class EditVacationTypeViewModel
+    public class VacationTypeViewModel
     {
         
         public int Id { get; set; }

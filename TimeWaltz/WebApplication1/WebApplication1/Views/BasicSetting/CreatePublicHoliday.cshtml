@@ -1,22 +1,13 @@
-﻿@model WebApplication1.Models.Entity.PublicHoliday
+﻿@model CreatePublicHolidayViewModel
 
 @{
     ViewData["Title"] = "新增國定假日";
 }
 
-<h1>CreatePublicHoliday</h1>
-
-<h4>PublicHoliday</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreatePublicHoliday">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
             <div class="form-group">
                 <label asp-for="HolidayName" class="control-label"></label>
                 <input asp-for="HolidayName" class="form-control" />
@@ -28,15 +19,13 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="新增" class="btn btn-primary" />
+                <a asp-action="ListPublicHoliday" class="btn btn-primary">返回</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
