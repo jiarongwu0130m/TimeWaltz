@@ -17,6 +17,7 @@ namespace WebApplication1
             //TODO: 將Transient統一改成Scoped
             builder.Services.AddTransient<VacationTypeService>();
             builder.Services.AddScoped<ShiftScheduleService>();
+            builder.Services.AddScoped<FlextimeService>();
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
             var app = builder.Build();
