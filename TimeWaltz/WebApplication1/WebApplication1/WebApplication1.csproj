@@ -9,6 +9,10 @@
   <ItemGroup>
     <Content Remove="Views\BasicSetting\EditSpecialHoliday.cshtml" />
     <Content Remove="Views\BasicSetting\ListSpecialHoliday.cshtml" />
+    <Compile Remove="Controllers\Api - 複製\**" />
+    <Content Remove="Controllers\Api - 複製\**" />
+    <EmbeddedResource Remove="Controllers\Api - 複製\**" />
+    <None Remove="Controllers\Api - 複製\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿@model WebApplication1.Models.SpecialHolidayViewModel
 
 @{
-    ViewData["Title"] = "編輯國定假日";
+    ViewData["Title"] = "編輯特休設定";
 }
 
 <form asp-action="SpecialHoliday" asp-controller="BasicSetting" method="post">
@@ -11,9 +11,9 @@
             <input type="hidden" name="@Model.Id" />
             <div class="form-group">
                 <label asp-for="HowToGive" class="control-label"></label>
-                <input asp-for="HowToGive" class="form-control" />
+                <select asp-for="HowToGive" class="form-control" asp-items="ViewBag.HowToGiveDropDownList"></select>
                 <span asp-validation-for="HowToGive" class="text-danger"></span>
-            </div>
+            </div>            
             <div class="form-group">
                 <label asp-for="GiveDay" class="control-label"></label>
                 <input asp-for="GiveDay" class="form-control" />

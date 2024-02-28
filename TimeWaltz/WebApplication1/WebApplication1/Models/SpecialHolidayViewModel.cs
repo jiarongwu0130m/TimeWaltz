@@ -8,15 +8,6 @@ namespace WebApplication1.Models
         public HowToGiveEnum? HowToGive { get; set; }
         public DateTime? GiveDay { get; set; }
     }
-    public class CreateSpecialHolidayViewModel
-    {
-        public HowToGiveEnum? HowToGive { get; set; }
-        public DateTime? GiveDay { get; set; }
-    }
-    public class EditSpecialHolidayViewModel
-    {
-        public int Id { get; set; }
-        public HowToGiveEnum? HowToGive { get; set; }
-        public DateTime? GiveDay { get; set; }
-    }
+    
+   
 }
