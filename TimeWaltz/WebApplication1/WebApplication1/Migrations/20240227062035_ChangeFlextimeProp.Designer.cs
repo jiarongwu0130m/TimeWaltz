@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models.Entity;
 
@@ -11,9 +12,11 @@ using WebApplication1.Models.Entity;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(TimeWaltzContext))]
-    partial class TimeWaltzContextModelSnapshot : ModelSnapshot
+    [Migration("20240227062035_ChangeFlextimeProp")]
+    partial class ChangeFlextimeProp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -436,25 +439,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Flextime", (string)null);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Entity.GradeTable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Days")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServiceLength")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GradeTable");
-                });
-
             modelBuilder.Entity("WebApplication1.Models.Entity.LeaveRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -696,25 +680,6 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SpacialVacation", (string)null);
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Entity.SpecialHoliday", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("GiveDay")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HowToGive")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SpecialHoliday");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.User", b =>
