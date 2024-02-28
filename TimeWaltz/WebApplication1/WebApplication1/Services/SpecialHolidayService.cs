@@ -21,9 +21,9 @@ namespace WebApplication1.Services
             return entity.Id;
         }
 
-        public int EditSpecialHoliday(EditSpecialHolidayViewModel model)
+        public int EditSpecialHoliday(SpecialHolidayViewModel model)
         {
-            var entity = GetSpecialHolidayOrNull(model.Id);
+            var entity = GetSpecialHolidayOrNull();
             entity.HowToGive = model.HowToGive;
             entity.GiveDay = model.GiveDay;
 
@@ -33,14 +33,19 @@ namespace WebApplication1.Services
 
         
 
-        public List<SpecialHoliday> GetSpecialHolidayList()
+        public SpecialHoliday GetSpecialHoliday()
         {
-            return _timeWaltzContext.SpecialHoliday.ToList();
+            var entity =  _timeWaltzContext.SpecialHoliday.FirstOrDefault();
+            if (entity == null)
+            {
+                throw new Exception("請先去資料庫新建一筆資料!");
+            }
+            return entity;
         }
 
-        public SpecialHoliday? GetSpecialHolidayOrNull(int id)
+        public SpecialHoliday? GetSpecialHolidayOrNull()
         {
-            return _timeWaltzContext.SpecialHoliday.FirstOrDefault(x => x.Id == id);
+            return _timeWaltzContext.SpecialHoliday.FirstOrDefault();
         }
 
         public int DeleteSpecialHoliday(SpecialHoliday entity)

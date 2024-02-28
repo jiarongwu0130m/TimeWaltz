@@ -6,17 +6,7 @@ using WebApplication1.Models.Enums;
 namespace WebApplication1.Helpers
 {
     public class EntityHelper
-    {
-        public static List<SpecialHolidayViewModel> ToViewModel(List<SpecialHoliday> entities)
-        {
-            var models = new List<SpecialHolidayViewModel>();
-            foreach(var entity in entities)
-            {
-                models.Add(ToViewModel(entity));
-            }
-            
-            return models;
-        }
+    {        
         public static SpecialHolidayViewModel ToViewModel(SpecialHoliday entity)
         {
             var model = new SpecialHolidayViewModel

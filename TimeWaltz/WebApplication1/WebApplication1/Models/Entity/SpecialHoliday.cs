@@ -11,6 +11,6 @@ namespace WebApplication1.Models.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public HowToGiveEnum? HowToGive {  get; set; }
-        public int? GiveDay { get; set; }
+        public DateTime? GiveDay { get; set; }
     }
 }

@@ -5,15 +5,7 @@ namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
-        public static SpecialHoliday ToEntity (CreateSpecialHolidayViewModel model)
-        {
-            var entity = new SpecialHoliday
-            {
-                GiveDay = model.GiveDay,
-                HowToGive = model.HowToGive,
-            };
-            return entity;
-        }
+       
         public static SpecialHoliday ToEntity(SpecialHolidayViewModel model)
         {
             var entity = new SpecialHoliday

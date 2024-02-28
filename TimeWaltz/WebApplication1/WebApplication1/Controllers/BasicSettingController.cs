@@ -24,60 +24,27 @@ namespace WebApplication1.Controllers
             _publicHolidayService = publicHolidayService;
             _flextimeService = flextimeService;
         }
-        public IActionResult ListSpecialHoliday()
-        {
-            var entities = _specialHolidayService.GetSpecialHolidayList();
-            var models = EntityHelper.ToViewModel(entities);
-
-            return View(models);
-        }
-
-        
         [HttpGet]
-        public IActionResult EditSpecialHoliday(int Id)
+        public IActionResult SpecialHoliday()
         {
-            if(Id != 0)
-            {
-                var entity = _specialHolidayService.GetSpecialHolidayOrNull(Id);
-                var model = EntityHelper.ToViewModel(entity);
-                return View(model);
-            }
-            return RedirectToAction("ListSpecialHoliday");            
-        }
+            var entity = _specialHolidayService.GetSpecialHoliday();            
+            var model = EntityHelper.ToViewModel(entity);
+            ViewBag.HowToGiveDropDownList = DropDownHelper.GetHowToGiveDropDownList();
+
+            return View(model);
+        }        
         [HttpPost]
-        public IActionResult EditSpecialHoliday(EditSpecialHolidayViewModel model)
+        public IActionResult SpecialHoliday(SpecialHolidayViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
             _specialHolidayService.EditSpecialHoliday(model);
-            return RedirectToAction("ListPublicHoliday");
+            return View(model);
         }
-        [HttpGet]
-        public IActionResult CreateSpecialHoliday()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult CreateSpecialHoliday(CreateSpecialHolidayViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var entity = ViewModelHelper.ToEntity(model);
-            _specialHolidayService.CreatePublicHoliday(entity);
-            return RedirectToAction("ListSpecialHoliday");
-        }
-
-        public IActionResult DeleteSpecialHoliday(int id)
-        {
-            var entity = _specialHolidayService.GetSpecialHolidayOrNull(id);
-            _specialHolidayService.DeleteSpecialHoliday(entity);
-            return RedirectToAction("ListVacationType");
-        }
-
+        
+               
         [HttpGet]
         public IActionResult CreatePublicHoliday()
         {
@@ -165,20 +132,8 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult CreateVacationType()
         {
-            var model = new CreateVacationTypeViewModel
-            {
-                GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
-                {
-                    Text = c.ToString(),
-                    Value = ((int)c).ToString()
-                }).ToList(),
-                CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
-                {
-                    Text = c.ToString(),
-                    Value = ((int)c).ToString()
-                }).ToList()
-            };
-            return View(model);
+            
+            return View();
         }
 
         [HttpGet]

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Api - 複製\**" />
+    <Content Remove="Controllers\Api - 複製\**" />
+    <EmbeddedResource Remove="Controllers\Api - 複製\**" />
+    <None Remove="Controllers\Api - 複製\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.15">
       <PrivateAssets>all</PrivateAssets>
