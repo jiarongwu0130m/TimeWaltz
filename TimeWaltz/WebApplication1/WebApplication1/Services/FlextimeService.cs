@@ -17,7 +17,7 @@ namespace WebApplication1.Services
             var flextimeViewModel = new FlextimeViewModel
             {
                 Id = model?.Id ?? 1,
-                FlexibleTime = model?.FlexibleTime,
+                FlexibleTime = model.FlexibleTime,
                 MoveUp = model?.MoveUp ?? false,
             };
 

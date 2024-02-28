@@ -1,13 +1,14 @@
-﻿@model WebApplication1.Models.EditSpecialHolidayViewModel
+﻿@model WebApplication1.Models.SpecialHolidayViewModel
 
 @{
     ViewData["Title"] = "編輯國定假日";
 }
 
-<form asp-action="EditPublicHoliday" asp-asp-controller="BasicSetting" method="post">
+<form asp-action="SpecialHoliday" asp-controller="BasicSetting" method="post">
     <section class="content">
         <div class="card-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" name="@Model.Id" />
             <div class="form-group">
                 <label asp-for="HowToGive" class="control-label"></label>
                 <input asp-for="HowToGive" class="form-control" />
@@ -24,7 +25,7 @@
                 <div class="row float-right">
                     <div class="col ">
                         <input type="submit" value="送出" class="btn btn-primary" />
-                        <a asp-controller="BasicSetting" asp-action="ListSpecialHoliday" class="btn btn-outline-success">返回</a>
+                        <a asp-controller="BasicSetting" asp-action="SpecialHoliday" class="btn btn-outline-success">返回</a>
                     </div>
                 </div>
             </div>
