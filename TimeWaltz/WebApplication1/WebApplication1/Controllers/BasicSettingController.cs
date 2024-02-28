@@ -27,6 +27,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult SpecialHoliday()
         {
+            //TODO:等人事基本資料完成後，讓使用者在選擇了周年制的情況下disable約定給假時間
             var entity = _specialHolidayService.GetSpecialHoliday();            
             var model = EntityHelper.ToViewModel(entity);
             ViewBag.HowToGiveDropDownList = DropDownHelper.GetHowToGiveDropDownList();
@@ -38,8 +39,10 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.HowToGiveDropDownList = DropDownHelper.GetHowToGiveDropDownList();
                 return View(model);
             }
+            ViewBag.HowToGiveDropDownList = DropDownHelper.GetHowToGiveDropDownList();
             _specialHolidayService.EditSpecialHoliday(model);
             return View(model);
         }
