@@ -200,8 +200,9 @@ namespace WebApplication1.Controllers
 
         public IActionResult Flextime()
         {
-            var model = _flextimeService.GetFlextimeViewModel();
-            return View(model);
+            var FlextimeEntity = _flextimeService.GetFlextime();
+            var Flextimemodel = EntityHelper.ToViewModel(FlextimeEntity);
+            return View(Flextimemodel);
         }
 
         [HttpPost]

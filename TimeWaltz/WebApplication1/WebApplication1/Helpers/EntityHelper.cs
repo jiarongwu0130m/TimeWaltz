@@ -8,6 +8,17 @@ namespace WebApplication1.Helpers
     public class EntityHelper
     {
 
+        public static FlextimeViewModel ToViewModel(Flextime entity)
+        {
+            var model = new FlextimeViewModel
+            {
+                Id = entity.Id,
+                FlexibleTime = entity.FlexibleTime,
+                MoveUp = entity.MoveUp,
+            };
+            return model;
+        }
+
         public static PublicHolidayViewModel ToViewModel(PublicHoliday entity)
         {
             var model = new PublicHolidayViewModel
