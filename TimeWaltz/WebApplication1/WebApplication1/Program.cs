@@ -18,6 +18,7 @@ namespace WebApplication1
             builder.Services.AddTransient<VacationTypeService>();
             builder.Services.AddScoped<ShiftScheduleService>();
             builder.Services.AddScoped<FlextimeService>();
+            builder.Services.AddScoped<DepartmentService>();
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
             var app = builder.Build();

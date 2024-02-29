@@ -100,5 +100,27 @@ namespace WebApplication1.Helpers
             
             return models;
        }
+
+        public static List<DepartmentViewModel> ToViewModel(List<Department> entities)
+        {
+            var models = new List<DepartmentViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
+
+        public static DepartmentViewModel ToViewModel(Department entity)
+        {
+            var model = new DepartmentViewModel
+            {
+                Id = entity.Id,
+                DepartmentName = entity.DepartmentName,
+                EmployeesId = entity.EmployeesId,
+            };
+            return model;
+        }
     }
 }

@@ -42,6 +42,17 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
+        public static Department ToEntity(DepartmentCreateViewModel model)
+        {
+            var entity = new Department
+            {
+                
+                DepartmentName = model.DepartmentName,
+                EmployeesId = model.EmployeesId,
+            };
+            return entity;
+        }
+
 
     }
 }
