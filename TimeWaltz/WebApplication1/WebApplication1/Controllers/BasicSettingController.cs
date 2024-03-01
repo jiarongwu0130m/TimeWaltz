@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers
         private readonly FlextimeService _flextimeService;
         private readonly DepartmentService _departmentService;
 
-        public BasicSettingController(GradeTableService gradeTableService, SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeServiceㄝDepartmentService departmentService)
+        public BasicSettingController(GradeTableService gradeTableService, SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService, DepartmentService departmentService) { 
         
             _shiftScheduleService = shiftScheduleService;
             _gradeTableService = gradeTableService;
