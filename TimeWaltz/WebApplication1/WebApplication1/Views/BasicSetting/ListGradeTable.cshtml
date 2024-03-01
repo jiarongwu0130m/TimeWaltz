@@ -1,0 +1,53 @@
+﻿@model IEnumerable<WebApplication1.Models.GradeTableViewModel>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "年資級距一覽";
+}
+<style>
+    .thinkcss-right {
+        text-align: right;
+    }
+</style>
+<div class="row">   
+    <div class="col-12">
+        <div class="thinkcss-right">
+            <a asp-controller="BasicSetting" asp-action="CreateGradeTable" class="btn btn-outline-success">新增</a>
+
+        </div>
+    </div>
+    
+    <table class="table table-bordered">
+        <thead>
+        <thead>
+            <tr>
+                <th>
+                   @Html.DisplayNameFor(model => model.ServiceLength)
+                </th>
+                <th>
+                   @Html.DisplayNameFor(model => model.Days)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServiceLength)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Days)
+                    </td>
+                    <td>
+                        @Html.ActionLink("詳細", "EditGradeTable", new { id = item.Id }) |
+                        @Html.ActionLink("刪除", "DeleteGradeTable", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div> 

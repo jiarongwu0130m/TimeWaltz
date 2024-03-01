@@ -10,19 +10,83 @@ namespace WebApplication1.Controllers
 {
     public class BasicSettingController : Controller
     {
+        private readonly GradeTableService _gradeTableService;
         private readonly SpecialHolidayService _specialHolidayService;
         private readonly ShiftScheduleService _shiftScheduleService;
         private readonly VacationTypeService _vacationTypeService;      
         private readonly PublicHolidayService _publicHolidayService;
         private readonly FlextimeService _flextimeService;
 
-        public BasicSettingController(SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService)
+        public BasicSettingController(GradeTableService gradeTableService, SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService)
         {
             _shiftScheduleService = shiftScheduleService;
+            _gradeTableService = gradeTableService;
             _specialHolidayService = specialHolidayService;
             _vacationTypeService = vacationTypeService;
             _publicHolidayService = publicHolidayService;
             _flextimeService = flextimeService;
+        }
+
+
+        [HttpGet]
+        public IActionResult CreateGradeTable()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateGradeTable(CreateGradeTableViewModel model)
+        {
+            if (!ModelState.IsValid && model != null)
+            {
+                return View(model);
+            }
+            var entity = ViewModelHelper.ToEntity(model);
+            _gradeTableService.CreateGradeTable(entity);
+            return RedirectToAction("ListGradeTable");
+        }
+
+        [HttpGet]
+        public IActionResult ListGradeTable()
+        {
+            var entities = _gradeTableService.GetGradeTableList();
+            var model = EntityHelper.ToViewModel(entities);
+            return View(model);
+        }
+        
+        public IActionResult DeleteGradeTable(int id)
+        {
+            var entity = _gradeTableService.GetGradeTableOrNull(id);
+            if(entity != null)
+            {
+                _gradeTableService.DeleteGradeTable(entity);
+                return RedirectToAction("ListGradeTable");
+            }
+            
+            return RedirectToAction("ListGradeTable");
+        }
+
+        [HttpGet]
+        public IActionResult EditGradeTable(int id)
+        {
+            var entity = _gradeTableService.GetGradeTableOrNull(id);
+            if (entity == null)
+            {
+                return RedirectToAction("ListGradeTable");
+            }
+            var model = EntityHelper.ToEditViewModel(entity);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditGradeTable(EditGradeTableViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _gradeTableService.EditGradeTable(model);
+            return RedirectToAction("ListGradeTable");
         }
         [HttpGet]
         public IActionResult SpecialHoliday()
@@ -88,7 +152,7 @@ namespace WebApplication1.Controllers
         public IActionResult EditPublicHoliday(int Id)
         {
             var entity = _publicHolidayService.GetPublicHolidayOrNull(Id);
-            var model = EntityHelper.ToViewModel(entity);
+            var model = EntityHelper.ToEditViewModel(entity);
             return View(model);
         }
         [HttpPost]
@@ -167,7 +231,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult CreateVacationType(CreateVacationTypeViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -191,7 +255,7 @@ namespace WebApplication1.Controllers
             {
                 return RedirectToAction("ListVacationType");
             }
-            var model = EntityHelper.ToViewModel(entity);
+            var model = EntityHelper.ToEditViewModel(entity);
 
             return View(model);
         }
@@ -223,5 +287,7 @@ namespace WebApplication1.Controllers
             _flextimeService.UpdateFlextime(model);
             return View();
         }
+
+       
     }
 }

@@ -6,7 +6,36 @@ using WebApplication1.Models.Enums;
 namespace WebApplication1.Helpers
 {
     public class EntityHelper
-    {        
+    {
+        public static EditGradeTableViewModel ToEditViewModel(GradeTable entity)
+        {
+            var model = new EditGradeTableViewModel
+            {
+                Id = entity.Id,
+                ServiceLength = entity.ServiceLength,
+                Days = entity.Days,
+            };
+            return model;
+        }
+        public static List<GradeTableViewModel> ToViewModel(List<GradeTable> entities)
+        {
+            var models = new List<GradeTableViewModel>();
+            foreach(var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+            return models;
+        }
+        public static GradeTableViewModel ToViewModel(GradeTable entity)
+        {
+            var model = new GradeTableViewModel
+            {
+                Id = entity.Id,
+                ServiceLength = entity.ServiceLength,
+                Days = entity.Days,
+            };
+            return model;
+        }
         public static SpecialHolidayViewModel ToViewModel(SpecialHoliday entity)
         {
             var model = new SpecialHolidayViewModel
@@ -14,6 +43,16 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 HowToGive = entity.HowToGive,
                 GiveDay = entity.GiveDay,
+            };
+            return model;
+        }
+        public static EditPublicHolidayViewModel ToEditViewModel(PublicHoliday entity)
+        {
+            var model = new EditPublicHolidayViewModel
+            {
+                Id = entity.Id,
+                HolidayName = entity.HolidayName,
+                Date = entity.Date,
             };
             return model;
         }
@@ -61,8 +100,33 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
+        public static EditVacationTypeViewModel ToEditViewModel(VacationDetail entity)
+        {
+            var model = new EditVacationTypeViewModel
+            {
+                Id = entity.Id,
+                VacationType = entity.VacationType,
+                Gender = entity.Gender,
+                Cycle = entity.Cycle,
+                NumberOfDays = entity.NumberOfDays,
+                MinVacationHours = entity.MinVacationHours,
+                //
+                GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
+                {
+                    Text = c.ToString(),
+                    Value = c.ToString()
+                }).ToList(),
+                CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
+                {
+                    Text = c.ToString(),
+                    Value = ((int)c).ToString()
+                }).ToList()
+            };
+            return model;
+        }
+        
 
-       public static List<VacationTypeViewModel> ToViewModel(List<VacationDetail> entities)
+        public static List<VacationTypeViewModel> ToViewModel(List<VacationDetail> entities)
         {
             var models = new List<VacationTypeViewModel>();     //先準備一個空的
             

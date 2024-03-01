@@ -36,7 +36,7 @@ namespace WebApplication1.Services
             entity.MinVacationHours = model.MinVacationHours;
 
             _timeWaltzContext.SaveChanges();
-            return model.Id;
+            return entity.Id;
         }
 
         public List<VacationDetail> GetVacationDetailsList()

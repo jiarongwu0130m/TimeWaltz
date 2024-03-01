@@ -5,7 +5,16 @@ namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
-       
+        public static GradeTable ToEntity(CreateGradeTableViewModel model)
+        {
+            var entity = new GradeTable
+            {
+                ServiceLength = model.ServiceLength,
+                Days = model.Days,
+            };
+            return entity;
+        }
+
         public static SpecialHoliday ToEntity(SpecialHolidayViewModel model)
         {
             var entity = new SpecialHoliday
