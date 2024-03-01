@@ -16,15 +16,17 @@ namespace WebApplication1.Controllers
         private readonly VacationTypeService _vacationTypeService;      
         private readonly PublicHolidayService _publicHolidayService;
         private readonly FlextimeService _flextimeService;
+        private readonly DepartmentService _departmentService;
 
-        public BasicSettingController(GradeTableService gradeTableService, SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService)
-        {
+        public BasicSettingController(GradeTableService gradeTableService, SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeServiceㄝDepartmentService departmentService)
+        
             _shiftScheduleService = shiftScheduleService;
             _gradeTableService = gradeTableService;
             _specialHolidayService = specialHolidayService;
             _vacationTypeService = vacationTypeService;
             _publicHolidayService = publicHolidayService;
             _flextimeService = flextimeService;
+            _departmentService = departmentService;
         }
 
 
@@ -279,8 +281,9 @@ namespace WebApplication1.Controllers
 
         public IActionResult Flextime()
         {
-            var model = _flextimeService.GetFlextimeViewModel();
-            return View(model);
+            var FlextimeEntity = _flextimeService.GetFlextime();
+            var Flextimemodel = EntityHelper.ToViewModel(FlextimeEntity);
+            return View(Flextimemodel);
         }
 
         [HttpPost]
@@ -294,6 +297,82 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-       
+        
+        public IActionResult CreateDepartment()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateDepartment(DepartmentCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var entity = ViewModelHelper.ToEntity(model);
+            _departmentService.CreateDepartment(entity);
+            return RedirectToAction("ListDepartment");
+            
+        }
+
+        public IActionResult Department()
+        {
+            var entities = _departmentService.GetDepartment();
+            var model = EntityHelper.ToViewModel(entities);
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public IActionResult Department(DepartmentViewModel selectedModel)
+        {
+            var entities = _departmentService.GetSelectedDepartment(selectedModel);
+            if (entities != null)
+            {
+                var models = EntityHelper.ToViewModel(entities);
+                return View(models);
+            }
+            else
+            {
+                return View(selectedModel);
+            }
+
+        }
+
+
+        [HttpGet]
+        public IActionResult EditDepartment(int id)
+        {
+            var entity = _departmentService.GetDepartmentOrNull(id);
+            if (entity == null)
+            {
+                return RedirectToAction("ListDepartment");
+            }
+            var model = EntityHelper.ToViewModel(entity);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditDepartment(DepartmentEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _departmentService.EditDepartment(model);
+            return RedirectToAction("ListDepartment");
+        }
+
+
+        public IActionResult DeleteDepartment(int id)
+        {
+            var entity = _departmentService.GetDepartmentOrNull(id);
+            _departmentService.DeleteDepartment(entity);
+            return RedirectToAction("ListDepartment");
+        }
+
+
     }
 }

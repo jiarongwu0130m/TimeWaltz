@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "_Layout";
+    ViewBag.title = "部門設定";
+}
+
+@model DepartmentCreateViewModel
+
+<div class="row">
+    <div class="col-md">
+        <form asp-action="Department" asp-asp-controller="BasicSetting" method="post">
+
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="DepartmentName" class="control-label">部門名稱</label>
+                    <input asp-for="DepartmentName" class="form-control col-sm-3" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">部門主管</label>
+                    <select class="form-control  col-sm-3"></select>
+                    <input asp-for="EmployeesId" type="hidden" value="1" />
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">直屬部門</label>
+                    <select class="form-control  col-sm-3"></select>
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="送出" class="btn btn-primary" />
+                <a asp-controller="BasicSetting" asp-action="ListDepartment" class="btn btn-outline-dark">返回</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,5 +1,4 @@
-﻿using WebApplication1.Models.Enums;
-
+﻿
 namespace WebApplication1.Models
 {
     public class FlextimeViewModel

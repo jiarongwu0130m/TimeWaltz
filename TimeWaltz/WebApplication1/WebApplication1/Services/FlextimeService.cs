@@ -9,32 +9,20 @@ namespace WebApplication1.Services
         public FlextimeService(TimeWaltzContext timeWaltzDb)
         {
             _timeWaltzDb = timeWaltzDb;
-        }
-        public FlextimeViewModel GetFlextimeViewModel()
+        }        
+
+        public Flextime GetFlextime()
         {
-            var model = _timeWaltzDb.Flextimes.FirstOrDefault();
-
-            var flextimeViewModel = new FlextimeViewModel
-            {
-                Id = model?.Id ?? 1,
-                FlexibleTime = model.FlexibleTime,
-                MoveUp = model?.MoveUp ?? false,
-            };
-
-            return flextimeViewModel;
+            return _timeWaltzDb.Flextimes.FirstOrDefault();
         }
 
-        public void UpdateFlextime(FlextimeViewModel model)
+        public FlextimeViewModel UpdateFlextime(FlextimeViewModel model)
         {
-            if (model == null) return;
-
-            var flextimeDb = _timeWaltzDb.Flextimes.FirstOrDefault();
-            if (flextimeDb != null)
-            {
-                flextimeDb.FlexibleTime = model.FlexibleTime;
+            var flextimeDb = _timeWaltzDb.Flextimes.FirstOrDefault(x=>x.Id == model.Id);
+            flextimeDb.FlexibleTime = model.FlexibleTime;
                 flextimeDb.MoveUp = model.MoveUp;
                 _timeWaltzDb.SaveChanges();
-            }
+            return model;
         }
 
 

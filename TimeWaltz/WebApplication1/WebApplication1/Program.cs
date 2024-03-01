@@ -14,12 +14,13 @@ namespace WebApplication1
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<TimeWaltzContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("TimeWaltz")));
-            //TODO: 將Transient統一改成Scoped
+            //TODO: 嚙瞇Transient嚙諄一嚙踝成Scoped
             builder.Services.AddTransient<VacationTypeService>();
             builder.Services.AddScoped<ShiftScheduleService>();
             builder.Services.AddScoped<FlextimeService>();
             builder.Services.AddScoped<GradeTableService>();
             builder.Services.AddScoped<SpecialHolidayService>();
+            builder.Services.AddScoped<DepartmentService>();
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
             var app = builder.Build();
