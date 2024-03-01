@@ -34,6 +34,7 @@ namespace WebApplication1.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult CreateGradeTable(CreateGradeTableViewModel model)
         {
             if (!ModelState.IsValid && model != null)
@@ -49,8 +50,8 @@ namespace WebApplication1.Controllers
         public IActionResult ListGradeTable()
         {
             var entities = _gradeTableService.GetGradeTableList();
-            var model = EntityHelper.ToViewModel(entities);
-            return View(model);
+            var models = EntityHelper.ToViewModel(entities);
+            return View(models);
         }
         
         public IActionResult DeleteGradeTable(int id)
@@ -65,7 +66,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("ListGradeTable");
         }
 
-        [HttpGet]
+        [HttpGet]        
         public IActionResult EditGradeTable(int id)
         {
             var entity = _gradeTableService.GetGradeTableOrNull(id);
@@ -79,6 +80,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult EditGradeTable(EditGradeTableViewModel model)
         {
             if (!ModelState.IsValid)
@@ -118,6 +120,7 @@ namespace WebApplication1.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult CreatePublicHoliday(CreatePublicHolidayViewModel model)
         {
             if (!ModelState.IsValid)
@@ -156,6 +159,7 @@ namespace WebApplication1.Controllers
             return View(model);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult EditPublicHoliday(EditPublicHolidayViewModel model)
         {
             if (!ModelState.IsValid)
@@ -229,6 +233,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult CreateVacationType(CreateVacationTypeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -261,6 +266,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult EditVacationType(EditVacationTypeViewModel model)
         {
             if (!ModelState.IsValid)

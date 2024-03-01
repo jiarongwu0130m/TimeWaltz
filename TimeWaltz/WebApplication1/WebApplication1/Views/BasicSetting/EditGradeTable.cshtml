@@ -10,12 +10,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
             <div class="form-group">
                 <label asp-for="ServiceLength" class="control-label"></label>
-                <input name="ServiceLength" type="number" class="form-control" />
+                <input type="number" class="form-control" value="@Model.ServiceLength" />
                 <span asp-validation-for="ServiceLength" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Days" class="control-label"></label>
-                <input name="Days" type="number" class="form-control" />
+                <input name="Days" type="number" class="form-control" value="@Model.Days" />
                 <span asp-validation-for="Days" class="text-danger"></span>
             </div>
             <div class="card-footer">
