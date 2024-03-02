@@ -22,9 +22,10 @@ public partial class Employee
     public GenderEnum Gender { get; set; }
 
     public string EmployeesNo { get; set; } = null!;
-
     [NotMapped]
-    public string DepartmentName { get; set; }
+    public string? ShiftsName { get; set; }
+    [NotMapped]
+    public string? DepartmentName { get; set; }
     public virtual ICollection<AdditionalClockIn> AdditionalClockInApprovalEmployees { get; set; } = new List<AdditionalClockIn>();
 
     public virtual ICollection<AdditionalClockIn> AdditionalClockInEmployees { get; set; } = new List<AdditionalClockIn>();

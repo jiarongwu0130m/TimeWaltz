@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models.Entity;
 
 public partial class ShiftSchedule
 {
     public int Id { get; set; }
-
+    
+ 
     public DateTime StartTime { get; set; }
 
     public DateTime EndTime { get; set; }

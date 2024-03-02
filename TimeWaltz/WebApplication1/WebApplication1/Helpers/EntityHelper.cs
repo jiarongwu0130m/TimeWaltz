@@ -15,7 +15,7 @@ namespace WebApplication1.Helpers
             _dbContext = timeWaltzContext;
         }
         
-        public TimeWaltzContext TimeWaltzContext { get { return _dbContext; } }
+
         public static List<PersonalDataViewModel> ToViewModel(List<Employee> entities)
         {
             var models = new List<PersonalDataViewModel>();
@@ -34,8 +34,8 @@ namespace WebApplication1.Helpers
             var model = new PersonalDataViewModel
             {
                 Id = entity.Id,
-                ShiftName = entity.ShiftSchedule.ShiftsName,                
-                DepartmentId = entity.DepartmentId,
+                ShiftsName = entity.ShiftsName,
+                DepartmentName = entity.DepartmentName,
                 Name = entity.Name,
                 HireDate = entity.HireDate,
                 Email = entity.Email,
@@ -47,14 +47,11 @@ namespace WebApplication1.Helpers
         }
         public static EditPersonalDataViewModel ToEditViewModel(Employee entity)
         {
-            TimeWaltzContext _timeWaltzContext = new();
-
-            var department = _timeWaltzContext.Departments.Where(d=>d.Id == entity.Id).FirstOrDefault();
+            
             var model = new EditPersonalDataViewModel
             {
                 Id = entity.Id,
                 ShiftScheduleId = entity.ShiftScheduleId,
-                ShiftName = entity.ShiftSchedule.ShiftsName,
                 DepartmentId = entity.DepartmentId,
                 DepartmentName = entity.DepartmentName,
                 Name = entity.Name,

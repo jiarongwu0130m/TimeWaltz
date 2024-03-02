@@ -91,7 +91,7 @@ namespace WebApplication1.Controllers
             {
                 return RedirectToAction("ListPersonalData");
             }
-            var model = EntityHelper.ToEditViewModel(entity);
+            var model = EntityHelper.ToEditViewModel(entity);           
             model.DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData);
             model.ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData);
             
