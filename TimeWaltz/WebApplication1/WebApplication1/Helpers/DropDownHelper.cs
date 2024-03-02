@@ -1,10 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Helpers
 {
     public class DropDownHelper
     {
+        public static List<SelectListItem> GetDepartmentNameDropDownList(List<Department> dropDownData)
+        {
+            return dropDownData.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.DepartmentName.ToString()
+            }).ToList();
+
+        }
+
+        public static List<SelectListItem> GetShiftNameDropDownList(List<ShiftSchedule> dropDownData)
+        {
+            return dropDownData.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.ShiftsName.ToString()
+            }).ToList();
+
+        }
         public static List<SelectListItem> GetGenderDropDownList()
         {
             return Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem

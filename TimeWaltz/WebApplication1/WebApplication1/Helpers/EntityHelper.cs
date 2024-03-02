@@ -30,16 +30,12 @@ namespace WebApplication1.Helpers
         public static PersonalDataViewModel ToViewModel(Employee entity)
         {
             
-            TimeWaltzContext _timeWaltzContext = new TimeWaltzContext();
-            var department = _timeWaltzContext.Departments.Where(d => d.Id == entity.Id).FirstOrDefault();
 
             var model = new PersonalDataViewModel
             {
                 Id = entity.Id,
-                ShiftScheduleId = entity.ShiftScheduleId,
-                ShiftName = entity.ShiftSchedule.ShiftsName,
+                ShiftName = entity.ShiftSchedule.ShiftsName,                
                 DepartmentId = entity.DepartmentId,
-                DepartmentName = department.DepartmentName,
                 Name = entity.Name,
                 HireDate = entity.HireDate,
                 Email = entity.Email,
@@ -60,7 +56,7 @@ namespace WebApplication1.Helpers
                 ShiftScheduleId = entity.ShiftScheduleId,
                 ShiftName = entity.ShiftSchedule.ShiftsName,
                 DepartmentId = entity.DepartmentId,
-                DepartmentName = department.DepartmentName,
+                DepartmentName = entity.DepartmentName,
                 Name = entity.Name,
                 Email = entity.Email,
 
@@ -103,6 +99,45 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 HowToGive = entity.HowToGive,
                 GiveDay = entity.GiveDay,
+            };
+            return model;
+        }
+        
+        public static List<ShiftSchedulesViewModel> ToViewModel(List<ShiftSchedule> entities)
+        {
+            var models = new List<ShiftSchedulesViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
+        public static ShiftSchedulesViewModel ToViewModel(ShiftSchedule entity)
+        {
+            var model = new ShiftSchedulesViewModel
+            {
+                Id = entity.Id,
+                Date = entity.StartTime.Date,
+                DayOfWeek = entity.StartTime.DayOfWeek,
+                ShiftName = entity.ShiftsName,
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
+                BreakTimeHours = entity.BreakTime / 60.0,
+                MaxAdditionalClockIn = entity.MaxAdditionalClockIn,
+            };
+            return model;
+        }
+        public static EditShiftSchedulesViewModel ToEditViewModel(ShiftSchedule entity)
+        {
+            var model = new EditShiftSchedulesViewModel
+            {
+                Id = entity.Id,
+                ShiftName = entity.ShiftsName,
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
+                BreakTimeHours = entity.BreakTime / 60.0,
+                MaxAdditionalClockIn = entity.MaxAdditionalClockIn,
             };
             return model;
         }
@@ -211,29 +246,8 @@ namespace WebApplication1.Helpers
             return models;
         }
 
-        public static ShiftSchedulesViewModel ToViewModel(ShiftSchedule entity)
-        {
-            var model = new ShiftSchedulesViewModel
-            {
-                Date = entity.StartTime.Date,
-                DayOfWeek = entity.StartTime.DayOfWeek,
-                StartTime = entity.StartTime,
-                EndTime = entity.EndTime,
-                BreakTime = entity.EndTime.CompareTo(entity.StartTime),
-
-            };
-            return model;
-        }
-       public static List<ShiftSchedulesViewModel> ToViewModel(List<ShiftSchedule> entities)
-       {
-            var models = new List<ShiftSchedulesViewModel>();
-            foreach (var entity in entities)
-            {
-                models.Add(ToViewModel(entity));
-            }
-            
-            return models;
-       }
+       
+       
 
         public static List<DepartmentViewModel> ToViewModel(List<Department> entities)
         {

@@ -6,18 +6,17 @@
 <form asp-action="CreatePersonalData" asp-asp-controller="BasicSetting" method="post" id="app">
     <section class="content">
         <div class="card-body">
-            <div asp-validation-summary="ModelOnly" class="text-danger">
-
-            </div><div class="form-group">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
                 <label asp-for="ShiftName" class="control-label"></label>
-                <input name="ShiftName" class="form-control" />
-                <span asp-validation-for="ShiftName" class="text-danger"></span>
-            </div>
+                <select class="form-control" asp-for="ShiftScheduleId" asp-items="@Model.ShiftNameSelectItems"></select>
+                <span class="text-danger"></span>
+            </div>  
             <div class="form-group">
                 <label asp-for="DepartmentName" class="control-label"></label>
-                <input name="DepartmentName" class="form-control" />
-                <span asp-validation-for="DepartmentName" class="text-danger"></span>
-            </div>
+                <select class="form-control" asp-for="DepartmentId" asp-items="@Model.DepartmentNameSelectItem"></select>
+                <span class="text-danger"></span>
+            </div>            
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input name="Name" class="form-control" />
@@ -35,9 +34,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">性別</label>
-                <select name="Gender" class="form-control">
-                    <option v-for="item in genderSelectItems" name="Gender" :value="item.value">{{item.text}}</option>
-                </select>
+                <select asp-for="Gender" asp-items="@Model.GenderSelectItems" class="form-control"></select>
                 <span class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -394,8 +394,8 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime");

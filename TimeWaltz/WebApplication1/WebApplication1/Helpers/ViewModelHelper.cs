@@ -29,7 +29,19 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
-        
+        public static ShiftSchedule ToEntity(CreateShiftSchedulesViewModel model)
+        {
+            var entity = new ShiftSchedule
+            {
+                Id = model.Id,
+                ShiftsName = model.ShiftName,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                BreakTime = (int)Math.Round(model.BreakTimeHours * 60.0),
+                MaxAdditionalClockIn = model.MaxAdditionalClockIn,
+            };
+            return entity;
+        }
 
         public static VacationDetail ToEntity(CreateVacationTypeViewModel model)
         {

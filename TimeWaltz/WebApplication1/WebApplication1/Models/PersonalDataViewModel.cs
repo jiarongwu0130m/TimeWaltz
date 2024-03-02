@@ -9,8 +9,11 @@ namespace WebApplication1.Models
 
         public int ? ShiftScheduleId { get; set; }
         public string? ShiftName { get; set; }
+        public List<SelectListItem>? ShiftNameSelectItems { get; set; }
         public int DepartmentId { get; set; }
         public string? DepartmentName { get; set; }
+
+        public List<SelectListItem>? DepartmentNameSelectItem { get; set; }
 
         public string? QueryDepartmentName { get; set; }
 
@@ -30,8 +33,10 @@ namespace WebApplication1.Models
     {
         public int? ShiftScheduleId { get; set; }
         public string? ShiftName { get; set; }
+        public List<SelectListItem>? ShiftNameSelectItems { get; set; }
         public int DepartmentId { get; set; }
         public string? DepartmentName { get; set; }
+        public List<SelectListItem>? DepartmentNameSelectItem { get; set; }
 
         public string? Name { get; set; }
 
@@ -40,6 +45,7 @@ namespace WebApplication1.Models
         public string? Email { get; set; }
 
         public GenderEnum Gender { get; set; }
+        
         public List<SelectListItem>? GenderSelectItems { get; set; }
 
         public string? EmployeesNo { get; set; }
@@ -50,8 +56,10 @@ namespace WebApplication1.Models
         public int Id { get; set; }
         public int? ShiftScheduleId { get; set; }
         public string? ShiftName { get; set; }
+        public List<SelectListItem>? ShiftNameSelectItems { get; set; }
         public int DepartmentId { get; set; }
         public string? DepartmentName { get; set; }
+        public List<SelectListItem>? DepartmentNameSelectItem { get; set; }
 
         public string? Name { get; set; }
 

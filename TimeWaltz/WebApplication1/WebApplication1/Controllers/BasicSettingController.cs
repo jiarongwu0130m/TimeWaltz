@@ -32,11 +32,21 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreatePersonal()
+        public IActionResult CreatePersonalData()
         {
-            ViewBag.DropDownList = DropDownHelper.GetGenderDropDownList();
-            return View();
+            var sDropDownData = _personalDataService.GetShiftNameDropDownData();
+            var dDropDownData = _personalDataService.GetDepartmentDropDownData();
+
+            var model = new CreatePersonalDataViewModel
+            {
+                GenderSelectItems = DropDownHelper.GetGenderDropDownList(),
+                DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData),
+                ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData) 
+            };
+
+            return View(model);
         }
+           
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreatePersonalData(CreatePersonalDataViewModel model)
@@ -52,8 +62,9 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult ListPersonalData()
         {
-            var entities = _personalDataService.GetPersonalDataList();
+            var entities = _personalDataService.GetPersonalDataList();            
             var models = EntityHelper.ToViewModel(entities);
+            
             return View(models);
         }
       
@@ -71,12 +82,19 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult EditPersonalData(int id)
         {
+            var sDropDownData = _personalDataService.GetShiftNameDropDownData();
+            var dDropDownData = _personalDataService.GetDepartmentDropDownData();
+
+            
             var entity = _personalDataService.GetPersonalDataOrNull(id);
             if (entity == null)
             {
                 return RedirectToAction("ListPersonalData");
             }
             var model = EntityHelper.ToEditViewModel(entity);
+            model.DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData);
+            model.ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData);
+            
 
             return View(model);
         }
@@ -244,12 +262,26 @@ namespace WebApplication1.Controllers
             _publicHolidayService.DeleteVacationType(entity);
             return RedirectToAction("ListPublicHoliday");
         }
-
-        public IActionResult ListShiftSchedule()
+        [HttpGet]
+        public IActionResult CreateShiftSchedule()
         {
-
-            var Id = 1;
-            var entities = _shiftScheduleService.GetPersonalShiftScheduleList(Id);
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateShiftSchedule(CreateShiftSchedulesViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var entity = ViewModelHelper.ToEntity(model);
+            _shiftScheduleService.CreateShiftSchedule(entity);
+            return RedirectToAction("ListShiftSchedule");
+        }
+        public IActionResult ListShiftSchedule()
+        {  
+            var entities = _shiftScheduleService.GetShiftScheduleList();
             var models = EntityHelper.ToViewModel(entities);
 
             return View(models);
@@ -266,6 +298,42 @@ namespace WebApplication1.Controllers
             }           
             return View(selectedModel);
         }
+        public IActionResult DeleteShiftSchedule(int id)
+        {
+            var entity = _shiftScheduleService.GetShiftScheduleOrNull(id);
+            if(entity == null)
+            {
+                return RedirectToAction("ListShiftSchedule");
+            }
+            _shiftScheduleService.DeleteShiftSchedule(entity);
+            return RedirectToAction("ListShiftSchedule");
+        }
+
+        [HttpGet]
+        public IActionResult EditShiftSchedule(int id)
+        {
+            var entity = _shiftScheduleService.GetShiftScheduleOrNull(id);
+            if (entity == null)
+            {
+                return RedirectToAction("ListShiftSchedule");
+            }
+            var model = EntityHelper.ToEditViewModel(entity);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditShiftSchedule(EditShiftSchedulesViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _shiftScheduleService.EditShiftSchedule(model);
+            return RedirectToAction("ListShiftSchedule");
+        }
+
 
         [HttpGet]
         public IActionResult CreateVacationType()
@@ -273,7 +341,18 @@ namespace WebApplication1.Controllers
             
             return View();
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateVacationType(CreateVacationTypeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var entity = ViewModelHelper.ToEntity(model);
+            _vacationTypeService.CreateVacationType(entity);
+            return RedirectToAction("ListVacationType");
+        }
         [HttpGet]
         public IActionResult ListVacationType()
         {
@@ -299,18 +378,7 @@ namespace WebApplication1.Controllers
         }
 
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult CreateVacationType(CreateVacationTypeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var entity = ViewModelHelper.ToEntity(model);
-            _vacationTypeService.CreateVacationType(entity);
-            return RedirectToAction("ListVacationType");
-        }
+        
 
         public IActionResult DeleteVacationType(int id)
         {

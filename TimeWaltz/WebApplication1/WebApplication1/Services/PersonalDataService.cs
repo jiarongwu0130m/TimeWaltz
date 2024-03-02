@@ -32,10 +32,31 @@ namespace WebApplication1.Services
             _timeWaltzContext.SaveChanges();
         }
 
+        public List<ShiftSchedule> GetShiftNameDropDownData()
+        {
+            var entities = _timeWaltzContext.ShiftSchedules.Select(s => new ShiftSchedule
+            {
+                Id = s.Id,
+                ShiftsName = s.ShiftsName,
+            }).ToList();
+
+            return entities;
+            
+        }
+
         public List<Employee> GetPersonalDataList()
         {
+            var entities =  _timeWaltzContext.Employees.ToList();
 
-            return _timeWaltzContext.Employees.ToList();
+            foreach (var entity in entities)
+            {
+                var department = _timeWaltzContext.Departments.FirstOrDefault(d => d.Id == entity.DepartmentId);
+                if(department != null)
+                {
+                    entity.DepartmentName = department.DepartmentName;
+                }
+            }
+            return entities;
         }
 
         public Employee? GetPersonalDataOrNull(int id)
@@ -54,6 +75,16 @@ namespace WebApplication1.Services
             entity.Email = model.Email;
             _timeWaltzContext.SaveChanges();
             
+        }
+
+        public List<Department> GetDepartmentDropDownData()
+        {
+            var entities = _timeWaltzContext.Departments.Select(d => new Department
+            {
+                Id = d.Id,
+                DepartmentName = d.DepartmentName,
+            }).ToList();
+            return entities;
         }
     }
 }
