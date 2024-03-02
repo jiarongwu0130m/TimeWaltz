@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models.Entity;
 
@@ -11,9 +12,11 @@ using WebApplication1.Models.Entity;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(TimeWaltzContext))]
-    partial class TimeWaltzContextModelSnapshot : ModelSnapshot
+    [Migration("20240302105950_ChangeDepartmentEmployeeIdToNullable")]
+    partial class ChangeDepartmentEmployeeIdToNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -394,8 +397,8 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime");
