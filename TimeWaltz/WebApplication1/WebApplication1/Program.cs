@@ -20,6 +20,7 @@ namespace WebApplication1
             builder.Services.AddScoped<FlextimeService>();
             builder.Services.AddScoped<GradeTableService>();
             builder.Services.AddScoped<SpecialHolidayService>();
+            builder.Services.AddScoped<PersonalDataService>();
             builder.Services.AddScoped<DepartmentService>();
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();

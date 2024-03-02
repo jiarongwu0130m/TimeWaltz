@@ -5,6 +5,20 @@ namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
+        public static Employee ToEntity(CreatePersonalDataViewModel model)
+        {
+            var entity = new Employee
+            {
+                ShiftScheduleId = model.ShiftScheduleId,
+                DepartmentId = model.DepartmentId,
+                Name = model.Name,
+                HireDate = model.HireDate,
+                Email = model.Email,
+                Gender = model.Gender,
+                EmployeesNo = model.EmployeesNo,
+            };
+            return entity;
+        }
         public static GradeTable ToEntity(CreateGradeTableViewModel model)
         {
             var entity = new GradeTable
@@ -15,15 +29,7 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
-        public static SpecialHoliday ToEntity(SpecialHolidayViewModel model)
-        {
-            var entity = new SpecialHoliday
-            {
-                GiveDay = model.GiveDay,
-                HowToGive = model.HowToGive,
-            };
-            return entity;
-        }
+        
 
         public static VacationDetail ToEntity(CreateVacationTypeViewModel model)
         {
@@ -38,20 +44,7 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-        public static VacationDetail ToEntity(VacationTypeViewModel model)
-        {            
-
-            var entity = new VacationDetail
-            {
-                Id = model.Id,
-                VacationType = model.VacationType,
-                Gender = model.Gender,
-                NumberOfDays = model.NumberOfDays,
-                Cycle = model.Cycle,
-                MinVacationHours = model.MinVacationHours
-            };
-            return entity;
-        }
+       
         public static PublicHoliday ToEntity(CreatePublicHolidayViewModel model)
         {
             var entity = new PublicHoliday

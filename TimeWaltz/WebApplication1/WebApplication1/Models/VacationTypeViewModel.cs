@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         [Required(ErrorMessage ="請填假別名稱")]
         public string VacationType { get; set; }
         public string? QueryVacationType { get; set; }
-        public GenderEnum? Gender { get; set; }
+        public GenderLimitEnum? Gender { get; set; }
         public List<SelectListItem>? GenderSelectItems { get; set; } 
   
         public int NumberOfDays { get; set; }
@@ -23,28 +23,13 @@ namespace WebApplication1.Models
  
         public int MinVacationHours { get; set; }
     }
-    public class DropDownListVacationTypeViewModel
-    {
-        [Required(ErrorMessage = "請填假別名稱")]
-        public string VacationType { get; set; }
-        public string? QueryVacationType { get; set; }
-        public GenderEnum? Gender { get; set; }
-        public List<SelectListItem>? GenderSelectItems { get; set; }
-
-        public int NumberOfDays { get; set; }
-
-        public List<SelectListItem>? CycleSelectItems { get; set; }
-        public CycleEnum Cycle { get; set; }
-
-
-        public int MinVacationHours { get; set; }
-    }
+    
     public class CreateVacationTypeViewModel
     {
         [Required(ErrorMessage = "請填假別名稱")]
         public string VacationType { get; set; }
         public string? QueryVacationType { get; set; }
-        public GenderEnum? Gender { get; set; }
+        public GenderLimitEnum? Gender { get; set; }
         public List<SelectListItem>? GenderSelectItems { get; set; }
 
         public int NumberOfDays { get; set; }
@@ -62,7 +47,7 @@ namespace WebApplication1.Models
         [Required(ErrorMessage = "請填假別名稱")]
         public string VacationType { get; set; }
         public string? QueryVacationType { get; set; }
-        public GenderEnum? Gender { get; set; }
+        public GenderLimitEnum? Gender { get; set; }
         public List<SelectListItem>? GenderSelectItems { get; set; }
 
         public int NumberOfDays { get; set; }

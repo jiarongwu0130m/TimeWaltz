@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
@@ -7,6 +8,65 @@ namespace WebApplication1.Helpers
 {
     public class EntityHelper
     {
+        private readonly TimeWaltzContext _dbContext;
+
+        public EntityHelper(TimeWaltzContext timeWaltzContext)
+        {
+            _dbContext = timeWaltzContext;
+        }
+        
+        public TimeWaltzContext TimeWaltzContext { get { return _dbContext; } }
+        public static List<PersonalDataViewModel> ToViewModel(List<Employee> entities)
+        {
+            var models = new List<PersonalDataViewModel>();
+            foreach(var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
+
+        public static PersonalDataViewModel ToViewModel(Employee entity)
+        {
+            
+            TimeWaltzContext _timeWaltzContext = new TimeWaltzContext();
+            var department = _timeWaltzContext.Departments.Where(d => d.Id == entity.Id).FirstOrDefault();
+
+            var model = new PersonalDataViewModel
+            {
+                Id = entity.Id,
+                ShiftScheduleId = entity.ShiftScheduleId,
+                ShiftName = entity.ShiftSchedule.ShiftsName,
+                DepartmentId = entity.DepartmentId,
+                DepartmentName = department.DepartmentName,
+                Name = entity.Name,
+                HireDate = entity.HireDate,
+                Email = entity.Email,
+                Gender = entity.Gender,
+                EmployeesNo = entity.EmployeesNo,
+
+            };
+            return model;
+        }
+        public static EditPersonalDataViewModel ToEditViewModel(Employee entity)
+        {
+            TimeWaltzContext _timeWaltzContext = new();
+
+            var department = _timeWaltzContext.Departments.Where(d=>d.Id == entity.Id).FirstOrDefault();
+            var model = new EditPersonalDataViewModel
+            {
+                Id = entity.Id,
+                ShiftScheduleId = entity.ShiftScheduleId,
+                ShiftName = entity.ShiftSchedule.ShiftsName,
+                DepartmentId = entity.DepartmentId,
+                DepartmentName = department.DepartmentName,
+                Name = entity.Name,
+                Email = entity.Email,
+
+            };
+            return model;
+        }
         public static EditGradeTableViewModel ToEditViewModel(GradeTable entity)
         {
             var model = new EditGradeTableViewModel

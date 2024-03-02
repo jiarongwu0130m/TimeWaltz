@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Models.Entity;
 
@@ -17,7 +18,7 @@ public partial class Employee
 
     public string? Email { get; set; }
 
-    public bool Gender { get; set; }
+    public GenderEnum Gender { get; set; }
 
     public string EmployeesNo { get; set; } = null!;
 

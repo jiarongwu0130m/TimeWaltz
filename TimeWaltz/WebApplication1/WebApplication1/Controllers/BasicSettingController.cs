@@ -10,6 +10,7 @@ namespace WebApplication1.Controllers
 {
     public class BasicSettingController : Controller
     {
+        private readonly PersonalDataService _personalDataService;
         private readonly GradeTableService _gradeTableService;
         private readonly SpecialHolidayService _specialHolidayService;
         private readonly ShiftScheduleService _shiftScheduleService;
@@ -18,9 +19,10 @@ namespace WebApplication1.Controllers
         private readonly FlextimeService _flextimeService;
         private readonly DepartmentService _departmentService;
 
-        public BasicSettingController(GradeTableService gradeTableService, SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService, DepartmentService departmentService) { 
+        public BasicSettingController(PersonalDataService personalDataService, GradeTableService gradeTableService, SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService, DepartmentService departmentService) { 
         
             _shiftScheduleService = shiftScheduleService;
+            _personalDataService = personalDataService;
             _gradeTableService = gradeTableService;
             _specialHolidayService = specialHolidayService;
             _vacationTypeService = vacationTypeService;
@@ -29,6 +31,69 @@ namespace WebApplication1.Controllers
             _departmentService = departmentService;
         }
 
+        [HttpGet]
+        public IActionResult CreatePersonal()
+        {
+            ViewBag.DropDownList = DropDownHelper.GetGenderDropDownList();
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreatePersonalData(CreatePersonalDataViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var entity = ViewModelHelper.ToEntity(model);
+            _personalDataService.CreatePersonalData(entity);
+            return RedirectToAction("ListPersonalData");
+        }
+        [HttpGet]
+        public IActionResult ListPersonalData()
+        {
+            var entities = _personalDataService.GetPersonalDataList();
+            var models = EntityHelper.ToViewModel(entities);
+            return View(models);
+        }
+      
+        public IActionResult DeletePersonalData(int id)
+        {
+            var entity = _personalDataService.GetPersonalDataOrNull(id);
+            if(entity == null)
+            {
+                return RedirectToAction("ListPersonalData");
+            }
+            _personalDataService.DeletePersonalData(entity);
+            return RedirectToAction("ListPersonalData");
+        }
+
+        [HttpGet]
+        public IActionResult EditPersonalData(int id)
+        {
+            var entity = _personalDataService.GetPersonalDataOrNull(id);
+            if (entity == null)
+            {
+                return RedirectToAction("ListPersonalData");
+            }
+            var model = EntityHelper.ToEditViewModel(entity);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPersonalData(EditPersonalDataViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _personalDataService.EditPersonalData(model);
+            return RedirectToAction("ListPersonalData");
+        }
+
+       
 
         [HttpGet]
         public IActionResult CreateGradeTable()

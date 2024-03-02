@@ -5,13 +5,22 @@ namespace WebApplication1.Helpers
 {
     public class DropDownHelper
     {
-        /// <summary>
-        /// 性別Enum的下拉式選單
-        /// </summary>
-        /// <returns></returns>
         public static List<SelectListItem> GetGenderDropDownList()
         {
             return Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
+            {
+                Text = c.ToString(),
+                Value = ((int)c).ToString()
+            }).ToList();
+
+        }
+        /// <summary>
+        /// 性別限制Enum的下拉式選單
+        /// </summary>
+        /// <returns></returns>
+        public static List<SelectListItem> GetGenderLimitDropDownList()
+        {
+            return Enum.GetValues(typeof(GenderLimitEnum)).Cast<GenderLimitEnum>().Select(c => new SelectListItem
             {
                 Text = c.ToString(),
                 Value = ((int)c).ToString()
