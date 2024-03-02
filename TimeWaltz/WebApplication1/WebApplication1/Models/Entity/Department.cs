@@ -9,7 +9,7 @@ public partial class Department
 
     public string DepartmentName { get; set; } = null!;
 
-    public int EmployeesId { get; set; }
+    public int? EmployeesId { get; set; }
 
     public int? DepartmentId { get; set; }
 

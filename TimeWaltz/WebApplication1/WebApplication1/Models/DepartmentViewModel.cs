@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         public string DepartmentName { get; set; }
 
         [Display(Name = "部門主管")]
-        public int EmployeesId { get; set; }
+        public int? EmployeesId { get; set; }
 
         public string? QueryDepartment { get; set; }
 
@@ -27,7 +27,7 @@ namespace WebApplication1.Models
         public string DepartmentName { get; set; }
 
         [Display(Name = "部門主管")]
-        public int EmployeesId { get; set; }
+        public int? EmployeesId { get; set; }
 
     }
 
@@ -39,7 +39,7 @@ namespace WebApplication1.Models
         public string DepartmentName { get; set; }
 
         [Display(Name = "部門主管")]
-        public int EmployeesId { get; set; }
+        public int? EmployeesId { get; set; }
 
         //public int? DepartmentId { get; set; }
 
