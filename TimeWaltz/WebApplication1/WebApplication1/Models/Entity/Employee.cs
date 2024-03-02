@@ -22,6 +22,8 @@ public partial class Employee
 
     public string EmployeesNo { get; set; } = null!;
 
+
+
     public virtual ICollection<AdditionalClockIn> AdditionalClockInApprovalEmployees { get; set; } = new List<AdditionalClockIn>();
 
     public virtual ICollection<AdditionalClockIn> AdditionalClockInEmployees { get; set; } = new List<AdditionalClockIn>();
