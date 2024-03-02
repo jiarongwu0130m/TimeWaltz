@@ -312,7 +312,7 @@ namespace WebApplication1.Controllers
             }
             var entity = ViewModelHelper.ToEntity(model);
             _departmentService.CreateDepartment(entity);
-            return RedirectToAction("ListDepartment");
+            return RedirectToAction("Department");
             
         }
 
@@ -347,7 +347,7 @@ namespace WebApplication1.Controllers
             var entity = _departmentService.GetDepartmentOrNull(id);
             if (entity == null)
             {
-                return RedirectToAction("ListDepartment");
+                return RedirectToAction("Department");
             }
             var model = EntityHelper.ToViewModel(entity);
 
@@ -362,7 +362,7 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
             _departmentService.EditDepartment(model);
-            return RedirectToAction("ListDepartment");
+            return RedirectToAction("Department");
         }
 
 
@@ -370,7 +370,7 @@ namespace WebApplication1.Controllers
         {
             var entity = _departmentService.GetDepartmentOrNull(id);
             _departmentService.DeleteDepartment(entity);
-            return RedirectToAction("ListDepartment");
+            return RedirectToAction("Department");
         }
 
 
