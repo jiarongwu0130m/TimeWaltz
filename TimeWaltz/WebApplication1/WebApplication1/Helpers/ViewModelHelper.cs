@@ -70,8 +70,7 @@ namespace WebApplication1.Helpers
         public static Department ToEntity(DepartmentCreateViewModel model)
         {
             var entity = new Department
-            {
-                
+            {                
                 DepartmentName = model.DepartmentName,
                 EmployeesId = model.EmployeesId,
             };

@@ -27,6 +27,8 @@ namespace WebApplication1.Controllers.Api
             return model;
         }
 
+
+        //參考用
         [HttpPost("add")]
         public ActionResult<TodoItem> CreateVacationDetail([FromBody] CreateVacationTypeViewModel model)
         {

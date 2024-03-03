@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
@@ -9,13 +10,13 @@ namespace WebApplication1.Controllers
 {
     public class PersonalRecordController : Controller
     {
-
+        private readonly AgentEmployeeService _agentEmployeeService;
         private readonly ClockService _clockService;
         private readonly TimeWaltzContext _timeWaltzContext;
 
-        public PersonalRecordController(ClockService clockService, TimeWaltzContext timeWaltzContext)
+        public PersonalRecordController(AgentEmployeeService agentEmployeeService, ClockService clockService, TimeWaltzContext timeWaltzContext)
         {
-
+            _agentEmployeeService = agentEmployeeService;
             _clockService = clockService;
             _timeWaltzContext = timeWaltzContext;
         }
@@ -44,8 +45,17 @@ namespace WebApplication1.Controllers
 
         //}
 
-
-
+        [HttpGet]
+        public IActionResult AgentEmployeeSetting()
+        {            
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AgentEmployeeSetting(AgentEmploeeViewModel model)
+        {
+            _agentEmployeeService.EditAgentEmployee(model);
+            return View();
+        }
         public IActionResult Clock()
         {
             var toDay = DateTime.Now.Date;
@@ -140,9 +150,6 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-        public IActionResult AgentEmployeeSetting()
-        {
-            return View();
-        }
+       
     }
 }

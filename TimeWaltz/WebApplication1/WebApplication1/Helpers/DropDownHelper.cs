@@ -6,9 +6,26 @@ namespace WebApplication1.Helpers
 {
     public class DropDownHelper
     {
-        public static List<SelectListItem> GetDepartmentNameDropDownList(List<Department> dropDownData)
+        public static List<SelectListItem> GetAgentDropDownList(List<Employee> data)
         {
-            return dropDownData.Select(c => new SelectListItem
+            var employee =  data.Select(e => new SelectListItem
+            {
+                Value = e.Id.ToString(),
+                Text = e.Name,
+            }).ToList();
+            return employee;
+        }
+        public static List<SelectListItem> GetEmployeeNameDropDownList(List<Employee> data)
+        {
+            return data.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = s.Name,
+            }).ToList();
+        }
+        public static List<SelectListItem> GetDepartmentNameDropDownList(List<Department> data)
+        {
+            return data.Select(c => new SelectListItem
             {
                 Value = c.Id.ToString(),
                 Text = c.DepartmentName.ToString()
@@ -16,9 +33,9 @@ namespace WebApplication1.Helpers
 
         }
 
-        public static List<SelectListItem> GetShiftNameDropDownList(List<ShiftSchedule> dropDownData)
+        public static List<SelectListItem> GetShiftNameDropDownList(List<ShiftSchedule> data)
         {
-            return dropDownData.Select(c => new SelectListItem
+            return data.Select(c => new SelectListItem
             {
                 Value = c.Id.ToString(),
                 Text = c.ShiftsName.ToString()
@@ -65,5 +82,7 @@ namespace WebApplication1.Helpers
             }).ToList();
 
         }
+
+       
     }
 }

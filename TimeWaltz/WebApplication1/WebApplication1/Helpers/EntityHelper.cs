@@ -264,6 +264,17 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 DepartmentName = entity.DepartmentName,
                 EmployeesId = entity.EmployeesId,
+                EmployeeName = entity. EmployeeName,
+            };
+            return model;
+        }
+        public static DepartmentEditViewModel ToEditViewModel(Department entity)
+        {
+            var model = new DepartmentEditViewModel
+            {
+                Id = entity.Id,
+                DepartmentName = entity.DepartmentName,
+                EmployeesId = entity.EmployeesId,
             };
             return model;
         }

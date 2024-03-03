@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Models
@@ -13,7 +15,9 @@ namespace WebApplication1.Models
 
         [Display(Name = "部門主管")]
         public int? EmployeesId { get; set; }
-
+ 
+        [NotMapped]
+        public string? EmployeeName { get; set; }
         public string? QueryDepartment { get; set; }
 
 
@@ -25,9 +29,12 @@ namespace WebApplication1.Models
         [Required(ErrorMessage = "請填部門名稱")]
         [Display(Name = "部門名稱")]
         public string DepartmentName { get; set; }
+    
+        public List<SelectListItem>? EmployeeNameSelectList { get; set; }
 
         [Display(Name = "部門主管")]
         public int? EmployeesId { get; set; }
+
 
     }
 
@@ -37,11 +44,13 @@ namespace WebApplication1.Models
 
         [Display(Name = "部門名稱")]
         public string DepartmentName { get; set; }
+  
+        public List<SelectListItem>? EmployeeNameSelectList { get; set; }
 
         [Display(Name = "部門主管")]
         public int? EmployeesId { get; set; }
 
-        //public int? DepartmentId { get; set; }
+
 
     }
 }

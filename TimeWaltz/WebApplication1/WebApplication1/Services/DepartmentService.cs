@@ -15,15 +15,25 @@ namespace WebApplication1.Services
 
         public List<Department> GetDepartment()
         {
-            return _timeWaltzDb.Departments.ToList();
+            
+            var entities = _timeWaltzDb.Departments.ToList();
+            foreach(var entity in entities)
+            {
+                var employee = _timeWaltzDb.Employees.FirstOrDefault(e=>e.Id == entity.EmployeesId);
+                if (employee != null)
+                {
+                    entity.EmployeeName = employee.Name;
+                }
+            }
+            return entities;                               
         }
 
 
-        public Department CreateDepartment(Department entity)
+        public void CreateDepartment(Department entity)
         {
             _timeWaltzDb.Departments.Add(entity);
             _timeWaltzDb.SaveChanges();
-            return entity;
+
         }
 
         public Department? GetDepartmentOrNull(int id)
@@ -68,6 +78,19 @@ namespace WebApplication1.Services
             return -1;
         }
 
+        public List<Department>? GetDropDownData()
+        {
+            var entity =  _timeWaltzDb.Departments.ToList();
+            if(entity != null)
+            {
+                return entity;
+            }
+            return null;
+        }
 
+        public List<Employee>? GetEmployeeDropDownData()
+        {
+            return _timeWaltzDb.Employees.ToList();
+        }
     }
 }

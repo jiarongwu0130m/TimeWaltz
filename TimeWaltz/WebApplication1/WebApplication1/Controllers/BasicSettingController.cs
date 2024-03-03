@@ -432,8 +432,23 @@ namespace WebApplication1.Controllers
 
         
         public IActionResult CreateDepartment()
-        {
-            return View();
+        {           
+            var employeeNameDropDownData = _departmentService.GetEmployeeDropDownData();
+            
+
+            if (employeeNameDropDownData != null) 
+            { 
+                var model = new DepartmentCreateViewModel
+                {                    
+                    EmployeeNameSelectList = DropDownHelper
+                       .GetEmployeeNameDropDownList(employeeNameDropDownData),
+                };
+                return View(model);
+            }
+           
+            
+            return RedirectToAction("ListPersonalData");
+
         }
 
         [HttpPost]
@@ -448,12 +463,12 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Department");
             
         }
-
+        [HttpGet]
         public IActionResult Department()
         {
             var entities = _departmentService.GetDepartment();
-            var model = EntityHelper.ToViewModel(entities);
-            return View(model);
+            var models = EntityHelper.ToViewModel(entities);
+            return View(models);
 
         }
 
@@ -477,14 +492,19 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult EditDepartment(int id)
         {
+            var employeeNameDropDownData = _departmentService.GetEmployeeDropDownData();
             var entity = _departmentService.GetDepartmentOrNull(id);
-            if (entity == null)
+            if (employeeNameDropDownData != null)
             {
-                return RedirectToAction("Department");
-            }
-            var model = EntityHelper.ToViewModel(entity);
+                var model = EntityHelper.ToEditViewModel(entity);
 
-            return View(model);
+                model.EmployeeNameSelectList = DropDownHelper
+                       .GetEmployeeNameDropDownList(employeeNameDropDownData);
+
+                return View(model);
+            }
+
+            return RedirectToAction("PersonalData");
         }
 
         [HttpPost]

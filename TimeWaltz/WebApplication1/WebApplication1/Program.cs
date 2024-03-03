@@ -24,6 +24,11 @@ namespace WebApplication1
             builder.Services.AddScoped<DepartmentService>();
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
+            builder.Services.AddScoped<AgentEmployeeService>();
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("forWeb", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -39,7 +39,7 @@
                     {
                         <tr class="text-center">
                             <td>@item.DepartmentName</td>
-                            <td>@item.EmployeesId</td>
+                            <td>@item.EmployeeName</td>
                             <td>
                                 <a asp-controller="BasicSetting" asp-action="EditDepartment" asp-route-id="@item.Id" class="btn btn-outline-primary">檢視</a>
                                 <a asp-controller="BasicSetting" asp-action="DeleteDepartment" asp-route-id="@item.Id" class="btn btn-outline-secondary" onclick="return confirmDelete();">刪除</a>
