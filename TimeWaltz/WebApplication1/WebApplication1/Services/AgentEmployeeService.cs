@@ -31,5 +31,45 @@ namespace WebApplication1.Services
             }
             entity.AgentEmployeesId = model.AgentEmployeesId;
         }
+
+        public void EditAllAgentEmployee(AgentEmployeeDto dto)
+        {
+            var emp = _timeWaltzContext.AgentEmployees.Where(a => a.EmployeesId == 1);
+            if(emp != null)
+            {
+                _timeWaltzContext.AgentEmployees.RemoveRange(emp);  
+                if (!string.IsNullOrEmpty(dto.Agent1))
+                {
+                    _timeWaltzContext.AgentEmployees.Add(new AgentEmployee
+                    {
+                        EmployeesId = 1,
+                        AgentEmployeesId = int.Parse(dto.Agent1),
+                    });
+                }
+                if (!string.IsNullOrEmpty(dto.Agent2))
+                {
+                    _timeWaltzContext.AgentEmployees.Add(new AgentEmployee
+                    {
+                        EmployeesId = 1,
+                        AgentEmployeesId = int.Parse(dto.Agent2),
+                    });
+                }
+                if (!string.IsNullOrEmpty(dto.Agent3))
+                {
+                    _timeWaltzContext.AgentEmployees.Add(new AgentEmployee
+                    {
+                        EmployeesId = 1,
+                        AgentEmployeesId = int.Parse(dto.Agent3),
+                    });
+                }
+                _timeWaltzContext.SaveChanges();
+            }
+            
+        }
+
+        public List<int> GetAgentemployee(int UserId)
+        {
+            return _timeWaltzContext.AgentEmployees.Where(a=> a.EmployeesId == UserId).Select(x=>x.AgentEmployeesId).ToList();
+        }
     }
 }

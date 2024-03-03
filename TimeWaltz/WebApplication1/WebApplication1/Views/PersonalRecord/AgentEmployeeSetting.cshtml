@@ -7,32 +7,35 @@
 <form asp-action="EditPersonalData" asp-asp-controller="BasicSetting" method="post" id="app">
     <section class="content">
         <div class="card-body">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* :selected="item.selected" *@
             <div class="form-group">
-                <label asp-for="AgentEmployeeName" class="control-label"></label>
-                <select class="form-control" asp-for="AgentEmployeesId">
-                    <option v-for="item in agentEmployeeSelectItems" value="item.value">{{item.text}}</option>
+                <label class="control-label"></label>
+                <select class="form-control" v-model="agent1">
+                    <option value="">請選擇</option>
+                    <option v-for="item in agentFilter1" :key="item" :value="item.value">{{item.text}}</option>
                 </select>
                 <span class="text-danger"></span>
             </div>  
             <div class="form-group">
-                <label asp-for="AgentEmployeeName" class="control-label"></label>
-                <select class="form-control" asp-for="AgentEmployeesId">
-                    <option v-for="item in agentEmployeeSelectItems" value="item.value">{{item.text}}</option>
+                <label  class="control-label"></label>
+                <select class="form-control" v-model="agent2" >
+                    <option value="">請選擇</option>
+                    <option v-for="item in agentFilter2" :key="item" :value="item.value">{{item.text}}</option>
                 </select>
                 <span class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AgentEmployeeName" class="control-label"></label>
-                <select class="form-control" asp-for="AgentEmployeesId">
-                    <option v-for="item in agentEmployeeSelectItems" value="item.value">{{item.text}}</option>
+                <label  class="control-label"></label>
+                <select class="form-control" v-model="agent3">
+                    <option value="">請選擇</option>
+                    <option v-for="item in agentFilter3" :key="item" :value="item.value">{{item.text}}</option>
                 </select>
                 <span class="text-danger"></span>
             </div>
             <div class="card-footer">
                 <div class="row float-right">
                     <div class="col ">
-                        <input type="submit" value="送出" class="btn btn-primary" />
+                        <input type="button" value="送出" class="btn btn-primary" @@click="send"/>
                         <a asp-controller="BasicSetting" asp-action="ListPersonalData" class="btn btn-outline-success">返回</a>
                     </div>
                 </div>
@@ -48,8 +51,40 @@
         Vue.createApp({
             data() {
                 return {
-                    agentEmployeeSelectItems: []
+                    agentEmployeeSelectItems: [],
+                    agent1: '',
+                    agent2: '',
+                    agent3: '',
+
                 }
+            },
+            computed: {
+                agentFilter1() {
+                    return this.agentEmployeeSelectItems.filter(s => s.value != this.agent2 && s.value != this.agent3);
+                },
+                agentFilter2() {
+                    return this.agentEmployeeSelectItems.filter(s => s.value != this.agent1 && s.value != this.agent3);
+                },
+                agentFilter3() {
+                    return this.agentEmployeeSelectItems.filter(s => s.value != this.agent2 && s.value != this.agent1);
+                },
+            },
+            methods: {
+                send() {
+                    let self = this
+                    console.log(this.agent1, this.agent2, this.agent3)
+                    fetch("/api/AgentEmployeeApi/EditAgentEmployee", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            agent1: self.agent1,
+                            agent2: self.agent2,
+                            agent3: self.agent3
+                        }),
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                    }).then(res => res.json()).then(result => console.log(result))
+                },
             },
             mounted() {
                 fetch("/api/AgentEmployeeApi/DropDownList").then(res => res.json())
@@ -59,7 +94,6 @@
             }
         }).mount("#app");
     </script>
-
-
+    
 
 }

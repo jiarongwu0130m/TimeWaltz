@@ -12,6 +12,7 @@ public partial class AgentEmployee
 
     public int AgentEmployeesId { get; set; }
 
+
     [NotMapped]
     public string? AgentEmployeeName { get; set; }
     public virtual Employee AgentEmployees { get; set; } = null!;

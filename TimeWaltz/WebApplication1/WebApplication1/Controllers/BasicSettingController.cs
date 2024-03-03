@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers
             {
                 GenderSelectItems = DropDownHelper.GetGenderDropDownList(),
                 DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData),
-                ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData) 
+                ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData)
             };
 
             return View(model);

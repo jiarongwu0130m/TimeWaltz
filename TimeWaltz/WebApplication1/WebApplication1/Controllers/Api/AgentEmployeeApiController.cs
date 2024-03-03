@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
@@ -20,11 +21,31 @@ namespace WebApplication1.Controllers.Api
         {
             var UserId = 1;
             var data = _agentEmployeeService.GetAgentDropDownData(UserId);
+            var AgentEmployeeSelectItems = DropDownHelper.GetAgentDropDownList(data);
+            var agentEmployee = _agentEmployeeService.GetAgentemployee(UserId);
+            foreach (var item in AgentEmployeeSelectItems)
+            {
+                if (agentEmployee.Contains(int.Parse(item.Value))){
+                    item.Selected = true;
+                }
+            }
             var model = new AgentEmploeeViewModel
             {
-                AgentEmployeeSelectItems = DropDownHelper.GetAgentDropDownList(data),
             };
             return model;
+        }
+        [HttpPost]
+        public bool EditAgentEmployee(AgentEmployeeDto dto)
+        {
+            try
+            {
+                _agentEmployeeService.EditAllAgentEmployee(dto);
+                return true;
+
+            }catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
