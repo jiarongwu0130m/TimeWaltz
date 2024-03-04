@@ -31,6 +31,7 @@ namespace WebApplication1.Controllers.Api
             }
             var model = new AgentEmploeeViewModel
             {
+                AgentEmployeeSelectItems = AgentEmployeeSelectItems,
             };
             return model;
         }

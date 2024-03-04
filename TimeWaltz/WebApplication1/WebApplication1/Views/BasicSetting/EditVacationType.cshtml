@@ -4,35 +4,39 @@
     Layout = "_Layout";
     ViewData["Title"] = "修改假別";
 }
-<form asp-action="EditVacationType" asp-controller="BasicSetting" method="post">
+<form asp-action="EditVacationType" asp-controller="BasicSetting" method="post" id="app">
     <section class="content">
         <div class="card-body">
-            <input asp-for="Id" type="hidden"/>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input name="id" type="hidden"/>
+            
             <div class="form-group">
-                <label asp-for="VacationType" class="control-label">假別名稱</label>
-                <input asp-for="VacationType" class="form-control" />
-                <span asp-validation-for="VacationType" class="text-danger"></span>
+                <label  class="control-label">假別名稱</label>
+                <input  class="form-control" v-model="vacationType" />
+                <span  class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Gender" class="control-label">可請性別</label>
-                <input asp-for="Gender" class="form-control" />
-                <span asp-validation-for="Gender" class="text-danger"></span>
+                <label class="control-label">可請性別限制</label>
+                <select name="Gender" class="form-control" v-model="gender">
+                    <option v-for="item in genderSelectItems"  :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Cycle" class="control-label">可請周期</label>
-                <select asp-for="Cycle" class="form-control" asp-items="@Model.CycleSelectItems"></select>
-                <span asp-validation-for="Cycle" class="text-danger"></span>
+                <label class="control-label">可請周期</label>
+                <select name="Cycle" class="form-control" v-model="cycle">
+                    <option v-for="item in cycleSelectItems" :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NumberOfDays" class="control-label">可請天數</label>
-                <input asp-for="NumberOfDays" class="form-control" />
-                <span asp-validation-for="NumberOfDays" class="text-danger"></span>
+                <label  class="control-label">可請天數</label>
+                <input  class="form-control" v-model="numberOfDays" />
+                <span  class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MinVacationHours" class="control-label">最小可請時數</label>
-                <input asp-for="MinVacationHours" class="form-control" />
-                <span asp-validation-for="MinVacationHours" class="text-danger"></span>
+                <label  class="control-label">最小可請時數</label>
+                <input  class="form-control" v-model="minVacationHours" />
+                <span  class="text-danger"></span>
             </div>
             <div class="form-group">
             </div>
@@ -49,4 +53,52 @@
         </div>
     </section>
 </form>
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    genderSelectItems: [],
+                    cycleSelectItems: [],
+                    vacationType: '',
+                    gender: 0,
+                    cycle: 0,
+                    numberOfDays: 0,
+                    minVacationHours: 0,
+                }
+            },
+            methods: {
+                send() {
+                    let self = this;
+                    fetch("/api/VacationDetailsApi/EditVacationType", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            VacationType: vacationType,
+                            Gender: gender,
+                            Cycle: cycle,
+                            NumberOfDays: numberOfDays,
+                            MinVacationHours: minVacationHours,
+                        }),
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                    }).then(res => res.json()).then(result => console.log(result))
+                },
+            },
+            mounted() {
 
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get('id');
+                fetch(`https://localhost:7238/api/VacationDetailsApi/EditVacationType/${id}`).then(res => res.json())
+                    .then(result => {
+                        console.log(result);
+                        this.genderSelectItems = result.genderSelectItems;
+                        this.cycleSelectItems = result.cycleSelectItems;
+                        this.vacationType = result.vacationType;
+                        this.numberOfDays = result.numberOfDays;
+                        this.minVacationHours = result.minVacationHours;
+                    })
+            }
+        }).mount("#app");
+    </script>
+}

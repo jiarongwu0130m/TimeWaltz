@@ -10,7 +10,7 @@
         
     }
 </style>
-<div class="row">
+<div class="row" id="app">
     <div class="form-inline col-sm-6 col-md-8">
         <div class="form-group col-sm-12">
             <label>假別名稱查詢：</label>
@@ -39,45 +39,46 @@
                        aria-describedby="example2_info">
                     <thead>
                         <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.VacationType)
+                            <th class="sorting sorting_asc" tabindex="0" rowspan="1"
+                                colspan="1">
+                                假別名稱
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Gender)
+                            <th class="sorting" rowspan="1" colspan="1">
+                                天數
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.NumberOfDays)
+                            <th class="sorting" rowspan="1" colspan="1">
+                                可請性別
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Cycle)
+                            <th class="sorting" rowspan="1" colspan="1">
+                                可請周期
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.MinVacationHours)
+                            <th class="sorting" rowspan="1" colspan="1">
+                                最小可請時數
                             </th>
-                            <th></th>
+                            <th></th>                            
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>                                
+                            <tr>  
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.VacationType)
+                                    @item.VacationType
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Gender)
+                                    @item.Gender
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.NumberOfDays)
+                                    @item.NumberOfDays
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Cycle)
+                                    @item.Cycle
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.MinVacationHours)
-                                </td>
+                                    @item.MinVacationHours
+                                </td>                                
                                 <td>
-                                    @Html.ActionLink("詳細", "EditVacationType", new { id=item.Id }) |
+                                    <button @@click="editVacationType(@item.Id)">編輯</button>
                                     @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
                                     <a asp-action="DeleteVacationType" asp-controller="BasicSetting" asp-route-Id="@item.Id">刪除</a>
                                 </td>
@@ -144,3 +145,27 @@
         </div>
     </div>
 </div>
+@section Scripts{
+
+    <script>
+        Vue.createApp({
+            methods: {
+                editVacationType(id) {                    
+                    event.preventDefault();
+                    console.log("Edit item with ID:", id);
+                    fetch(`/api/VacationDetailsApi/EditVacationType/${id}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.text();
+                        });
+
+                }
+            }
+        }).mount("#app");
+
+    </script>
+
+
+}

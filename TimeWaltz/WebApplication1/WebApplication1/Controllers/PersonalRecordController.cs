@@ -27,23 +27,29 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        //public IActionResult Leave()
-        //{
-        //    var status = _timeWaltzContext.RequestStatuses.Where(x => x.TableType == TableTypeEnum.請假單);
-        //    var data = _timeWaltzContext.LeaveRequests.Join(status,
-        //        l => l.Id,
-        //        s => s.TableId,
-        //        (l, s) => new LeaveViewModel
-        //        {
-        //            StartTime = l.StartTime,
-        //            EndTime = l.EndTime,
-        //            LeaveHour = l.LeaveHours,
-        //            VacationName = l.VacationDetails.VacationType.ToString(),
-        //            ApprovalStatus = s.Status.ToString()
-        //        }).ToString();
-        //    return Json(data);
+        public IActionResult Leave()
+        {
+            var status = _timeWaltzContext.RequestStatuses.Where(x => x.TableType == TableTypeEnum.請假單);
+            var data = _timeWaltzContext.LeaveRequests.Join(status,
+                l => l.Id,
+                s => s.TableId,
+                (l, s) => new LeaveViewModel
+                {
+                    StartTime = l.StartTime,
+                    EndTime = l.EndTime,
+                    LeaveHour = l.LeaveHours,
+                    VacationName = l.VacationDetails.VacationType.ToString(),
+                    ApprovalStatus = s.Status.ToString()
+                }).ToString();
+            return Json(data);
 
-        //}
+        }
+        [HttpGet]
+        public IActionResult CreateLeave()
+        {
+            return View();
+        }
+        
 
         [HttpGet]
         public IActionResult AgentEmployeeSetting()

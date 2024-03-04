@@ -27,7 +27,30 @@ namespace WebApplication1.Controllers.Api
             return model;
         }
 
+        [HttpGet]
+        [Route("{id}")]
+        public EditVacationTypeViewModel EditVacationType(int id)
+        {
+            var entity = _vacationTypeService.GetVacationTypeOrNull(id);
+            var model = EntityHelper.ToEditViewModel(entity);
+            return model;
 
+
+        }
+        [HttpPost]
+        public ActionResult EditVacationType(EditVacationDto dto)
+        {
+            var model = new EditVacationTypeViewModel
+            {
+                VacationType = dto.VacationType,
+                Gender = dto.Gender,
+                Cycle = dto.Cycle,
+                NumberOfDays = dto.NumberOfDays,
+                MinVacationHours = dto.MinVacationHours,
+            };
+            _vacationTypeService.EditVacationType(model);
+            return Ok();
+        }
         //參考用
         [HttpPost("add")]
         public ActionResult<TodoItem> CreateVacationDetail([FromBody] CreateVacationTypeViewModel model)
