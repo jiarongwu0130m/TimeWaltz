@@ -53,6 +53,48 @@ namespace WebApplication1.Services
 
             
         }
-       
+
+        public void CreateShiftSchedule(ShiftSchedule entity)
+        {
+            _timeWaltzContext.ShiftSchedules.Add(entity);
+            _timeWaltzContext.SaveChanges();          
+        }
+
+        public void DeleteShiftSchedule(ShiftSchedule entity)
+        {
+            _timeWaltzContext.Remove(entity);
+            _timeWaltzContext.SaveChanges(true);
+        }
+
+        public ShiftSchedule? GetShiftScheduleOrNull(int id)
+        {
+            return _timeWaltzContext.ShiftSchedules.FirstOrDefault(s => s.Id == id);
+        }
+
+        public void EditShiftSchedule(EditShiftSchedulesViewModel model)
+        {
+            var entity = GetShiftScheduleOrNull(model.Id);
+
+            entity.ShiftsName = model.ShiftName;
+            entity.StartTime = model.StartTime;
+            entity.EndTime = model.EndTime;
+            entity.BreakTime = (int)Math.Round(model.BreakTimeHours * 60.0);
+            entity.MaxAdditionalClockIn = model.MaxAdditionalClockIn;
+
+            _timeWaltzContext.SaveChanges();
+        }
+
+        public List<ShiftSchedule> GetShiftScheduleList()
+        {
+            return _timeWaltzContext.ShiftSchedules.Select(s=>new ShiftSchedule
+            {
+                Id = s.Id,
+                ShiftsName = s.ShiftsName,
+                StartTime = s.StartTime, 
+                EndTime = s.EndTime,
+                BreakTime = s.BreakTime,
+                MaxAdditionalClockIn = s.MaxAdditionalClockIn,
+            }).ToList();
+        }
     }
 }

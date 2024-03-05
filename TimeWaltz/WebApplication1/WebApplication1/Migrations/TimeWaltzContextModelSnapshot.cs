@@ -350,22 +350,16 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int")
-                        .HasColumnName("DepartmentID");
-
                     b.Property<string>("DepartmentName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("EmployeesId")
+                    b.Property<int?>("EmployeesId")
                         .HasColumnType("int")
                         .HasColumnName("EmployeesID");
 
                     b.HasKey("Id");
-
-                    b.HasIndex(new[] { "DepartmentId" }, "IX_Department_DepartmentID");
 
                     b.HasIndex(new[] { "EmployeesId" }, "IX_Department_EmployeesID");
 
@@ -394,8 +388,8 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool>("Gender")
-                        .HasColumnType("bit");
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime");
@@ -425,15 +419,34 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("FlexibleTime")
+                    b.Property<int>("FlexibleTime")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("MoveUp")
+                    b.Property<bool>("MoveUp")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.ToTable("Flextime", (string)null);
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.GradeTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Days")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceLength")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GradeTable");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.LeaveRequest", b =>
@@ -677,6 +690,25 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SpacialVacation", (string)null);
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.SpecialHoliday", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("GiveDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("HowToGive")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpecialHoliday");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.User", b =>

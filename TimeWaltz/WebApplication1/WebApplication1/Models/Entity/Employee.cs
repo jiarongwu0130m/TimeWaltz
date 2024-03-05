@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Models.Entity;
 
@@ -17,10 +19,13 @@ public partial class Employee
 
     public string? Email { get; set; }
 
-    public bool Gender { get; set; }
+    public GenderEnum Gender { get; set; }
 
     public string EmployeesNo { get; set; } = null!;
-
+    [NotMapped]
+    public string? ShiftsName { get; set; }
+    [NotMapped]
+    public string? DepartmentName { get; set; }
     public virtual ICollection<AdditionalClockIn> AdditionalClockInApprovalEmployees { get; set; } = new List<AdditionalClockIn>();
 
     public virtual ICollection<AdditionalClockIn> AdditionalClockInEmployees { get; set; } = new List<AdditionalClockIn>();

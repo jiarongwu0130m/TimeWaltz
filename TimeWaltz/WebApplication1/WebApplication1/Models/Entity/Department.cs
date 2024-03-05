@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models.Entity;
 
@@ -9,9 +10,9 @@ public partial class Department
 
     public string DepartmentName { get; set; } = null!;
 
-    public int EmployeesId { get; set; }
-
-    public int? DepartmentId { get; set; }
+    public int? EmployeesId { get; set; }
+    [NotMapped]
+    public string? EmployeeName { get; set; }
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

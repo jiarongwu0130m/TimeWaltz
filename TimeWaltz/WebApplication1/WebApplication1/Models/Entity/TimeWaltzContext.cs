@@ -14,7 +14,8 @@ public partial class TimeWaltzContext : DbContext
         : base(options)
     {
     }
-
+    public virtual DbSet<SpecialHoliday> SpecialHoliday { get; set; }
+    public virtual DbSet<GradeTable> GradeTable { get; set; }
     public virtual DbSet<Access> Accesses { get; set; }
 
     public virtual DbSet<AccessRoleBind> AccessRoleBinds { get; set; }
@@ -263,12 +264,12 @@ public partial class TimeWaltzContext : DbContext
         {
             entity.ToTable("Department");
 
-            entity.HasIndex(e => e.DepartmentId, "IX_Department_DepartmentID");
+
 
             entity.HasIndex(e => e.EmployeesId, "IX_Department_EmployeesID");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
+
             entity.Property(e => e.DepartmentName).HasMaxLength(50);
             entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
         });

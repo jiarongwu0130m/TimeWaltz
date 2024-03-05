@@ -1,0 +1,118 @@
+﻿@{
+    Layout = "_Layout";
+    ViewBag.title = "部門瀏覽";
+}
+
+@model IEnumerable<DepartmentViewModel>
+
+<div class="row">
+    <div class="col-12">
+        <div class="row mb-2">
+            <label>部門名稱查詢：</label>
+            <form asp-action="Department" asp-controller="BasicSetting" method="post">
+                <input name="QueryDepartment" type="text">
+                <button type="submit" class="btn btn-outline-dark">查詢</button>
+            </form>
+            <div class="col-sm-auto ml-auto">
+                <a asp-controller="BasicSetting" asp-action="CreateDepartment" class="btn btn-outline-success pull-right">新增</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <table id="example2" class="table table-bordered">
+            <thead>
+                <tr>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.DepartmentName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeesId)
+                    </th>
+                    <th scope="col">詳細資料</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model)
+                    {
+                        <tr class="text-center">
+                            <td>@item.DepartmentName</td>
+                            <td>@item.EmployeeName</td>
+                            <td>
+                                <a asp-controller="BasicSetting" asp-action="EditDepartment" asp-route-id="@item.Id" class="btn btn-outline-primary">檢視</a>
+                                <a asp-controller="BasicSetting" asp-action="DeleteDepartment" asp-route-id="@item.Id" class="btn btn-outline-secondary" onclick="return confirmDelete();">刪除</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-5">
+        <div class="col-sm col-md-5" id="example2_info"></div>
+    </div>
+    <div class="col-sm-4 col-md-8">
+        <div class="col-sm-12 col-md-7">
+            <div class="dataTables_paginate paging_simple_numbers"
+                 id="example2_paginate">
+                <ul class="pagination">
+                    <li class="paginate_button page-item previous disabled"
+                        id="example2_previous">
+                        <a href="#" aria-controls="example2"
+                           data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                    </li>
+                    <li class="paginate_button page-item active">
+                        <a href="#"
+                           aria-controls="example2" data-dt-idx="1" tabindex="0"
+                           class="page-link">1</a>
+                    </li>
+                    <li class="paginate_button page-item ">
+                        <a href="#"
+                           aria-controls="example2" data-dt-idx="2" tabindex="0"
+                           class="page-link">2</a>
+                    </li>
+                    <li class="paginate_button page-item ">
+                        <a href="#"
+                           aria-controls="example2" data-dt-idx="3" tabindex="0"
+                           class="page-link">3</a>
+                    </li>
+                    <li class="paginate_button page-item ">
+                        <a href="#"
+                           aria-controls="example2" data-dt-idx="4" tabindex="0"
+                           class="page-link">4</a>
+                    </li>
+                    <li class="paginate_button page-item ">
+                        <a href="#"
+                           aria-controls="example2" data-dt-idx="5" tabindex="0"
+                           class="page-link">5</a>
+                    </li>
+                    <li class="paginate_button page-item ">
+                        <a href="#"
+                           aria-controls="example2" data-dt-idx="6" tabindex="0"
+                           class="page-link">6</a>
+                    </li>
+                    <li class="paginate_button page-item next" id="example2_next">
+                        <a href="#" aria-controls="example2" data-dt-idx="7"
+                           tabindex="0" class="page-link">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function confirmDelete() {
+        // 使用 confirm 函數顯示確認視窗
+        var result = confirm("確定要刪除嗎?");
+
+        // 如果用戶確定，返回 true，否則返回 false
+        return result;
+    }
+</script>

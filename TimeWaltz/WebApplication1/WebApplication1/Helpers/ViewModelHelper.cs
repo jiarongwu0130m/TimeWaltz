@@ -5,6 +5,44 @@ namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
+        public static Employee ToEntity(CreatePersonalDataViewModel model)
+        {
+            var entity = new Employee
+            {
+                ShiftScheduleId = model.ShiftScheduleId,
+                DepartmentId = model.DepartmentId,
+                Name = model.Name,
+                HireDate = model.HireDate,
+                Email = model.Email,
+                Gender = model.Gender,
+                EmployeesNo = model.EmployeesNo,
+            };
+            return entity;
+        }
+        public static GradeTable ToEntity(CreateGradeTableViewModel model)
+        {
+            var entity = new GradeTable
+            {
+                ServiceLength = model.ServiceLength,
+                Days = model.Days,
+            };
+            return entity;
+        }
+
+        public static ShiftSchedule ToEntity(CreateShiftSchedulesViewModel model)
+        {
+            var entity = new ShiftSchedule
+            {
+                Id = model.Id,
+                ShiftsName = model.ShiftName,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                BreakTime = (int)Math.Round(model.BreakTimeHours * 60.0),
+                MaxAdditionalClockIn = model.MaxAdditionalClockIn,
+            };
+            return entity;
+        }
+
         public static VacationDetail ToEntity(CreateVacationTypeViewModel model)
         {
 
@@ -18,27 +56,26 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-        public static VacationDetail ToEntity(EditVacationTypeViewModel model)
-        {            
-
-            var entity = new VacationDetail
+       
+        public static PublicHoliday ToEntity(CreatePublicHolidayViewModel model)
+        {
+            var entity = new PublicHoliday
             {
-                Id = model.Id,
-                VacationType = model.VacationType,
-                Gender = model.Gender,
-                NumberOfDays = model.NumberOfDays,
-                Cycle = model.Cycle,
-                MinVacationHours = model.MinVacationHours
+                HolidayName = model.HolidayName,
+                Date = model.Date
             };
             return entity;
         }
-        //public static ShiftSchedule ToEntity(ShiftSchedulesViewModel model)
-        //{
-        //    var entity = new ShiftSchedule
-        //    {
 
-        //    };
-        //}
+        public static Department ToEntity(DepartmentCreateViewModel model)
+        {
+            var entity = new Department
+            {                
+                DepartmentName = model.DepartmentName,
+                EmployeesId = model.EmployeesId,
+            };
+            return entity;
+        }
 
 
         public static User ToEntity(AccountViewModel model)
