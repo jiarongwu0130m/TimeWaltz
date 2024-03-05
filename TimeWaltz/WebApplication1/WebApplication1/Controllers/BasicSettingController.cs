@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models.ViewModel;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -32,12 +34,12 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreatePersonalData()
+        public IActionResult PersonalDataCreate()
         {
             var sDropDownData = _personalDataService.GetShiftNameDropDownData();
             var dDropDownData = _personalDataService.GetDepartmentDropDownData();
 
-            var model = new CreatePersonalDataViewModel
+            var model = new PersonalDataCreateViewModel
             {
                 GenderSelectItems = DropDownHelper.GetGenderDropDownList(),
                 DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData),
@@ -49,7 +51,7 @@ namespace WebApplication1.Controllers
            
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePersonalData(CreatePersonalDataViewModel model)
+        public IActionResult PersonalDataCreate(PersonalDataCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +62,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("ListPersonalData");
         }
         [HttpGet]
-        public IActionResult ListPersonalData()
+        public IActionResult PersonalDataList()
         {
             var entities = _personalDataService.GetPersonalDataList();            
             var models = EntityHelper.ToViewModel(entities);
@@ -68,7 +70,7 @@ namespace WebApplication1.Controllers
             return View(models);
         }
       
-        public IActionResult DeletePersonalData(int id)
+        public IActionResult PersonalDataDelete(int id)
         {
             var entity = _personalDataService.GetPersonalDataOrNull(id);
             if(entity == null)
@@ -80,7 +82,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditPersonalData(int id)
+        public IActionResult PersonalDataEdit(int id)
         {
             var sDropDownData = _personalDataService.GetShiftNameDropDownData();
             var dDropDownData = _personalDataService.GetDepartmentDropDownData();
@@ -101,7 +103,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonalData(EditPersonalDataViewModel model)
+        public IActionResult PersonalDataEdit(PersonalDataEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -114,13 +116,13 @@ namespace WebApplication1.Controllers
        
 
         [HttpGet]
-        public IActionResult CreateGradeTable()
+        public IActionResult SpecialGradeCreate()
         {
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateGradeTable(CreateGradeTableViewModel model)
+        public IActionResult SpecialGradeCreate(SpecialGradeCreateViewModel model)
         {
             if (!ModelState.IsValid && model != null)
             {
@@ -132,14 +134,14 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListGradeTable()
+        public IActionResult SpecialGradeList()
         {
             var entities = _gradeTableService.GetGradeTableList();
             var models = EntityHelper.ToViewModel(entities);
             return View(models);
         }
         
-        public IActionResult DeleteGradeTable(int id)
+        public IActionResult SpecialGradeDelete(int id)
         {
             var entity = _gradeTableService.GetGradeTableOrNull(id);
             if(entity != null)
@@ -166,7 +168,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditGradeTable(EditGradeTableViewModel model)
+        public IActionResult EditGradeTable(SpecialGradeEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -200,13 +202,13 @@ namespace WebApplication1.Controllers
         
                
         [HttpGet]
-        public IActionResult CreatePublicHoliday()
+        public IActionResult PublicHolidayCreate()
         {
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePublicHoliday(CreatePublicHolidayViewModel model)
+        public IActionResult CreatePublicHoliday(PublicHolidayCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -226,7 +228,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult ListPublicHoliday(PublicHolidayViewModel selectedModel)
+        public IActionResult PublicHolidayList(PublicHolidayViewModel selectedModel)
         {
             var entities = _publicHolidayService.GetSelectedPublicHolidayList(selectedModel);
             if(entities != null)
@@ -237,7 +239,7 @@ namespace WebApplication1.Controllers
             return View(selectedModel);
         }
         [HttpGet]
-        public IActionResult EditPublicHoliday(int Id)
+        public IActionResult PublicHolidayEdit(int Id)
         {
             var entity = _publicHolidayService.GetPublicHolidayOrNull(Id);
             var model = EntityHelper.ToEditViewModel(entity);
@@ -245,7 +247,7 @@ namespace WebApplication1.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPublicHoliday(EditPublicHolidayViewModel model)
+        public IActionResult PublicHolidayEdit(PublicHolidayEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -255,7 +257,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("ListPublicHoliday");
         }
 
-        public IActionResult DeletePublicHoliday(int id)
+        public IActionResult PublicHolidayDelete(int id)
         {
             //TODO: 驗證是否為登入者有權限的資料
             var entity = _publicHolidayService.GetPublicHolidayOrNull(id);
@@ -263,13 +265,13 @@ namespace WebApplication1.Controllers
             return RedirectToAction("ListPublicHoliday");
         }
         [HttpGet]
-        public IActionResult CreateShiftSchedule()
+        public IActionResult ShiftScheduleCreate()
         {
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateShiftSchedule(CreateShiftSchedulesViewModel model)
+        public IActionResult ShiftScheduleCreate(CreateShiftSchedulesViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -279,7 +281,7 @@ namespace WebApplication1.Controllers
             _shiftScheduleService.CreateShiftSchedule(entity);
             return RedirectToAction("ListShiftSchedule");
         }
-        public IActionResult ListShiftSchedule()
+        public IActionResult ShiftScheduleList()
         {  
             var entities = _shiftScheduleService.GetShiftScheduleList();
             var models = EntityHelper.ToViewModel(entities);
@@ -288,7 +290,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult ListShiftSchedule(ShiftSchedulesViewModel selectedModel)
+        public IActionResult ShiftScheduleList(ShiftSchedulesViewModel selectedModel)
         {
             var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
             if(entities != null)
@@ -298,7 +300,7 @@ namespace WebApplication1.Controllers
             }           
             return View(selectedModel);
         }
-        public IActionResult DeleteShiftSchedule(int id)
+        public IActionResult ShiftScheduleDelete(int id)
         {
             var entity = _shiftScheduleService.GetShiftScheduleOrNull(id);
             if(entity == null)
@@ -310,7 +312,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditShiftSchedule(int id)
+        public IActionResult ShiftScheduleEdit(int id)
         {
             var entity = _shiftScheduleService.GetShiftScheduleOrNull(id);
             if (entity == null)
@@ -324,7 +326,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditShiftSchedule(EditShiftSchedulesViewModel model)
+        public IActionResult ShiftScheduleEdit(EditShiftSchedulesViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -336,51 +338,51 @@ namespace WebApplication1.Controllers
 
 
         [HttpGet]
-        public IActionResult CreateVacationType()
+        public IActionResult VacationTypeCreate()
         {
             
             return View();
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult CreateVacationType(CreateVacationTypeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var entity = ViewModelHelper.ToEntity(model);
-            _vacationTypeService.CreateVacationType(entity);
-            return RedirectToAction("ListVacationType");
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult VacationTypeCreate(VacationCreateViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    var entity = ViewModelHelper.ToEntity(model);
+        //    _vacationTypeService.CreateVacationType(entity);
+        //    return RedirectToAction("ListVacationType");
+        //}
         [HttpGet]
-        public IActionResult ListVacationType()
+        public IActionResult VacationTypeList()
         {
 
 
-            var entities = _vacationTypeService.GetVacationDetailsList();
-            var model = EntityHelper.ToViewModel(entities);
-            return View(model);
+            //var entities = _vacationTypeService.GetVacationDetailsList();
+            //var model = EntityHelper.ToViewModel(entities);
+            return View();
         }
-        [HttpPost]
-        public IActionResult ListVacationType(VacationTypeViewModel selectedModel)
-        {
-            var entities = _vacationTypeService.GetSelectedVacationTypeList(selectedModel);
-            if (entities != null)
-            {
-                var models = EntityHelper.ToViewModel(entities);
-                return View(models);
-            }
-            else
-            {
-                return View(selectedModel);
-            }
-        }
+        //[HttpPost]
+        //public IActionResult VacationTypeList(VacationViewModel selectedModel)
+        //{
+        //    var entities = _vacationTypeService.GetSelectedVacationTypeList(selectedModel);
+        //    if (entities != null)
+        //    {
+        //        var models = EntityHelper.ToViewModel(entities);
+        //        return View(models);
+        //    }
+        //    else
+        //    {
+        //        return View(selectedModel);
+        //    }
+        //}
 
 
         
 
-        public IActionResult DeleteVacationType(int id)
+        public IActionResult VacationTypeDelete(int id)
         {
             var entity = _vacationTypeService.GetVacationTypeOrNull(id);
             _vacationTypeService.DeleteVacationType(entity);
@@ -388,29 +390,25 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditVacationType(int id)
+        public IActionResult VacationTypeEdit(int id)
         {
-            var entity = _vacationTypeService.GetVacationTypeOrNull(id);
-            if (entity == null)
-            {
-                return RedirectToAction("ListVacationType");
-            }
-            var model = EntityHelper.ToEditViewModel(entity);
+            
 
-            return View(model);
+            return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditVacationType(EditVacationTypeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            _vacationTypeService.EditVacationType(model);
-            return RedirectToAction("ListVacationType");
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult VacationTypeEdit(VacationEditViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    _vacationTypeService.EditVacationType(model);
+        //    return RedirectToAction("ListVacationType");
+        //}
+
 
         public IActionResult Flextime()
         {
@@ -431,7 +429,7 @@ namespace WebApplication1.Controllers
         }
 
         
-        public IActionResult CreateDepartment()
+        public IActionResult DepartmentCreate()
         {           
             var employeeNameDropDownData = _departmentService.GetEmployeeDropDownData();
             
@@ -452,7 +450,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateDepartment(DepartmentCreateViewModel model)
+        public IActionResult DepartmentCreate(DepartmentCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -490,7 +488,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpGet]
-        public IActionResult EditDepartment(int id)
+        public IActionResult DepartmentEdit(int id)
         {
             var employeeNameDropDownData = _departmentService.GetEmployeeDropDownData();
             var entity = _departmentService.GetDepartmentOrNull(id);
@@ -508,7 +506,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditDepartment(DepartmentEditViewModel model)
+        public IActionResult DepartmentEdit(DepartmentEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -519,7 +517,7 @@ namespace WebApplication1.Controllers
         }
 
 
-        public IActionResult DeleteDepartment(int id)
+        public IActionResult DepartmentDelete(int id)
         {
             var entity = _departmentService.GetDepartmentOrNull(id);
             _departmentService.DeleteDepartment(entity);

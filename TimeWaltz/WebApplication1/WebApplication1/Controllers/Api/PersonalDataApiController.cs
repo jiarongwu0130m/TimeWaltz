@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
-using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Controllers.Api
 {
@@ -9,9 +9,9 @@ namespace WebApplication1.Controllers.Api
     [ApiController]
     public class PersonalDataApiController : ControllerBase
     {
-        public CreatePersonalDataViewModel DropDownList()
+        public PersonalDataCreateViewModel DropDownList()
         {
-            var model = new CreatePersonalDataViewModel
+            var model = new PersonalDataCreateViewModel
             {
                 GenderSelectItems = DropDownHelper.GetGenderDropDownList(),                
             };

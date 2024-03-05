@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using WebApplication1.Models;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Services
 {

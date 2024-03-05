@@ -62,7 +62,7 @@ namespace WebApplication1.Helpers
         }
         public static List<SelectListItem> GetGenderDropDownList()
         {
-            return Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
+            return Enum.GetValues(typeof(GenderLimitEnum)).Cast<GenderLimitEnum>().Select(c => new SelectListItem
             {
                 Text = c.ToString(),
                 Value = ((int)c).ToString()

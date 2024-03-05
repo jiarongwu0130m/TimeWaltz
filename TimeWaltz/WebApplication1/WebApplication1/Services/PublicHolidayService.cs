@@ -1,5 +1,6 @@
 ﻿using WebApplication1.Models;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Services
 {
@@ -37,7 +38,7 @@ namespace WebApplication1.Services
             return _timeWaltzContext.PublicHolidays.FirstOrDefault(p => p.Id == id);
         }
 
-        public int EditPublicHoliday(EditPublicHolidayViewModel model)
+        public int EditPublicHoliday(PublicHolidayEditViewModel model)
         {
             var entity = _timeWaltzContext.PublicHolidays.FirstOrDefault(p=>p.Id == model.Id);
 

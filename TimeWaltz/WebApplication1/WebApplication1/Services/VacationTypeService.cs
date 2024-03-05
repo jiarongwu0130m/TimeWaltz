@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using WebApplication1.Models;
+using WebApplication1.Models.Dto;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Services
 {
@@ -12,11 +13,10 @@ namespace WebApplication1.Services
         {
             _timeWaltzContext = timeWaltzContext;
         }
-        public int CreateVacationType(VacationDetail entity)
+        public void CreateVacationType(VacationDetail entity)
         {
             _timeWaltzContext.VacationDetails.Add(entity);
-            _timeWaltzContext.SaveChanges();
-            return entity.Id;
+            _timeWaltzContext.SaveChanges();           
         }        
         public VacationDetail? GetVacationTypeOrNull(int id)
         {
@@ -24,7 +24,22 @@ namespace WebApplication1.Services
 
         }
 
-        public int EditVacationType(EditVacationTypeViewModel model)
+        public int EditVacationType(VacationEditDto model)
+        {
+            var entity = _timeWaltzContext.VacationDetails.FirstOrDefault(x => x.Id == model.Id);
+
+
+
+            entity.VacationType = model.VacationType;
+            entity.Gender = model.Gender;
+            entity.NumberOfDays = model.NumberOfDays;
+            entity.Cycle = model.Cycle;
+            entity.MinVacationHours = model.MinVacationHours;
+
+            _timeWaltzContext.SaveChanges();
+            return entity.Id;
+        }
+        public int EditVacationType(VacationEditViewModel model)
         {
             var entity = _timeWaltzContext.VacationDetails.FirstOrDefault(x => x.Id == model.Id);
 
@@ -56,7 +71,7 @@ namespace WebApplication1.Services
         }
         
 
-        public List<VacationDetail> GetSelectedVacationTypeList(VacationTypeViewModel selectedModel)
+        public List<VacationDetail> GetSelectedVacationTypeList(VacationViewModel selectedModel)
         {
             if(selectedModel.QueryVacationType != null) 
             {

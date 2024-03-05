@@ -1,0 +1,51 @@
+﻿@model WebApplication1.Models.ViewModel.PublicHolidayEditViewModel
+
+@{
+    ViewData["Title"] = "編輯國定假日";
+}
+
+<form asp-action="EditPublicHoliday" asp-asp-controller="BasicSetting" method="post">
+    <section class="content">
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="HolidayName" class="control-label"></label>
+                <input asp-for="HolidayName" class="form-control " />
+                <span asp-validation-for="HolidayName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input name="Date" id="dateInput" class="form-control" value="@Model.Date.ToString("yyyy/MM/dd")"/>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+
+            <div class="card-footer">
+                <div class="row float-right">
+                    <div class="col ">
+                        <input type="submit" value="送出" class="btn btn-primary" />
+                        <a asp-controller="BasicSetting" asp-action="ListPublicHoliday" class="btn btn-outline-success">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+@section Scripts {
+
+
+    <script>
+
+        $(function () {
+            $('#dateInput').daterangepicker({
+                singleDatePicker: true,
+                locale: {
+                    format: 'YYYY/MM/DD'
+                }
+            });
+        });
+    </script>
+
+
+}

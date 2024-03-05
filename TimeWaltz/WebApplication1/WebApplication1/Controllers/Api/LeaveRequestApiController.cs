@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
-using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Api
@@ -19,7 +19,7 @@ namespace WebApplication1.Controllers.Api
             _leaveService = leaveService;
         }
         [HttpGet]
-        public CreateLeaveViewModel DropDownList()
+        public LeaveCreateViewModel DropDownList()
         {
             var UserId = 1;
             var agentData = _leaveService.GetAgentDropDownData(UserId);
@@ -28,7 +28,7 @@ namespace WebApplication1.Controllers.Api
             var VacationData = _leaveService.GetVacationDropDownData();
             var VacationTypeSelectItems = DropDownHelper
                 .GetVacationTypeDropDownList(VacationData);
-            var model = new CreateLeaveViewModel
+            var model = new LeaveCreateViewModel
             {
                 AgentEmployeeSelectItems = AgentEmployeeSelectItems,
                 VacationTypeSelectItems = VacationTypeSelectItems,                

@@ -1,0 +1,147 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "修改假別";
+}
+<form asp-action="EditVacationType" asp-controller="BasicSetting" method="post" id="app">    <section class="content">
+        <div class="card-body">
+            <input name="id" type="hidden"/>            
+            <div class="form-group">
+                <label  class="control-label">假別名稱</label>
+                <input name="VacationType" class="form-control" v-model="vacationType" />
+                <span  class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">可請性別限制</label>
+                <select name="Gender" class="form-control" v-model.number="gender">
+                    <option value="">請選擇</option>
+                    <option v-for="item in genderSelectItems"  :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">可請周期</label>
+                <select name="Cycle" class="form-control" v-model.number="cycle">
+                    <option value="">請選擇</option>
+                    <option v-for="item in cycleSelectItems" :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">可請天數</label>
+                <input name="NumberOfDays" class="form-control" v-model="numberOfDays" />
+                <span  class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">最小可請時數</label>
+                <input naem="MinVacationHours" class="form-control" v-model="minVacationHours" />
+                <span  class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            </div>
+
+
+            <div class="card-footer">
+                <div class="row float-right">
+                    <div class="col ">                        
+                        <input @@click="send" type="button" value="送出" class="btn btn-primary" />
+                        <a asp-action="VacationTypeList" asp-controller="BasicSetting" class="btn btn-primary">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    Id: null,
+                    genderSelectItems: [],
+                    cycleSelectItems: [],
+                    cycle: '',
+                    gender: '',
+                    vacationType: '',
+                    minVacationHours: null,
+                    numberOfDays: null,
+                }
+            },
+            methods: {
+                checkId() {
+                    // 定义 URL
+                    var url = location.pathname;
+
+                    // 使用正则表达式匹配数字部分
+                    var match = url.match(/\/(\d+)$/);
+
+                    // 检查是否有匹配
+                    if (match) {
+                        // 获取最后一个数字
+                        var lastNumber = parseInt(match[1]);
+                        this.Id = lastNumber;
+
+                    } else {
+                        location.href = "/BasicSetting/VacationTypeList";
+                    }
+
+                },
+                send() {
+                    let self = this;
+                    console.log(self.vacationType, self.gender, self.cycle, self.numberOfDays, self.minVacationHours,)
+                    fetch("/api/VacationDetailsApi/VacationEdit", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            Id: self.Id,
+                            VacationType: self.vacationType,
+                            Gender: self.gender,
+                            Cycle: self.cycle,
+                            NumberOfDays: self.numberOfDays,
+                            MinVacationHours: self.minVacationHours,
+                        }),
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                    }).then(res => res.json()).then(result => {
+                        if (result.status) {
+                            alert("修改成功");
+                            location.href = "/BasicSetting/VacationTypeList";
+                        } else {
+                            alert("修改失敗");
+                        }
+
+                    })
+                },
+                getEditVacationData() {
+
+                    fetch(`/api/VacationDetailsApi/GetVacationEditData/${this.Id}`)
+                        .then(res => res.json())
+                        .then(result => {
+                            console.log(result)
+                            this.cycle = result.cycle;
+                            this.gender = result.gender;
+                            this.vacationType = result.vacationType;
+                            this.minVacationHours = result.minVacationHours;
+                            this.numberOfDays = result.numberOfDays;
+
+                        })
+                },
+                getDropDownList() {
+                    fetch("/api/VacationDetailsApi/DropDownList")
+                        .then(res => res.json())
+                        .then(result => {
+                            this.genderSelectItems = result.genderSelectItems;
+                            this.cycleSelectItems = result.cycleSelectItems;
+                        }
+                        )
+                },
+            },
+            mounted() {
+                this.checkId();
+                this.getEditVacationData()
+                this.getDropDownList()
+
+
+            }
+        }).mount("#app");
+    </script>
+}

@@ -1,8 +1,8 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
-using WebApplication1.Models;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Services
 {
@@ -73,7 +73,7 @@ namespace WebApplication1.Services
 
         
 
-        public void EditPersonalData(EditPersonalDataViewModel model)
+        public void EditPersonalData(PersonalDataEditViewModel model)
         {
             var entity = _timeWaltzContext.Employees.FirstOrDefault(e=>e.Id == model.Id);
             entity.DepartmentId = model.DepartmentId;

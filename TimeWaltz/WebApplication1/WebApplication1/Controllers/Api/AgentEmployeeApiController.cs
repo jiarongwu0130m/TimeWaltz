@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
-using WebApplication1.Models;
+using WebApplication1.Models.Dto;
+using WebApplication1.Models.ViewModel;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Api

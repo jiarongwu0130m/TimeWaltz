@@ -4,6 +4,7 @@ using WebApplication1.Helpers;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models.ViewModel;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -45,7 +46,7 @@ namespace WebApplication1.Controllers
 
         }
         [HttpGet]
-        public IActionResult CreateLeave()
+        public IActionResult LeaveCreate()
         {
             return View();
         }
