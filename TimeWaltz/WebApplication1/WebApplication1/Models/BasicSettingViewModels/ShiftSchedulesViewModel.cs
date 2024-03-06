@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication1.Models.ViewModel
+namespace WebApplication1.Models.BasicSettingViewModels
 {
     public class ShiftSchedulesViewModel
     {
@@ -18,7 +18,7 @@ namespace WebApplication1.Models.ViewModel
         public int MaxAdditionalClockIn { get; set; }
 
     }
-    public class CreateShiftSchedulesViewModel
+    public class ShiftSchedulesCreateViewModel
     {
         public int Id { get; set; }
         [Required]
@@ -29,7 +29,7 @@ namespace WebApplication1.Models.ViewModel
         public int MaxAdditionalClockIn { get; set; }
 
     }
-    public class EditShiftSchedulesViewModel
+    public class ShiftSchedulesEditViewModel
     {
         public int Id { get; set; }
         [Required]

@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication1.Models.Entity;
 
-namespace WebApplication1.Models.ViewModel
+namespace WebApplication1.Models.PersonalRecordViewModels
 {
-    public class AgentEmploeeViewModel
+    public class AgentEmployeeViewModel
     {
         public int Id { get; set; }
 

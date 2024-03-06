@@ -1,5 +1,5 @@
-﻿using WebApplication1.Models.Entity;
-using WebApplication1.Models.ViewModel;
+﻿using WebApplication1.Models.BasicSettingViewModels;
+using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Services
 {

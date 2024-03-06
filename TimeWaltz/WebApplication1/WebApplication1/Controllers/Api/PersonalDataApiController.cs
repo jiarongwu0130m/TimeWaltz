@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
-using WebApplication1.Models.Dto;
-using WebApplication1.Models.ViewModel;
-using WebApplication1.Services;
+using WebApplication1.Models.BasicSettingViewModels;
 
 namespace WebApplication1.Controllers.Api
 {
@@ -21,7 +19,7 @@ namespace WebApplication1.Controllers.Api
         {
             var model = new GenderDropDownDto
             {
-                GenderSelectItems = DropDownHelper.GetGenderDropDownList(),                
+                GenderSelectItems = DropDownHelper.GetGenderDropDownList(),
             };
             return model;
         }

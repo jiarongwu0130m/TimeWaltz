@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Models.Enums;
 
-namespace WebApplication1.Models.ViewModel
+namespace WebApplication1.Models.PersonalRecordViewModels
 {
     public class LeaveViewModel
     {

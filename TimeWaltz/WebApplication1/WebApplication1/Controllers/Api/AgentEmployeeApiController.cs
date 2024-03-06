@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
-using WebApplication1.Models.Dto;
-using WebApplication1.Models.ViewModel;
+using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Api
@@ -18,7 +17,7 @@ namespace WebApplication1.Controllers.Api
         {
             _agentEmployeeService = agentEmployeeService;
         }
-        public AgentEmploeeViewModel DropDownList()
+        public AgentEmployeeViewModel DropDownList()
         {
             var UserId = 1;
             var data = _agentEmployeeService.GetAgentDropDownData(UserId);
@@ -30,7 +29,7 @@ namespace WebApplication1.Controllers.Api
                     item.Selected = true;
                 }
             }
-            var model = new AgentEmploeeViewModel
+            var model = new AgentEmployeeViewModel
             {
                 AgentEmployeeSelectItems = AgentEmployeeSelectItems,
             };

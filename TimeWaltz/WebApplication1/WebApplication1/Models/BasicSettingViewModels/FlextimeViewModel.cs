@@ -1,4 +1,4 @@
-﻿namespace WebApplication1.Models.ViewModel
+﻿namespace WebApplication1.Models.BasicSettingViewModels
 {
     public class FlextimeViewModel
     {

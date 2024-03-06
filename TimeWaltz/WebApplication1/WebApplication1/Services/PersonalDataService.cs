@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
-using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Services
 {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using WebApplication1.Models.Dto;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
-using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Services
 {
