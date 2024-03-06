@@ -26,6 +26,8 @@ public partial class Employee
     public string? ShiftsName { get; set; }
     [NotMapped]
     public string? DepartmentName { get; set; }
+    [NotMapped]
+    public string? AgentEmployeeName { get; set; }
     public virtual ICollection<AdditionalClockIn> AdditionalClockInApprovalEmployees { get; set; } = new List<AdditionalClockIn>();
 
     public virtual ICollection<AdditionalClockIn> AdditionalClockInEmployees { get; set; } = new List<AdditionalClockIn>();

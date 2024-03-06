@@ -22,6 +22,7 @@ namespace WebApplication1.Helpers
         }
         /// <summary>
         /// 在請假申請單中用來選擇代理人的下拉式選單
+        /// 傳入一個代理人List的entityModel
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>

@@ -17,14 +17,14 @@ namespace WebApplication1.Services
         }
         public void CreatePersonalData(Employee entity)
         {
-            if(entity == null)
+            if (entity == null)
             {
                 throw new ArgumentNullException("新增錯誤");
             }
             _timeWaltzContext.Employees.Add(entity);
             _timeWaltzContext.SaveChanges();
 
-            
+
         }
 
         public void DeletePersonalData(Employee entity)
@@ -42,19 +42,14 @@ namespace WebApplication1.Services
             }).ToList();
 
             return entities;
-            
+
         }
-        public object GetEmployeeAndShiftData()
-        {
-            throw new NotImplementedException();
-        }
+        
         public List<Employee> GetPersonalDataList()
         {
-            var department = _timeWaltzContext.Departments
-                .Select(d=>new Department { Id = d.Id, DepartmentName = d.DepartmentName})
-                .ToList();
-            var entities = _timeWaltzContext.Employees.ToList()
-                .Join(department, e=>e.DepartmentId, d=> d.Id, (e, d)=> new Employee
+            
+            var entities = _timeWaltzContext.Employees
+                .Join(_timeWaltzContext.Departments, e => e.DepartmentId, d => d.Id, (e, d) => new Employee
                 {
                     Id = e.Id,
                     ShiftScheduleId = e.ShiftScheduleId,
@@ -67,9 +62,9 @@ namespace WebApplication1.Services
                     DepartmentName = d.DepartmentName,
                     ShiftsName = "",
                 }).ToList();
-            
-            
-            foreach( var entity in entities)
+
+
+            foreach (var entity in entities)
             {
                 var shiftSchedule = _timeWaltzContext.ShiftSchedules.FirstOrDefault(s => s.Id == entity.ShiftScheduleId);
                 if (shiftSchedule != null)
@@ -80,7 +75,7 @@ namespace WebApplication1.Services
                 {
                     throw new Exception("資料庫錯誤");
                 }
-                
+
             }
 
             return entities;
@@ -92,17 +87,17 @@ namespace WebApplication1.Services
             return _timeWaltzContext.Employees.Where(e => e.Id == id).FirstOrDefault();
         }
 
-        
+
 
         public void EditPersonalData(PersonalDataEditViewModel model)
         {
-            var entity = _timeWaltzContext.Employees.FirstOrDefault(e=>e.Id == model.Id);
+            var entity = _timeWaltzContext.Employees.FirstOrDefault(e => e.Id == model.Id);
             entity.DepartmentId = model.DepartmentId;
             entity.ShiftScheduleId = model.ShiftScheduleId;
             entity.Name = model.Name;
             entity.Email = model.Email;
             _timeWaltzContext.SaveChanges();
-            
+
         }
 
         public List<Department> GetDepartmentDropDownData()
@@ -115,6 +110,6 @@ namespace WebApplication1.Services
             return entities;
         }
 
-        
+
     }
 }

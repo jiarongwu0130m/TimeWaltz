@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace WebApplication1.Models.Dto
+namespace WebApplication1.Models.PersonalRecordViewModels
 {
     public class LeaveDto
     {

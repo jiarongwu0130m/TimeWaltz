@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Helpers;
-using WebApplication1.Models.Dto;
+using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Api

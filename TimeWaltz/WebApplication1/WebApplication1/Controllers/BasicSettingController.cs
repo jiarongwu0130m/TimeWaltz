@@ -64,10 +64,10 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult PersonalData()
         {
-            var entities = _personalDataService.GetPersonalDataList();            
-            var models = EntityHelper.ToViewModel(entities);
+            //var entities = _personalDataService.GetPersonalDataList();            
+            //var models = EntityHelper.ToViewModel(entities);
             
-            return View(models);
+            return View();
         }
       
         public IActionResult PersonalDataDelete(int id)

@@ -19,13 +19,7 @@
         <div class="row">
             <div class="col-sm-4">
                 <input name="QueryName" type="text">
-            </div>
-            <div class="col-sm-4">
-                <input name="QueryDepartmentName" type="text">
-            </div>
-            <div class="col-sm-4">
-                <input name="QueryEmployeesNo" type="text">
-            </div>
+            </div>            
         </div>
         <div class="row">            
             <div class="col form-group">
@@ -72,39 +66,37 @@
         </thead>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
+            <tr v-for="emp in empList" v-for="dep in depName">
                     <td>
-                        @Html.DisplayFor(modelItem => item.ShiftsName)
+                    {{emp.shiftsName}}
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.DepartmentName)
+                    {{emp.departmentName}}
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.Name)
+                    {{emp.name}}
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.HireDate.Date)
+                    {{emp.hireDate}}
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Email)
+                    {{emp.email}}
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Gender)
+                    {{emp.gender}}
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.EmployeesNo)
+                    {{emp.employeesNo}}
                     </td>
                     <td>
-                        @Html.ActionLink("詳細", "PersonalDataEdit", new { id = item.Id }) |
-                        @Html.ActionLink("刪除", "PersonalDataDelete", new { id = item.Id })
+                        @Html.ActionLink("詳細", "PersonalDataEdit", new {}) |
+                        @Html.ActionLink("刪除", "PersonalDataDelete", new { })
                     </td>
                 </tr>
-            }
+            
         </tbody>
     </table>
 
@@ -116,15 +108,23 @@
             data() {
                 return {
                     empList: [],
-
+                    
                 }
             },
             methods: {
                 getEmpList() {
-                    fetch("/api/PersonalDataApi/EmployeeAndShiftData")
+                    let self = this;
+                    fetch("/api/PersonalDataApi/GetPersonalData")
                     .then(res => res.json())
-                    .then(result => console.log(result));
-                }
+                    .then(result => {
+                        self.empList = result;
+                    });
+                },
+                
+            },
+            mounted(){
+                this.getEmpList();
+               
             },
 
 

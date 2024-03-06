@@ -15,11 +15,11 @@ namespace WebApplication1.Helpers
         {
             _dbContext = timeWaltzContext;
         }
-        
 
-        public static List<PersonalDataViewModel> ToViewModel(List<Employee> entities)
+      
+        public static List<PersonalDataDto> ToViewModel(List<Employee> entities)
         {
-            var models = new List<PersonalDataViewModel>();
+            var models = new List<PersonalDataDto>();
             foreach(var entity in entities)
             {
                 models.Add(ToViewModel(entity));
@@ -28,15 +28,14 @@ namespace WebApplication1.Helpers
             return models;
         }
 
-        public static PersonalDataViewModel ToViewModel(Employee entity)
+        public static PersonalDataDto ToViewModel(Employee entity)
         {
             
 
-            var model = new PersonalDataViewModel
+            var model = new PersonalDataDto
             {
                 Id = entity.Id,
-                ShiftsName = entity.ShiftsName,
-                DepartmentName = entity.DepartmentName,
+                ShiftsName = entity.ShiftsName,                
                 Name = entity.Name,
                 HireDate = entity.HireDate,
                 Email = entity.Email,
