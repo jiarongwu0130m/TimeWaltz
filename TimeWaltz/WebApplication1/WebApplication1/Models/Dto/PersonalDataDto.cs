@@ -5,7 +5,7 @@ namespace WebApplication1.Models.Dto
     public class PersonalDataDto
     {
         public int Id { get; set; }
-        public 
+        
     }
 
     public class GenderDropDownDto
