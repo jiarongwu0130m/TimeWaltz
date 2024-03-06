@@ -1,0 +1,188 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "假別瀏覽";
+}
+<style>
+    .thinkcss-right {
+        text-align: right;
+    }
+</style>
+<div id="app">
+    <div class="row" >
+        <div class="form-inline col-sm-6 col-md-8">
+            <div class="form-group col-sm-12">
+                <label>假別名稱查詢：</label>
+                <input name="QueryVacationType" v-model="search" type="text">
+                <button  class="btn btn-outline-dark" @@click="changeSwitch">查詢</button>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 thinkcss-right">
+            <a asp-controller="BasicSetting" asp-action="VacationTypeCreate" class="btn btn-outline-success">新增</a>
+
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div class="row">
+                <div class="col-sm-12 col-md-6"></div>
+                <div class="col-sm-12 col-md-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="example2"
+                           class="table table-bordered table-hover dataTable dtr-inline"
+                           aria-describedby="example2_info">
+                        <thead>
+                            <tr>
+                                <th class="sorting sorting_asc" tabindex="0" rowspan="1"
+                                    colspan="1">
+                                    假別名稱
+                                </th>
+
+                                <th class="sorting" rowspan="1" colspan="1">
+                                    可請性別
+                                </th>
+                                <th class="sorting" rowspan="1" colspan="1">
+                                    可請周期
+                                </th>
+                                <th class="sorting" rowspan="1" colspan="1">
+                                    天數
+                                </th>
+                                <th class="sorting" rowspan="1" colspan="1">
+                                    最小可請時數
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-if="isSwitch">
+                                <tr v-for="vacation in filterByVacationType">
+                                    <td>
+                                        {{vacation.vacationType}}
+                                    </td>
+                                    <td>
+                                        {{vacation.gender}}
+                                    </td>
+                                    <td>
+                                        {{vacation.cycle}}
+                                    </td>
+                                    <td>
+                                        {{vacation.numberOfDays}}
+
+                                    </td>
+                                    <td>
+                                        {{vacation.minVacationHours}}
+
+                                    </td>
+                                    <td>
+                                        <a href="#" @@click="edit(vacation.id, $event)">編輯</a> |
+                                        @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
+                                        <a href="#" @@click="getOut(vacation.id, $event)">刪除</a>
+
+                                    </td>
+                                </tr>
+                            </template>                            
+                            <template v-else>
+                                <tr v-for="vacation in vacationList">
+                                    <td>
+                                        {{vacation.vacationType}}
+                                    </td>
+                                    <td>
+                                        {{vacation.gender}}
+                                    </td>
+                                    <td>
+                                        {{vacation.cycle}}
+                                    </td>
+                                    <td>
+                                        {{vacation.numberOfDays}}
+
+                                    </td>
+                                    <td>
+                                        {{vacation.minVacationHours}}
+
+                                    </td>
+                                    <td>
+                                        <a href="#" @@click="edit(vacation.id, $event)">編輯</a> |
+                                        @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
+                                        <a href="#" @@click="getOut(vacation.id, $event)">刪除</a>
+
+                                    </td>
+                                </tr>
+                            </template>
+                            
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    vacationList: [],
+                    search: '',
+                    isSwitch: false,
+                }
+            },
+            methods: {
+                changeSwitch() {
+                    this.isSwitch = !this.isSwitch;
+                },
+                filterByVacationType() {
+                    if (this.search != '') return this.vacationList.filter(x => x.vacationType.includes(this.search));
+                    return this.vacationList;
+                },
+                hello() {
+                    console.log('')
+                },
+                getOut(id, event) {
+                    let self = this
+                    const fd = new FormData();
+                    fd.append("Id", id);
+                    console.debug('delete:', id);
+                    event.preventDefault();
+                    fetch(`/api/VacationDetailsApi/VacationDelete`, {
+                        body: fd,
+                        method: "POST",
+
+                    }).then(res => res.json()).then(result => {
+                        if (result.status) {
+                            alert("刪除成功")
+                            self.getVacationListData()
+
+                        } else {
+                            alert("刪除失敗")
+                        }
+                    })
+
+
+                },
+                edit(id, event) {
+                    event.preventDefault();
+                    location.href = `/BasicSetting/VacationTypeEdit/${id}`
+                },
+                getVacationListData() {
+                    let self = this
+                    fetch("/api/VacationDetailsApi/GetVacationList").then(res => res.json()).then(result => {
+                        console.log(result)
+                        self.vacationList = result
+
+                    });
+                },
+            },
+            mounted() {
+                this.getVacationListData()
+            }
+        }).mount("#app");
+
+    </script>
+
+
+}

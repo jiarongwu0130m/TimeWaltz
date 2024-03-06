@@ -25,6 +25,9 @@ namespace WebApplication1
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
             builder.Services.AddScoped<AgentEmployeeService>();
+            builder.Services.AddScoped<LeaveService>();
+
+            
             builder.Services.AddCors(opt =>
             {
                 opt.AddPolicy("forWeb", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());

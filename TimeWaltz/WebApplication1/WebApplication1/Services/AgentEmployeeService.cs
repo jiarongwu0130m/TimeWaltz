@@ -1,5 +1,5 @@
-﻿using WebApplication1.Models;
-using WebApplication1.Models.Entity;
+﻿using WebApplication1.Models.Entity;
+using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Services
 {
@@ -22,7 +22,7 @@ namespace WebApplication1.Services
             throw new Exception("程式錯誤");                       
         }
 
-        public void EditAgentEmployee(AgentEmploeeViewModel model)
+        public void EditAgentEmployee(AgentEmployeeViewModel model)
         {
             var entity = _timeWaltzContext.AgentEmployees.FirstOrDefault(a => a.Id == model.Id);
             if(entity == null)

@@ -15,7 +15,7 @@ public partial class TimeWaltzContext : DbContext
     {
     }
     public virtual DbSet<SpecialHoliday> SpecialHoliday { get; set; }
-    public virtual DbSet<GradeTable> GradeTable { get; set; }
+    public virtual DbSet<SpecialGrade> SpecialGrade { get; set; }
     public virtual DbSet<Access> Accesses { get; set; }
 
     public virtual DbSet<AccessRoleBind> AccessRoleBinds { get; set; }

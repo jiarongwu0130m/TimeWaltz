@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
-using WebApplication1.Models;
+using WebApplication1.Models.BasicSettingViewModels;
+
 using WebApplication1.Services;
 using static WebApplication1.Controllers.Api.VacationDetailsApiController;
 
@@ -17,98 +18,100 @@ namespace WebApplication1.Controllers.Api
         {
             _vacationTypeService = vacationTypeService;
         }
-        public CreateVacationTypeViewModel DropDownList()
+        /// <summary>
+        /// 可提供性別限制以及循環的下拉選單資料
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public VacationDropDownDto DropDownList()
         {
-            var model = new CreateVacationTypeViewModel
+            var model = new VacationDropDownDto
             {
                 GenderSelectItems = DropDownHelper.GetGenderDropDownList(),
                 CycleSelectItems = DropDownHelper.GetCycleDropDownList()
             };
             return model;
         }
-
-
-        //參考用
-        [HttpPost("add")]
-        public ActionResult<TodoItem> CreateVacationDetail([FromBody] CreateVacationTypeViewModel model)
+        /// <summary>
+        /// 新增假別的Post方法， 接到使用者輸入完成的資料並存入資料庫回傳OK
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult VacationCreate(VacationCreateDto model)
         {
-            if (model == null)
+            try
             {
-                return BadRequest();
+                var entity = ViewModelHelper.ToEntity(model);
+                _vacationTypeService.CreateVacationType(entity);
+                return Ok(new { status = true });
             }
-            var entity = ViewModelHelper.ToEntity(model);
-            _vacationTypeService.CreateVacationType(entity);
-            
-            return Ok();
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
+
         }
 
-        // Controllers/TodoController.cs
-
-
-
-        [Route("api/[controller]")]
-    public class TodoController : ControllerBase
-    {
-        private static List<TodoItem> _todoItems = new List<TodoItem>
-    {
-        new TodoItem { Id = 1, Task = "Task 1", IsCompleted = false },
-        new TodoItem { Id = 2, Task = "Task 2", IsCompleted = true }
-    };
+        /// <summary>
+        /// GET假別設定編輯頁面的原資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("{id}")]
+        public VacationEditDto GetVacationEditData(int id)
+        {
+            try
+            {
+                var entity = _vacationTypeService.GetVacationTypeOrNull(id);
+                var model = EntityHelper.ToEditDto(entity);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
+        }
+        /// <summary>
+        /// 編輯畫面送出後觸發的Post方法，修改資料庫後導回List
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult VacationEdit(VacationEditDto dto)
+        {
+            try
+            {
+                _vacationTypeService.EditVacationType(dto);
+                return Ok(new {status = true });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
+        }
 
         [HttpGet]
-        public ActionResult<IEnumerable<TodoItem>> GetTodoItems()
+        public List<VacationDto> GetVacationList()
         {
-            return Ok(_todoItems);
+            var entities = _vacationTypeService.GetVacationDetailsList();
+            var models = EntityHelper.ToDto(entities);
+            return models;
         }
 
-        [HttpPost("add")]
-        public ActionResult<TodoItem> AddTodoItem([FromBody] TodoItem todoItem)
+        [HttpPost]
+        public ActionResult VacationDelete([FromForm] int Id)
         {
-            if (todoItem == null)
+            try
             {
-                return BadRequest();
-            }
-
-            todoItem.Id = _todoItems.Count + 1;
-            _todoItems.Add(todoItem);
-            return Ok(todoItem);
-        }
-
-        [HttpPost("update")]
-        public ActionResult UpdateTodoItem([FromBody] TodoItem updatedTodoItem)
-        {
-            var existingTodoItem = _todoItems.FirstOrDefault(item => item.Id == updatedTodoItem.Id);
-            if (existingTodoItem == null)
+                var entity = _vacationTypeService.GetVacationTypeOrNull(Id);
+                _vacationTypeService.DeleteVacationType(entity);
+                return Ok(new { status = true });
+            }catch (Exception ex)
             {
-                return NotFound();
+                return Ok(new { status = false });
             }
-
-            existingTodoItem.Task = updatedTodoItem.Task;
-            existingTodoItem.IsCompleted = updatedTodoItem.IsCompleted;
-
-            return Ok(existingTodoItem);
-        }
-
-        [HttpPost("delete/{id}")]
-        public ActionResult DeleteTodoItem(int id)
-        {
-            var todoItemToRemove = _todoItems.FirstOrDefault(item => item.Id == id);
-            if (todoItemToRemove == null)
-            {
-                return NotFound();
-            }
-
-            _todoItems.Remove(todoItemToRemove);
-            return NoContent();
         }
     }
-
-    public class TodoItem
-    {
-        public int Id { get; set; }
-        public string Task { get; set; }
-        public bool IsCompleted { get; set; }
-    }
-
-}
 }

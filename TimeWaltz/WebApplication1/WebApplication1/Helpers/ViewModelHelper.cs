@@ -1,11 +1,12 @@
 ﻿using WebApplication1.Models;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
-        public static Employee ToEntity(CreatePersonalDataViewModel model)
+        public static Employee ToEntity(PersonalDataCreateViewModel model)
         {
             var entity = new Employee
             {
@@ -19,9 +20,9 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-        public static GradeTable ToEntity(CreateGradeTableViewModel model)
+        public static SpecialGrade ToEntity(SpecialGradeCreateViewModel model)
         {
-            var entity = new GradeTable
+            var entity = new SpecialGrade
             {
                 ServiceLength = model.ServiceLength,
                 Days = model.Days,
@@ -29,7 +30,7 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
-        public static ShiftSchedule ToEntity(CreateShiftSchedulesViewModel model)
+        public static ShiftSchedule ToEntity(ShiftSchedulesCreateViewModel model)
         {
             var entity = new ShiftSchedule
             {
@@ -43,7 +44,7 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
-        public static VacationDetail ToEntity(CreateVacationTypeViewModel model)
+        public static VacationDetail ToEntity(VacationCreateDto model)
         {
 
             var entity = new VacationDetail
@@ -57,7 +58,7 @@ namespace WebApplication1.Helpers
             return entity;
         }
        
-        public static PublicHoliday ToEntity(CreatePublicHolidayViewModel model)
+        public static PublicHoliday ToEntity(PublicHolidayCreateViewModel model)
         {
             var entity = new PublicHoliday
             {

@@ -1,9 +1,10 @@
-﻿@{
+﻿@model IEnumerable<WebApplication1.Models.BasicSettingViewModels.DepartmentViewModel>
+
+@{
     Layout = "_Layout";
     ViewBag.title = "部門瀏覽";
 }
 
-@model IEnumerable<DepartmentViewModel>
 
 <div class="row">
     <div class="col-12">
@@ -14,7 +15,7 @@
                 <button type="submit" class="btn btn-outline-dark">查詢</button>
             </form>
             <div class="col-sm-auto ml-auto">
-                <a asp-controller="BasicSetting" asp-action="CreateDepartment" class="btn btn-outline-success pull-right">新增</a>
+                <a asp-controller="BasicSetting" asp-action="DepartmentCreate" class="btn btn-outline-success pull-right">新增</a>
             </div>
         </div>
     </div>
@@ -41,8 +42,8 @@
                             <td>@item.DepartmentName</td>
                             <td>@item.EmployeeName</td>
                             <td>
-                                <a asp-controller="BasicSetting" asp-action="EditDepartment" asp-route-id="@item.Id" class="btn btn-outline-primary">檢視</a>
-                                <a asp-controller="BasicSetting" asp-action="DeleteDepartment" asp-route-id="@item.Id" class="btn btn-outline-secondary" onclick="return confirmDelete();">刪除</a>
+                                <a asp-controller="BasicSetting" asp-action="DepartmentEdit" asp-route-id="@item.Id" class="btn btn-outline-primary">檢視</a>
+                                <a asp-controller="BasicSetting" asp-action="DepartmentDelete" asp-route-id="@item.Id" class="btn btn-outline-secondary" onclick="return confirmDelete();">刪除</a>
                             </td>
                         </tr>
                     }

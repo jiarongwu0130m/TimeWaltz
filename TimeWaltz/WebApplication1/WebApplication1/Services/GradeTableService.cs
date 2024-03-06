@@ -1,4 +1,4 @@
-﻿using WebApplication1.Models;
+﻿using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Services
@@ -11,24 +11,24 @@ namespace WebApplication1.Services
         {
             _timeWaltzContext = timeWaltzContext;
         }
-        public int CreateGradeTable(GradeTable entity)
+        public int CreateGradeTable(SpecialGrade entity)
         {            
-            _timeWaltzContext.GradeTable.Add(entity);
+            _timeWaltzContext.SpecialGrade.Add(entity);
             _timeWaltzContext.SaveChanges();
 
             return entity.Id;
         }
 
-        public int DeleteGradeTable(GradeTable? entity)
+        public int DeleteGradeTable(SpecialGrade? entity)
         {
             _timeWaltzContext.Remove(entity);
             _timeWaltzContext.SaveChanges();
             return entity.Id;
         }
 
-        public int EditGradeTable(EditGradeTableViewModel model)
+        public int EditGradeTable(SpecialGradeEditViewModel model)
         {
-            var entity = _timeWaltzContext.GradeTable.FirstOrDefault(x => x.Id == model.Id);
+            var entity = _timeWaltzContext.SpecialGrade.FirstOrDefault(x => x.Id == model.Id);
             entity.ServiceLength = model.ServiceLength;
             entity.Days = model.Days;
 
@@ -38,14 +38,14 @@ namespace WebApplication1.Services
 
         
 
-        public List<GradeTable> GetGradeTableList()
+        public List<SpecialGrade> GetGradeTableList()
         {
-            return _timeWaltzContext.GradeTable.ToList();
+            return _timeWaltzContext.SpecialGrade.ToList();
         }
 
-        public GradeTable? GetGradeTableOrNull(int Id)
+        public SpecialGrade? GetGradeTableOrNull(int Id)
         {
-            return _timeWaltzContext.GradeTable.FirstOrDefault(g => g.Id == Id);
+            return _timeWaltzContext.SpecialGrade.FirstOrDefault(g => g.Id == Id);
         }
     }
 }

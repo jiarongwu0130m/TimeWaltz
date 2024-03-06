@@ -1,0 +1,29 @@
+﻿@model WebApplication1.Models.BasicSettingViewModels.SpecialGradeCreateViewModel
+@{
+    ViewData["Title"] = "新增級距";
+}
+
+<form asp-action="CreateGradeTable" asp-asp-controller="BasicSetting" method="post">
+    <section class="content">
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ServiceLength" class="control-label"></label>
+                <input name="ServiceLength" class="form-control" />
+                <span asp-validation-for="ServiceLength" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Days" class="control-label"></label>
+                <input name="Days" class="form-control" />
+                <span asp-validation-for="Days" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+        <div>
+            <a asp-action="SpecialGradeList" asp-controller="BasicSetting"></a>
+        </div>
+    </section>
+</form>
+

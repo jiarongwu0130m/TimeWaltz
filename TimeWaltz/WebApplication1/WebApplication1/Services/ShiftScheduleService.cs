@@ -1,4 +1,4 @@
-﻿using WebApplication1.Models;
+﻿using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Services
@@ -71,7 +71,7 @@ namespace WebApplication1.Services
             return _timeWaltzContext.ShiftSchedules.FirstOrDefault(s => s.Id == id);
         }
 
-        public void EditShiftSchedule(EditShiftSchedulesViewModel model)
+        public void EditShiftSchedule(ShiftSchedulesEditViewModel model)
         {
             var entity = GetShiftScheduleOrNull(model.Id);
 

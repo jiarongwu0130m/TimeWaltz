@@ -6,6 +6,24 @@ namespace WebApplication1.Helpers
 {
     public class DropDownHelper
     {
+        public static List<SelectListItem> GetVacationTypeDropDownList(List<VacationDetail> data)
+        {
+            var vacationType = data.Select(v => new SelectListItem
+            {
+                Value = v.Id.ToString(),
+                Text = v.VacationType
+            }).ToList();
+            return vacationType;
+        }
+        public static List<SelectListItem> GetAgentDropDownList(List<AgentEmployee> data)
+        {
+            var employee = data.Select(e => new SelectListItem
+            {
+                Value = e.EmployeesId.ToString(),
+                Text = e.AgentEmployeeName,
+            }).ToList();
+            return employee;
+        }
         public static List<SelectListItem> GetAgentDropDownList(List<Employee> data)
         {
             var employee =  data.Select(e => new SelectListItem
@@ -44,7 +62,7 @@ namespace WebApplication1.Helpers
         }
         public static List<SelectListItem> GetGenderDropDownList()
         {
-            return Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
+            return Enum.GetValues(typeof(GenderLimitEnum)).Cast<GenderLimitEnum>().Select(c => new SelectListItem
             {
                 Text = c.ToString(),
                 Value = ((int)c).ToString()
@@ -83,6 +101,6 @@ namespace WebApplication1.Helpers
 
         }
 
-       
+        
     }
 }

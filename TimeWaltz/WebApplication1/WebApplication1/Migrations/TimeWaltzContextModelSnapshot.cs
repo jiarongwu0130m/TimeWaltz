@@ -430,25 +430,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Flextime", (string)null);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Entity.GradeTable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Days")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServiceLength")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GradeTable");
-                });
-
             modelBuilder.Entity("WebApplication1.Models.Entity.LeaveRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -690,6 +671,25 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SpacialVacation", (string)null);
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Entity.SpecialGrade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Days")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceLength")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpecialGrade");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.SpecialHoliday", b =>

@@ -1,0 +1,34 @@
+﻿@model WebApplication1.Models.BasicSettingViewModels.DepartmentEditViewModel
+@{
+    Layout = "_Layout";
+    ViewBag.title = "部門修改";
+}
+
+
+<form asp-controller="BasicSetting" asp-action="EditDepartment" method="post">
+    <section class="content">
+        <div class="card-body">
+            <input asp-for="Id" type="hidden" />
+
+            <div class="form-group">
+                <label asp-for="DepartmentName" class="control-label">部門名稱</label>
+                <input asp-for="DepartmentName" class="form-control col-sm-3" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">部門主管</label>
+                <select class="form-control  col-sm-3" asp-for="EmployeesId" asp-items="@Model.EmployeeNameSelectList"></select>
+                <span class="text-danger"></span>
+            </div>
+
+
+            <div class="card-footer">
+                <div class="row float-right">
+                    <div class="col ">
+                        <input type="submit" value="送出" class="btn btn-primary" />
+                        <a asp-controller="BasicSetting" asp-action="Department" class="btn btn-outline-dark">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

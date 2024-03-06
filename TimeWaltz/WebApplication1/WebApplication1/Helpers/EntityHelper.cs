@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebApplication1.Models;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
 
@@ -45,10 +46,10 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        public static EditPersonalDataViewModel ToEditViewModel(Employee entity)
+        public static PersonalDataEditViewModel ToEditViewModel(Employee entity)
         {
             
-            var model = new EditPersonalDataViewModel
+            var model = new PersonalDataEditViewModel
             {
                 Id = entity.Id,
                 ShiftScheduleId = entity.ShiftScheduleId,
@@ -60,9 +61,9 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        public static EditGradeTableViewModel ToEditViewModel(GradeTable entity)
+        public static SpecialGradeEditViewModel ToEditViewModel(SpecialGrade entity)
         {
-            var model = new EditGradeTableViewModel
+            var model = new SpecialGradeEditViewModel
             {
                 Id = entity.Id,
                 ServiceLength = entity.ServiceLength,
@@ -70,18 +71,18 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        public static List<GradeTableViewModel> ToViewModel(List<GradeTable> entities)
+        public static List<SpecialGradeViewModel> ToViewModel(List<SpecialGrade> entities)
         {
-            var models = new List<GradeTableViewModel>();
+            var models = new List<SpecialGradeViewModel>();
             foreach(var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
             return models;
         }
-        public static GradeTableViewModel ToViewModel(GradeTable entity)
+        public static SpecialGradeViewModel ToViewModel(SpecialGrade entity)
         {
-            var model = new GradeTableViewModel
+            var model = new SpecialGradeViewModel
             {
                 Id = entity.Id,
                 ServiceLength = entity.ServiceLength,
@@ -125,9 +126,9 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        public static EditShiftSchedulesViewModel ToEditViewModel(ShiftSchedule entity)
+        public static ShiftSchedulesEditViewModel ToEditViewModel(ShiftSchedule entity)
         {
-            var model = new EditShiftSchedulesViewModel
+            var model = new ShiftSchedulesEditViewModel
             {
                 Id = entity.Id,
                 ShiftName = entity.ShiftsName,
@@ -138,9 +139,9 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        public static EditPublicHolidayViewModel ToEditViewModel(PublicHoliday entity)
+        public static PublicHolidayEditViewModel ToEditViewModel(PublicHoliday entity)
         {
-            var model = new EditPublicHolidayViewModel
+            var model = new PublicHolidayEditViewModel
             {
                 Id = entity.Id,
                 HolidayName = entity.HolidayName,
@@ -179,33 +180,15 @@ namespace WebApplication1.Helpers
             }
             return models;
         }
-        public static VacationTypeViewModel ToViewModel(VacationDetail entity)
+       
+        /// <summary>
+        /// 給編輯頁面用的ToEditDto，傳入一個entity，回傳一個Dto
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static VacationEditDto ToEditDto(VacationDetail entity)
         {
-            var model = new VacationTypeViewModel
-            {
-                Id = entity.Id,
-                VacationType = entity.VacationType,
-                Gender = entity.Gender,           
-                Cycle = entity.Cycle,
-                NumberOfDays = entity.NumberOfDays,
-                MinVacationHours = entity.MinVacationHours,
-                //
-                GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
-                {
-                    Text = c.ToString(),
-                    Value = c.ToString()
-                }).ToList(),
-                CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
-                {
-                    Text = c.ToString(),
-                    Value = ((int)c).ToString()
-                }).ToList()
-            };
-            return model;
-        }
-        public static EditVacationTypeViewModel ToEditViewModel(VacationDetail entity)
-        {
-            var model = new EditVacationTypeViewModel
+            var model = new VacationEditDto
             {
                 Id = entity.Id,
                 VacationType = entity.VacationType,
@@ -213,38 +196,69 @@ namespace WebApplication1.Helpers
                 Cycle = entity.Cycle,
                 NumberOfDays = entity.NumberOfDays,
                 MinVacationHours = entity.MinVacationHours,
-                //
-                GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
-                {
-                    Text = c.ToString(),
-                    Value = c.ToString()
-                }).ToList(),
-                CycleSelectItems = Enum.GetValues(typeof(CycleEnum)).Cast<CycleEnum>().Select(c => new SelectListItem
-                {
-                    Text = c.ToString(),
-                    Value = ((int)c).ToString()
-                }).ToList()
+
+                
             };
             return model;
         }
-        
-
-        public static List<VacationTypeViewModel> ToViewModel(List<VacationDetail> entities)
+        /// <summary>
+        /// 給編輯畫面用的將ListEntity轉成ListEditDto
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public static List<VacationEditDto> ToEditDto(List<VacationDetail> entities)
         {
-            var models = new List<VacationTypeViewModel>();     //先準備一個空的
+            var models = new List<VacationEditDto>();     //先準備一個空的
+
+            foreach (var entity in entities)                    //跑迴圈
+            {
+                models.Add(ToEditDto(entity));
+            }
+
+            //var items = entities.Select(o => ToViewModel(o)).ToList();      //LINQ寫法...
+
+            return models;
+        }
+
+        /// <summary>
+        /// 給查詢畫面用的entity轉Dto(List)
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public static List<VacationDto> ToDto(List<VacationDetail> entities)
+        {
+            var models = new List<VacationDto>();     //先準備一個空的
             
             foreach (var entity in entities)                    //跑迴圈
             {
-                models.Add(ToViewModel(entity));
+                models.Add(ToDto(entity));
             }
             
             //var items = entities.Select(o => ToViewModel(o)).ToList();      //LINQ寫法...
 
             return models;
         }
+        /// <summary>
+        /// 給查詢畫面用的ToDto用的，傳入VacationDetails假別entityModel後回傳VacationDto
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public static VacationDto ToDto(VacationDetail entity)
+        {
+            var model = new VacationDto
+            {
+                Id = entity.Id,
+                VacationType = entity.VacationType,
+                Gender = entity.Gender.ToString(),
+                Cycle = entity.Cycle.ToString(),
+                NumberOfDays = entity.NumberOfDays,
+                MinVacationHours = entity.MinVacationHours,
 
-       
-       
+            };
+            return model;
+        }
+
+
 
         public static List<DepartmentViewModel> ToViewModel(List<Department> entities)
         {
