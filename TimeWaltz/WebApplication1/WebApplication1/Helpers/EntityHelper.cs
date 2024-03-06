@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebApplication1.Models;
-using WebApplication1.Models.Dto;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
-using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Helpers
 {
@@ -127,9 +126,9 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        public static EditShiftSchedulesViewModel ToEditViewModel(ShiftSchedule entity)
+        public static ShiftSchedulesEditViewModel ToEditViewModel(ShiftSchedule entity)
         {
-            var model = new EditShiftSchedulesViewModel
+            var model = new ShiftSchedulesEditViewModel
             {
                 Id = entity.Id,
                 ShiftName = entity.ShiftsName,

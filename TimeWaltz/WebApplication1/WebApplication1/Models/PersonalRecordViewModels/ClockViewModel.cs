@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using WebApplication1.Models.Enums;
 
-namespace WebApplication1.Models.ViewModel
+namespace WebApplication1.Models.PersonalRecordViewModels
 {
     public class ClockViewModel
     {

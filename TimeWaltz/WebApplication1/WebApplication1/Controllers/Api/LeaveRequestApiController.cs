@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
-using WebApplication1.Models.ViewModel;
+using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Api

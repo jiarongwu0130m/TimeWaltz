@@ -4,6 +4,7 @@ using WebApplication1.Helpers;
 using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Models.ViewModel;
 using WebApplication1.Services;
 
@@ -58,7 +59,7 @@ namespace WebApplication1.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AgentEmployeeSetting(AgentEmploeeViewModel model)
+        public IActionResult AgentEmployeeSetting(AgentEmployeeViewModel model)
         {
             _agentEmployeeService.EditAgentEmployee(model);
             return View();

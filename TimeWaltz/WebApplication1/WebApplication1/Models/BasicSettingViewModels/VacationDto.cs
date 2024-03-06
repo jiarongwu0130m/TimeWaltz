@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Models.Enums;
 
-namespace WebApplication1.Models.Dto
+namespace WebApplication1.Models.BasicSettingViewModels
 {
     public class VacationDto
     {
@@ -40,7 +40,7 @@ namespace WebApplication1.Models.Dto
     {
         public List<SelectListItem>? GenderSelectItems { get; set; }
         public List<SelectListItem>? CycleSelectItems { get; set; }
-        
+
 
     }
 }

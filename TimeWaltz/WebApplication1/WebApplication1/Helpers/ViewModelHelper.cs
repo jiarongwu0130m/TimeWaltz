@@ -1,7 +1,6 @@
 ﻿using WebApplication1.Models;
-using WebApplication1.Models.Dto;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
-using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Helpers
 {
@@ -31,7 +30,7 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
-        public static ShiftSchedule ToEntity(CreateShiftSchedulesViewModel model)
+        public static ShiftSchedule ToEntity(ShiftSchedulesCreateViewModel model)
         {
             var entity = new ShiftSchedule
             {
