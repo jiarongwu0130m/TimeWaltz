@@ -5,7 +5,7 @@ using WebApplication1.Models;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
 using WebApplication1.Models.PersonalRecordViewModels;
-using WebApplication1.Models.ViewModel;
+
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
