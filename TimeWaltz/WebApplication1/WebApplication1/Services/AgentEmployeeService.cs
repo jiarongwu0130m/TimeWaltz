@@ -13,12 +13,18 @@ namespace WebApplication1.Services
             _timeWaltzContext = timeWaltzContext;
         }
 
-        public List<Employee> GetAgentDropDownData(int UserId)
+        public List<AgentEmployee> GetAgentDropDownData(int UserId)
         {
             var User = _timeWaltzContext.Employees.FirstOrDefault(e=>e.Id == UserId);
             if(User != null)
             {
-                return _timeWaltzContext.Employees.Where(e => e.DepartmentId == User.DepartmentId).ToList();                
+                var entity =  _timeWaltzContext.Employees
+                    .Where(e => e.DepartmentId == User.DepartmentId)
+                    .Select(x=> new AgentEmployee
+                {
+                    EmployeesId = x.Id,
+                    AgentEmployeeName = x.Name,
+                }).ToList();                
             }
             throw new Exception("程式錯誤");                       
         }

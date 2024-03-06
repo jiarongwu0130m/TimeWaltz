@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using WebApplication1.Models.Entity;
@@ -43,28 +44,48 @@ namespace WebApplication1.Services
             return entities;
             
         }
-
+        public object GetEmployeeAndShiftData()
+        {
+            throw new NotImplementedException();
+        }
         public List<Employee> GetPersonalDataList()
         {
-            var entities =  _timeWaltzContext.Employees.ToList();
-
-            foreach (var entity in entities)
-            {
-                //TODO: 在這種假如資料正常情況下(有串好)不可能是null的時候要寫log或直接丟錯(因為也許空空的到前面也不能用)
-                var department = _timeWaltzContext.Departments.FirstOrDefault(d => d.Id == entity.DepartmentId);
-                if(department != null)
+            var department = _timeWaltzContext.Departments
+                .Select(d=>new Department { Id = d.Id, DepartmentName = d.DepartmentName})
+                .ToList();
+            var entities = _timeWaltzContext.Employees.ToList()
+                .Join(department, e=>e.DepartmentId, d=> d.Id, (e, d)=> new Employee
                 {
-                    entity.DepartmentName = department.DepartmentName;
-                }
+                    Id = e.Id,
+                    ShiftScheduleId = e.ShiftScheduleId,
+                    DepartmentId = e.DepartmentId,
+                    Name = e.Name,
+                    HireDate = e.HireDate,
+                    Email = e.Email,
+                    Gender = e.Gender,
+                    EmployeesNo = e.EmployeesNo,
+                    DepartmentName = d.DepartmentName,
+                    ShiftsName = "",
+                }).ToList();
+            
+            
+            foreach( var entity in entities)
+            {
                 var shiftSchedule = _timeWaltzContext.ShiftSchedules.FirstOrDefault(s => s.Id == entity.ShiftScheduleId);
-                if(shiftSchedule != null)
+                if (shiftSchedule != null)
                 {
                     entity.ShiftsName = shiftSchedule.ShiftsName;
                 }
+                else
+                {
+                    throw new Exception("資料庫錯誤");
+                }
+                
             }
-            
+
             return entities;
         }
+
 
         public Employee? GetPersonalDataOrNull(int id)
         {
@@ -93,5 +114,7 @@ namespace WebApplication1.Services
             }).ToList();
             return entities;
         }
+
+        
     }
 }

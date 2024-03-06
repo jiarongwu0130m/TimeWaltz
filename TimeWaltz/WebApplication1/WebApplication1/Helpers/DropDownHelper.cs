@@ -6,6 +6,11 @@ namespace WebApplication1.Helpers
 {
     public class DropDownHelper
     {
+        /// <summary>
+        /// 在請假申請單用來選擇假別的下拉式選單
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static List<SelectListItem> GetVacationTypeDropDownList(List<VacationDetail> data)
         {
             var vacationType = data.Select(v => new SelectListItem
@@ -15,12 +20,17 @@ namespace WebApplication1.Helpers
             }).ToList();
             return vacationType;
         }
+        /// <summary>
+        /// 在請假申請單中用來選擇代理人的下拉式選單
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static List<SelectListItem> GetAgentDropDownList(List<AgentEmployee> data)
         {
-            var employee = data.Select(e => new SelectListItem
+            var employee = data.Select(a => new SelectListItem
             {
-                Value = e.EmployeesId.ToString(),
-                Text = e.AgentEmployeeName,
+                Value = a.EmployeesId.ToString(),
+                Text = a.AgentEmployeeName,
             }).ToList();
             return employee;
         }
@@ -62,13 +72,14 @@ namespace WebApplication1.Helpers
         }
         public static List<SelectListItem> GetGenderDropDownList()
         {
-            return Enum.GetValues(typeof(GenderLimitEnum)).Cast<GenderLimitEnum>().Select(c => new SelectListItem
+            return Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
             {
                 Text = c.ToString(),
                 Value = ((int)c).ToString()
             }).ToList();
 
         }
+
         /// <summary>
         /// 性別限制Enum的下拉式選單
         /// </summary>

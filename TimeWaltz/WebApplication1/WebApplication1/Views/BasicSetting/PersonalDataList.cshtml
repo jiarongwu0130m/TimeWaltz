@@ -9,11 +9,11 @@
         text-align: right;
     }
 </style>
-<div class="row">
+<div class="row" id="app">
     <form asp-action="ListVacationType" asp-controller="BasicSetting" method="post">
         <div class="row">
             <div class="form-group col-sm-12">
-                <label>假別名稱查詢：</label>
+                <label>查詢：</label>
             </div>
         </div>
         <div class="row">
@@ -47,25 +47,25 @@
         <thead>
             <tr>
                 <th>
-                        @Html.DisplayNameFor(model => model.ShiftsName)
+                    班別名稱
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.DepartmentName)
+                    部門
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                    員工名稱
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.HireDate)
+                    雇傭日期
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.Email)
+                    員工信箱
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.Gender)
+                    性別
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.EmployeesNo)
+                    員工編號
                 </th>
                 <th></th>
             </tr>
@@ -109,3 +109,27 @@
     </table>
 
 </div> 
+@section Scripts{
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    empList: [],
+
+                }
+            },
+            methods: {
+                getEmpList() {
+                    fetch("/api/PersonalDataApi/EmployeeAndShiftData")
+                    .then(res => res.json())
+                    .then(result => console.log(result));
+                }
+            },
+
+
+        }).mount('#app');
+
+    </script>
+
+}
