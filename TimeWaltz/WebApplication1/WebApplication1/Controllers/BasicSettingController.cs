@@ -343,45 +343,12 @@ namespace WebApplication1.Controllers
             
             return View();
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult VacationTypeCreate(VacationCreateViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-        //    var entity = ViewModelHelper.ToEntity(model);
-        //    _vacationTypeService.CreateVacationType(entity);
-        //    return RedirectToAction("ListVacationType");
-        //}
+        
         [HttpGet]
         public IActionResult VacationTypeList()
         {
-
-
-            //var entities = _vacationTypeService.GetVacationDetailsList();
-            //var model = EntityHelper.ToViewModel(entities);
             return View();
-        }
-        //[HttpPost]
-        //public IActionResult VacationTypeList(VacationViewModel selectedModel)
-        //{
-        //    var entities = _vacationTypeService.GetSelectedVacationTypeList(selectedModel);
-        //    if (entities != null)
-        //    {
-        //        var models = EntityHelper.ToViewModel(entities);
-        //        return View(models);
-        //    }
-        //    else
-        //    {
-        //        return View(selectedModel);
-        //    }
-        //}
-
-
-        
-
+        }              
         public IActionResult VacationTypeDelete(int id)
         {
             var entity = _vacationTypeService.GetVacationTypeOrNull(id);
@@ -391,25 +358,9 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         public IActionResult VacationTypeEdit(int id)
-        {
-            
-
+        {           
             return View();
-        }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult VacationTypeEdit(VacationEditViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-        //    _vacationTypeService.EditVacationType(model);
-        //    return RedirectToAction("ListVacationType");
-        //}
-
-
+        }        
         public IActionResult Flextime()
         {
             var FlextimeEntity = _flextimeService.GetFlextime();
