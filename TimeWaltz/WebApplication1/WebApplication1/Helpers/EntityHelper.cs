@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebApplication1.Models;
+using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
@@ -289,6 +290,30 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 DepartmentName = entity.DepartmentName,
                 EmployeesId = entity.EmployeesId,
+            };
+            return model;
+        }
+        public static List<CompRequestViewModel> ToViewModel(List<AdditionalClockIn> entities)
+        {
+            var models = new List<CompRequestViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
+
+        public static CompRequestViewModel ToViewModel(AdditionalClockIn entity)
+        {
+            var model = new CompRequestViewModel
+            {
+                Id = entity.Id,
+                EmployeesId = entity.EmployeesId,
+                AdditionalTime = entity.AdditionalTime,
+                Status = entity.Status,
+                Reason = entity.Reason,
+                ApprovalEmployeeId = entity.ApprovalEmployeeId,
             };
             return model;
         }

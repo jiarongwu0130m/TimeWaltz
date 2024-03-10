@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.title = "補打卡申請單";
+}
+
+<div class="row" id="app">
+    <div class="col-md">
+        <form>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <label class="col-form-label">申請人：</label>
+                    <input name="EmployeesId" type="text" class="col-sm-2 form-control" v-model="EmpId" readonly>
+                    <div class="col-sm-auto ml-auto">
+                        <label class="border rounded border-success text-green p-1 pull-right">送審中</label>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="col-form-label">補打卡日期：</label>
+                    <div class="input-group date col-sm-4" id="reservationdate">
+                        <div class="input-group-append">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                        <input name="AdditionalTime" type="text" class="form-control" id="dateInput" :value="formatDate(additionalTime)"readonly>
+                    </div>
+                    <div class="col-sm-auto mr-auto">
+                        <label class="col-form-label">顯示當日打卡狀況</label>
+                    </div>
+                </div>
+
+
+                <div class="row mb-2">
+                    <label for="Status" class="col-form-label">補卡時段：</label>
+
+                    <select name="Status" class="form-control col-sm-3" v-model.number="status" readonly>
+                        <option v-for="item in clockStatusSelectItems" :value="item.value">{{item.text}}</option>
+                    </select>
+
+                </div>
+
+                <div class="row mb-2">
+                    <label class="col-form-label">補打卡原因：</label>
+                    <input name="Reason" type="text" class="col-sm-3 form-control" v-model="reason" readonly>
+                </div>
+
+
+                <div class="row mb-2">
+                    <label class="col-form-label">審核人員：</label>
+                    <input name="ApprovalEmployeeId" type="text" class="col-sm-3 form-control" v-model="approvalEmployeeId" readonly>
+                </div>
+
+
+            </div>
+            <div class="card-footer">
+                <input type="button" @@click="toList" class="btn btn-outline-dark" value="返回" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    clockStatusSelectItems: [],
+                    EmpId: 1,
+                    status: '',
+                    reason: '',
+                    approvalEmployeeId: 2,
+                    additionalTime:'',
+                    shifts: [],
+                    search: {
+                        date: '',
+                        startTime: '',
+                        endTime: '',
+                        clockStart: '',
+                        clockEnd: ''
+                    }
+                }
+            },
+            mounted() {
+                this.checkId();
+                this.getCompRequestData();
+
+                fetch("/api/AdditionalClockInApi/DropDownList").then(res => res.json())
+                    .then(result => {
+                        this.clockStatusSelectItems = result.clockStatusSelectItems;
+                    });
+            },
+            methods: {
+                checkId() {
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        this.Id = lastNumber;
+
+                    } else {
+                        location.href = "/ApplicationForm/CompRequest";
+                    }
+                },
+                getCompRequestData() {
+                    fetch(`/api/AdditionalClockInApi/GetCompRequestData/${this.Id}`)
+                        .then(res => res.json())
+                        .then(result => {
+                            console.log(result);
+                            this.EmpId = result.employeesId;
+                            this.additionalTime = result.additionalTime;
+                            this.status = result.status;
+                            this.reason = result.reason;
+                            this.approvalEmployeeId = result.approvalEmployeeId;
+                        });
+                },
+                formatDate(dateString) {
+                    const options = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    };
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString('zh-TW', options);
+                },
+                formatDateTime(dateTimeString) {
+                    const options = {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    };
+                    const dateTime = new Date(dateTimeString);
+                    return dateTime.toLocaleTimeString('zh-TW', options);
+                },
+                fetchShifts() {
+                    fetch(`/api/ShiftApi/GetEmpShifts/${this.EmpId}?date=${this.search.date}`)
+                        .then(res => res.json())
+                        .then(result => {
+                            this.shifts = result;
+                            this.search.date = result[0].shiftsDate;
+                            this.search.startTime = result[0].shiftSchedule.startTime;
+                            this.search.endTime = result[0].shiftSchedule.endTime;
+                        });
+
+                    fetch(`/api/ClockApi/GetEmpClocks/${this.EmpId}?date=${this.search.date}`)
+                        .then(res => res.json())
+                        .then(results => {
+                            results.forEach(record => {
+                                if (record.status === 0) {
+                                    console.log('員工上班打卡');
+                                    this.search.clockStart = record.date;
+                                } else if (record.status === 1) {
+                                    console.log('員工下班打卡');
+                                    this.search.clockEnd = record.date;
+                                } else {
+                                    console.log('未知的打卡狀態');
+                                }
+                            });
+                        });
+
+                },
+                toList() {
+                    location.href = "/ApplicationForm/CompRequest";
+                },
+            }
+        }).mount("#app");
+    </script>
+}

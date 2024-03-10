@@ -1,0 +1,135 @@
+﻿@{
+    Layout = "_Layout";
+    ViewBag.title = "補打卡單據";
+}
+
+@* @model IEnumerable<WebApplication1.Models.ApplicationFormViewModels.CompRequestViewModel> *@
+
+<div class="row" id="app">
+    <div class="col-12">
+        <div class="row mb-3">
+            <label class="form-label col-auto">補卡日期查詢：</label>
+            <div class="input-group date col-5 col-md-3" id="reservationdate">
+                <div class="input-group-append">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+                <input name="QueryCompRequest" type="text" class="form-control" autocomplete="off" v-model="search.date">
+
+            </div>
+            <div class="col-auto ml-auto">
+                <button @@click="toCreate" class="btn btn-outline-success pull-right">新增</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <table id="example2" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th v-bind:title="title('AdditionalTime')">{{ title('AdditionalTime') }}</th>
+                    <th v-bind:title="title('Status')">{{ title('Status') }}</th>
+                    <th v-bind:title="title('Details')">{{ title('Details') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="text-center" v-for="item in allcompRequest">
+                    <td>{{formatDateTime(item.additionalTime)}}</td>
+                    <td>
+                        {{ clockStatusSelectItems.find(option => option.value == item.status)?.text }}
+                    </td>
+                    <td>
+                        <button @@click="toDetail(item.id,$event)" class="btn btn-outline-primary">檢視</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-5">
+        <div class="col-sm col-md-5" id="example2_info"></div>
+    </div>
+    <div class="col-sm-4 col-md-8">
+        <div class="col-sm-12 col-md-7">
+            <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    search: {
+                        date: "",
+                        status: "",
+                    },
+                    allcompRequest: [],
+                    clockStatusSelectItems: [],
+                    originalCompRequests: []
+                }
+            },
+            computed: {
+                title(){
+                    return key => {
+                        const localizationData = {
+                            'AdditionalTime': '補卡時間',
+                            'Status': '補卡狀態',
+                            'Details': '詳細資料'
+                        };
+                        return localizationData[key] || key;
+                    };
+                }
+
+            },
+            methods: {
+                formatDateTime(dateTimeString) {
+                    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                    const date = new Date(dateTimeString);
+                    return date.toLocaleDateString('zh-TW', options);
+                },
+                searchCompRequests() {
+                    const filteredCompRequests = this.originalCompRequests.filter(item => {
+                        const requestDate = new Date(item.additionalTime);
+                        const selectedDate = new Date(this.search.date);
+                        return requestDate >= selectedDate;
+                    });
+                    this.allcompRequest = filteredCompRequests;
+                },
+                toCreate() {
+                    location.href = "/ApplicationForm/CompRequestCreate";
+                },
+                toDetail(id,event) {
+                    event.preventDefault();
+                    location.href = `/ApplicationForm/CompRequestDetail/${id}`;
+                }
+            },
+            mounted() {
+
+                const dateInputRef = document.querySelector('#reservationdate');
+
+                $(dateInputRef).daterangepicker({
+                    singleDatePicker: true,
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                }).on('apply.daterangepicker', (ev, picker) => {
+                    this.search.date = picker.startDate.format('YYYY/MM/DD');
+                    dateInputRef.value = this.search.date;
+                    this.searchCompRequests();
+                });
+
+                Promise.all([
+                    fetch("/api/AdditionalClockInApi/GetAdditionalClockIns").then(res => res.json()),
+                    fetch("/api/AdditionalClockInApi/DropDownList").then(res => res.json())
+                ]).then(([additionalClockIns, dropdownList]) => {
+                    this.allcompRequest = additionalClockIns;
+                    this.clockStatusSelectItems = dropdownList.clockStatusSelectItems;
+                    this.originalCompRequests = additionalClockIns;
+                });
+            }
+        }).mount('#app')
+    </script>
+}

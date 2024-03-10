@@ -1,4 +1,5 @@
 ﻿using WebApplication1.Models;
+using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 
@@ -74,6 +75,19 @@ namespace WebApplication1.Helpers
             {                
                 DepartmentName = model.DepartmentName,
                 EmployeesId = model.EmployeesId,
+            };
+            return entity;
+        }
+
+        public static AdditionalClockIn ToEntity(CompRequestCreateViewModel model)
+        {
+            var entity = new AdditionalClockIn
+            {
+                EmployeesId = model.EmployeesId,
+                AdditionalTime = model.AdditionalTime,
+                Status = model.Status,
+                Reason = model.Reason,
+                ApprovalEmployeeId = model.ApprovalEmployeeId,
             };
             return entity;
         }
