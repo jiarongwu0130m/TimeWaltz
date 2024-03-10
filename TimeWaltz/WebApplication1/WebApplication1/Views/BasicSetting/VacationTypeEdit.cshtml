@@ -56,7 +56,7 @@
         Vue.createApp({
             data() {
                 return {
-                    Id: null,
+                    id: null,
                     genderSelectItems: [],
                     cycleSelectItems: [],
                     cycle: '',
@@ -68,17 +68,12 @@
             },
             methods: {
                 checkId() {
-                    // 定义 URL
                     var url = location.pathname;
-
-                    // 使用正则表达式匹配数字部分
                     var match = url.match(/\/(\d+)$/);
 
-                    // 检查是否有匹配
                     if (match) {
-                        // 获取最后一个数字
                         var lastNumber = parseInt(match[1]);
-                        this.Id = lastNumber;
+                        this.id = lastNumber;
 
                     } else {
                         location.href = "/BasicSetting/VacationTypeList";
@@ -91,12 +86,12 @@
                     fetch("/api/VacationDetailsApi/VacationEdit", {
                         method: "POST",
                         body: JSON.stringify({
-                            Id: self.Id,
-                            VacationType: self.vacationType,
-                            Gender: self.gender,
-                            Cycle: self.cycle,
-                            NumberOfDays: self.numberOfDays,
-                            MinVacationHours: self.minVacationHours,
+                            id: self.id,
+                            vacationType: self.vacationType,
+                            gender: self.gender,
+                            cycle: self.cycle,
+                            numberOfDays: self.numberOfDays,
+                            minVacationHours: self.minVacationHours,
                         }),
                         headers: {
                             "content-type": "application/json",

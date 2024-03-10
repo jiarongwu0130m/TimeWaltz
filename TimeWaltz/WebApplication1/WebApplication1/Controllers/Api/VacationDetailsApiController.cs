@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var entity = ViewModelHelper.ToEntity(model);
+                var entity = ViewModelConverter.ToEntity(model);
                 _vacationTypeService.CreateVacationType(entity);
                 return Ok(new { status = true });
             }
@@ -64,7 +64,7 @@ namespace WebApplication1.Controllers.Api
             try
             {
                 var entity = _vacationTypeService.GetVacationTypeOrNull(id);
-                var model = EntityHelper.ToEditDto(entity);
+                var model = EntityContverter.ToEditDto(entity);
                 return model;
             }
             catch (Exception ex)
@@ -96,7 +96,7 @@ namespace WebApplication1.Controllers.Api
         public List<VacationDto> GetVacationList()
         {
             var entities = _vacationTypeService.GetVacationDetailsList();
-            var models = EntityHelper.ToDto(entities);
+            var models = EntityContverter.ToDto(entities);
             return models;
         }
 

@@ -1,12 +1,13 @@
 ﻿using WebApplication1.Models;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Helpers
 {
-    public class ViewModelHelper
+    public class ViewModelConverter
     {
-        public static Employee ToEntity(PersonalDataCreateViewModel model)
+        public static Employee ToEntity(PersonalDataCreateDto model)
         {
             var entity = new Employee
             {
@@ -15,7 +16,7 @@ namespace WebApplication1.Helpers
                 Name = model.Name,
                 HireDate = model.HireDate,
                 Email = model.Email,
-                Gender = model.Gender,
+                Gender = (GenderEnum)model.Gender,
                 EmployeesNo = model.EmployeesNo,
             };
             return entity;

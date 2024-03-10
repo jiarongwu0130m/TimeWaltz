@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebApplication1.Models;
 using WebApplication1.Models.BasicSettingViewModels;
@@ -7,35 +8,36 @@ using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Helpers
 {
-    public class EntityHelper
+    public class EntityContverter
     {
         private readonly TimeWaltzContext _dbContext;
 
-        public EntityHelper(TimeWaltzContext timeWaltzContext)
+        public EntityContverter(TimeWaltzContext timeWaltzContext)
         {
             _dbContext = timeWaltzContext;
         }
 
-      
-        public static List<PersonalDataDto> ToViewModel(List<Employee> entities)
+        
+        public static List<PersonalDataDto> ToPersonalListDto(List<Employee> entities)
         {
             var models = new List<PersonalDataDto>();
             foreach(var entity in entities)
             {
-                models.Add(ToViewModel(entity));
+                models.Add(ToPersonalDto(entity));
             }
 
             return models;
         }
 
-        public static PersonalDataDto ToViewModel(Employee entity)
+        public static PersonalDataDto ToPersonalDto(Employee entity)
         {
             
 
             var model = new PersonalDataDto
             {
                 Id = entity.Id,
-                ShiftsName = entity.ShiftsName,                
+                ShiftsName = entity.ShiftsName,
+                DepartmentName = entity.DepartmentName,
                 Name = entity.Name,
                 HireDate = entity.HireDate,
                 Email = entity.Email,
@@ -179,7 +181,21 @@ namespace WebApplication1.Helpers
             }
             return models;
         }
-       
+
+        public static PersonalDataEditDto ToEditDto(Employee entity)
+        {
+            var model = new PersonalDataEditDto
+            {
+                Id =entity.Id,
+                ShiftScheduleId = entity.ShiftScheduleId,
+                DepartmentId = entity.DepartmentId,
+                Name = entity.Name,
+                Email = entity.Email,
+                
+            };
+            return model;
+        }
+
         /// <summary>
         /// 給編輯頁面用的ToEditDto，傳入一個entity，回傳一個Dto
         /// </summary>
@@ -291,5 +307,7 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
+
+        
     }
 }

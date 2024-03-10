@@ -29,32 +29,86 @@ namespace WebApplication1.Controllers.Api
             };
             return model;
         }
-
-        public List<Employee> GetPersonalData()
-        {
-            var entity = _personalDataService.GetPersonalDataList();
-            return entity;
-        }
-
         /// <summary>
-        /// 給個人資料設定畫面使用，取得員工的資料和員工班別資料
+        /// 給個人資料畫面用，取得個人資料
         /// </summary>
         /// <returns></returns>
-        public List<PersonalDataDto> EmployeeAndShiftData()
+        public List<PersonalDataDto> GetPersonalData()
         {
+            var entities = _personalDataService.GetPersonalDataList();
+            var models = EntityContverter.ToPersonalListDto(entities);
+            return models;
+        }
 
-            var entity = _personalDataService.GetEmployeeAndShiftData();
-            var model = EntityHelper.ToViewModel(entity);
-            return model;
-        }
-        /// <summary>
-        /// 給個人資料設定畫面使用，取得員工部門
-        /// </summary>
-        /// <returns></returns>
-        public List<string> GetDepName()
+        public ActionResult<DepAndShiftDropDownDto> GetDepAndShiftDorpDownList(int id)
         {
-            return  _personalDataService.GetDepartmentDropDownData().Select(d => d.DepartmentName).ToList();
+            try
+            {
+                var sDropDownData = _personalDataService.GetShiftNameDropDownData();
+                var dDropDownData = _personalDataService.GetDepartmentDropDownData();
+
+
+                var model = new DepAndShiftDropDownDto
+                {
+                    DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData),
+                    ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData),
+                };
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
+
         }
-        
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult<PersonalDataEditDto> GetEditData(int id)
+        {
+            try
+            {
+                var entity = _personalDataService.GetPersonalDataOrNull(id);
+                var model = EntityContverter.ToEditDto(entity);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                return Ok(new {status = false});
+            }
+           
+        }
+        [HttpPost]
+        [Route("{id}")]
+        public ActionResult Edit(PersonalDataEditDto model)
+        {
+            try
+            {
+                _personalDataService.EditPersonalData(model);
+                return Ok(new {status = true});
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult Create(PersonalDataCreateDto model)
+        {
+            try
+            {
+                var entity = ViewModelConverter.ToEntity(model);
+                _personalDataService.CreatePersonalData(entity);
+                return Ok(new { status = true });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
+
+        }
+
+
     }
 }

@@ -44,7 +44,11 @@ namespace WebApplication1.Services
             return entities;
 
         }
-        
+        /// <summary>
+        /// 給GetPersonalData用，Join部門以及班別
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public List<Employee> GetPersonalDataList()
         {
             
@@ -84,12 +88,13 @@ namespace WebApplication1.Services
 
         public Employee? GetPersonalDataOrNull(int id)
         {
-            return _timeWaltzContext.Employees.Where(e => e.Id == id).FirstOrDefault();
+
+            return _timeWaltzContext.Employees.FirstOrDefault(x=>x.Id == id);
         }
 
 
 
-        public void EditPersonalData(PersonalDataEditViewModel model)
+        public void EditPersonalData(PersonalDataEditDto model)
         {
             var entity = _timeWaltzContext.Employees.FirstOrDefault(e => e.Id == model.Id);
             entity.DepartmentId = model.DepartmentId;
