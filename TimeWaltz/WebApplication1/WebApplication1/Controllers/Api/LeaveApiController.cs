@@ -37,5 +37,11 @@ namespace WebApplication1.Controllers.Api
             };
             return model;
         }
+        public string GetEmoloyeeName()
+        {
+            var UserId = 1;
+            var userName = _leaveService.GetNameOrNull(UserId);
+            return userName;
+        }
     }
 }

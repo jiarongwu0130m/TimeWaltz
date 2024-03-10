@@ -30,7 +30,7 @@ namespace WebApplication1.Helpers
         {
             var employee = data.Select(a => new SelectListItem
             {
-                Value = a.EmployeesId.ToString(),
+                Value = a.Id.ToString(),
                 Text = a.AgentEmployeeName,
             }).ToList();
             return employee;

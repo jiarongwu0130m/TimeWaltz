@@ -21,5 +21,10 @@ namespace WebApplication1.Services
         {
             throw new NotImplementedException();
         }
+
+        public string GetNameOrNull(int userId)
+        {
+            return _timeWaltzContext.Employees.FirstOrDefault(x => x.Id == userId).Name;
+        }
     }
 }
