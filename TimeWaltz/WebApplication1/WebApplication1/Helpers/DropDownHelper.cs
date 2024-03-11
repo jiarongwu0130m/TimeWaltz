@@ -112,7 +112,15 @@ namespace WebApplication1.Helpers
             }).ToList();
 
         }
+        public static List<SelectListItem> GetClockStatusDropDownList()
+        {
+            return Enum.GetValues(typeof(ClockStatusEnum)).Cast<ClockStatusEnum>().Select(c => new SelectListItem
+            {
+                Text = c.ToString(),
+                Value = ((int)c).ToString()
+            }).ToList();
 
-        
+        }
+
     }
 }

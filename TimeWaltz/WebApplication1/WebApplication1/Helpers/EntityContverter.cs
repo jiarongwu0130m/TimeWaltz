@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebApplication1.Models;
+using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
@@ -17,11 +18,11 @@ namespace WebApplication1.Helpers
             _dbContext = timeWaltzContext;
         }
 
-        
+
         public static List<PersonalDataDto> ToPersonalListDto(List<Employee> entities)
         {
             var models = new List<PersonalDataDto>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 models.Add(ToPersonalDto(entity));
             }
@@ -31,7 +32,7 @@ namespace WebApplication1.Helpers
 
         public static PersonalDataDto ToPersonalDto(Employee entity)
         {
-            
+
 
             var model = new PersonalDataDto
             {
@@ -49,7 +50,7 @@ namespace WebApplication1.Helpers
         }
         public static PersonalDataEditViewModel ToEditViewModel(Employee entity)
         {
-            
+
             var model = new PersonalDataEditViewModel
             {
                 Id = entity.Id,
@@ -75,7 +76,7 @@ namespace WebApplication1.Helpers
         public static List<SpecialGradeViewModel> ToViewModel(List<SpecialGrade> entities)
         {
             var models = new List<SpecialGradeViewModel>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
@@ -101,7 +102,7 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        
+
         public static List<ShiftSchedulesViewModel> ToViewModel(List<ShiftSchedule> entities)
         {
             var models = new List<ShiftSchedulesViewModel>();
@@ -175,7 +176,7 @@ namespace WebApplication1.Helpers
         public static List<PublicHolidayViewModel> ToViewModel(List<PublicHoliday> entities)
         {
             var models = new List<PublicHolidayViewModel>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
@@ -186,12 +187,12 @@ namespace WebApplication1.Helpers
         {
             var model = new PersonalDataEditDto
             {
-                Id =entity.Id,
+                Id = entity.Id,
                 ShiftScheduleId = entity.ShiftScheduleId,
                 DepartmentId = entity.DepartmentId,
                 Name = entity.Name,
                 Email = entity.Email,
-                
+
             };
             return model;
         }
@@ -212,7 +213,7 @@ namespace WebApplication1.Helpers
                 NumberOfDays = entity.NumberOfDays,
                 MinVacationHours = entity.MinVacationHours,
 
-                
+
             };
             return model;
         }
@@ -243,12 +244,12 @@ namespace WebApplication1.Helpers
         public static List<VacationDto> ToDto(List<VacationDetail> entities)
         {
             var models = new List<VacationDto>();     //先準備一個空的
-            
+
             foreach (var entity in entities)                    //跑迴圈
             {
                 models.Add(ToDto(entity));
             }
-            
+
             //var items = entities.Select(o => ToViewModel(o)).ToList();      //LINQ寫法...
 
             return models;
@@ -293,7 +294,7 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 DepartmentName = entity.DepartmentName,
                 EmployeesId = entity.EmployeesId,
-                EmployeeName = entity. EmployeeName,
+                EmployeeName = entity.EmployeeName,
             };
             return model;
         }
@@ -307,7 +308,29 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
+        public static List<CompRequestViewModel> ToViewModel(List<AdditionalClockIn> entities)
+        {
+            var models = new List<CompRequestViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
 
-        
+            return models;
+        }
+
+        public static CompRequestViewModel ToViewModel(AdditionalClockIn entity)
+        {
+            var model = new CompRequestViewModel
+            {
+                Id = entity.Id,
+                EmployeesId = entity.EmployeesId,
+                AdditionalTime = entity.AdditionalTime,
+                Status = entity.Status,
+                Reason = entity.Reason,
+                ApprovalEmployeeId = entity.ApprovalEmployeeId,
+            };
+            return model;
+        }
     }
 }

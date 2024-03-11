@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WebApplication1.Models.Entity;
 
@@ -21,5 +22,6 @@ public partial class ShiftSchedule
 
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 
+    [JsonIgnore]
     public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
 }
