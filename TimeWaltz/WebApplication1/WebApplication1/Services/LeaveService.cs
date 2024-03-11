@@ -22,9 +22,15 @@ namespace WebApplication1.Services
             throw new NotImplementedException();
         }
 
-        public string GetNameOrNull(int userId)
+        public Employee GetNameOrNull(int userId)
         {
-            return _timeWaltzContext.Employees.FirstOrDefault(x => x.Id == userId).Name;
+            return _timeWaltzContext.Employees.Find(userId);           
+        }
+
+        public void CreateLeaveRequest(LeaveRequest entity)
+        {
+            _timeWaltzContext.LeaveRequests.Add(entity);
+            _timeWaltzContext.SaveChanges();           
         }
     }
 }

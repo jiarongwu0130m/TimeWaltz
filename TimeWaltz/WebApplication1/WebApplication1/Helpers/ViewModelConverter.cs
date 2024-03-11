@@ -1,13 +1,31 @@
-﻿using WebApplication1.Models;
+﻿using System.Drawing;
+using WebApplication1.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Helpers
 {
     public class ViewModelConverter
     {
+        public static LeaveRequest ToEntity(LeaveDto model)
+        {
+            var entity = new LeaveRequest
+            {
+                EmployeesId = model.EmployeesId,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                VacationDetailsId = model.VacationDetailsId,
+                Reason = model.Reason,
+                FileRoute = model.RelativeFileRoute,
+                AgentEmployeeId = model.AgentEmployeeId,
+                LeaveHours = model.LeaveHours,
+            };
+            return entity;
+        }
+
         public static Employee ToEntity(PersonalDataCreateDto model)
         {
             var entity = new Employee

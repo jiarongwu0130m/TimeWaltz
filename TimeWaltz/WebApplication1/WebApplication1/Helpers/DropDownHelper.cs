@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models.PersonalRecordViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication1.Helpers
 {
@@ -122,5 +124,6 @@ namespace WebApplication1.Helpers
 
         }
 
+        
     }
 }

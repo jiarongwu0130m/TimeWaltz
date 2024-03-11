@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 using WebApplication1.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Helpers
 {
@@ -330,6 +332,16 @@ namespace WebApplication1.Helpers
                 Reason = entity.Reason,
                 ApprovalEmployeeId = entity.ApprovalEmployeeId,
             };
+            return model;
+        }
+
+        public static EmployeeAndIdPareDto GetNameAndIdPare(Employee entity)
+        {
+            var model = new EmployeeAndIdPareDto{
+                EmployeeId = entity.Id,
+                EmployeesName = entity.Name,
+            };
+
             return model;
         }
     }

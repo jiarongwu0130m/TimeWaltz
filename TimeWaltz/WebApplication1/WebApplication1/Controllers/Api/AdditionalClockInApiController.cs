@@ -47,7 +47,7 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var entity = ViewModelHelper.ToEntity(model);
+                var entity = ViewModelConverter.ToEntity(model);
                 _compRequestService.CreateCompRequest(entity);
                 return Ok(new { status = true });
             }
@@ -65,7 +65,7 @@ namespace WebApplication1.Controllers.Api
             try
             {
                 var entity = _compRequestService.GetCompRequestTypeOrNull(id);
-                var model = EntityHelper.ToViewModel(entity);
+                var model = EntityContverter.ToViewModel(entity);
                 return model;
             }
             catch (Exception ex)

@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
         public IActionResult CompRequest()
         {
             var entities = _compRequestService.GetCompRequest();
-            var model = EntityHelper.ToViewModel(entities);
+            var model = EntityContverter.ToViewModel(entities);
             return View(model);
         }
         [HttpGet]

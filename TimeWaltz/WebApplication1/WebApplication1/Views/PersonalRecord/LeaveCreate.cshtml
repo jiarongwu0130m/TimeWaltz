@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">請假期間</label>
-                    <input id="timeRange" type="time" class="form-control ">
+                    <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="startTime, endTime">
                 </div>
                 <div class="form-group">
                     <label for="">假別選擇</label>
@@ -41,35 +41,17 @@
                         <span class="selection"></span>
                     </span>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card-body">
                 <div class="form-group">
-                    <section class="content">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">當日班表</h3>
-                            </div>
-                            <div class="card-body">
-                                <div>早上：</div>
-                                <div>下午：</div>
-                                <div>晚上：</div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-                <div class="form-group">
-                    <div class="info-box ">
-                        <span class="info-box-icon"><i class="far fa-calendar-alt"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">請假時數</span>
-                            <span class="info-box-number">8hr</span>
-                        </div>
-                    </div>
+                    <label for="">附加檔案上傳：</label><br />
+                    <input type="file" id="exampleInputFile" @@change="change">
+                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                          dir="ltr" style="width: 100%;">
+                        <span class="selection"></span>
+                    </span>
                 </div>
             </div>
         </div>
+        
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -81,28 +63,89 @@
                 </div>
             </div>
         </div>
+        <div class="col">
+            <div class="form-group">
+                <input type="button" value="傳送" @@click="send"/>
+            </div>
+        </div>
     </div>
 </form>
 @section Scripts {
-    
+
     <script>
         Vue.createApp({
             data() {
                 return {
-                    timeRagne: [],
                     agentDropDownList: '',
                     vacationDropDownList: '',
                     name: '',
+                    employeesId: null,
+                    startTime: null,
+                    endTime: null,
+                    vacationDetailsId: null,
+                    reason: '',
+                    fileRoute: '',
+                    agentEmployeeId: null,
+                    leaveHours: null,
+                    nameAndIdPare: [],
                 }
             },
             methods: {
+                change(e) {
+                    let self = this;
+                    console.log(e.target.files[0])
+                    self.fileRoute = e.target.files[0]
+                },
+                getToday(){
+                    console.log(moment().format("YYYY-MM-DD HH:mm"))
+                    return moment().format("YYYY-MM-DD HH:mm")
+                },
+                send(){
+                    let self = this;
+                    console.log(self.name, startTime, endTime, vacationDetailsId, agentEmployeeId, reason)
+                    fetch("/api/LeaveApi/Create", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            employeesName: self.name,
+                            startTime: self.startTime,
+                            endTime: self.endTime,
+                            employeesId: self.employeesId,
+                            vacationDetailsId: self.vacationDetailsId,
+                            agentEmployeeId: self.agentEmployeeId,
+                            reason: self.reason,
+                            fileRoute: self.fileRoute,
+                        }),
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                    }).then(res => res.json()).then(result => {
+                        console.log(result);
+                        if(result.status){
+                            alert("申請成功送出!")
+                            location.href = 'basicsseting/Leave'
+                        }else{
+                            alert("申請失敗!")
+                            location.href = 'basicsseting/LeaveCreate'
+                        }
+                    })
+                },
+                getDefaultTime() {
+                    console.log(moment().format('YYYY-MM-DD HH:mm'))
+                    return moment().format('YYYY-MM-DD HH:mm')                   
+                },
                 getTimeRange() {
                     $('#timeRange').daterangepicker({
+                        "startDate": this.getToday(),
+                        "endDate": this.getToday(),
                         timePicker: true,
                         timePickerIncrement: 30,
                         locale: {
-                            format: 'YYYY/MM/DD HH:mm'
-                        }, function(strat, end, _) {
+                            format: 'YYYY-MM-DD HH:mm'
+                        }, function(start, end, _) {
+                            console.log(start, end)
+                            this.startTime = start
+                            this.endTime = end
+                            console.log(this.startTime, this.endTime)
                         },
                     });
                 },
@@ -115,18 +158,21 @@
                         self.vacationDropDownList = result.vacationDropDownList
                     })
                 },
-                getName() {
+                getNameAndId(){
                     let self = this;
-                    fetch("/api/LeaveApi/GetEmoloyeeName").then(res=>res.text()).then(result => {
-                        console.log(result) 
-                        self.name = result
+                    fetch("/api/LeaveApi/GetEmoloyeeName").then(res => res.json()).then(result => {
+                        console.log(result);
+                        self.name = result.employeesName;
+                        self.employeeId = result.employeeId;
+
                     })
                 },
             },
             mounted() {
                 this.getDropDownList();
-                this.getName();
                 this.getTimeRange();
+                this.getNameAndId();
+                this.getDefaultTime();
             }
         }).mount("#app");
 
