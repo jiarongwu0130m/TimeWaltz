@@ -36,7 +36,7 @@ namespace WebApplication1.Controllers.Api
         public List<PersonalDataDto> GetPersonalData()
         {
             var entities = _personalDataService.GetPersonalDataList();
-            var models = EntityContverter.ToPersonalListDto(entities);
+            var models = EntityHelper.ToPersonalListDto(entities);
             return models;
         }
 
@@ -69,7 +69,7 @@ namespace WebApplication1.Controllers.Api
             try
             {
                 var entity = _personalDataService.GetPersonalDataOrNull(id);
-                var model = EntityContverter.ToEditDto(entity);
+                var model = EntityHelper.ToEditDto(entity);
                 return model;
             }
             catch (Exception ex)
@@ -98,7 +98,7 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var entity = ViewModelConverter.ToEntity(model);
+                var entity = ViewModelHelper.ToEntity(model);
                 _personalDataService.CreatePersonalData(entity);
                 return Ok(new { status = true });
             }

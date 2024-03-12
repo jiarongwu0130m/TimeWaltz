@@ -49,7 +49,7 @@ namespace WebApplication1.Controllers.Api
         {
             var UserId = 1;
             var userNameAndIdPare = _leaveService.GetNameOrNull(UserId);
-            var employee = EntityContverter.GetNameAndIdPare(userNameAndIdPare);
+            var employee = EntityHelper.GetNameAndIdPare(userNameAndIdPare);
             
 
             return employee;
@@ -63,7 +63,8 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var entity = ViewModelConverter.ToEntity(model);
+                var newmodel = _leaveService.GetRelativeFileRoute(model);
+                var entity = ViewModelHelper.ToEntity(model);
                 _leaveService.CreateLeaveRequest(entity);
                 return Ok(new { status = true });
 

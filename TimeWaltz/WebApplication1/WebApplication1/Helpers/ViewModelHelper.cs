@@ -8,7 +8,7 @@ using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Helpers
 {
-    public class ViewModelConverter
+    public class ViewModelHelper
     {
         public static LeaveRequest ToEntity(LeaveDto model)
         {
@@ -21,7 +21,7 @@ namespace WebApplication1.Helpers
                 Reason = model.Reason,
                 FileRoute = model.RelativeFileRoute,
                 AgentEmployeeId = model.AgentEmployeeId,
-                LeaveHours = model.LeaveHours,
+                LeaveHours = model.LeaveHours,                
             };
             return entity;
         }

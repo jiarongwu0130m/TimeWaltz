@@ -80,7 +80,7 @@ namespace WebApplication1.Controllers
             {
                 return View(model);
             }
-            var entity = ViewModelConverter.ToEntity(model);
+            var entity = ViewModelHelper.ToEntity(model);
             _gradeTableService.CreateGradeTable(entity);
             return RedirectToAction("SpecialGrade");
         }
@@ -89,7 +89,7 @@ namespace WebApplication1.Controllers
         public IActionResult SpecialGrade()
         {
             var entities = _gradeTableService.GetGradeTableList();
-            var models = EntityContverter.ToViewModel(entities);
+            var models = EntityHelper.ToViewModel(entities);
             return View(models);
         }
         
@@ -113,7 +113,7 @@ namespace WebApplication1.Controllers
             {
                 return RedirectToAction("SpecialGrade");
             }
-            var model = EntityContverter.ToEditViewModel(entity);
+            var model = EntityHelper.ToEditViewModel(entity);
 
             return View(model);
         }
@@ -134,7 +134,7 @@ namespace WebApplication1.Controllers
         {
             //TODO:等人事基本資料完成後，讓使用者在選擇了周年制的情況下disable約定給假時間
             var entity = _specialHolidayService.GetSpecialHoliday();            
-            var model = EntityContverter.ToViewModel(entity);
+            var model = EntityHelper.ToViewModel(entity);
             ViewBag.HowToGiveDropDownList = DropDownHelper.GetHowToGiveDropDownList();
 
             return View(model);
@@ -166,7 +166,7 @@ namespace WebApplication1.Controllers
             {
                 return View(model);
             }
-            var entity = ViewModelConverter.ToEntity(model);
+            var entity = ViewModelHelper.ToEntity(model);
             _publicHolidayService.CreatePublicHoliday(entity);
             return RedirectToAction("PublicHoliday");
         }
@@ -174,7 +174,7 @@ namespace WebApplication1.Controllers
         public IActionResult PublicHoliday()
         {
             var entities = _publicHolidayService.GetPublicHolidayList();
-            var models = EntityContverter.ToViewModel(entities);
+            var models = EntityHelper.ToViewModel(entities);
 
             return View(models);
         }
@@ -185,7 +185,7 @@ namespace WebApplication1.Controllers
             var entities = _publicHolidayService.GetSelectedPublicHolidayList(selectedModel);
             if(entities != null)
             {
-                var models = EntityContverter.ToViewModel(entities);
+                var models = EntityHelper.ToViewModel(entities);
                 return View(models);
             }
             return View(selectedModel);
@@ -194,7 +194,7 @@ namespace WebApplication1.Controllers
         public IActionResult PublicHolidayEdit(int Id)
         {
             var entity = _publicHolidayService.GetPublicHolidayOrNull(Id);
-            var model = EntityContverter.ToEditViewModel(entity);
+            var model = EntityHelper.ToEditViewModel(entity);
             return View(model);
         }
         [HttpPost]
@@ -229,14 +229,14 @@ namespace WebApplication1.Controllers
             {
                 return View(model);
             }
-            var entity = ViewModelConverter.ToEntity(model);
+            var entity = ViewModelHelper.ToEntity(model);
             _shiftScheduleService.CreateShiftSchedule(entity);
             return RedirectToAction("ShiftSchedule");
         }
         public IActionResult ShiftSchedule()
         {  
             var entities = _shiftScheduleService.GetShiftScheduleList();
-            var models = EntityContverter.ToViewModel(entities);
+            var models = EntityHelper.ToViewModel(entities);
 
             return View(models);
         }
@@ -247,7 +247,7 @@ namespace WebApplication1.Controllers
             var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
             if(entities != null)
             {
-                var models = EntityContverter.ToViewModel(entities);
+                var models = EntityHelper.ToViewModel(entities);
                 return View(models);
             }           
             return View(selectedModel);
@@ -271,7 +271,7 @@ namespace WebApplication1.Controllers
             {
                 return RedirectToAction("ShiftSchedule");
             }
-            var model = EntityContverter.ToEditViewModel(entity);
+            var model = EntityHelper.ToEditViewModel(entity);
 
             return View(model);
         }
@@ -316,7 +316,7 @@ namespace WebApplication1.Controllers
         public IActionResult Flextime()
         {
             var FlextimeEntity = _flextimeService.GetFlextime();
-            var Flextimemodel = EntityContverter.ToViewModel(FlextimeEntity);
+            var Flextimemodel = EntityHelper.ToViewModel(FlextimeEntity);
             return View(Flextimemodel);
         }
 
@@ -359,7 +359,7 @@ namespace WebApplication1.Controllers
             {
                 return View(model);
             }
-            var entity = ViewModelConverter.ToEntity(model);
+            var entity = ViewModelHelper.ToEntity(model);
             _departmentService.CreateDepartment(entity);
             return RedirectToAction("Department");
             
@@ -368,7 +368,7 @@ namespace WebApplication1.Controllers
         public IActionResult Department()
         {
             var entities = _departmentService.GetDepartment();
-            var models = EntityContverter.ToViewModel(entities);
+            var models = EntityHelper.ToViewModel(entities);
             return View(models);
 
         }
@@ -379,7 +379,7 @@ namespace WebApplication1.Controllers
             var entities = _departmentService.GetSelectedDepartment(selectedModel);
             if (entities != null)
             {
-                var models = EntityContverter.ToViewModel(entities);
+                var models = EntityHelper.ToViewModel(entities);
                 return View(models);
             }
             else
@@ -397,7 +397,7 @@ namespace WebApplication1.Controllers
             var entity = _departmentService.GetDepartmentOrNull(id);
             if (employeeNameDropDownData != null)
             {
-                var model = EntityContverter.ToEditViewModel(entity);
+                var model = EntityHelper.ToEditViewModel(entity);
 
                 model.EmployeeNameSelectList = DropDownHelper
                        .GetEmployeeNameDropDownList(employeeNameDropDownData);

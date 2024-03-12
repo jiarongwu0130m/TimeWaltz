@@ -11,11 +11,11 @@ using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Helpers
 {
-    public class EntityContverter
+    public class EntityHelper
     {
         private readonly TimeWaltzContext _dbContext;
 
-        public EntityContverter(TimeWaltzContext timeWaltzContext)
+        public EntityHelper(TimeWaltzContext timeWaltzContext)
         {
             _dbContext = timeWaltzContext;
         }

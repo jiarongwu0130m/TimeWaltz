@@ -13,13 +13,16 @@
                 </div>
                 <div class="form-group">
                     <label for="">請假期間</label>
-                    <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="startTime, endTime">
+                    <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="">
+                    <input type="hidden" id="startTimeValue" v-model="startTime"/>
+                    <input type="hidden" id="endTimeValue" v-model="endTime"/>
+
                 </div>
                 <div class="form-group">
                     <label for="">假別選擇</label>
                     <select class="form-control select2 select2-hidden-accessible"
                             style="width: 100%;" data-select2-id="1" tabindex="-1"
-                            aria-hidden="true">
+                            aria-hidden="true" v-model="vacationDetailsId">
                         <option value="">---請選擇---</option>
                         <option v-for="item in vacationDropDownList" :value="item.value">{{item.text}}</option>
                     </select>
@@ -32,7 +35,7 @@
                     <label for="">代理人選擇</label>
                     <select class="form-control select2 select2-hidden-accessible"
                             style="width: 100%;" data-select2-id="1" tabindex="-1"
-                            aria-hidden="true">
+                            aria-hidden="true" v-model="agentEmployeeId">
                         <option value="">---請選擇---</option>
                         <option v-for="item in agentDropDownList" :value="item.value">{{item.text}}</option>
                     </select>
@@ -79,7 +82,7 @@
                     agentDropDownList: '',
                     vacationDropDownList: '',
                     name: '',
-                    employeesId: null,
+                    employeeId: null,
                     startTime: null,
                     endTime: null,
                     vacationDetailsId: null,
@@ -102,7 +105,7 @@
                 },
                 send(){
                     let self = this;
-                    console.log(self.name, startTime, endTime, vacationDetailsId, agentEmployeeId, reason)
+                    console.log(self.employeeId, self.startTime, self.endTime, self.vacationDetailsId, self.agentEmployeeId, self.reason, self.fileRoute)
                     fetch("/api/LeaveApi/Create", {
                         method: 'POST',
                         body: JSON.stringify({
@@ -120,12 +123,12 @@
                         },
                     }).then(res => res.json()).then(result => {
                         console.log(result);
-                        if(result.status){
+                        if(result.status == true){
                             alert("申請成功送出!")
-                            location.href = 'basicsseting/Leave'
+                            // location.href = 'basicsseting/Leave'
                         }else{
                             alert("申請失敗!")
-                            location.href = 'basicsseting/LeaveCreate'
+                            // location.href = 'basicsseting/LeaveCreate'
                         }
                     })
                 },
@@ -143,8 +146,8 @@
                             format: 'YYYY-MM-DD HH:mm'
                         }, function(start, end, _) {
                             console.log(start, end)
-                            this.startTime = start
-                            this.endTime = end
+                            $('#startTimeValue').val() = start
+                            $('#endTimeValue').val() = end
                             console.log(this.startTime, this.endTime)
                         },
                     });
