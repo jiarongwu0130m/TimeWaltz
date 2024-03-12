@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Helpers;
+using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -7,10 +8,12 @@ namespace WebApplication1.Controllers
     public class ApplicationFormController : Controller
     {
         private readonly CompRequestService _compRequestService;
+        private readonly OvertimeRequestService _overtimeRequestService;
 
-        public ApplicationFormController(CompRequestService compRequestService)
+        public ApplicationFormController(CompRequestService compRequestService,OvertimeRequestService overtimeRequestService)
         {
             _compRequestService = compRequestService;
+            _overtimeRequestService = overtimeRequestService;
         }
         public IActionResult Index()
         {
@@ -38,5 +41,29 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+        public IActionResult OvertimeRequest()
+        {
+            return View("OvertimeRequestCreate");
+        }
+        public IActionResult OvertimeRequestCreate()
+        {
+            return View();
+        }
+
+        //[HttpPost]
+        //public ActionResult OvertimeRequestCreate(OvertimeCreateViewModel model)
+        //{
+        //    try
+        //    {
+        //        var entity = ViewModelHelper.ToEntity(model);
+        //        _overtimeRequestService.CreateOvertimeRequest(entity);
+        //        return Ok(new { status = true });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Ok(new { status = false });
+
+        //    }
+        //}
     }
 }

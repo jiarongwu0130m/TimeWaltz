@@ -23,6 +23,7 @@ namespace WebApplication1
             builder.Services.AddScoped<PersonalDataService>();
             builder.Services.AddScoped<DepartmentService>();
             builder.Services.AddScoped<CompRequestService>();
+            builder.Services.AddScoped<OvertimeRequestService>();
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
             builder.Services.AddScoped<AgentEmployeeService>();

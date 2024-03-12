@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.title = "加班申請單";
+}
+
+<div class="row" id="app">
+    <div class="col-md">
+        <form method="post">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <label class="col-form-label">申請人：</label>
+                    <input type="text" class="col-sm-2 form-control" v-model="empId" readonly>
+                    <div class="col-sm-auto ml-auto">
+                        <button class="btn btn-outline-info pull-right">編輯中</button>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="col-form-label text-danger">選擇加班日期及時間</label>
+                    <div class="input-group date col-sm-2" id="reservationdate">
+                        <div class="input-group-append">
+                            <div class="input-group-text" :style="inputGroupText"><i class="fa fa-calendar" :style="red"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="col-form-label">開始時間：</label>
+                    <label class="col-form-label col-sm-4">{{search.startTime}}</label>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="col-form-label">結束時間：</label>
+                    <label class="col-form-label col-sm-4">{{search.endTime}}</label>
+                </div>
+
+                <div class="row mb-2" v-if="isValid(search.date)">
+                    <label class="col-form-label text-green">加班時數：{{ overtimeResult }}</label>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend mr-1">
+                            <span class="input-group-text" :class="inputGroupText">
+                                <input type="checkbox" id="ovetimeCheck" v-model="search.status">
+                            </span>
+                        </div>
+                        <label for="ovetimeCheck" class="mb-0" style="" :style="inputGroupText">加班轉補休</label>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="col-form-label">加班原因：</label>
+                    <textarea cols="5" rows="5" class="form-control" v-model="search.reason"></textarea>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <input v-on:click="send" type="button" value="送出" class="btn btn-outline-primary" />
+                <input type="button" class="btn btn-outline-dark" value="取消" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+
+                return {
+                    empId: 1,
+                    overtimeResult: '',
+                    search: {
+                        date: '',
+                        startTime: '',
+                        endTime: '',
+                        status: false,
+                        reason: '',
+                    },
+                    inputGroupText: {
+                        "rounded": "true",
+                    },
+                    red: {
+                        "color": "red",
+                    },
+                }
+            },
+            mounted() {
+                this.getTimeRange();
+
+            },
+            methods: {
+                send() {
+                    const requestBody = {
+                        EmployeesId: this.empId,
+                        StartTime: this.formatDateTime(this.search.startTime),
+                        EndTime: this.formatDateTime(this.search.endTime),
+                        Status: this.search.status,
+                        Reason: this.search.reason,
+                        ApprovalEmployeeId: 1,
+                    };
+                    fetch("/api/OvertimeApplicationApi/OvertimeRequestCreate", {
+                        method: "POST",
+                        body: JSON.stringify(requestBody),
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                    }).then(res => res.json()).then(result => {
+                        if (result.status) {
+                            alert("新增成功")
+                            location.href = "/ApplicationForm/OvertimeRequest"
+                        } else {
+                            alert("新增失敗")
+                        }
+                    });
+                },
+                getTimeRange() {
+                    const dateInputRef = document.querySelector('#reservationdate');
+
+                    $(dateInputRef).daterangepicker({
+                        "singleDatePicker": false,
+                        "timePicker": true,
+                        "timePickerIncrement": 15,
+                        locale: {
+                            format: 'YYYY-MM-DD HH:mm'
+                        }
+                    }).on('apply.daterangepicker', (ev, picker) => {
+                        const newDate = picker.startDate.format('YYYY-MM-DD');
+                        this.search.date = newDate;
+                        dateInputRef.value = this.search.date;
+                        this.search.startTime = picker.startDate.format('YYYY-MM-DD HH:mm');
+                        this.search.endTime = picker.endDate.format('YYYY-MM-DD HH:mm');
+                        this.countOvertimeMins();
+                    });
+                },
+                countOvertimeMins() {
+                    this.overtimeResult = '';
+                    if (this.search.startTime && this.search.endTime) {
+                        const startTime = new Date(`${this.search.startTime}`);
+                        const endTime = new Date(`${this.search.endTime}`);
+                        const durationMilliseconds = endTime - startTime;
+                        const durationMinutes = Math.floor(durationMilliseconds / (60 * 1000));
+                        const hours = Math.floor(durationMinutes / 60);
+                        const minutes = durationMinutes % 60;
+                        if (hours === 0) {
+                            this.overtimeResult = `${minutes} 分鐘`;
+                        } else if (minutes === 0) {
+                            this.overtimeResult = `${hours} 小時`;
+                        } else {
+                            this.overtimeResult = `${hours} 小時 ${minutes} 分鐘`;
+                        }
+                    } else {
+                        this.overtimeResult = '';
+                    }
+                },
+                isValid(dateString) {
+                    const isValidData = Date.parse(dateString);
+                    return !isNaN(isValidData);
+                },
+
+            },
+        }).mount("#app");
+    </script>
+}
