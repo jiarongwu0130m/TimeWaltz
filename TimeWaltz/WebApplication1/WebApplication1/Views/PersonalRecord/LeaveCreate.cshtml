@@ -76,7 +76,7 @@
 @section Scripts {
 
     <script>
-        Vue.createApp({
+        const vueLeave = Vue.createApp({
             data() {
                 return {
                     agentDropDownList: '',
@@ -137,6 +137,7 @@
                     return moment().format('YYYY-MM-DD HH:mm')                   
                 },
                 getTimeRange() {
+                    let self = this;
                     $('#timeRange').daterangepicker({
                         "startDate": this.getToday(),
                         "endDate": this.getToday(),
@@ -144,13 +145,16 @@
                         timePickerIncrement: 30,
                         locale: {
                             format: 'YYYY-MM-DD HH:mm'
-                        }, function(start, end, _) {
-                            console.log(start, end)
-                            $('#startTimeValue').val() = start
-                            $('#endTimeValue').val() = end
-                            console.log(this.startTime, this.endTime)
-                        },
-                    });
+                        }
+                    },
+                        function (start, end, _) {
+                            console.log('selected', start, end)
+                            self.startTime = start.format('YYYY-MM-DD HH:mm')
+                            self.endTime = end.format('YYYY-MM-DD HH:mm')
+
+                            console.log(self.startTime, self.endTime)
+                        }
+                    );                    
                 },
                 getDropDownList() {
                     let self = this;

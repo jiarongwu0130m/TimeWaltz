@@ -59,7 +59,7 @@ namespace WebApplication1.Controllers.Api
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Create(LeaveDto model)
+        public ActionResult Create(LeaveCreateDto model)
         {
             try
             {
@@ -74,6 +74,20 @@ namespace WebApplication1.Controllers.Api
                 return Ok(new { status = false });
             }
         }
-        
+        [HttpGet]
+        public ActionResult<LeaveRequest> List() 
+        {
+            try
+            {
+                var entities = _leaveService.GetLeaveListData();
+                var models = EntityHelper.ToDto(entities);
+                return Ok(models);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
+            
+        }
     }
 }

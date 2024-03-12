@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models.Entity;
 
@@ -14,14 +15,20 @@ public partial class LeaveRequest
     public DateTime EndTime { get; set; }
 
     public int VacationDetailsId { get; set; }
+    [NotMapped]
+    public string VacationType { get; set; }
 
     public string? Reason { get; set; }
 
     public string? FileRoute { get; set; }
 
     public int AgentEmployeeId { get; set; }
+    [NotMapped]
+    public string AgentEmployeeName { get; set; }
 
     public int ApprovalEmployeeId { get; set; }
+    [NotMapped]
+    public string ApporvalEmpName { get; set; }
 
     public int LeaveHours { get; set; }
 

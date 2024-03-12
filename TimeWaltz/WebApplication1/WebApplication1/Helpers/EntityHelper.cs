@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
+using System.Drawing;
 using WebApplication1.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
@@ -343,6 +344,27 @@ namespace WebApplication1.Helpers
             };
 
             return model;
+        }
+        public static List<LeaveDto> ToDto(List<LeaveRequest> entities)
+        {
+            var models = new List<LeaveDto>();
+
+            foreach(var entity in entities)
+            {
+                var model = new LeaveDto
+                {
+                    Id = entity.Id,
+                    EmployeesId = entity.EmployeesId,
+                    StartTime = entity.StartTime,
+                    EndTime = entity.EndTime,
+                    VacationType = entity.VacationType,
+                    ApprovalEmpName = entity.ApporvalEmpName,
+                    AgentEmployeeName = entity.AgentEmployeeName,
+                    LeaveHours = entity.LeaveHours,
+                };
+                models.Add(model);
+            }
+            return models;
         }
     }
 }

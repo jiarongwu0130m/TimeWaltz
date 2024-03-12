@@ -1,4 +1,7 @@
-﻿@model WebApplication1.Models.PersonalRecordViewModels.LeaveViewModel
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "請假瀏覽";
+}
 
 <div class="card-body" id="app">
     <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -39,8 +42,8 @@
                     </thead>
                     <tbody>
                         
-                        <tr class="odd">
-                            <td class="dtr-control">1</td>
+                        <tr v-for="item in leaveRequestListData">
+                            <td class="dtr-control">{{item.}}</td>
                             <td>2</td>
                             <td>3</td>
                             <td>4</td>
@@ -62,11 +65,27 @@
         Vue.createApp({
             data() {
                 return {
-
-                },
+                    leaveRequestListData: [],
+                    employeeId: null,
+                    startTime: null,
+                    endTime: null,
+                    leaveHours: null,
+                    approvalEmpName: '',
+                    vacationType: '',
+                    agentEmployeeName: '',
+                }
             },
-            mothods: {
-
+            methods: {
+                getListData(){
+                    let self = this;
+                    fetch("/api/LeaveApi/List").then(res => res.json()).then(result => {
+                        console.log(result)
+                        self.leaveRequestListData = result
+                    })
+                }
+            },
+            mounted(){
+                this.getListData();
             },
         }).mount('#app')
     </script>

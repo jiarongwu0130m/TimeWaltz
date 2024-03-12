@@ -5,18 +5,20 @@ namespace WebApplication1.Models.PersonalRecordViewModels
 
     public class LeaveDto
     {
+        public int Id { get; set; }
         public int EmployeesId { get; set; }
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }
         public int VacationDetailsId { get; set; }
+        public string VacationType { get; set; }
 
-        public string? Reason { get; set; }
-        public string? RelativeFileRoute { get; set; }
+        public int ApprovalEmployeeId { get; set; }
+        public string ApprovalEmpName { get; set; }
 
-        public IFormFile? FileRoute { get; set; }
 
         public int AgentEmployeeId { get; set; }
+        public string AgentEmployeeName { get; set; }
         public int LeaveHours { get; set; }
     }
 

@@ -10,7 +10,7 @@ namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
-        public static LeaveRequest ToEntity(LeaveDto model)
+        public static LeaveRequest ToEntity(LeaveCreateDto model)
         {
             var entity = new LeaveRequest
             {
