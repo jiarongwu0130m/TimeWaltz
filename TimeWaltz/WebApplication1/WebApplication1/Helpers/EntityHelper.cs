@@ -9,6 +9,7 @@ using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
 using WebApplication1.Models.PersonalRecordViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication1.Helpers
 {
@@ -339,7 +340,7 @@ namespace WebApplication1.Helpers
         public static EmployeeAndIdPareDto GetNameAndIdPare(Employee entity)
         {
             var model = new EmployeeAndIdPareDto{
-                EmployeesId = entity.Id,
+                EmployeeId = entity.Id,
                 EmployeesName = entity.Name,
             };
 
@@ -355,17 +356,36 @@ namespace WebApplication1.Helpers
                 {
                     Id = entity.Id,
                     EmployeesId = entity.EmployeesId,
-                    Date = entity.StartTime.ToString("yyyy-MM-dd"),
+                    StartDate = entity.StartTime.ToString("yyyy-MM-dd"),
+                    EndDate = entity.EndTime.ToString("yyyy-MM-dd"),
                     StartTime = entity.StartTime.ToString("HH:mm"),
                     EndTime = entity.EndTime.ToString("HH:mm"),
                     VacationType = entity.VacationType,
-                    ApprovalEmpName = entity.ApprovalStatus.ToString(),
+                    ApprovalEmpName = entity.ApporvalEmpName,
                     AgentEmployeeName = entity.AgentEmployeeName,
                     LeaveHours = entity.LeaveHours,
                 };
                 models.Add(model);
             }
             return models;
+        }
+
+        public static LeaveEditDto ToDto(LeaveRequest entity)
+        {
+            var model = new LeaveEditDto
+            {
+               
+                Name = entity.EmployeeName,
+                StartTime = entity.StartTime.ToString("yyyy-MM-dd HH:mm"),
+                EndTime = entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                VacationType = entity.VacationType,
+                ApprovalEmpName = entity.ApporvalEmpName,
+                AgentEmployeeName = entity.AgentEmployeeName,
+                LeaveHours = entity.LeaveHours,
+                ApprovalStatus = entity.ApprovalStatus.ToString(),
+                ApprovalRemark = entity.ApprovalRemark,
+            };
+            return model;
         }
     }
 }

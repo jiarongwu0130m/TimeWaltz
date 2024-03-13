@@ -100,9 +100,10 @@ namespace WebApplication1.Controllers.Api
             
         }
         [HttpGet]
-        public ActionResult<LeaveEditDto> Edit(int UserId)
+        public ActionResult<LeaveEditDto> Edit(int Id)
         {
-            var entity = _leaveService.GetEditData(UserId);
+            var entity = _leaveService.GetEditData(Id);
+            var model = EntityHelper.ToDto(entity);
             return Ok();
         }
     }

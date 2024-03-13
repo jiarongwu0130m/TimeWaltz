@@ -10,6 +10,8 @@ public partial class LeaveRequest
     public int Id { get; set; }
 
     public int EmployeesId { get; set; }
+    [NotMapped]
+    public string EmployeeName { get; set; }
 
     public DateTime StartTime { get; set; }
 
@@ -32,6 +34,8 @@ public partial class LeaveRequest
     public string ApporvalEmpName { get; set; }
 
     public int LeaveHours { get; set; }
+    [NotMapped]
+    public string ApprovalRemark { get; set; }
     [NotMapped]
     public RequestStatusEnum ApprovalStatus { get; set; }
 

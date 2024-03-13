@@ -81,17 +81,18 @@ namespace WebApplication1.Services
                 .Join(_timeWaltzContext.Employees, lv => lv.l.EmployeesId, e => e.Id, (lv, e) => new { lv, e })
                 .Join(_timeWaltzContext.Departments, lve => lve.e.Id, d => d.EmployeesId, (lve, d) => new { lve, d })
                 .Join(_timeWaltzContext.Employees, lved => lved.lve.lv.l.AgentEmployeeId, a => a.Id, (lved, a) => new { lved, a })
-                .Join(_timeWaltzContext.RequestStatuses, lveda => lveda.lved.lve.lv.l.Id, r => r.TableId, (lveda, r) => new { lveda, r })
-                .Where(lvedar => (int)lvedar.r.TableType == 1).Select(lvedar => new LeaveRequest
+                .Join(_timeWaltzContext.Employees, lveda => lveda.lved.lve.lv.l.ApprovalEmployeeId, ap => ap.Id, (lveda, ap) => new { lveda, ap })
+                .Join(_timeWaltzContext.RequestStatuses, lvedaap => lvedaap.lveda.lved.lve.lv.l.Id, r => r.TableId, (lvedaap, r) => new { lvedaap, r })
+                .Where(lvedaapr => (int)lvedaapr.r.TableType == 1).Select(lvedaapr => new LeaveRequest
                 {
-                    AgentEmployeeName = lvedar.lveda.a.Name,
-                    VacationType = lvedar.lveda.lved.lve.lv.v.VacationType,
-                    ApporvalEmpName = lvedar.lveda.lved.lve.e.Name,
-                    StartTime = lvedar.lveda.lved.lve.lv.l.StartTime,
-                    EmployeesId = lvedar.lveda.lved.lve.lv.l.EmployeesId,
-                    EndTime = lvedar.lveda.lved.lve.lv.l.EndTime,
-                    Id = lvedar.lveda.lved.lve.lv.l.Id,
-                    ApprovalStatus = lvedar.r.Status,
+                    VacationType = lvedaapr.lvedaap.lveda.lved.lve.lv.v.VacationType,
+                    AgentEmployeeName = lvedaapr.lvedaap.lveda.a.Name,
+                    ApprovalStatus = lvedaapr.r.Status,
+                    ApporvalEmpName = lvedaapr.lvedaap.ap.Name,
+                    Id = lvedaapr.lvedaap.lveda.lved.lve.lv.l.Id,
+                    StartTime = lvedaapr.lvedaap.lveda.lved.lve.lv.l.StartTime,
+                    EndTime = lvedaapr.lvedaap.lveda.lved.lve.lv.l.EndTime,
+                    EmployeeName = lvedaapr.lvedaap.lveda.lved.lve.e.Name,
                 }).ToList();
             return entities;
         }
@@ -116,9 +117,29 @@ namespace WebApplication1.Services
         /// <param name="userId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public LeaveRequest GetEditData(int userId)
+        public LeaveRequest GetEditData(int Id)
         {
-            throw new NotImplementedException();
+            return _timeWaltzContext.LeaveRequests.Where(x => x.Id == Id)
+                 .Join(_timeWaltzContext.VacationDetails, l => l.VacationDetailsId, v => v.Id, (l, v) => new { l, v })
+                 .Join(_timeWaltzContext.Employees, lv => lv.l.EmployeesId, e => e.Id, (lv, e) => new { lv, e })
+                 .Join(_timeWaltzContext.Departments, lve => lve.e.Id, d => d.EmployeesId, (lve, d) => new { lve, d })
+                 .Join(_timeWaltzContext.Employees, lved => lved.lve.lv.l.AgentEmployeeId, a => a.Id, (lved, a) => new { lved, a })
+                 .Join(_timeWaltzContext.Employees, lveda => lveda.lved.lve.lv.l.ApprovalEmployeeId, ap => ap.Id, (lveda, ap) => new { lveda, ap })
+                 .Join(_timeWaltzContext.RequestStatuses, lvedaap => lvedaap.lveda.lved.lve.lv.l.Id, r => r.TableId, (lvedaap, r) => new { lvedaap, r })
+                 .Join(_timeWaltzContext.Approvals, lvedaapr => lvedaapr.lvedaap.lveda.lved.lve.lv.l.Id, app => app.TableId, (lvedaapr, app) => new { lvedaapr, app })
+                 .Where(lvedaaprapp => lvedaaprapp.app.TableType == (Models.Enums.TableTypeEnum)1)
+                .Where(lvedaaprapp => (int)lvedaaprapp.lvedaapr.r.TableType == 1).Select(lvedaaprapp => new LeaveRequest
+                {
+                    VacationType = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.v.VacationType,
+                    AgentEmployeeName = lvedaaprapp.lvedaapr.lvedaap.lveda.a.Name,
+                    ApprovalStatus = lvedaaprapp.lvedaapr.r.Status,
+                    ApporvalEmpName = lvedaaprapp.lvedaapr.lvedaap.ap.Name,
+                    Id = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.Id,
+                    StartTime = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.StartTime,
+                    EndTime = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.EndTime,
+                    EmployeeName = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.e.Name,
+                    ApprovalRemark = lvedaaprapp.app.Remark,
+                }).FirstOrDefault();
         }
     }
 }
