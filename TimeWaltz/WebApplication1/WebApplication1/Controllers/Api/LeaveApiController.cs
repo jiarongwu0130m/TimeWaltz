@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using WebApplication1.Helpers;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.PersonalRecordViewModels;
@@ -16,11 +17,15 @@ namespace WebApplication1.Controllers.Api
     {
         private readonly LeaveService _leaveService;
         private readonly AgentEmployeeService _agentEmployeeService;
+        private readonly RequestStatusService _requestStatusService;
+        private readonly ApprovalService _approvalService;
 
-        public LeaveApiController(LeaveService leaveService, AgentEmployeeService agentEmployeeService)
+        public LeaveApiController(LeaveService leaveService, AgentEmployeeService agentEmployeeService, RequestStatusService requestStatusService, ApprovalService approvalService)
         {
             _leaveService = leaveService;
             _agentEmployeeService = agentEmployeeService;
+            this._requestStatusService = requestStatusService;
+            this._approvalService = approvalService;
         }
         /// <summary>
         /// 請假申請單畫面，取下拉式選單資料
@@ -59,13 +64,18 @@ namespace WebApplication1.Controllers.Api
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Create(LeaveCreateDto model)
+        public ActionResult Create([FromForm]LeaveCreateDto model)
         {
             try
             {
-                var newmodel = _leaveService.GetRelativeFileRoute(model);
-                var entity = ViewModelHelper.ToEntity(model);
+                var fileModel = _leaveService.GetRelativeFileRoute(model);
+                var approvalModel = _leaveService.GetApprovalEmp(fileModel);
+                var entity = ViewModelHelper.ToEntity(approvalModel);
                 _leaveService.CreateLeaveRequest(entity);
+                //TODO: 新增狀態表
+                _requestStatusService.NewRequestStatus(entity);
+                //TODO: 新增簽核表
+                _approvalService.NewApproval(entity);
                 return Ok(new { status = true });
 
             }
@@ -75,7 +85,7 @@ namespace WebApplication1.Controllers.Api
             }
         }
         [HttpGet]
-        public ActionResult<LeaveRequest> List() 
+        public ActionResult<LeaveDto> List() 
         {
             try
             {
@@ -88,6 +98,12 @@ namespace WebApplication1.Controllers.Api
                 return Ok(new { status = false });
             }
             
+        }
+        [HttpGet]
+        public ActionResult<LeaveEditDto> Edit(int UserId)
+        {
+            var entity = _leaveService.GetEditData(UserId);
+            return Ok();
         }
     }
 }

@@ -12,5 +12,5 @@ public partial class RequestStatus
 
     public int TableId { get; set; }
 
-    public ApprovalStatusEnum Status { get; set; }
+    public RequestStatusEnum Status { get; set; }
 }

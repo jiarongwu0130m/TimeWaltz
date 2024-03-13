@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Models.Entity;
 
@@ -31,6 +32,8 @@ public partial class LeaveRequest
     public string ApporvalEmpName { get; set; }
 
     public int LeaveHours { get; set; }
+    [NotMapped]
+    public RequestStatusEnum ApprovalStatus { get; set; }
 
     public virtual Employee AgentEmployee { get; set; } = null!;
 

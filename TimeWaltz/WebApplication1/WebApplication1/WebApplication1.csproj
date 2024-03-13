@@ -38,6 +38,7 @@
   <ItemGroup>
     <Folder Include="Models\ApplicationFormViewModels\" />
     <Folder Include="Models\ApplicationFormViewModels\" />
+    <Folder Include="wwwroot\pic\" />
   </ItemGroup>
 
 </Project>

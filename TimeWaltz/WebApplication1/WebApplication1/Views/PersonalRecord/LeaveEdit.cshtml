@@ -1,0 +1,90 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "請假詳細";
+}
+
+<form id="app">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="">申請人</label>
+                    <label class="form-control" :value="name" >
+                </div>
+                <div class="form-group">
+                    <label for="">請假期間</label>
+                    <label id="timeRange" name="dateRange" type="datetime" class="form-control" value="">
+                </div>
+                <div class="form-group">
+                    <label for="">假別選擇</label>
+                    <label v-model=""></label>
+                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                          dir="ltr" style="width: 100%;">
+                        <span class="selection"></span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="">代理人選擇</label>
+                    <label v-model=""></label>
+                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                          dir="ltr" style="width: 100%;">
+                        <span class="selection"></span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <a :href"fileRoute"></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-body">
+                <div class="form-group">
+                    <label>原因：</label>
+                    <label class="form-control" rows="3"
+                              control-id="ControlID-13" v-model="reason"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+
+    <script>
+        const vueLeave = Vue.createApp({
+            data() {
+                return {
+                    name: '',
+                    employeesId: null,
+                    startTime: null,
+                    endTime: null,
+                    vacationDetailsId: null,
+                    reason: '',
+                    fileRoute: '',
+                    agentEmployeeId: null,
+                    leaveHours: null,
+                    nameAndIdPare: [],
+                }
+            },
+            methods: {
+                getLeaveData(){
+                    let self = this;
+                    fetch("/api/LeaveApi/").then(res => res.json()).then(result => {
+                        console.log(result);
+                    })
+                },
+            },
+            mounted() {
+            }
+        }).mount("#app");
+
+
+
+
+
+    </script>
+
+}
+

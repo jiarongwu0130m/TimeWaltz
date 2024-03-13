@@ -39,7 +39,12 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-        
+        [HttpGet]
+        public IActionResult LeaveEdit()
+        {
+            return View();
+        }
+
 
         [HttpGet]
         public IActionResult AgentEmployeeSetting()

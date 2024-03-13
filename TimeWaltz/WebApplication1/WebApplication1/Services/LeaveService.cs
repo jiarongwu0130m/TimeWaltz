@@ -70,20 +70,55 @@ namespace WebApplication1.Services
             return model;
 
         }
-
+        /// <summary>
+        /// 取得請假歷史紀錄清單資料
+        /// </summary>
+        /// <returns></returns>
         public List<LeaveRequest> GetLeaveListData()
         {
             var entities = _timeWaltzContext.LeaveRequests
-                .Join(_timeWaltzContext.AgentEmployees, l => l.AgentEmployeeId, a => a.Id, (l, a) => new { l, a })
-                .Join(_timeWaltzContext.VacationDetails, la => la.l.VacationDetailsId, v => v.Id, (la, v) => new { la, v })
-                .Join(_timeWaltzContext.Employees, lav => lav.la.l.EmployeesId, e => e.Id, (lav, e) => new { lav, e })
-                .Join(_timeWaltzContext.Departments, lave => lave.e.Id, d => d.EmployeesId, (lave, d) => new LeaveRequest
+                .Join(_timeWaltzContext.VacationDetails, l => l.VacationDetailsId, v => v.Id, (l, v) => new { l, v })
+                .Join(_timeWaltzContext.Employees, lv => lv.l.EmployeesId, e => e.Id, (lv, e) => new { lv, e })
+                .Join(_timeWaltzContext.Departments, lve => lve.e.Id, d => d.EmployeesId, (lve, d) => new { lve, d })
+                .Join(_timeWaltzContext.Employees, lved => lved.lve.lv.l.AgentEmployeeId, a => a.Id, (lved, a) => new { lved, a })
+                .Join(_timeWaltzContext.RequestStatuses, lveda => lveda.lved.lve.lv.l.Id, r => r.TableId, (lveda, r) => new { lveda, r })
+                .Where(lvedar => (int)lvedar.r.TableType == 1).Select(lvedar => new LeaveRequest
                 {
-                    AgentEmployeeName = lave.lav.la.a.AgentEmployeeName,
-                    VacationType = lave.lav.v.VacationType,
-                    ApporvalEmpName = d.EmployeeName,
+                    AgentEmployeeName = lvedar.lveda.a.Name,
+                    VacationType = lvedar.lveda.lved.lve.lv.v.VacationType,
+                    ApporvalEmpName = lvedar.lveda.lved.lve.e.Name,
+                    StartTime = lvedar.lveda.lved.lve.lv.l.StartTime,
+                    EmployeesId = lvedar.lveda.lved.lve.lv.l.EmployeesId,
+                    EndTime = lvedar.lveda.lved.lve.lv.l.EndTime,
+                    Id = lvedar.lveda.lved.lve.lv.l.Id,
+                    ApprovalStatus = lvedar.r.Status,
                 }).ToList();
             return entities;
+        }
+        /// <summary>
+        /// 取得簽核人資料
+        /// </summary>
+        /// <param name="fileModel"></param>
+        /// <returns></returns>
+        public LeaveCreateDto GetApprovalEmp(LeaveCreateDto fileModel)
+        {
+            var emp = _timeWaltzContext.Employees.FirstOrDefault(x => x.Id == fileModel.EmployeesId).DepartmentId;
+            var sameEmp = _timeWaltzContext.Departments.FirstOrDefault(x => x.Id == emp).EmployeesId;
+            if (sameEmp != null)
+            {
+                fileModel.ApprovalEmployeeId = (int)sameEmp;
+            }
+            return fileModel;
+        }
+        /// <summary>
+        /// 取得請假詳細資料
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public LeaveRequest GetEditData(int userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

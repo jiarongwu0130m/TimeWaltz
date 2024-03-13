@@ -27,9 +27,6 @@
                                 結束時間
                             </th>
                             <th class="sorting" tabindex="0" rowspan="1" colspan="1">
-                                時數
-                            </th>
-                            <th class="sorting" tabindex="0" rowspan="1" colspan="1">
                                 假別
                             </th>
                             <th class="sorting" tabindex="0" rowspan="1" colspan="1">
@@ -43,13 +40,14 @@
                     <tbody>
                         
                         <tr v-for="item in leaveRequestListData">
-                            <td class="dtr-control">{{item.}}</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
-                            <td>6</td>
-                            <td>7</td>
+                            <td class="dtr-control">{{item.date}}</td>
+                            <td>{{item.startTime}}</td>
+                            <td>{{item.endTime}}</td>
+                            <td>{{item.vacationType}}</td>
+                            <td>{{item.approvalEmpName}}</td>
+                            <td>
+                                <a href="#" @@click="edit(item.id, $event)">詳細</a> 
+                            </td>
                         </tr>
                         
                     </tbody>
@@ -66,23 +64,31 @@
             data() {
                 return {
                     leaveRequestListData: [],
+                    id: null,
                     employeeId: null,
+                    date: null,
                     startTime: null,
                     endTime: null,
                     leaveHours: null,
                     approvalEmpName: '',
                     vacationType: '',
                     agentEmployeeName: '',
+                    approvalStatus: '',
                 }
             },
             methods: {
+                edit(id, event) {
+                    event.preventDefault();
+                    location.href = `/PersonalRecord/leaveEdit/${id}`
+
+                },
                 getListData(){
                     let self = this;
                     fetch("/api/LeaveApi/List").then(res => res.json()).then(result => {
                         console.log(result)
                         self.leaveRequestListData = result
                     })
-                }
+                },
             },
             mounted(){
                 this.getListData();

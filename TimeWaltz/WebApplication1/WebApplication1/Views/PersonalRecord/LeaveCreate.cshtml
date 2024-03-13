@@ -62,7 +62,7 @@
                 <div class="form-group">
                     <label>原因：</label>
                     <textarea class="form-control" rows="3"
-                              control-id="ControlID-13"></textarea>
+                              control-id="ControlID-13" v-model="reason"></textarea>
                 </div>
             </div>
         </div>
@@ -82,7 +82,7 @@
                     agentDropDownList: '',
                     vacationDropDownList: '',
                     name: '',
-                    employeeId: null,
+                    employeesId: null,
                     startTime: null,
                     endTime: null,
                     vacationDetailsId: null,
@@ -105,30 +105,31 @@
                 },
                 send(){
                     let self = this;
-                    console.log(self.employeeId, self.startTime, self.endTime, self.vacationDetailsId, self.agentEmployeeId, self.reason, self.fileRoute)
+                    console.log(self.employeesId, self.startTime, self.endTime, self.vacationDetailsId, self.agentEmployeeId, self.reason, self.fileRoute)
+                    if(self.leaveHours == null){
+                        self.leaveHours = 0;
+                    }
+                    var formData = new FormData()
+                    formData.append('employeesName', self.name)
+                    formData.append('startTime', self.startTime)
+                    formData.append('endTime', self.endTime)
+                    formData.append('employeesId', self.employeesId)
+                    formData.append('vacationDetailsId', self.vacationDetailsId)
+                    formData.append('agentEmployeeId', self.agentEmployeeId)
+                    formData.append('reason', self.reason)
+                    formData.append('fileRoute', self.fileRoute)
+                    formData.append('leaveHours', self.leaveHours)
                     fetch("/api/LeaveApi/Create", {
                         method: 'POST',
-                        body: JSON.stringify({
-                            employeesName: self.name,
-                            startTime: self.startTime,
-                            endTime: self.endTime,
-                            employeesId: self.employeesId,
-                            vacationDetailsId: self.vacationDetailsId,
-                            agentEmployeeId: self.agentEmployeeId,
-                            reason: self.reason,
-                            fileRoute: self.fileRoute,
-                        }),
-                        headers: {
-                            "content-type": "application/json",
-                        },
+                        body: formData,
                     }).then(res => res.json()).then(result => {
                         console.log(result);
                         if(result.status == true){
                             alert("申請成功送出!")
-                            // location.href = 'basicsseting/Leave'
+                            location.href = '/basicsseting/Leave'
                         }else{
                             alert("申請失敗!")
-                            // location.href = 'basicsseting/LeaveCreate'
+                            location.href = '/basicsseting/LeaveCreate'
                         }
                     })
                 },
@@ -170,7 +171,7 @@
                     fetch("/api/LeaveApi/GetEmoloyeeName").then(res => res.json()).then(result => {
                         console.log(result);
                         self.name = result.employeesName;
-                        self.employeeId = result.employeeId;
+                        self.employeesId = result.employeesId;
 
                     })
                 },

@@ -28,6 +28,8 @@ namespace WebApplication1
             builder.Services.AddScoped<PublicHolidayService>();
             builder.Services.AddScoped<AgentEmployeeService>();
             builder.Services.AddScoped<LeaveService>();
+            builder.Services.AddScoped<RequestStatusService>();
+            builder.Services.AddScoped<ApprovalService>();
             builder.Services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                 .UseSimpleAssemblyNameTypeSerializer()

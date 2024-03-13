@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models.PersonalRecordViewModels
 {
@@ -6,10 +7,11 @@ namespace WebApplication1.Models.PersonalRecordViewModels
     public class LeaveDto
     {
         public int Id { get; set; }
+        public string Date { get; set; }
         public int EmployeesId { get; set; }
-        public DateTime StartTime { get; set; }
+        public string StartTime { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public string EndTime { get; set; }
         public int VacationDetailsId { get; set; }
         public string VacationType { get; set; }
 
@@ -20,6 +22,21 @@ namespace WebApplication1.Models.PersonalRecordViewModels
         public int AgentEmployeeId { get; set; }
         public string AgentEmployeeName { get; set; }
         public int LeaveHours { get; set; }
+        [NotMapped]
+        public string ApprovalStatus { get; set; }
+    }
+    public class LeaveEditDto
+    {
+        public string Date { get; set; }
+        public string Name { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public string VacationType { get; set; }
+        public string ApprovalEmpName { get; set; }
+        public string AgentEmployeeName { get; set; }
+        public int LeaveHours { get; set; }
+        public string ApprovalStatus { get; set; }
+        public string? ApprovalRemark { get; set; }
     }
 
     public class LeaveCreateDto
@@ -34,7 +51,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
 
         public IFormFile? FileRoute { get; set; }
         public string? RelativeFileRoute { get; set; }
-
+        public int ApprovalEmployeeId { get; set; }
         public int AgentEmployeeId { get; set; }
         public int LeaveHours { get; set; }
     }
@@ -48,7 +65,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
 
     public class EmployeeAndIdPareDto
     {
-        public int EmployeeId { get; set;}
+        public int EmployeesId { get; set;}
         public string EmployeesName { get; set; }
     }
 }

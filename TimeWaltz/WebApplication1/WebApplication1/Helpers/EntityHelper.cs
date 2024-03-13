@@ -339,7 +339,7 @@ namespace WebApplication1.Helpers
         public static EmployeeAndIdPareDto GetNameAndIdPare(Employee entity)
         {
             var model = new EmployeeAndIdPareDto{
-                EmployeeId = entity.Id,
+                EmployeesId = entity.Id,
                 EmployeesName = entity.Name,
             };
 
@@ -355,10 +355,11 @@ namespace WebApplication1.Helpers
                 {
                     Id = entity.Id,
                     EmployeesId = entity.EmployeesId,
-                    StartTime = entity.StartTime,
-                    EndTime = entity.EndTime,
+                    Date = entity.StartTime.ToString("yyyy-MM-dd"),
+                    StartTime = entity.StartTime.ToString("HH:mm"),
+                    EndTime = entity.EndTime.ToString("HH:mm"),
                     VacationType = entity.VacationType,
-                    ApprovalEmpName = entity.ApporvalEmpName,
+                    ApprovalEmpName = entity.ApprovalStatus.ToString(),
                     AgentEmployeeName = entity.AgentEmployeeName,
                     LeaveHours = entity.LeaveHours,
                 };

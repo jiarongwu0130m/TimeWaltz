@@ -1,6 +1,6 @@
 ﻿namespace WebApplication1.Models.Enums
 {
-    public enum ApprovalStatusEnum
+    public enum RequestStatusEnum
     {       
         簽核中 = 1,
         退回 = 2,
