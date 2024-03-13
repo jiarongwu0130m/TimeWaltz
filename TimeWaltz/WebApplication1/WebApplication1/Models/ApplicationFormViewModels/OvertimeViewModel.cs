@@ -22,4 +22,10 @@ namespace WebApplication1.Models.ApplicationFormViewModels
 
         public int ApprovalEmployeeId { get; set; }
     }
+
+    public class EmpIdNameGet
+    {
+        public int EmployeeId { get; set;}
+        public string EmployeeName { get; set; }
+    }
 }
