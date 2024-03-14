@@ -6,7 +6,7 @@
 }
 
 <div class="row" id="app">
-    <form asp-action="ListVacationType" asp-controller="BasicSetting" method="post">
+    <form asp-action="VacationType" asp-controller="BasicSetting" method="post">
         <div class="row">
             <div class="col">
                 <div>
@@ -123,8 +123,8 @@
                 </td>
                 <td>
                     <a href="#" @@click="edit(emp.id, $event)">編輯</a> |
-                    |
-                    @Html.ActionLink("刪除", "PersonalDataDelete", new { })
+                    <a href="#" @@click="getOut(emp.id, $event)">刪除</a> 
+
                 </td>
             </tr>
 
@@ -168,6 +168,26 @@
                 },
             },
             methods: {
+                getOut(id, event) {
+                    let self = this
+                    const fd = new FormData();
+                    fd.append("Id", id);
+                    console.debug('delete:', id);
+                    event.preventDefault();
+                    fetch(`/api/PersonalDataApi/Delete`, {
+                        body: fd,
+                        method: "POST",
+
+                    }).then(res => res.json()).then(result => {
+                        if (result.status) {
+                            alert("刪除成功")
+                        } else {
+                            alert("刪除失敗")
+                        }
+                    })
+
+
+                },
                 edit(id, event) {
                     event.preventDefault();
                     location.href = `/BasicSetting/PersonalDataEdit/${id}`

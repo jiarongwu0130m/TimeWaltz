@@ -87,6 +87,8 @@
                     fetch("/api/LeaveApi/List").then(res => res.json()).then(result => {
                         console.log(result)
                         self.leaveRequestListData = result
+                        self.date = result.startDate + '~' + result.endDate
+                        console.log(self.date);
                     })
                 },
             },

@@ -340,7 +340,7 @@ namespace WebApplication1.Helpers
         public static EmployeeAndIdPareDto GetNameAndIdPare(Employee entity)
         {
             var model = new EmployeeAndIdPareDto{
-                EmployeeId = entity.Id,
+                EmployeesId = entity.Id,
                 EmployeesName = entity.Name,
             };
 
@@ -356,8 +356,7 @@ namespace WebApplication1.Helpers
                 {
                     Id = entity.Id,
                     EmployeesId = entity.EmployeesId,
-                    StartDate = entity.StartTime.ToString("yyyy-MM-dd"),
-                    EndDate = entity.EndTime.ToString("yyyy-MM-dd"),
+                    Date = entity.StartTime.ToString("yyyy-MM-dd") + "~" + entity.EndTime.ToString("yyyy-MM-dd"),
                     StartTime = entity.StartTime.ToString("HH:mm"),
                     EndTime = entity.EndTime.ToString("HH:mm"),
                     VacationType = entity.VacationType,
@@ -376,14 +375,14 @@ namespace WebApplication1.Helpers
             {
                
                 Name = entity.EmployeeName,
-                StartTime = entity.StartTime.ToString("yyyy-MM-dd HH:mm"),
-                EndTime = entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                TimeRange = entity.StartTime.ToString("yyyy-MM-dd HH:mm") + "~" +entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
                 VacationType = entity.VacationType,
                 ApprovalEmpName = entity.ApporvalEmpName,
                 AgentEmployeeName = entity.AgentEmployeeName,
                 LeaveHours = entity.LeaveHours,
                 ApprovalStatus = entity.ApprovalStatus.ToString(),
                 ApprovalRemark = entity.ApprovalRemark,
+                Reason = entity.Reason,
             };
             return model;
         }

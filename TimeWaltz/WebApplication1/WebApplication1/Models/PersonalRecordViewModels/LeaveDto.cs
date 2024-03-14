@@ -7,8 +7,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
     public class LeaveDto
     {
         public int Id { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
+        public string Date { get; set; }
         public int EmployeesId { get; set; }
         public string StartTime { get; set; }
 
@@ -29,13 +28,13 @@ namespace WebApplication1.Models.PersonalRecordViewModels
     public class LeaveEditDto
     {
         public string Name { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
+        public string TimeRange { get; set; }
         public string VacationType { get; set; }
         public string ApprovalEmpName { get; set; }
         public string AgentEmployeeName { get; set; }
         public int LeaveHours { get; set; }
         public string ApprovalStatus { get; set; }
+        public string? Reason { get; set; }
         public string? ApprovalRemark { get; set; }
     }
 

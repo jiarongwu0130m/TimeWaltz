@@ -117,7 +117,7 @@ namespace WebApplication1.Services
         /// <param name="userId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public LeaveRequest GetEditData(int Id)
+        public LeaveRequest? GetEditDataOrNull(int Id)
         {
             return _timeWaltzContext.LeaveRequests.Where(x => x.Id == Id)
                  .Join(_timeWaltzContext.VacationDetails, l => l.VacationDetailsId, v => v.Id, (l, v) => new { l, v })
@@ -139,6 +139,7 @@ namespace WebApplication1.Services
                     EndTime = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.EndTime,
                     EmployeeName = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.e.Name,
                     ApprovalRemark = lvedaaprapp.app.Remark,
+                    Reason = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.Reason,
                 }).FirstOrDefault();
         }
     }

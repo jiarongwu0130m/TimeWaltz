@@ -109,6 +109,19 @@ namespace WebApplication1.Controllers.Api
 
         }
 
-
+        [HttpPost]
+        public ActionResult Delete([FromForm]int id)
+        {
+            try
+            {
+                var entity = _personalDataService.GetPersonalDataOrNull(id);
+                _personalDataService.DeletePersonalData(entity);
+                return Ok(new { status = true });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
+        }
     }
 }
