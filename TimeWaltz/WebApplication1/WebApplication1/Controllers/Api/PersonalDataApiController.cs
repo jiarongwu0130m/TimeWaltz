@@ -40,6 +40,11 @@ namespace WebApplication1.Controllers.Api
             return models;
         }
 
+        /// <summary>
+        /// 取得部門、班別下拉式選單資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult<DepAndShiftDropDownDto> GetDepAndShiftDorpDownList(int id)
         {
             try
@@ -62,6 +67,11 @@ namespace WebApplication1.Controllers.Api
             }
 
         }
+        /// <summary>
+        /// 取得編輯畫面原始資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
         public ActionResult<PersonalDataEditDto> GetEditData(int id)
@@ -78,6 +88,11 @@ namespace WebApplication1.Controllers.Api
             }
            
         }
+        /// <summary>
+        /// 編輯畫面修改資料庫
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("{id}")]
         public ActionResult Edit(PersonalDataEditDto model)
@@ -93,6 +108,11 @@ namespace WebApplication1.Controllers.Api
             }
 
         }
+        /// <summary>
+        /// 新增一筆個人資料
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(PersonalDataCreateDto model)
         {
@@ -108,7 +128,11 @@ namespace WebApplication1.Controllers.Api
             }
 
         }
-
+        /// <summary>
+        /// 刪除單筆個人資料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete([FromForm]int id)
         {

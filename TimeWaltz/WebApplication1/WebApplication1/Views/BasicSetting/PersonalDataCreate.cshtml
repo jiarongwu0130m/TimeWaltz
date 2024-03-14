@@ -7,19 +7,19 @@
         <div class="card-body">
             <div class="form-group">
                 <label class="control-label">姓名</label>
-                <input class="form-control"  v-model="name" />
+                <input class="form-control" :class="validation.name" v-model.lazy.trim="name" />
                 <span class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">性別</label>
-                <select class="form-control" v-model="gender">
+                <select class="form-control" :class="validation" v-model="gender">
                     <option v-for="item in genderSelectItems" :value="item.value">{{item.text}}</option>
                 </select>
                 <span class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">部門</label>
-                <select class="form-control" v-model="departmentId">
+                <select class="form-control" :class="validation" v-model="departmentId">
                     <option value="">請選擇</option>
                     <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
                 </select>
@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">班別</label>
-                <select class="form-control" v-model="shiftScheduleId">
+                <select class="form-control" :class="validation" v-model="shiftScheduleId">
                     <option value="">請選擇</option>
                     <option v-for="item in shiftNameSelectItems" :value="item.value">{{item.text}}</option>
                 </select>
@@ -86,6 +86,25 @@
                     gender: '',
                     employeesNo: '',
                     today: null,
+                }
+            },
+            watch: {
+                "form.email": {
+                    handler(newVal, oldVal) {
+                        this.apiTime++;
+                        var exist = ["reds1210@gmail.com", "esther0908@gmail.com"];
+                        this.validation.email = exist.includes(newVal) ? "is-invalid" : "is-valid";
+                    },
+                    immediate: false
+                },
+                arr(n) {
+                    console.log(n);
+                },
+                "obj": {
+                    deep: true,
+                    handler(n) {
+                        console.log(n);
+                    }
                 }
             },
             methods: {
