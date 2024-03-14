@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.title = "加班申請單-檢視";
+}
+
+<div class="row" id="app">
+    <div class="col-md">
+        <div class="card-body">
+            <div class="row mb-2">
+                <label class="col-form-label">申請人：</label>
+                <input type="text" class="col-sm-2 form-control" :value="empName" readonly>
+                <div class="col-sm-auto ml-auto">
+                    <label class="border rounded border-success  text-green p-1 pull-right">審核中</label>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-form-label">加班期間：</label>                
+                <label class="col-form-label col-8">{{formatDateTime(startTime)}} - {{formatDateTime(endTime)}}</label>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-form-label text-green">加班時數：{{ overtimeResult }}</label>
+            </div>
+
+            <div class="row mb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend mr-1">
+                        <span class="input-group-text" :class="inputGroupText">
+                            <input type="checkbox" id="ovetimeCheck" v-model="status" disabled>
+                        </span>
+                    </div>
+                    <label for="ovetimeCheck" class="mb-0" style="" :style="inputGroupText">加班轉補休</label>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-form-label">加班原因：</label>
+                <textarea cols="5" rows="5" class="form-control" v-model="reason" readonly></textarea>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <input type="button" @@click="toList" class="btn btn-outline-dark" value="返回" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    empId: 1,
+                    empName: '',
+                    overtimeResult: '',
+                    date: '',
+                    startTime: '',
+                    endTime: '',
+                    status: false,
+                    reason: '',
+                    inputGroupText: {
+                        "rounded": "true",
+                    },
+                }
+            },
+            mounted() {
+                this.checkId();
+                this.getEmpId();
+                this.getCompRequestData();
+            },
+            methods: {
+
+                checkId() {
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        this.Id = lastNumber;
+
+                    } else {
+                        location.href = "/ApplicationForm/OvertimeRequestDetail";
+                    }
+                },
+
+                getCompRequestData() {
+                    fetch(`/api/OvertimeApplicationsApi/GetOvertimeRequestData/${this.Id}`)
+                        .then(res => res.json())
+                        .then(result => {
+                            this.EmpId = result.employeesId;
+                            this.startTime = result.startTime;
+                            this.endTime = result.endTime;
+                            this.status = result.status;
+                            this.reason = result.reason;
+                            this.approvalEmployeeId = result.approvalEmployeeId;
+                            this.countOvertimeMins();
+                        });
+                },
+
+                getEmpId() {
+                    let self = this;
+                    fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
+                        .then(result => {
+                            self.empId = result.employeeId;
+                            self.empName = result.employeeName;
+                        })
+                },
+
+                countOvertimeMins() {
+                    this.overtimeResult = '';
+                    if (this.startTime && this.endTime) {
+                        const startTime = new Date(`${this.startTime}`);
+                        const endTime = new Date(`${this.endTime}`);
+                        const durationMilliseconds = endTime - startTime;
+                        const durationMinutes = Math.floor(durationMilliseconds / (60 * 1000));
+                        const hours = Math.floor(durationMinutes / 60);
+                        const minutes = durationMinutes % 60;
+                        if (hours === 0) {
+                            this.overtimeResult = `${minutes} 分鐘`;
+                        } else if (minutes === 0) {
+                            this.overtimeResult = `${hours} 小時`;
+                        } else {
+                            this.overtimeResult = `${hours} 小時 ${minutes} 分鐘`;
+                        }
+                    } else {
+                        this.overtimeResult = '';
+                    }
+                },
+
+                formatDateTime(dateTimeString) {
+                    const options = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                    };
+                    const dateTime = new Date(dateTimeString);
+                    return dateTime.toLocaleTimeString('zh', options).replaceAll('/', '-');
+                },
+
+                isValid(dateString) {
+                    const isValidData = Date.parse(dateString);
+                    return !isNaN(isValidData);
+                },
+
+                toList() {
+                    location.href = "/ApplicationForm/OvertimeRequest";
+                },
+            }
+        }).mount("#app");
+    </script>
+}

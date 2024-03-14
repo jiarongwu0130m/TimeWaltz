@@ -5,7 +5,7 @@
 <div class="row" id="app">
     <div class="col-12">
         <div class="row mb-3">
-            <label class="form-label col-auto">加班日期查詢：</label>
+            <label class="col-form-label col-auto">加班日期查詢：</label>
             <div class="input-group date col-5 col-md-3" id="reservationdate">
                 <div class="input-group-append">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -39,18 +39,6 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-12 col-md-5">
-        <div class="col-sm col-md-5" id="example2_info"></div>
-    </div>
-    <div class="col-sm-4 col-md-8">
-        <div class="col-sm-12 col-md-7">
-            <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-            </div>
-        </div>
     </div>
 </div>
 
@@ -91,11 +79,11 @@
                     const date = new Date(dateTimeString);
                     return date.toLocaleTimeString('zh-TW', options);
                 },
-                searchCompRequests() {
+                searchOvertimeRequests() {
                     if (this.searchDate.trim() !== '') {
-                        const selectedDate = new Date(this.searchDate);
                         const filteredCompRequests = this.originalCompRequests.filter(item => {
-                            const requestDate = new Date(item.startTime);
+                            const requestDate = new Date(item.overtimeDate);
+                            const selectedDate = new Date(this.searchDate);
                             return requestDate >= selectedDate;
                         });
                         this.allOvertimeRequest = filteredCompRequests;
@@ -120,15 +108,15 @@
                     }
                 }).on('apply.daterangepicker', (ev, picker) => {
                     this.searchDate = picker.startDate.format('YYYY/MM/DD');
-                    dateInputRef.value = this.search.date;
-                    this.searchCompRequests();
+                    dateInputRef.value = this.searchDate;
+                    this.searchOvertimeRequests();
                 });
 
                 fetch("/api/OvertimeApplicationsApi/GetOvertimeList")
                     .then(res => res.json())
                     .then(result => {
-                        console.log(result);
                         this.allOvertimeRequest = result;
+                        this.originalCompRequests = result;
                     });
             }
         }).mount('#app')

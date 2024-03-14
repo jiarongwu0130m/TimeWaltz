@@ -20,7 +20,7 @@ namespace WebApplication1.Controllers.Api
         private readonly TimeWaltzContext _context;
         private readonly OvertimeRequestService _overtimeRequestService;
 
-        public OvertimeApplicationsApiController(TimeWaltzContext context,OvertimeRequestService overtimeRequestService)
+        public OvertimeApplicationsApiController(TimeWaltzContext context, OvertimeRequestService overtimeRequestService)
         {
             _context = context;
             _overtimeRequestService = overtimeRequestService;
@@ -30,11 +30,42 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OvertimeApplication>>> GetOvertimeApplications()
         {
-          if (_context.OvertimeApplications == null)
-          {
-              return NotFound();
-          }
+            if (_context.OvertimeApplications == null)
+            {
+                return NotFound();
+            }
             return await _context.OvertimeApplications.ToListAsync();
+        }
+
+        public void GetOvertimeRequestData(){
+            }
+
+
+        [HttpGet]
+        [Route("{id}")]
+        public OvertimeViewModel GetOvertimeRequestData(int id)
+        {
+            try
+            {
+                var entity = _overtimeRequestService.GetOvertimeRequestTypeOrNull(id);
+                var model = EntityHelper.ToViewModel(entity);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
+        public EmpIdNameGet GetEmoloyeeName()
+        {
+            var UserId = 1;
+            var userNameAndIdPare = _overtimeRequestService.GetNameOrNull(UserId);
+            var employee = EntityHelper.GetNameAndIdPare(userNameAndIdPare);
+
+
+            return employee;
         }
 
         // GET: api/OvertimeApplicationsApi/5

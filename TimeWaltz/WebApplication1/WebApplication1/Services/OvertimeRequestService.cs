@@ -22,5 +22,18 @@ namespace WebApplication1.Services
         {
             return _timeWaltzDb.OvertimeApplications.ToList();
         }
+
+        public OvertimeApplication? GetOvertimeRequestTypeOrNull(int id)
+        {
+            return _timeWaltzDb.OvertimeApplications.FirstOrDefault(x => x.Id == id);
+
+        }
+
+
+        public Employee? GetNameOrNull(int id)
+        {
+            return _timeWaltzDb.Employees.FirstOrDefault(x => x.Id == id);
+
+        }
     }
 }

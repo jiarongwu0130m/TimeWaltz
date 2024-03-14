@@ -336,8 +336,25 @@ namespace WebApplication1.Helpers
                 OvertimeDate = entity.StartTime,
                 StartTime = entity.StartTime,
                 EndTime = entity.EndTime,
+                EmployeesId = entity.EmployeesId,
+                Reason = entity.Reason,
+                Status = entity.Status,
+                ApprovalEmployeeId = entity.ApprovalEmployeeId,
             };
             return model;
         }
+
+
+        public static EmpIdNameGet GetNameAndIdPare(Employee entity)
+        {
+            var model = new EmpIdNameGet
+            {
+                EmployeeId = entity.Id,
+                EmployeeName = entity.Name,
+            };
+
+            return model;
+        }
+
     }
 }

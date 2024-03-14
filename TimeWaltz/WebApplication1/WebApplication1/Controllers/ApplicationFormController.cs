@@ -63,5 +63,9 @@ namespace WebApplication1.Controllers
             return RedirectToAction("OvertimeRequest");
 
         }
+        public IActionResult OvertimeRequestDetail(int id)
+        {
+            return View();
+        }
     }
 }

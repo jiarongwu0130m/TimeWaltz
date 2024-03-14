@@ -8,15 +8,14 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <label class="col-form-label">申請人：</label>
-                    <input type="hidden" v-model="empId" asp-for="EmployeesId" :value="empId">
                     <input type="text" class="col-sm-2 form-control" v-model="empName" readonly>
                     <div class="col-sm-auto ml-auto">
-                        <button class="btn btn-outline-info pull-right">編輯中</button>
+                        <label class="border rounded border-success  text-green p-1 pull-right">編輯中</label>
                     </div>
                 </div>
 
                 <div class="row mb-2">
-                    <label class="col-form-label text-danger">加班期間：</label>
+                    <label class="col-form-label">加班期間：</label>
                     <input id="timeRange" name="dateRange" type="datetime" class="form-control col-6" value="">
                     <input type="hidden" id="startTimeValue" v-model="startTime" asp-for="StartTime" />
                     <input type="hidden" id="endTimeValue" v-model="endTime" asp-for="EndTime" />
@@ -44,10 +43,9 @@
                 </div>
 
             </div>
-            <div class="card-footer">
-                @* <input v-on:click="send" type="button" value="送出" class="btn btn-outline-primary" /> *@
-                <button type="submit" class="btn btn-outline-primary">送出</button>
-                <input type="button" class="btn btn-outline-dark" value="取消" />
+            <div class="card-footer">                
+                <button id="dataSend" type="submit" class="btn btn-outline-primary">送出</button>
+                <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" />
             </div>
         </div>
     </div>
@@ -74,14 +72,19 @@
             mounted() {
                 this.getEmpId();
                 this.getTimeRange();
+
+                // $('#dataSend').click(function (event) {
+                //     event.preventDefault();
+                // }
+
             },
             methods: {
                 getEmpId() {
                     let self = this;
-                    fetch(`/api/EmployeesApi/GetEmpIdName/${self.empId}`).then(res => res.json())
+                    fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
                         .then(result => {
-                            self.empId = result.id;
-                            self.empName = result.name;
+                            self.empId = result.employeeId;
+                            self.empName = result.employeeName;
                         })
                 },
                 getTimeRange() {
@@ -129,6 +132,9 @@
                 isValid(dateString) {
                     const isValidData = Date.parse(dateString);
                     return !isNaN(isValidData);
+                },
+                toList() {
+                    location.href = "/ApplicationForm/OvertimeRequest";
                 },
             }
         }).mount("#app");
