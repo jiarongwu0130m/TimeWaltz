@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Areas.Employee.Models;
+using WebApplication1.Helpers;
 using WebApplication1.Models.Entity;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,6 +17,58 @@ namespace WebApplication1.Controllers.Api
         public ClockApiController(TimeWaltzContext timeWaltzDb)
         {
             _timeWaltzDb = timeWaltzDb;
+        }
+
+        [HttpGet]
+        public bool Info()
+        {
+            var empId = User.GetEmployeeId();
+            var allClock = _timeWaltzDb.Clocks.Where(x => x.EmployeesId == empId &&
+            EF.Functions.DateDiffDay(x.Date, DateTime.Now) == 0);
+
+            allClock.GroupBy(x => x.Status).Select(x=>new { 
+                
+            });
+
+        }
+        [HttpPost]
+        public bool On(ClockOnDto dto)
+        {
+            return OnAndOff(dto, Models.Enums.ClockStatusEnum.上班打卡);
+        }
+
+        [HttpPost]
+        public bool Off(ClockOnDto dto)
+        {
+            return OnAndOff(dto, Models.Enums.ClockStatusEnum.下班打卡);
+        }
+
+
+        [NonAction]
+        public bool OnAndOff(ClockOnDto dto, Models.Enums.ClockStatusEnum status)
+        {
+            var empId = User.GetEmployeeId();
+            
+
+            try
+            {
+                _timeWaltzDb.Clocks.Add(new Clock
+                {
+                    Date = DateTime.Now,
+                    EmployeesId = empId,
+                    Latitude = dto.Latitude,
+                    Longitude = dto.Longitude,
+                    Status = status
+                });
+
+                _timeWaltzDb.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
         }
 
         [HttpGet("{id}")]

@@ -1,17 +1,56 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models.Entity;
+using WebApplication1.Models.Enums;
+using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Areas.Employee.Controllers
 {
     [Area("Employee")]
     public class EventController : Controller
     {
+        private readonly TimeWaltzContext _timeWaltzContext;
+
+        public EventController(TimeWaltzContext timeWaltzContext)
+        {
+            _timeWaltzContext = timeWaltzContext;
+        }
         /// <summary>
         /// 打卡
         /// </summary>
         /// <returns></returns>
         public IActionResult Clock()
         {
-            return View();
+            var toDay = DateTime.Now.Date;
+            var clockRecord = _timeWaltzContext.Clocks.FirstOrDefault(res => res.Date.Date == toDay);
+            ClockViewModel clockViewModel = null;
+
+            if (clockRecord != null)
+            {
+                clockViewModel = new ClockViewModel
+                {
+                    EmployeesId = clockRecord.EmployeesId,
+                    StartClockInDate = clockRecord.Status == ClockStatusEnum.上班打卡 ? clockRecord.Date : null,
+                    StartClockInLongitude = clockRecord.Status == ClockStatusEnum.上班打卡 ? clockRecord.Longitude : null,
+                    StartClockInLatitude = clockRecord.Status == ClockStatusEnum.上班打卡 ? clockRecord.Latitude : null,
+                    EndClockInDate = clockRecord.Status == ClockStatusEnum.下班打卡 ? clockRecord.Date : null,
+                    EndClockInLongitude = clockRecord.Status == ClockStatusEnum.下班打卡 ? clockRecord.Longitude : null,
+                    EndClockInLatitude = clockRecord.Status == ClockStatusEnum.下班打卡 ? clockRecord.Latitude : null,
+                };
+
+                var shift = _timeWaltzContext.Shifts.FirstOrDefault(workShift => workShift.ShiftsDate.Date == toDay);
+                var shiftSchedule = _timeWaltzContext.ShiftSchedules.FirstOrDefault(ShiftSchedule => ShiftSchedule.StartTime.Date == toDay);
+
+                if (shift != null && shiftSchedule != null)
+                {
+                    TimeSpan startTimeOfDay = shift.ShiftSchedule.StartTime.TimeOfDay;
+                    TimeSpan endTimeOfDay = shift.ShiftSchedule.EndTime.TimeOfDay;
+
+                    clockViewModel.ShiftScheduleStartTime = startTimeOfDay;
+                    clockViewModel.ShiftScheduleEndTime = endTimeOfDay;
+                }
+            }
+
+            return View(clockViewModel ?? new ClockViewModel());
         }
 
         /// <summary>
