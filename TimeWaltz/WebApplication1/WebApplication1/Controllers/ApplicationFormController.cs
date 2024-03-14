@@ -43,27 +43,25 @@ namespace WebApplication1.Controllers
         }
         public IActionResult OvertimeRequest()
         {
-            return View("OvertimeRequestCreate");
+            return View();
         }
         public IActionResult OvertimeRequestCreate()
         {
             return View();
         }
 
-        //[HttpPost]
-        //public ActionResult OvertimeRequestCreate(OvertimeCreateViewModel model)
-        //{
-        //    try
-        //    {
-        //        var entity = ViewModelHelper.ToEntity(model);
-        //        _overtimeRequestService.CreateOvertimeRequest(entity);
-        //        return Ok(new { status = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Ok(new { status = false });
+        [HttpPost]
+        public IActionResult OvertimeRequestCreate(OvertimeCreateViewModel model)
+        {
 
-        //    }
-        //}
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var entity = ViewModelHelper.ToEntity(model);
+            _overtimeRequestService.CreateOvertimeRequest(entity);
+            return RedirectToAction("OvertimeRequest");
+
+        }
     }
 }

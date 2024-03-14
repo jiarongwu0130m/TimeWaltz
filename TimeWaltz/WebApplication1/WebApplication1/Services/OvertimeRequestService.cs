@@ -17,5 +17,10 @@ namespace WebApplication1.Services
             _timeWaltzDb.SaveChanges();
             return entity;
         }
+
+        public List<OvertimeApplication> GetOvertimeList()
+        {
+            return _timeWaltzDb.OvertimeApplications.ToList();
+        }
     }
 }

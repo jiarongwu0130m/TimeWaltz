@@ -1,12 +1,14 @@
 ﻿@{
     ViewBag.title = "加班申請單";
 }
-
-<div class="row" id="app">
-    <div class="col-md">        
+@model WebApplication1.Models.ApplicationFormViewModels.OvertimeCreateViewModel
+<form asp-controller="ApplicationForm" asp-action="OvertimeRequestCreate" method="post">
+    <div class="row" id="app">
+        <div class="col-md">
             <div class="card-body">
                 <div class="row mb-2">
                     <label class="col-form-label">申請人：</label>
+                    <input type="hidden" v-model="empId" asp-for="EmployeesId" :value="empId">
                     <input type="text" class="col-sm-2 form-control" v-model="empName" readonly>
                     <div class="col-sm-auto ml-auto">
                         <button class="btn btn-outline-info pull-right">編輯中</button>
@@ -16,20 +18,20 @@
                 <div class="row mb-2">
                     <label class="col-form-label text-danger">加班期間：</label>
                     <input id="timeRange" name="dateRange" type="datetime" class="form-control col-6" value="">
-                    <input type="hidden" id="startTimeValue" v-model="startTime" />
-                    <input type="hidden" id="endTimeValue" v-model="endTime" />
+                    <input type="hidden" id="startTimeValue" v-model="startTime" asp-for="StartTime" />
+                    <input type="hidden" id="endTimeValue" v-model="endTime" asp-for="EndTime" />
 
                 </div>
 
                 <div class="row mb-2" v-if="isValid(startTime)">
-                    <label class="col-form-label text-green" >加班時數：{{ overtimeResult }}</label>
+                    <label class="col-form-label text-green">加班時數：{{ overtimeResult }}</label>
                 </div>
 
                 <div class="row mb-2">
                     <div class="input-group">
                         <div class="input-group-prepend mr-1">
                             <span class="input-group-text" :class="inputGroupText">
-                                <input type="checkbox" id="ovetimeCheck" v-model="status">
+                                <input type="checkbox" id="ovetimeCheck" v-model="status" asp-for="Status">
                             </span>
                         </div>
                         <label for="ovetimeCheck" class="mb-0" style="" :style="inputGroupText">加班轉補休</label>
@@ -38,35 +40,34 @@
 
                 <div class="row mb-2">
                     <label class="col-form-label">加班原因：</label>
-                    <textarea cols="5" rows="5" class="form-control" v-model="reason"></textarea>
+                    <textarea cols="5" rows="5" class="form-control" v-model="reason" asp-for="Reason"></textarea>
                 </div>
 
             </div>
             <div class="card-footer">
-                <input v-on:click="send" type="button" value="送出" class="btn btn-outline-primary" />
+                @* <input v-on:click="send" type="button" value="送出" class="btn btn-outline-primary" /> *@
+                <button type="submit" class="btn btn-outline-primary">送出</button>
                 <input type="button" class="btn btn-outline-dark" value="取消" />
-            </div>        
+            </div>
+        </div>
     </div>
-</div>
+</form>
 
 @section Scripts {
     <script>
         Vue.createApp({
             data() {
                 return {
-                    empId:1,
-                    empName:'',
+                    empId: 1,
+                    empName: '',
                     overtimeResult: '',
-                        date: '',
-                        startTime: '',
-                        endTime: '',
-                        status: false,
-                        reason: '',
+                    date: '',
+                    startTime: '',
+                    endTime: '',
+                    status: false,
+                    reason: '',
                     inputGroupText: {
                         "rounded": "true",
-                    },
-                    red: {
-                        "color": "red",
                     },
                 }
             },
@@ -78,10 +79,10 @@
                 getEmpId() {
                     let self = this;
                     fetch(`/api/EmployeesApi/GetEmpIdName/${self.empId}`).then(res => res.json())
-                    .then(result => {
-                        self.empId = result.id;
-                        self.empName = result.name;
-                    })
+                        .then(result => {
+                            self.empId = result.id;
+                            self.empName = result.name;
+                        })
                 },
                 getTimeRange() {
                     let self = this;
@@ -129,32 +130,7 @@
                     const isValidData = Date.parse(dateString);
                     return !isNaN(isValidData);
                 },
-                send() {
-                    let self = this;
-                    fetch("/api/OvertimeApplicationApi/OvertimeRequestCreate", {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            EmployeesId: self.empId,
-                            StartTime: self.startTime,
-                            EndTime: self.endTime,
-                            Status: self.status,
-                            Reason: self.reason,
-                            ApprovalEmployeeId: 1,
-                        }),
-                        headers: {
-                            "content-type": "application/json",
-                        },
-                    }).then(res => res.json()).then(result => {
-                        if (result.status) {
-                            alert("新增成功")
-                            // location.href = "/ApplicationForm/OvertimeRequest"
-                        } else {
-                            alert("新增失敗")
-                        }
-                    })
-                },
-
-            },
+            }
         }).mount("#app");
     </script>
 }
