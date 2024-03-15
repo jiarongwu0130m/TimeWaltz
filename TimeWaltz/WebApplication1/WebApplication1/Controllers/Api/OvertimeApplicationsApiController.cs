@@ -37,8 +37,22 @@ namespace WebApplication1.Controllers.Api
             return await _context.OvertimeApplications.ToListAsync();
         }
 
-        public void GetOvertimeRequestData(){
+
+
+        [HttpPost]
+        public bool Create(OvertimeRequestDto dto)
+        {
+            try
+            {
+
+                var entity = ViewModelHelper.ToEntity(dto);
+                _overtimeRequestService.CreateOvertimeRequest(entity);              
+                return true;
             }
+            catch (Exception) {
+                return false;
+            }
+        }            
 
 
         [HttpGet]

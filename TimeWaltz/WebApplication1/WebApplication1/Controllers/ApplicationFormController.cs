@@ -50,19 +50,6 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult OvertimeRequestCreate(OvertimeCreateViewModel model)
-        {
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var entity = ViewModelHelper.ToEntity(model);
-            _overtimeRequestService.CreateOvertimeRequest(entity);
-            return RedirectToAction("OvertimeRequest");
-
-        }
         public IActionResult OvertimeRequestDetail(int id)
         {
             return View();

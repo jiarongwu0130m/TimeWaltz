@@ -16,9 +16,9 @@
 
                 <div class="row mb-2">
                     <label class="col-form-label">加班期間：</label>
-                    <input id="timeRange" name="dateRange" type="datetime" class="form-control col-6" value="">
-                    <input type="hidden" id="startTimeValue" v-model="startTime" asp-for="StartTime" />
-                    <input type="hidden" id="endTimeValue" v-model="endTime" asp-for="EndTime" />
+                    <input id="timeRange" type="datetime" class="form-control col-6">
+                    <input type="hidden" v-model="startTime" />
+                    <input type="hidden" v-model="endTime" />
 
                 </div>
 
@@ -29,21 +29,22 @@
                 <div class="row mb-2">
                     <div class="input-group">
                         <div class="input-group-prepend mr-1">
-                            <span class="input-group-text" :class="inputGroupText">
-                                <input type="checkbox" id="ovetimeCheck" v-model="status" asp-for="Status">
+                            <span class="input-group-text">
+                                <input type="checkbox" id="ovetimeCheck" v-model="status">
                             </span>
                         </div>
-                        <label for="ovetimeCheck" class="mb-0" style="" :style="inputGroupText">加班轉補休</label>
+                        <label for="ovetimeCheck" class="mb-0" style="">加班轉補休</label>
                     </div>
                 </div>
 
                 <div class="row mb-2">
                     <label class="col-form-label">加班原因：</label>
-                    <textarea cols="5" rows="5" class="form-control" v-model="reason" asp-for="Reason"></textarea>
+                    <textarea cols="5" rows="5" class="form-control" v-model="reason"></textarea>
                 </div>
 
             </div>
-            <div class="card-footer">                
+            <div class="card-footer">
+                <input type="button" @@click="sendOvertimeRequest" class="btn btn-outline-primary" value="api送出" />
                 <button id="dataSend" type="submit" class="btn btn-outline-primary">送出</button>
                 <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" />
             </div>
@@ -51,42 +52,33 @@
     </div>
 </form>
 
+
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         Vue.createApp({
             data() {
                 return {
-                    empId: 1,
                     empName: '',
-                    overtimeResult: '',
-                    date: '',
                     startTime: '',
                     endTime: '',
                     status: false,
                     reason: '',
-                    inputGroupText: {
-                        "rounded": "true",
-                    },
+                    overtimeResult: '',
                 }
-            },
-            mounted() {
-                this.getEmpId();
-                this.getTimeRange();
-
-                // $('#dataSend').click(function (event) {
-                //     event.preventDefault();
-                // }
-
             },
             methods: {
                 getEmpId() {
                     let self = this;
                     fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
                         .then(result => {
-                            self.empId = result.employeeId;
                             self.empName = result.employeeName;
                         })
                 },
+                toList() {
+                    location.href = "/ApplicationForm/OvertimeRequest";
+                },
+
                 getTimeRange() {
                     let self = this;
                     $('#timeRange').daterangepicker({
@@ -99,43 +91,64 @@
                         }
                     },
                         function (start, end, _) {
-                            self.startTime = start.format('YYYY-MM-DD HH:mm');
-                            self.endTime = end.format('YYYY-MM-DD HH:mm');
+                            self.startTime = new Date(start);
+                            self.endTime = new Date(end);
                             self.countOvertimeMins();
+                            // self.starttime = moment(self.starttime);
+                            // self.endtime = moment(self.endtime);
+                            console.log(self.startTime, self.endTime);
                         });
-
                 },
                 getToday() {
                     return moment().format("YYYY-MM-DD HH:mm")
                 },
                 countOvertimeMins() {
-                    this.overtimeResult = '';
-                    console.log(this.startTime, this.endTime)
-                    if (this.startTime && this.endTime) {
-                        const startTime = new Date(`${this.startTime}`);
-                        const endTime = new Date(`${this.endTime}`);
-                        const durationMilliseconds = endTime - startTime;
+                    let self = this;
+                    self.overtimeResult = '';
+                    if (self.startTime && self.endTime) {
+                        const start = self.startTime;
+                        const end = self.endTime;
+                        const durationMilliseconds = end - start;
                         const durationMinutes = Math.floor(durationMilliseconds / (60 * 1000));
                         const hours = Math.floor(durationMinutes / 60);
                         const minutes = durationMinutes % 60;
                         if (hours === 0) {
-                            this.overtimeResult = `${minutes} 分鐘`;
+                            self.overtimeResult = `${minutes} 分鐘`;
                         } else if (minutes === 0) {
-                            this.overtimeResult = `${hours} 小時`;
+                            self.overtimeResult = `${hours} 小時`;
                         } else {
-                            this.overtimeResult = `${hours} 小時 ${minutes} 分鐘`;
+                            self.overtimeResult = `${hours} 小時 ${minutes} 分鐘`;
                         }
                     } else {
-                        this.overtimeResult = '';
+                        self.overtimeResult = '';
                     }
                 },
-                isValid(dateString) {
-                    const isValidData = Date.parse(dateString);
+                sendOvertimeRequest() {
+                    let self = this;
+                    axios.post("/api/OvertimeApplicationsApi/Create", {
+                        startTime: self.startTime,
+                        endTime: self.endTime,
+                        reason: self.reason,
+                        status: self.status,
+                    }).then(response => {
+                        console.log(response);
+                        if (response.data == true) {
+                            alert("新增成功");
+                        } else {
+                            alert("新增失敗");
+                        }
+                    });
+                },
+                isValid(string) {
+                    const isValidData = Date.parse(string);
                     return !isNaN(isValidData);
                 },
-                toList() {
-                    location.href = "/ApplicationForm/OvertimeRequest";
-                },
+            },
+            mounted() {
+                this.getEmpId();
+                this.getTimeRange();
+
+
             }
         }).mount("#app");
     </script>
