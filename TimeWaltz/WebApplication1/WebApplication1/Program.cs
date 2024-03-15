@@ -22,6 +22,7 @@ namespace WebApplication1
             builder.Services.AddScoped<SpecialHolidayService>();
             builder.Services.AddScoped<PersonalDataService>();
             builder.Services.AddScoped<DepartmentService>();
+            builder.Services.AddScoped<CompRequestService>();
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
             builder.Services.AddScoped<AgentEmployeeService>();
@@ -54,6 +55,9 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

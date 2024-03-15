@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Employee\Data\" />
     <Folder Include="Models\ApplicationFormViewModels\" />
   </ItemGroup>
 
