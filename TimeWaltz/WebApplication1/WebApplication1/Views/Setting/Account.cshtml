@@ -1,35 +1,36 @@
-﻿@model List<AccountViewModel>
-<div class="container">
+﻿@model IEnumerable< WebApplication1.Models.SettingViewModels.UserViewModel>
 
-    <form asp-action="Account" asp-controller="Setting" method="post">
-        <div asp-validation-summary="All" class="text-danger"></div>
+@{
+    Layout = "_Layout";
+    ViewBag.title = "帳號瀏覽";
+}
 
-        <div class="col-md-4">
-            <div class="form-group">
-                <label>帳號：</label>
-                <input type="text" id="Account" value="" />
-            </div>
-            @*             <div class="form-group">
-            <label asp-for="DepartmentID" class="control-label">單位</label>
-            <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.GenderEnum"></select>
-            <span asp-validation-for="DepartmentID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-            <label asp-for="employeesID" class="control-label">姓名</label>
-            <select asp-for="EmployeesID" class="form-control" asp-items="ViewBag.GenderEnum"></select>
-            <span asp-validation-for="EmployeesID" class="text-danger"></span>
-            </div> *@
+
+<form asp-action="Account" asp-controller="Setting" method="post">
+    <div class="row">
+        <div class="col-md-2">
+            <label>帳號：</label>
+            <input type="text" name="Account" value="" style="width: 100px;" />
         </div>
-        <div class="form-group">
-            <div>
-                <button type="submit" class="btn btn-outline-dark">查詢</button>
-            </div>
-            <div>
-                <a asp-controller="Setting" asp-action="CreateAccount" class="btn btn-outline-dark">新增帳號</a>
-            </div>
+        <div class="col-md-2">
+            <label>單位：</label>
+            <select name="DepartmentID" asp-items="ViewBag.GenderEnumDepart" style="width: 100px;"></select>
+            <span class="text-danger"></span>
         </div>
-    </form>
-</div>
+        <div class="col-md-2">
+            <label>姓名：</label>
+            <input type="text" name="Account" value="" style="width: 100px;" />
+        </div>
+    </div>
+    <br />
+    <div class=" row ">
+        <button type="submit" class="btn btn-outline-dark">查詢</button>
+        <div class="col-sm-auto ml-auto">
+            <a asp-controller="Setting" asp-action="AccountCreate" class="btn btn-outline-dark pull-right">新增帳號</a>
+        </div>
+    </div>
+</form>
+
 
 <div class="card-body">
     <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -51,12 +52,8 @@
                                 啟用/停用
                             </th>
                             <th>
-                                修改
+                                修改/刪除
                             </th>
-                            <th>
-                                刪除
-                            </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,11 +64,11 @@
                                     @Html.DisplayFor(modelItem => item.Account)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Stop)
+                                    <a asp-action="AccountStop" asp-controller="Setting" asp-route-Id="@item.Id" class="btn btn-outline-dark">停用</a>
+                                    <a asp-action="AccountStop" asp-controller="Setting" asp-route-Id="@item.Id" class="btn btn-outline-dark">啟用</a>
                                 </td>
                                 <td>
-                                    @Html.ActionLink("詳細", "EditVacationType", new { id = item.Id }) |
-                                    <a asp-action="DeleteVacationType" asp-controller="BasicSetting" asp-route-Id="@item.Id">刪除</a>
+                                    <a asp-action="AccountEdit" asp-controller="Setting" asp-route-Id="@item.Id" class="btn btn-outline-dark">修改/刪除</a>
                                 </td>
                             </tr>
                         }

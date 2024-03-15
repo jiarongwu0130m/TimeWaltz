@@ -1,6 +1,6 @@
-﻿using WebApplication1.Models;
-using WebApplication1.Models.BasicSettingViewModels;
+﻿using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Helpers
 {
@@ -79,15 +79,15 @@ namespace WebApplication1.Helpers
         }
 
 
-        public static User ToEntity(AccountViewModel model)
+        public static User ToEntity(UserViewModel model)
         {
 
             var entity = new User
             {
                 Account = model.Account,
                 //Password = model.Password,
-                EmployeesId = model.EmployeesID.Value,
-                DepartmentId = model.DepartmentID.Value,
+                EmployeesId = model.EmployeesName.Value,
+                DepartmentId = model.DepartmentName.Value,
                 Stop = model.Stop,
                 PasswordDate = DateTime.Now
             };

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using WebApplication1.Models;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Helpers
 {
@@ -15,12 +15,12 @@ namespace WebApplication1.Helpers
         {
             _dbContext = timeWaltzContext;
         }
-        
+
 
         public static List<PersonalDataViewModel> ToViewModel(List<Employee> entities)
         {
             var models = new List<PersonalDataViewModel>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
@@ -30,7 +30,7 @@ namespace WebApplication1.Helpers
 
         public static PersonalDataViewModel ToViewModel(Employee entity)
         {
-            
+
 
             var model = new PersonalDataViewModel
             {
@@ -48,7 +48,7 @@ namespace WebApplication1.Helpers
         }
         public static PersonalDataEditViewModel ToEditViewModel(Employee entity)
         {
-            
+
             var model = new PersonalDataEditViewModel
             {
                 Id = entity.Id,
@@ -74,7 +74,7 @@ namespace WebApplication1.Helpers
         public static List<SpecialGradeViewModel> ToViewModel(List<SpecialGrade> entities)
         {
             var models = new List<SpecialGradeViewModel>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
@@ -100,7 +100,7 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
-        
+
         public static List<ShiftSchedulesViewModel> ToViewModel(List<ShiftSchedule> entities)
         {
             var models = new List<ShiftSchedulesViewModel>();
@@ -174,13 +174,13 @@ namespace WebApplication1.Helpers
         public static List<PublicHolidayViewModel> ToViewModel(List<PublicHoliday> entities)
         {
             var models = new List<PublicHolidayViewModel>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
             return models;
         }
-       
+
         /// <summary>
         /// 給編輯頁面用的ToEditDto，傳入一個entity，回傳一個Dto
         /// </summary>
@@ -197,7 +197,7 @@ namespace WebApplication1.Helpers
                 NumberOfDays = entity.NumberOfDays,
                 MinVacationHours = entity.MinVacationHours,
 
-                
+
             };
             return model;
         }
@@ -228,12 +228,12 @@ namespace WebApplication1.Helpers
         public static List<VacationDto> ToDto(List<VacationDetail> entities)
         {
             var models = new List<VacationDto>();     //先準備一個空的
-            
+
             foreach (var entity in entities)                    //跑迴圈
             {
                 models.Add(ToDto(entity));
             }
-            
+
             //var items = entities.Select(o => ToViewModel(o)).ToList();      //LINQ寫法...
 
             return models;
@@ -278,7 +278,7 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 DepartmentName = entity.DepartmentName,
                 EmployeesId = entity.EmployeesId,
-                EmployeeName = entity. EmployeeName,
+                EmployeeName = entity.EmployeeName,
             };
             return model;
         }
@@ -286,40 +286,42 @@ namespace WebApplication1.Helpers
         {
             var model = new DepartmentEditViewModel
             {
-                models.Add(ToViewModel(entity));
-            }
-            
-            return models;
-       }
+                Id = entity.Id,
+                DepartmentName = entity.DepartmentName,
+                EmployeesId = entity.EmployeesId,
+            };
+            return model;
+        }
 
-
-        public static AccountViewModel ToViewModel(User entity)
+        public static UserEditViewModel ToEditViewModel(User entity)
         {
-            var model = new AccountViewModel
+            var model = new UserEditViewModel
+            {
+                Id = entity.Id,
+                DepartmentName = entity.DepartmentId,
+                EmployeesName = entity.EmployeesId,
+            };
+            return model;
+        }
+        public static UserViewModel ToViewModel(User entity)
+        {
+            var model = new UserViewModel
             {
                 Id = entity.Id,
                 Account = entity.Account,
-                EmployeesID = entity.EmployeesId,
-                DepartmentID = entity.DepartmentId,
                 Stop = entity.Stop,
             };
             return model;
         }
-        public static List<AccountViewModel> ToViewModel(List<User> entities)
+        public static List<UserViewModel> ToViewModel(List<User> entities)
         {
-            var models = new List<AccountViewModel>();
+            var models = new List<UserViewModel>();
             foreach (var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
 
             return models;
-        }
-                Id = entity.Id,
-                DepartmentName = entity.DepartmentName,
-                EmployeesId = entity.EmployeesId,
-            };
-            return model;
         }
     }
 }

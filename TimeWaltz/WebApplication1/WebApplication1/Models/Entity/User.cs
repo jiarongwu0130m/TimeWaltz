@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models.Entity;
 
 public partial class User
 {
     public int Id { get; set; }
-
     public int? EmployeesId { get; set; }
 
     public int DepartmentId { get; set; }

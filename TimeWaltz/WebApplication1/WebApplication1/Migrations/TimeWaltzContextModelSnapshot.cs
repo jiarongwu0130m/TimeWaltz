@@ -134,7 +134,7 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex(new[] { "EmployeesId" }, "IX_AgentEmployees_EmployeesID");
 
-                    b.ToTable("AgentEmployees");
+                    b.ToTable("AgentEmployees", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.AllLeaveDay", b =>
@@ -159,7 +159,7 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int")
                         .HasDefaultValueSql("((0))");
 
-                    b.ToTable("AllLeaveDays");
+                    b.ToTable("AllLeaveDays", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.Approval", b =>
@@ -407,7 +407,7 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex(new[] { "ShiftScheduleId" }, "IX_Employees_ShiftScheduleID");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.Flextime", b =>
@@ -689,7 +689,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SpecialGrade");
+                    b.ToTable("SpecialGrade", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.SpecialHoliday", b =>
@@ -708,7 +708,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SpecialHoliday");
+                    b.ToTable("SpecialHoliday", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.User", b =>
@@ -717,6 +717,8 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Account")
                         .IsRequired()
@@ -828,7 +830,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VacationDetails");
+                    b.ToTable("VacationDetails", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Entity.AccessRoleBind", b =>
@@ -1033,7 +1035,7 @@ namespace WebApplication1.Migrations
 
                     b.HasOne("WebApplication1.Models.Entity.Employee", "IdNavigation")
                         .WithOne("User")
-                        .HasForeignKey("WebApplication1.Models.Entity.User", "Id")
+                        .HasForeignKey("WebApplication1.Models.Entity.User", "EmployeesID")
                         .IsRequired()
                         .HasConstraintName("FK_User_Employees1");
 
