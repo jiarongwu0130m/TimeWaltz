@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>@ViewBag.Title</title>
+    <link rel="icon" type="image/png" href="/mobile/assets/img/favicon.png" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="/mobile/assets/img/icon/192x192.png">
+    <link rel="stylesheet" href="/mobile/assets/css/style.css">
+    <link rel="manifest" href="/mobile/__manifest.json">
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <div>
+        <!-- loader -->
+        <div id="loader">
+            <div class="spinner-border text-primary" role="status"></div>
+        </div>
+        <!-- * loader -->
+        <!-- App Header -->
+        <partial name="_AppHeaderPartial" />
+        <!-- * App Header -->
+        <!-- Search Component -->
+        <partial name="_SearchComponentPartial" />
+        <!-- * Search Component -->
+        <div id="appCapsule">
+            @RenderBody()
+        </div>
+
+
+        <!-- App Bottom Menu -->
+        <partial name="_AppBottomMenuPartial" />
+        <!-- * App Bottom Menu -->
+        <!-- App Sidebar -->
+        <partial name="_AppSidebarPartial" />
+        <!-- * App Sidebar -->
+        <!-- welcome notification  -->
+        <partial name="_ WelcomeNotificationPartial" />
+        <!-- * welcome notification -->
+    </div>
+</body>
+<script src="/mobile/assets/js/lib/jquery-3.4.1.min.js"></script>
+<script src="/mobile/assets/js/lib/popper.min.js"></script>
+<script src="/mobile/assets/js/lib/bootstrap.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
+<script src="/mobile/assets/js/plugins/owl-carousel/owl.carousel.min.js"></script>
+<script src="/mobile/assets/js/plugins/jquery-circle-progress/circle-progress.min.js"></script>
+<script src="/mobile/assets/js/base.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@RenderSection("Scripts", required: false)
+</html>
