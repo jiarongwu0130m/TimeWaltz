@@ -134,12 +134,13 @@ namespace WebApplication1.Controllers.Api
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Delete([FromForm]int id)
+        [Route("{id}")]
+        public ActionResult Delete(int id)
         {
             try
             {
                 var entity = _personalDataService.GetPersonalDataOrNull(id);
-                _personalDataService.DeletePersonalData(entity);
+                _personalDataService.SoftDeletePersonalData(entity);
                 return Ok(new { status = true });
             }
             catch (Exception ex)

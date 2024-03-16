@@ -4,35 +4,38 @@
 
 <form asp-action="EditPersonalData" asp-asp-controller="BasicSetting" id="app">
     <section class="content">
-        <div class="card-body">           
+        <div class="card-body">
             <div class="form-group">
                 <label class="control-label">姓名</label>
-                <input class="form-control" v-model="name"/>
+                <input class="form-control" :class="validation.name" v-model="name" />
+                <span class="text-danger" v-if="!validation.name">姓名不得為空</span>
             </div>
             <div class="form-group">
                 <label class="control-label">部門</label>
-                <select class="form-control" v-model="departmentId">
+                <select class="form-control" :class="validation.departmentId" v-model="departmentId">
                     <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
-                </select>                
-                <span class="text-danger"></span>
+                </select>
+                <span class="text-danger" v-if="!validation.departmentId">部門不得為空</span>
             </div>
             <div class="form-group">
                 <label class="control-label">班別名稱</label>
                 <select class="form-control" v-model="shiftScheduleId">
                     <option v-for="item in shiftNameSelectItems" :value="item.value">{{item.text}}</option>
                 </select>
-                
-                <span class="text-danger"></span>
+                <span class="text-danger" v-if="!validation.shiftScheduleId">班別不得為空</span>
             </div>
-            
+
             <div class="form-group">
                 <label class="control-label">郵件地址</label>
-                <input class="form-control" v-model="email" />
+                <input type="email" class="form-control" :class="validation.email" v-model="email" />
+                <div class="invalid-feedback">
+                    Email格式錯誤!
+                </div>
             </div>
             <div class="card-footer">
                 <div class="row float-right">
                     <div class="col ">
-                        <input type="button" value="送出" class="btn btn-primary" @@click="send(id)" />
+                        <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit(id)" />
                         <a asp-controller="BasicSetting" asp-action="PersonalData" class="btn btn-outline-success">返回</a>
                     </div>
                 </div>
@@ -40,7 +43,7 @@
         </div>
     </section>
 </form>
-@section Scripts{
+@section Scripts {
     <script>
         Vue.createApp({
             data() {
@@ -52,9 +55,36 @@
                     email: '',
                     name: '',
                     shiftScheduleId: null,
+                    validation: {
+                        employeesNo: true,
+                        gender: true,
+                        departmentId: true,
+                        email: null,
+                        name: true,
+                        shiftScheduleId: true,
+                    },
                 }
             },
+            watch: {
+                "email": {
+                    handler(newVal, oldVal) {
+                        this.validation.email = newVal.includes('@@') ? "is-valid" : "is-invalid";
+                    },
+                    immediate: false
+                },
+            },
             methods: {
+                validateAndSubmit(id) {
+                    let isValid = true;
+                    this.validation.name = this.name == '' ? false : true;
+                    this.validation.gender = this.gender == '' ? false : true;
+                    this.validation.departmentId = this.departmentId == '' ? false : true;
+                    this.validation.employeesNo = this.employeesNo == '' ? false : true;
+                    this.validation.shiftScheduleId = this.shiftScheduleId == '' ? false : true;
+                    if (this.validation.name && this.validation.gender && this.validation.departmentId && this.validation.employeesNo) {
+                        this.send(id);
+                    }
+                },
                 send(id) {
                     let self = this;
                     fetch(`/api/PersonalDataApi/Edit/${id}`, {
@@ -69,8 +99,8 @@
                         headers: {
                             "content-type": "application/json",
                         },
-                    }).then(res => res.json()).then(result => { 
-                        console.log(result) 
+                    }).then(res => res.json()).then(result => {
+                        console.log(result)
                         if (result.status) {
                             alert("修改成功");
                         } else {

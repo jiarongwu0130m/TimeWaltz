@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models.Entity;
 
@@ -11,9 +12,11 @@ using WebApplication1.Models.Entity;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(TimeWaltzContext))]
-    partial class TimeWaltzContextModelSnapshot : ModelSnapshot
+    [Migration("20240315151659_addIsDeletePropInEmployeeTable")]
+    partial class addIsDeletePropInEmployeeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -394,7 +397,7 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsDelete")
+                    b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")

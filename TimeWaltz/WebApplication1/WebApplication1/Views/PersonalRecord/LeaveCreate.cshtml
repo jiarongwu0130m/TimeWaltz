@@ -14,13 +14,12 @@
                 <div class="form-group">
                     <label for="">請假期間</label>
                     <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="">
-
                 </div>
                 <div class="form-group">
                     <label for="">假別選擇</label>
                     <select class="form-control select2 select2-hidden-accessible"
                             style="width: 100%;" data-select2-id="1" tabindex="-1"
-                            aria-hidden="true" v-model="vacationDetailsId">
+                            aria-hidden="true" :class="validation.vacationDetailsId" v-model="vacationDetailsId">
                         <option value="">---請選擇---</option>
                         <option v-for="item in vacationDropDownList" :value="item.value">{{item.text}}</option>
                     </select>
@@ -28,12 +27,13 @@
                           dir="ltr" style="width: 100%;">
                         <span class="selection"></span>
                     </span>
+                    <span class="text-danger" v-if="!validation.vacationDetailsId">假別選擇不得為空!</span>
                 </div>
                 <div class="form-group">
                     <label for="">代理人選擇</label>
                     <select class="form-control select2 select2-hidden-accessible"
                             style="width: 100%;" data-select2-id="1" tabindex="-1"
-                            aria-hidden="true" v-model="agentEmployeeId">
+                            aria-hidden="true" :class="validation.agentEmployeeId" v-model="agentEmployeeId">
                         <option value="">---請選擇---</option>
                         <option v-for="item in agentDropDownList" :value="item.value">{{item.text}}</option>
                     </select>
@@ -41,6 +41,7 @@
                           dir="ltr" style="width: 100%;">
                         <span class="selection"></span>
                     </span>
+                    <span class="text-danger" v-if="!validation.agentEmployeeId">代理人選擇不得為空!</span>
                 </div>
                 <div class="form-group">
                     <label for="">附加檔案上傳：</label><br />
@@ -60,13 +61,14 @@
                 <div class="form-group">
                     <label>原因：</label>
                     <textarea class="form-control" rows="3"
-                              control-id="ControlID-13" v-model="reason"></textarea>
+                              control-id="ControlID-13" :class="validation.reason" v-model="reason"></textarea>
+                    <span class="text-danger" v-if="!validation.reason">請假原因不得為空!</span>
                 </div>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <input type="button" value="傳送" @@click="send"/>
+                <input type="button" value="傳送" @@click="validateAndSubmit" />
             </div>
         </div>
     </div>
@@ -89,9 +91,24 @@
                     agentEmployeeId: null,
                     leaveHours: null,
                     nameAndIdPare: [],
+                    validation: {
+                        vacationDetailsId: true,
+                        reason: true,
+                        agentEmployeeId: true,
+                        
+                    },
                 }
             },
             methods: {
+                validateAndSubmit() {
+                    let isValid = true;
+                    this.validation.vacationDetailsId = this.vacationDetailsId == null ? false : true;
+                    this.validation.reason = this.reason == '' ? false : true;
+                    this.validation.agentEmployeeId = this.agentEmployeeId == null ? false : true;
+                    if (this.validation.vacationDetailsId && this.validation.reason && this.validation.agentEmployeeId) {
+                        this.send();
+                    }
+                },
                 change(e) {
                     let self = this;
                     console.log(e.target.files[0])
@@ -108,7 +125,6 @@
                         self.leaveHours = 0;
                     }
                     var formData = new FormData()
-                    formData.append('employeesName', self.name)
                     formData.append('startTime', self.startTime)
                     formData.append('endTime', self.endTime)
                     formData.append('employeesId', self.employeesId)
@@ -124,10 +140,10 @@
                         console.log(result);
                         if(result.status == true){
                             alert("申請成功送出!")
-                            location.href = '/basicsseting/Leave'
+                            location.href = '/personalrecord/Leave'
                         }else{
                             alert("申請失敗!")
-                            location.href = '/basicsseting/LeaveCreate'
+                            location.href = '/personalrecord/LeaveCreate'
                         }
                     })
                 },

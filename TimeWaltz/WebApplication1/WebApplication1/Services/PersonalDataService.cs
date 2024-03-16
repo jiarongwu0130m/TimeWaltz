@@ -21,15 +21,16 @@ namespace WebApplication1.Services
             {
                 throw new ArgumentNullException("新增錯誤");
             }
+            entity.IsDelete = false;
             _timeWaltzContext.Employees.Add(entity);
             _timeWaltzContext.SaveChanges();
 
 
         }
 
-        public void DeletePersonalData(Employee entity)
+        public void SoftDeletePersonalData(Employee entity)
         {
-            _timeWaltzContext.Employees.Remove(entity);
+            entity.IsDelete = true;
             _timeWaltzContext.SaveChanges();
         }
 
@@ -53,6 +54,7 @@ namespace WebApplication1.Services
         {
             
             var entities = _timeWaltzContext.Employees
+                .Where(x=>x.IsDelete == false)
                 .Join(_timeWaltzContext.Departments, e => e.DepartmentId, d => d.Id, (e, d) => new Employee
                 {
                     Id = e.Id,
@@ -89,14 +91,14 @@ namespace WebApplication1.Services
         public Employee? GetPersonalDataOrNull(int id)
         {
 
-            return _timeWaltzContext.Employees.FirstOrDefault(x=>x.Id == id);
+            return _timeWaltzContext.Employees.Where(x=>x.IsDelete == false).FirstOrDefault(x=>x.Id == id);
         }
 
 
 
         public void EditPersonalData(PersonalDataEditDto model)
         {
-            var entity = _timeWaltzContext.Employees.FirstOrDefault(e => e.Id == model.Id);
+            var entity = _timeWaltzContext.Employees.Where(x => x.IsDelete == false).FirstOrDefault(e => e.Id == model.Id);
             entity.DepartmentId = model.DepartmentId;
             entity.ShiftScheduleId = model.ShiftScheduleId;
             entity.Name = model.Name;

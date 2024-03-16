@@ -46,7 +46,7 @@ namespace WebApplication1.Helpers
                 Name = entity.Name,
                 HireDate = entity.HireDate,
                 Email = entity.Email,
-                Gender = entity.Gender,
+                Gender = entity.Gender.ToString(),
                 EmployeesNo = entity.EmployeesNo,
 
             };

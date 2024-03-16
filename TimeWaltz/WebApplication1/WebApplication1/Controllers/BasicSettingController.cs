@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
             {
                 return RedirectToAction("PersonalData");
             }
-            _personalDataService.DeletePersonalData(entity);
+            _personalDataService.SoftDeletePersonalData(entity);
             return RedirectToAction("PersonalData");
         }
 

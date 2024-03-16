@@ -170,17 +170,14 @@
             methods: {
                 getOut(id, event) {
                     let self = this
-                    const fd = new FormData();
-                    fd.append("Id", id);
-                    console.debug('delete:', id);
                     event.preventDefault();
-                    fetch(`/api/PersonalDataApi/Delete`, {
-                        body: fd,
+                    fetch(`/api/PersonalDataApi/Delete/${id}`, {
                         method: "POST",
 
                     }).then(res => res.json()).then(result => {
                         if (result.status) {
                             alert("刪除成功")
+                            this.getEmpList();
                         } else {
                             alert("刪除失敗")
                         }

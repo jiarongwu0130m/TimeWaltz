@@ -93,7 +93,7 @@ namespace WebApplication1.Services
                     StartTime = lvedaapr.lvedaap.lveda.lved.lve.lv.l.StartTime,
                     EndTime = lvedaapr.lvedaap.lveda.lved.lve.lv.l.EndTime,
                     EmployeeName = lvedaapr.lvedaap.lveda.lved.lve.e.Name,
-                }).ToList();
+                }).Distinct().ToList();
             return entities;
         }
         /// <summary>

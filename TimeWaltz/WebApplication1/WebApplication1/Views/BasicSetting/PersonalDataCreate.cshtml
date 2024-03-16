@@ -7,31 +7,33 @@
         <div class="card-body">
             <div class="form-group">
                 <label class="control-label">姓名</label>
-                <input class="form-control" :class="validation.name" v-model.lazy.trim="name" />
-                <span class="text-danger"></span>
+                <input class="form-control" :class="validation.name" v-model.trim="name" />
+
+                <span class="text-danger" v-if="!validation.name">姓名不得為空</span>
             </div>
             <div class="form-group">
                 <label class="control-label">性別</label>
-                <select class="form-control" :class="validation" v-model="gender">
+                <select class="form-control" :class="validation.gender" v-model="gender">
+                    <option value="" disabled>請選擇</option>
                     <option v-for="item in genderSelectItems" :value="item.value">{{item.text}}</option>
                 </select>
-                <span class="text-danger"></span>
+                <span class="text-danger" v-if="!validation.gender">性別不得為空</span>
             </div>
             <div class="form-group">
                 <label class="control-label">部門</label>
-                <select class="form-control" :class="validation" v-model="departmentId">
-                    <option value="">請選擇</option>
+                <select class="form-control" :class="validation.departmentId" v-model="departmentId">
+                    <option value="" disabled>請選擇</option>
                     <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
                 </select>
-                <span class="text-danger"></span>
+                <span class="text-danger" v-if="!validation.departmentId">部門不得為空</span>
             </div>
             <div class="form-group">
                 <label class="control-label">班別</label>
-                <select class="form-control" :class="validation" v-model="shiftScheduleId">
-                    <option value="">請選擇</option>
+                <select class="form-control" v-model="shiftScheduleId">
+                    <option value="" disabled>請選擇</option>
                     <option v-for="item in shiftNameSelectItems" :value="item.value">{{item.text}}</option>
                 </select>
-                <span class="text-danger"></span>
+                <span class="text-danger" v-if="!validation.shiftScheduleId">班別不得為空</span>
             </div>
             <div class="form-group">
                 <label class="control-label">入職日期</label>
@@ -41,21 +43,20 @@
             <div class="form-group">
                 <label class="control-label">Email</label>
                 <input type="email" name="Email" class="form-control" :class="validation.email" v-model="email" />
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
                 <div class="invalid-feedback">
-                    Please choose a username.
+                    Email格式錯誤!
                 </div>
-                <span class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">員工編號</label>
-                <input name="EmployeesNo" class="form-control" v-model="employeesNo" />
-                <span class="text-danger"></span>
-            </div>
+                <input name="EmployeesNo" class="form-control" :class="validation.employeesNo" v-model="employeesNo" />
+                <div class="invalid-feedback">
+                    員工編號不得為空!
+                </div>
+                <span class="text-danger" v-if="!validation.employeesNo">員工編號不得為空</span>
+        </div>
             <div class="form-group">
-                <input type="button" value="新增" @@click="send" class="btn btn-primary" />
+                <input type="button" value="新增" @@click="validateAndSubmit" class="btn btn-primary" />
             </div>
         </div>
         <div>
@@ -86,26 +87,23 @@
                     gender: '',
                     employeesNo: '',
                     today: null,
+                    validation: {
+                        employeesNo: true,
+                        gender: true,
+                        departmentId: true,
+                        email: null,
+                        name: true,
+                        shiftScheduleId: true,
+                    },
                 }
             },
             watch: {
-                "form.email": {
+                "email": {
                     handler(newVal, oldVal) {
-                        this.apiTime++;
-                        var exist = ["reds1210@gmail.com", "esther0908@gmail.com"];
-                        this.validation.email = exist.includes(newVal) ? "is-invalid" : "is-valid";
+                        this.validation.email = newVal.includes('@@') ? "is-valid" : "is-invalid";
                     },
                     immediate: false
-                },
-                arr(n) {
-                    console.log(n);
-                },
-                "obj": {
-                    deep: true,
-                    handler(n) {
-                        console.log(n);
-                    }
-                }
+                }, 
             },
             methods: {
                 getToday() {
@@ -124,6 +122,17 @@
                     }, function (start, _, _) {
                         self.hireDate = start.format("YYYY-MM-DD");
                     });
+                },
+                validateAndSubmit(){
+                    let isValid = true;
+                    this.validation.name = this.name == '' ? false : true;
+                    this.validation.gender = this.gender == '' ? false : true;
+                    this.validation.departmentId = this.departmentId == '' ? false : true;
+                    this.validation.employeesNo = this.employeesNo == '' ? false : true;
+                    this.validation.shiftScheduleId = this.shiftScheduleId == '' ? false : true;
+                    if (this.validation.name && this.validation.gender && this.validation.departmentId && this.validation.employeesNo && this.shiftScheduleId) {
+                        this.send();
+                    }
                 },
                 send: function () {
                     let self = this;
@@ -149,7 +158,6 @@
                             location.href = "/BasicSetting/PersonalData"
                         } else {
                             alert("新增失敗");
-                            location.href = "/BasicSetting/personalDataCreate"
                         }
                     })
                 },
@@ -158,9 +166,9 @@
                     fetch("/api/PersonalDataApi/DropDownList").then(res => res.json())
                         .then(result => {
                             console.log(result);
-                            const selectItems = [{ disabled: false, group: null, selected: true, text: '請選擇', value: '' }, ...result.genderSelectItems]
-                            console.log(selectItems)
-                            self.genderSelectItems = selectItems;
+                            // const selectItems = [{ disabled: true, group: null, selected: true, text: '請選擇', value: '' }, ...result.genderSelectItems]
+                            // console.log(selectItems)
+                            self.genderSelectItems = result.genderSelectItems;
 
                         })
                 },

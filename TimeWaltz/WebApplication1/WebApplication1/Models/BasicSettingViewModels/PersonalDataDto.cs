@@ -16,7 +16,7 @@ namespace WebApplication1.Models.BasicSettingViewModels
 
         public string? Email { get; set; }
 
-        public GenderEnum Gender { get; set; }
+        public string Gender { get; set; }
 
         public string EmployeesNo { get; set; } 
   

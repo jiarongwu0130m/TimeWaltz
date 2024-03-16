@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication1.Models.Enums;
 
@@ -22,6 +23,8 @@ public partial class Employee
     public GenderEnum Gender { get; set; }
 
     public string EmployeesNo { get; set; } = null!;
+    [DefaultValue(false)]
+    public bool IsDelete { get; set; }
     [NotMapped]
     public string? ShiftsName { get; set; }
     [NotMapped]
