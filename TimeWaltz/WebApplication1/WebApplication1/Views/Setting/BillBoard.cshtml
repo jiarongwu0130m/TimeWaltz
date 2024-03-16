@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.title = "編輯公佈欄";
+}
+
+@section Sylesheets {
+
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-body">
+                <div id="editor">This is some sample content.</div>
+            </div>
+
+            <div class="card-footer">
+                <input type="button" class="btn btn-outline-primary" value="api送出" />
+                <input type="button" class="btn btn-outline-dark" value="取消" />
+            </div>
+
+            @* <div class="card-footer">
+            <input type="button" @@click="sendOvertimeRequest" class="btn btn-outline-primary" value="api送出" />
+            <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" />
+            </div> *@
+
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
+    
+    <script>
+
+        ClassicEditor
+            .create(document.querySelector(
+                '#editor'), {
+                toolbar: ['undo', 'redo',
+                    '|', 'heading',
+                    '|', 'bold', 'italic',
+                    '|', 'link', 'insertTable',
+                    '|', 'Blockquote',
+                    '|', 'bulletedList', 'numberedList',
+                    '|', 'outdent', 'indent']
+            })
+            .then(editor => {
+                console.log(editor);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+    </script>
+}
