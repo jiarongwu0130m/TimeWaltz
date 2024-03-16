@@ -44,7 +44,6 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-
                 var entity = ViewModelHelper.ToEntity(dto);
                 _overtimeRequestService.CreateOvertimeRequest(entity);              
                 return true;

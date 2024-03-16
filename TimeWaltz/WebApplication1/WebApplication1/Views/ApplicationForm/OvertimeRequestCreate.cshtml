@@ -1,56 +1,52 @@
 ﻿@{
     ViewBag.title = "加班申請單";
 }
-@model WebApplication1.Models.ApplicationFormViewModels.OvertimeCreateViewModel
-<form asp-controller="ApplicationForm" asp-action="OvertimeRequestCreate" method="post">
-    <div class="row" id="app">
-        <div class="col-md">
-            <div class="card-body">
-                <div class="row mb-2">
-                    <label class="col-form-label">申請人：</label>
-                    <input type="text" class="col-sm-2 form-control" v-model="empName" readonly>
-                    <div class="col-sm-auto ml-auto">
-                        <label class="border rounded border-success  text-green p-1 pull-right">編輯中</label>
-                    </div>
+<div class="row" id="app">
+    <div class="col-md">
+        <div class="card-body">
+            <div class="row mb-2">
+                <label class="col-form-label">申請人：</label>
+                <input type="text" class="col-sm-2 form-control" v-model="empName" readonly>
+                <div class="col-sm-auto ml-auto">
+                    <label class="border rounded border-success  text-green p-1 pull-right">編輯中</label>
                 </div>
+            </div>
 
-                <div class="row mb-2">
-                    <label class="col-form-label">加班期間：</label>
-                    <input id="timeRange" type="datetime" class="form-control col-6">
-                    <input type="hidden" v-model="startTime" />
-                    <input type="hidden" v-model="endTime" />
-
-                </div>
-
-                <div class="row mb-2" v-if="isValid(startTime)">
-                    <label class="col-form-label text-green">加班時數：{{ overtimeResult }}</label>
-                </div>
-
-                <div class="row mb-2">
-                    <div class="input-group">
-                        <div class="input-group-prepend mr-1">
-                            <span class="input-group-text">
-                                <input type="checkbox" id="ovetimeCheck" v-model="status">
-                            </span>
-                        </div>
-                        <label for="ovetimeCheck" class="mb-0" style="">加班轉補休</label>
-                    </div>
-                </div>
-
-                <div class="row mb-2">
-                    <label class="col-form-label">加班原因：</label>
-                    <textarea cols="5" rows="5" class="form-control" v-model="reason"></textarea>
-                </div>
+            <div class="row mb-2">
+                <label class="col-form-label">加班期間：</label>
+                <input id="timeRange" type="datetime" class="form-control col-6">
+                <input type="hidden" v-model="startTime" />
+                <input type="hidden" v-model="endTime" />
 
             </div>
-            <div class="card-footer">
-                <input type="button" @@click="sendOvertimeRequest" class="btn btn-outline-primary" value="api送出" />
-                <button id="dataSend" type="submit" class="btn btn-outline-primary">送出</button>
-                <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" />
+
+            <div class="row mb-2" v-if="isValid(startTime)">
+                <label class="col-form-label text-green">加班時數：{{ overtimeResult }}</label>
             </div>
+
+            <div class="row mb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend mr-1">
+                        <span class="input-group-text">
+                            <input type="checkbox" id="ovetimeCheck" v-model="status">
+                        </span>
+                    </div>
+                    <label for="ovetimeCheck" class="mb-0" style="">加班轉補休</label>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-form-label">加班原因：</label>
+                <textarea cols="5" rows="5" class="form-control" v-model="reason"></textarea>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <input type="button" @@click="sendOvertimeRequest" class="btn btn-outline-primary" value="送出" />            
+            <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" />
         </div>
     </div>
-</form>
+</div>
 
 
 @section Scripts {
@@ -81,6 +77,16 @@
 
                 getTimeRange() {
                     let self = this;
+                    var options = {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric'
+                    };
+
                     $('#timeRange').daterangepicker({
                         "startDate": this.getToday(),
                         "endDate": this.getToday(),
@@ -91,12 +97,9 @@
                         }
                     },
                         function (start, end, _) {
-                            self.startTime = new Date(start);
-                            self.endTime = new Date(end);
-                            self.countOvertimeMins();
-                            // self.starttime = moment(self.starttime);
-                            // self.endtime = moment(self.endtime);
-                            console.log(self.startTime, self.endTime);
+                            self.startTime = start;
+                            self.endTime = end;
+                            self.countOvertimeMins();                            
                         });
                 },
                 getToday() {
@@ -125,15 +128,18 @@
                 },
                 sendOvertimeRequest() {
                     let self = this;
+                    self.startTime = self.startTime.utc(true).toISOString();
+                    self.endTime = self.endTime.utc(true).toISOString();
+                    
                     axios.post("/api/OvertimeApplicationsApi/Create", {
                         startTime: self.startTime,
                         endTime: self.endTime,
                         reason: self.reason,
                         status: self.status,
-                    }).then(response => {
-                        console.log(response);
+                    }).then(response => {                        
                         if (response.data == true) {
                             alert("新增成功");
+                            location.href = "/ApplicationForm/OvertimeRequest";
                         } else {
                             alert("新增失敗");
                         }
