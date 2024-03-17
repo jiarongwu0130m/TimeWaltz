@@ -24,6 +24,7 @@ namespace WebApplication1
             builder.Services.AddScoped<PersonalDataService>();
             builder.Services.AddScoped<DepartmentService>();
             builder.Services.AddScoped<CompRequestService>();
+            builder.Services.AddScoped<OvertimeRequestService>();
             builder.Services.AddTransient<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
             builder.Services.AddScoped<AgentEmployeeService>();
@@ -38,6 +39,13 @@ namespace WebApplication1
                 .UseRecommendedSerializerSettings()
                 .UseSqlServerStorage(builder.Configuration.GetConnectionString("TimeWaltz")));
             builder.Services.AddHangfireServer();
+
+
+            builder.Services.AddScoped<AccessService>();
+            builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<DropDownBasicSettingService>();
+
+
             builder.Services.AddCors(opt =>
             {
                 opt.AddPolicy("forWeb", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());

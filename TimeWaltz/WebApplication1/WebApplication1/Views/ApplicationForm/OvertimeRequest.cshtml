@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.title = "加班申請單據";
+}
+
+<div class="row" id="app">
+    <div class="col-12">
+        <div class="row mb-3">
+            <label class="col-form-label col-auto">加班日期查詢：</label>
+            <div class="input-group date col-5 col-md-3" id="reservationdate">
+                <div class="input-group-append">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+                <input name="QueryOvertime" type="text" class="form-control" autocomplete="off" v-model="searchDate">
+
+            </div>
+            <div class="col-auto ml-auto">
+                <button @@click="toCreate" class="btn btn-outline-success pull-right">新增</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <table id="example2" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th v-bind:title="title('date')">{{ title('date') }}</th>
+                    <th v-bind:title="title('startTime')">{{ title('startTime') }}</th>
+                    <th v-bind:title="title('endTime')">{{ title('endTime') }}</th>
+                    <th v-bind:title="title('details')">{{ title('details') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="text-center" v-for="item in allOvertimeRequest">
+                    <td>{{formatToDate(item.overtimeDate)}}</td>
+                    <td>{{formatToTime(item.startTime)}}</td>
+                    <td>{{formatToTime(item.endTime)}}</td>
+                    <td>
+                        <button @@click="toDetail(item.id,$event)" class="btn btn-outline-primary">檢視</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    searchDate: '',
+                    date: '',
+                    // startTime:'',
+                    // endTime:'',
+                    allOvertimeRequest: [],
+                    originalCompRequests: []
+                }
+            },
+            computed: {
+                title() {
+                    return key => {
+                        const localizationData = {
+                            'date': '加班日期',
+                            'startTime': '開始時間',
+                            'endTime': '結束時間',
+                            'details': '詳細資料'
+                        };
+                        return localizationData[key] || key;
+                    };
+                }
+            },
+            methods: {
+                formatToDate(dateTimeString) {
+                    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                    const date = new Date(dateTimeString);
+                    return date.toLocaleDateString('zh-TW', options);
+                },
+                formatToTime(dateTimeString) {
+                    const options = { hour: 'numeric', minute: '2-digit' };
+                    const date = new Date(dateTimeString);
+                    return date.toLocaleTimeString('zh-TW', options);
+                },
+                searchOvertimeRequests() {
+                    if (this.searchDate.trim() !== '') {
+                        const filteredCompRequests = this.originalCompRequests.filter(item => {
+                            const requestDate = new Date(item.overtimeDate);
+                            const selectedDate = new Date(this.searchDate);
+                            return requestDate >= selectedDate;
+                        });
+                        this.allOvertimeRequest = filteredCompRequests;
+                    }
+                },
+                toCreate() {
+                    location.href = "/ApplicationForm/OvertimeRequestCreate";
+                },
+                toDetail(id, event) {
+                    event.preventDefault();
+                    location.href = `/ApplicationForm/OvertimeRequestDetail/${id}`;
+                }
+            },
+            mounted() {
+
+                const dateInputRef = document.querySelector('#reservationdate');
+
+                $(dateInputRef).daterangepicker({
+                    singleDatePicker: true,
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                }).on('apply.daterangepicker', (ev, picker) => {
+                    this.searchDate = picker.startDate.format('YYYY/MM/DD');
+                    dateInputRef.value = this.searchDate;
+                    this.searchOvertimeRequests();
+                });
+
+                fetch("/api/OvertimeApplicationsApi/GetOvertimeList")
+                    .then(res => res.json())
+                    .then(result => {
+                        this.allOvertimeRequest = result;
+                        this.originalCompRequests = result;
+                    });
+            }
+        }).mount('#app')
+    </script>
+}

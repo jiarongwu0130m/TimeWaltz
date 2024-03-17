@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Areas.Employee.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.Enums;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,103 +19,118 @@ namespace WebApplication1.Controllers.Api
         {
             _timeWaltzDb = timeWaltzDb;
         }
-
-        //[HttpGet]
-        //public bool Info()
-        //{
-        //    var empId = User.GetEmployeeId();
-        //    var allClock = _timeWaltzDb.Clocks.Where(x => x.EmployeesId == empId &&
-        //    EF.Functions.DateDiffDay(x.Date, DateTime.Now) == 0);
-
-        //    allClock.GroupBy(x => x.Status).Select(x=>new { 
-                
-        //    });
-
-        //}
-        [HttpPost]
-        public bool On(ClockOnDto dto)
-        {
-            return OnAndOff(dto, Models.Enums.ClockStatusEnum.上班打卡);
-        }
-
-        [HttpPost]
-        public bool Off(ClockOnDto dto)
-        {
-            return OnAndOff(dto, Models.Enums.ClockStatusEnum.下班打卡);
-        }
-
-
-        [NonAction]
-        public bool OnAndOff(ClockOnDto dto, Models.Enums.ClockStatusEnum status)
+        [HttpGet]
+        public object ShiftSchedule()
         {
             var empId = User.GetEmployeeId();
-            
-
-            try
+            var shift = _timeWaltzDb.Shifts.Include(shift => shift.ShiftSchedule).FirstOrDefault(x => x.EmployeesId == empId && EF.Functions.DateDiffDay(x.ShiftsDate, DateTime.Now) == 0);
+            if (shift == null) return new { onTime = "", offTime = "" };
+            return new
             {
-                _timeWaltzDb.Clocks.Add(new Clock
-                {
-                    Date = DateTime.Now,
-                    EmployeesId = empId,
-                    Latitude = dto.Latitude,
-                    Longitude = dto.Longitude,
-                    Status = status
-                });
+                onTime = shift.ShiftSchedule.StartTime,
+                offTime = shift.ShiftSchedule.EndTime,
+            };
 
-                _timeWaltzDb.SaveChanges();
-                return true;
-            }
-            catch (Exception)
-            {
-
-                return false;
-            }
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetEmpClocks(int id, [FromQuery] DateTime date)
-        {
-            var clockResult = _timeWaltzDb.Clocks
-                .Where(x => x.EmployeesId == id && x.Date.Date == date);
-
-            if (clockResult == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(clockResult);
-        }
-
-        // GET: api/<ClockApiController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public object Info()
         {
-            return new string[] { "value1", "value2" };
-        }
+            var empId = User.GetEmployeeId();
+            var allClock = _timeWaltzDb.Clocks.Where(x => x.EmployeesId == empId &&
+            EF.Functions.DateDiffDay(x.Date, DateTime.Now) == 0).AsEnumerable();
 
-        // GET api/<ClockApiController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+            return new
+            {
+                On = allClock.Where(x => x.Status == ClockStatusEnum.上班打卡).MinBy(x => x.Date),
+                Off = allClock.Where(x => x.Status == ClockStatusEnum.下班打卡).MaxBy(x => x.Date),
+            };
 
-        // POST api/<ClockApiController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+            //}
+            [HttpPost]
+            public bool On(ClockOnDto dto)
+            {
+                return OnAndOff(dto, Models.Enums.ClockStatusEnum.上班打卡);
+            }
 
-        // PUT api/<ClockApiController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            [HttpPost]
+            public bool Off(ClockOnDto dto)
+            {
+                return OnAndOff(dto, Models.Enums.ClockStatusEnum.下班打卡);
+            }
 
-        // DELETE api/<ClockApiController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+
+            [NonAction]
+            public bool OnAndOff(ClockOnDto dto, Models.Enums.ClockStatusEnum status)
+            {
+                var empId = User.GetEmployeeId();
+
+
+                try
+                {
+                    _timeWaltzDb.Clocks.Add(new Clock
+                    {
+                        Date = DateTime.Now,
+                        EmployeesId = empId,
+                        Latitude = dto.Latitude,
+                        Longitude = dto.Longitude,
+                        Status = status
+                    });
+
+                    _timeWaltzDb.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+
+                    return false;
+                }
+            }
+
+            [HttpGet("{id}")]
+            public IActionResult GetEmpClocks(int id, [FromQuery] DateTime date)
+            {
+                var clockResult = _timeWaltzDb.Clocks
+                    .Where(x => x.EmployeesId == id && x.Date.Date == date);
+
+                if (clockResult == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(clockResult);
+            }
+
+            // GET: api/<ClockApiController>
+            [HttpGet]
+            public IEnumerable<string> Get()
+            {
+                return new string[] { "value1", "value2" };
+            }
+
+            // GET api/<ClockApiController>/5
+            [HttpGet("{id}")]
+            public string Get(int id)
+            {
+                return "value";
+            }
+
+            // POST api/<ClockApiController>
+            [HttpPost]
+            public void Post([FromBody] string value)
+            {
+            }
+
+            // PUT api/<ClockApiController>/5
+            [HttpPut("{id}")]
+            public void Put(int id, [FromBody] string value)
+            {
+            }
+
+            // DELETE api/<ClockApiController>/5
+            [HttpDelete("{id}")]
+            public void Delete(int id)
+            {
+            }
         }
     }
-}

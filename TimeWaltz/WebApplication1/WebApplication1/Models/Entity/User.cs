@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models.Entity;
 
 public partial class User
 {
     public int Id { get; set; }
-
     public int? EmployeesId { get; set; }
 
     public int DepartmentId { get; set; }
@@ -20,6 +20,13 @@ public partial class User
     public bool Stop { get; set; }
 
     public string Salt { get; set; } = null!;
+
+    [NotMapped]
+    public string? EmployeesName { get; set; }
+
+    [NotMapped]
+    public string? DepartmentName { get; set; }
+
 
     public virtual Department Department { get; set; } = null!;
 

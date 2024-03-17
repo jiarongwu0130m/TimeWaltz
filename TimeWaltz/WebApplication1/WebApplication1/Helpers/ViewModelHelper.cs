@@ -1,10 +1,12 @@
-﻿using System.Drawing;
+using System.Drawing;
+using WebApplication1.Models.Enums;
+using WebApplication1.Models.PersonalRecordViewModels;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
-using WebApplication1.Models.PersonalRecordViewModels;
+using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Helpers
 {
@@ -21,7 +23,7 @@ namespace WebApplication1.Helpers
                 Reason = model.Reason,
                 FileRoute = model.RelativeFileRoute,
                 AgentEmployeeId = model.AgentEmployeeId,
-                LeaveHours = model.LeaveHours,     
+                LeaveHours = model.LeaveHours,
                 ApprovalEmployeeId = model.ApprovalEmployeeId,
             };
             return entity;
@@ -78,7 +80,7 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-       
+
         public static PublicHoliday ToEntity(PublicHolidayCreateViewModel model)
         {
             var entity = new PublicHoliday
@@ -92,7 +94,7 @@ namespace WebApplication1.Helpers
         public static Department ToEntity(DepartmentCreateViewModel model)
         {
             var entity = new Department
-            {                
+            {
                 DepartmentName = model.DepartmentName,
                 EmployeesId = model.EmployeesId,
             };
@@ -118,6 +120,34 @@ namespace WebApplication1.Helpers
             {
                 SpecialVacationName = dto.SpecialVacationName,
                 Date = dto.Date,
+            }
+            return entity;
+        }
+        public static OvertimeApplication ToEntity(OvertimeRequestDto dto)
+        {
+            var entity = new OvertimeApplication
+            {
+                EmployeesId = 1,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Status = dto.Status,
+                Reason = dto.Reason,
+                ApprovalEmployeeId = 2,
+            };
+            return entity;
+        }
+
+        public static User ToEntity(UserViewModel model)
+        {
+
+            var entity = new User
+            {
+                Account = model.Account,
+                //Password = model.Password,
+                EmployeesId = model.EmployeesID,
+                DepartmentId = (int)model.DepartmentID,
+                Stop = model.Stop == 1 ? true : false,
+                PasswordDate = DateTime.Now
             };
             return entity;
         }

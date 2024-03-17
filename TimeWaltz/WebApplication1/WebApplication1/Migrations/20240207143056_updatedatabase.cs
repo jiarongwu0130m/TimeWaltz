@@ -99,6 +99,11 @@ namespace WebApplication1.Migrations
                 {
                     table.PrimaryKey("PK_Flextime", x => x.ID);
                 });
+            migrationBuilder.InsertData(
+                        table: "Flextime",
+                        columns: new[] { "FlexibleTime", "MoveUp" },
+                        values: new object[] { 0, true }
+                        );
 
             migrationBuilder.CreateTable(
                 name: "PublicHoliday",
@@ -444,7 +449,8 @@ namespace WebApplication1.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeesID = table.Column<int>(type: "int", nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: false),
                     Account = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -463,13 +469,8 @@ namespace WebApplication1.Migrations
                         principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_User_Employees1",
-                        column: x => x.ID,
+                        column: x => x.EmployeesID,
                         principalTable: "Employees",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_User_UserOfDepartment",
-                        column: x => x.ID,
-                        principalTable: "UserOfDepartment",
                         principalColumn: "ID");
                 });
 

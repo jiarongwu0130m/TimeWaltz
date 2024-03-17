@@ -10,6 +10,7 @@ using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
 using WebApplication1.Models.PersonalRecordViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Helpers
 {
@@ -21,7 +22,6 @@ namespace WebApplication1.Helpers
         {
             _dbContext = timeWaltzContext;
         }
-
 
         public static List<PersonalDataDto> ToPersonalListDto(List<Employee> entities)
         {
@@ -36,8 +36,6 @@ namespace WebApplication1.Helpers
 
         public static PersonalDataDto ToPersonalDto(Employee entity)
         {
-
-
             var model = new PersonalDataDto
             {
                 Id = entity.Id,
@@ -312,6 +310,36 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
+
+        public static UserEditViewModel ToEditViewModel(User entity)
+        {
+            var model = new UserEditViewModel
+            {
+                Id = entity.Id,
+                DepartmentName = entity.DepartmentId,
+                EmployeesName = entity.EmployeesId,
+            };
+            return model;
+        }
+        public static UserViewModel ToViewModel(User entity)
+        {
+            var model = new UserViewModel
+            {
+                Id = entity.Id,
+                Account = entity.Account,
+                Stop = entity.Stop ? 1 : 0,
+            };
+            return model;
+        }
+        public static List<UserViewModel> ToViewModel(List<User> entities)
+        {
+            var models = new List<UserViewModel>(); foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
         public static List<CompRequestViewModel> ToViewModel(List<AdditionalClockIn> entities)
         {
             var models = new List<CompRequestViewModel>();
@@ -339,7 +367,8 @@ namespace WebApplication1.Helpers
 
         public static EmployeeAndIdPareDto GetNameAndIdPare(Employee entity)
         {
-            var model = new EmployeeAndIdPareDto{
+            var model = new EmployeeAndIdPareDto
+            {
                 EmployeesId = entity.Id,
                 EmployeesName = entity.Name,
             };
@@ -350,7 +379,7 @@ namespace WebApplication1.Helpers
         {
             var models = new List<LeaveDto>();
 
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 var model = new LeaveDto
                 {
@@ -373,9 +402,9 @@ namespace WebApplication1.Helpers
         {
             var model = new LeaveEditDto
             {
-               
+
                 Name = entity.EmployeeName,
-                TimeRange = entity.StartTime.ToString("yyyy-MM-dd HH:mm") + "~" +entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                TimeRange = entity.StartTime.ToString("yyyy-MM-dd HH:mm") + "~" + entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
                 VacationType = entity.VacationType,
                 ApprovalEmpName = entity.ApporvalEmpName,
                 AgentEmployeeName = entity.AgentEmployeeName,
@@ -386,5 +415,44 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
+        public static List<OvertimeViewModel> ToViewModel(List<OvertimeApplication> entities)
+        {
+            var models = new List<OvertimeViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
+
+        public static OvertimeViewModel ToViewModel(OvertimeApplication entity)
+        {
+            var model = new OvertimeViewModel
+            {
+                Id = entity.Id,
+                OvertimeDate = entity.StartTime,
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
+                EmployeesId = entity.EmployeesId,
+                Reason = entity.Reason,
+                Status = entity.Status,
+                ApprovalEmployeeId = entity.ApprovalEmployeeId,
+            };
+            return model;
+        }
+
+
+        public static EmpIdNameGet GetNameAndIdPare(Employee entity)
+        {
+            var model = new EmpIdNameGet
+            {
+                EmployeeId = entity.Id,
+                EmployeeName = entity.Name,
+            };
+
+            return model;
+        }
+
     }
 }
