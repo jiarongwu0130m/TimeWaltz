@@ -46,91 +46,92 @@ namespace WebApplication1.Controllers.Api
                 Off = allClock.Where(x => x.Status == ClockStatusEnum.下班打卡).MaxBy(x => x.Date),
             };
 
-            //}
-            [HttpPost]
-            public bool On(ClockOnDto dto)
+        }
+        [HttpPost]
+        public bool On(ClockOnDto dto)
+        {
+            return OnAndOff(dto, Models.Enums.ClockStatusEnum.上班打卡);
+        }
+
+        [HttpPost]
+        public bool Off(ClockOnDto dto)
+        {
+            return OnAndOff(dto, Models.Enums.ClockStatusEnum.下班打卡);
+        }
+
+
+        [NonAction]
+        public bool OnAndOff(ClockOnDto dto, Models.Enums.ClockStatusEnum status)
+        {
+            var empId = User.GetEmployeeId();
+
+
+            try
             {
-                return OnAndOff(dto, Models.Enums.ClockStatusEnum.上班打卡);
-            }
-
-            [HttpPost]
-            public bool Off(ClockOnDto dto)
-            {
-                return OnAndOff(dto, Models.Enums.ClockStatusEnum.下班打卡);
-            }
-
-
-            [NonAction]
-            public bool OnAndOff(ClockOnDto dto, Models.Enums.ClockStatusEnum status)
-            {
-                var empId = User.GetEmployeeId();
-
-
-                try
+                _timeWaltzDb.Clocks.Add(new Clock
                 {
-                    _timeWaltzDb.Clocks.Add(new Clock
-                    {
-                        Date = DateTime.Now,
-                        EmployeesId = empId,
-                        Latitude = dto.Latitude,
-                        Longitude = dto.Longitude,
-                        Status = status
-                    });
+                    Date = DateTime.Now,
+                    EmployeesId = empId,
+                    Latitude = dto.Latitude,
+                    Longitude = dto.Longitude,
+                    Status = status
+                });
 
-                    _timeWaltzDb.SaveChanges();
-                    return true;
-                }
-                catch (Exception)
-                {
-
-                    return false;
-                }
+                _timeWaltzDb.SaveChanges();
+                return true;
             }
-
-            [HttpGet("{id}")]
-            public IActionResult GetEmpClocks(int id, [FromQuery] DateTime date)
+            catch (Exception)
             {
-                var clockResult = _timeWaltzDb.Clocks
-                    .Where(x => x.EmployeesId == id && x.Date.Date == date);
 
-                if (clockResult == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(clockResult);
-            }
-
-            // GET: api/<ClockApiController>
-            [HttpGet]
-            public IEnumerable<string> Get()
-            {
-                return new string[] { "value1", "value2" };
-            }
-
-            // GET api/<ClockApiController>/5
-            [HttpGet("{id}")]
-            public string Get(int id)
-            {
-                return "value";
-            }
-
-            // POST api/<ClockApiController>
-            [HttpPost]
-            public void Post([FromBody] string value)
-            {
-            }
-
-            // PUT api/<ClockApiController>/5
-            [HttpPut("{id}")]
-            public void Put(int id, [FromBody] string value)
-            {
-            }
-
-            // DELETE api/<ClockApiController>/5
-            [HttpDelete("{id}")]
-            public void Delete(int id)
-            {
+                return false;
             }
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetEmpClocks(int id, [FromQuery] DateTime date)
+        {
+            var clockResult = _timeWaltzDb.Clocks
+                .Where(x => x.EmployeesId == id && x.Date.Date == date);
+
+            if (clockResult == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(clockResult);
+        }
+
+        // GET: api/<ClockApiController>
+        [HttpGet]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        // GET api/<ClockApiController>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            return "value";
+        }
+
+        // POST api/<ClockApiController>
+        [HttpPost]
+        public void Post([FromBody] string value)
+        {
+        }
+
+        // PUT api/<ClockApiController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        // DELETE api/<ClockApiController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
     }
+}
+

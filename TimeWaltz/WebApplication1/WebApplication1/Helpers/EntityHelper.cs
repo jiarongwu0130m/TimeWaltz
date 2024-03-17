@@ -275,7 +275,42 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
+        /// <summary>
+        /// 傳入一個SpecialVacationList實體模型，傳回一個SpecialVacationDtoList
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public static List<SpecialVacationDto> ToDto(List<SpecialVacation> entities)
+        {
+            var models = new List<SpecialVacationDto>();
 
+            foreach(var entity in entities)
+            {
+                models.Add(new SpecialVacationDto
+                {
+                    Id = entity.Id,
+                    SpecialVacationName = entity.SpecialVacationName,
+                    Date = entity.Date.ToString("yyyy-MM-dd"),
+                });
+            }
+            return models;
+        }
+        /// <summary>
+         /// 傳入一個SpecialVacation實體模型，傳回一個SpecialVacationEditDto
+         /// </summary>
+         /// <param name="entities"></param>
+         /// <returns></returns>
+        public static SpecialVacationEditDto ToDto(SpecialVacation entity)
+        {
+            var model = new SpecialVacationEditDto
+            {
+                Id = entity.Id,
+                SpecialVacationName = entity.SpecialVacationName,
+                Date = entity.Date,
+            };
+           
+            return model;
+        }
 
 
         public static List<DepartmentViewModel> ToViewModel(List<Department> entities)
@@ -365,16 +400,7 @@ namespace WebApplication1.Helpers
             return model;
         }
 
-        public static EmployeeAndIdPareDto GetNameAndIdPare(Employee entity)
-        {
-            var model = new EmployeeAndIdPareDto
-            {
-                EmployeesId = entity.Id,
-                EmployeesName = entity.Name,
-            };
-
-            return model;
-        }
+        
         public static List<LeaveDto> ToDto(List<LeaveRequest> entities)
         {
             var models = new List<LeaveDto>();

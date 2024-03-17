@@ -61,4 +61,9 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public int? ShiftScheduleId { get; set; }
 
     }
+    public class EmpIdNameGet
+    {
+        public int EmployeeId { get; set; }
+        public string EmployeeName { get; set; }
+    }
 }

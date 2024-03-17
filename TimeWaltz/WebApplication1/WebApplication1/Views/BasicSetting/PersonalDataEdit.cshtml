@@ -2,7 +2,7 @@
     ViewData["Title"] = "編輯";
 }
 
-<form asp-action="EditPersonalData" asp-asp-controller="BasicSetting" id="app">
+<form asp-action="SpecialVacationEdit" asp-asp-controller="BasicSetting" id="app">
     <section class="content">
         <div class="card-body">
             <div class="form-group">
@@ -36,7 +36,7 @@
                 <div class="row float-right">
                     <div class="col ">
                         <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit(id)" />
-                        <a asp-controller="BasicSetting" asp-action="PersonalData" class="btn btn-outline-success">返回</a>
+                        <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-success">返回</a>
                     </div>
                 </div>
             </div>

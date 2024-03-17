@@ -6,9 +6,9 @@
     <section class="content">
         <div class="card-body">
             <div class="form-group">
-                <label name="SpecialVacationName" class="control-label" ></label>
+                <label name="SpecialVacationName" class="control-label"></label>
                 <input name="SpecialVacationName" v-model="specialVacationName" class="form-control" :class="validation.specialVacationName" />
-                <span class="text-danger"></span>
+                <span class="text-danger" v-if="!validation.specialVacationName"></span>
             </div>
             <div class="form-group">
                 <label name="Date" class="control-label"></label>
@@ -18,7 +18,7 @@
             <div class="card-footer">
                 <div class="row float-right">
                     <div class="col ">
-                        <input type="button" value="送出" class="btn btn-primary" @@click="send"/>
+                        <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit" />
                         <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-success">返回</a>
                     </div>
                 </div>
@@ -40,6 +40,13 @@
                 }
             },
             methods: {
+                validateAndSubmit() {
+                    let isValid = true;
+                    this.validation.specialVacationName = this.specialVacationName == '' ? false : true;
+                    if (this.validation.specialVacationName) {
+                        this.send();
+                    }
+                },
                 send() {
                     let self = this;
                     console.log(this.specialVacationName, this.date)
@@ -49,7 +56,7 @@
                     }).then((response) => {
                         if (response.status) {
                             alert('新增成功')
-                        }else{
+                        } else {
                             alert('新增失敗')
                         }
                     })

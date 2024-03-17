@@ -120,7 +120,7 @@ namespace WebApplication1.Helpers
             {
                 SpecialVacationName = dto.SpecialVacationName,
                 Date = dto.Date,
-            }
+            };
             return entity;
         }
         public static OvertimeApplication ToEntity(OvertimeRequestDto dto)

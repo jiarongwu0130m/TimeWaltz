@@ -82,7 +82,7 @@
                     agentDropDownList: '',
                     vacationDropDownList: '',
                     name: '',
-                    employeesId: null,
+                    employeeId: null,
                     startTime: null,
                     endTime: null,
                     vacationDetailsId: null,
@@ -182,10 +182,10 @@
                 },
                 getNameAndId(){
                     let self = this;
-                    fetch("/api/LeaveApi/GetEmoloyeeName").then(res => res.json()).then(result => {
+                    fetch("/api/LeaveApi/GetEmployeeName").then(res => res.json()).then(result => {
                         console.log(result);
-                        self.name = result.employeesName;
-                        self.employeesId = result.employeesId;
+                        self.name = result.employeeName;
+                        self.employeesId = result.employeeId;
 
                     })
                 },

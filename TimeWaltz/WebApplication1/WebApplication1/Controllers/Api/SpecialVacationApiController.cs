@@ -30,5 +30,41 @@ namespace WebApplication1.Controllers.Api
             }
             
         }
+        [HttpGet]
+        [Route("{id}")]
+        public SpecialVacationEditDto GetEditData(int id)
+        {
+            try
+            {
+                var entity = _specialVacationService.GetEditDataOrNull(id);
+                var model = EntityHelper.ToDto(entity);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("程式錯誤");
+            }
+        }
+        [HttpPost]
+        [Route("{id}")]
+
+        public void Edit(SpecialVacationEditDto model)
+        {
+            _specialVacationService.Edit(model);            
+        }
+        [HttpGet]
+        public List<SpecialVacationDto> List()
+        {
+            try
+            {
+                var entities = _specialVacationService.ListData();
+                var models = EntityHelper.ToDto(entities);
+                return models;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("程式錯誤");
+            }
+        }
     }
 }

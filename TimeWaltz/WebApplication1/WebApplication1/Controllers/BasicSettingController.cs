@@ -34,6 +34,17 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        public IActionResult SpecialVacation()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult SpecialVacationEdit(int id)
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult SpecialVacationCreate()
         {
             return View();

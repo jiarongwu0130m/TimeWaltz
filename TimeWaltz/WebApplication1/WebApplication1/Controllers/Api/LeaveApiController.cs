@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebApplication1.Helpers;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Services;
@@ -50,7 +51,7 @@ namespace WebApplication1.Controllers.Api
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public EmployeeAndIdPareDto GetEmoloyeeName()
+        public EmpIdNameGet GetEmployeeName()
         {
             var UserId = 1;
             var userNameAndIdPare = _leaveService.GetNameOrNull(UserId);
