@@ -122,5 +122,18 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
+
+        public static Billboard ToEntity(BillboardCreat dto)
+        {
+            var entity = new Billboard
+            {
+                EmployeesId = 1,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Title = dto.Title,
+                Content = dto.Content,
+            };
+            return entity;
+        }
     }
 }

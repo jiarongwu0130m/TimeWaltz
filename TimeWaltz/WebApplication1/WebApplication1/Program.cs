@@ -29,7 +29,7 @@ namespace WebApplication1
             builder.Services.AddScoped<AgentEmployeeService>();
             builder.Services.AddScoped<LeaveService>();
 
-
+            builder.Services.AddScoped<BillboardService>();
             builder.Services.AddScoped<AccessService>();
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<DropDownBasicSettingService>();

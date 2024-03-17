@@ -1,55 +1,216 @@
 ﻿@{
-    ViewBag.title = "編輯公佈欄";
+    ViewBag.title = "公佈欄";
 }
 
-@section Sylesheets {
+<div class="row" id="app">
+    <div class="col-12">
+        <div class="row mb-3">
+            <label class="col-form-label col-auto">公告日期查詢：</label>
+            <div class="input-group date col-5 col-md-3" id="reservationdate">
+                <div class="input-group-append">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+                <input name="QueryOvertime" type="text" class="form-control" autocomplete="off" v-model="searchDate">
 
-}
+            </div>
+            <div class="col-auto ml-auto">
+                <button @@click="toCreate" class="btn btn-outline-success pull-right">新增</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <table id="example2" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th v-bind:title="title('date')">{{ title('date') }}</th>
+                    <th v-bind:title="title('startTime')">{{ title('startTime') }}</th>
+                    <th v-bind:title="title('endTime')">{{ title('endTime') }}</th>
+                    <th v-bind:title="title('details')">{{ title('details') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="text-center" v-for="item in allOvertimeRequest">
+                    <td>{{formatToDate(item.overtimeDate)}}</td>
+                    <td>{{formatToTime(item.startTime)}}</td>
+                    <td>{{formatToTime(item.endTime)}}</td>
+                    <td>
+                        <button @@click="toDetail(item.id,$event)" class="btn btn-outline-primary">檢視</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <section class="content">
-    <div class="row">
+    <div class="row" id="app">
         <div class="col-md-12">
             <div class="card-body">
-                <div id="editor">This is some sample content.</div>
+                <div class="row mb-2">
+                    <label class="col-form-label">主旨：</label>
+                    <input type="text" class="col-10 form-control" v-model="title">
+                    <span class="text-danger font-weight-bold col-form-label" v-if="!dataValid.title">要驗證主旨不可為null</span>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-form-label">公告期間：</label>
+                    <input id="timeRange" type="datetime" class="form-control col-6">
+                </div>
+                <div class="row mb-2">
+                    <label class="col-form-label">發布人：</label>
+                    <input type="text" class="col-2 form-control" v-model="empName" readonly>
+                </div>
+                <div class="row row-cols-1 mb-2">
+                    <label class="col-form-label">內容：</label>
+                    <textarea ref="editor" v-model="content"></textarea>
+                </div>
             </div>
-
             <div class="card-footer">
-                <input type="button" class="btn btn-outline-primary" value="api送出" />
+                <input type="button" @@click="checkIsValidData" class="btn btn-outline-primary" value="送出" />
                 <input type="button" class="btn btn-outline-dark" value="取消" />
+                @* <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" /> *@
             </div>
-
-            @* <div class="card-footer">
-            <input type="button" @@click="sendOvertimeRequest" class="btn btn-outline-primary" value="api送出" />
-            <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" />
-            </div> *@
 
 
         </div>
     </div>
 </section>
 
-@section Scripts {
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
-    
+@section Scripts {    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
+        Vue.createApp({
+            data() {
+                return {
+                    empName: '',
+                    startTime: '',
+                    endTime: '',
+                    content: '',
+                    title: '',
+                    dataValid: {
+                        title: true,
+                    }
+                }
+            },
+            methods: {
+                getEmpId() {
+                    let self = this;
+                    fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
+                        .then(result => {
+                            self.empName = result.employeeName;
+                        })
+                },
+                getTimeRange() {
+                    let self = this;
 
-        ClassicEditor
-            .create(document.querySelector(
-                '#editor'), {
-                toolbar: ['undo', 'redo',
-                    '|', 'heading',
-                    '|', 'bold', 'italic',
-                    '|', 'link', 'insertTable',
-                    '|', 'Blockquote',
-                    '|', 'bulletedList', 'numberedList',
-                    '|', 'outdent', 'indent']
-            })
-            .then(editor => {
-                console.log(editor);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                    $('#timeRange').daterangepicker({
+                        "startDate": this.getToday(),
+                        "endDate": this.getTodayEnd(),
+                        timePicker: true,
+                        timePickerIncrement: 15,
+                        locale: {
+                            format: 'YYYY-MM-DD HH:mm'
+                        }
+                    },
+                        function (start, end, _) {
+                            self.startTime = start;
+                            self.endTime = end;
+                        });
+                },
+                getToday() {
+                    let self = this;
+                    self.startTime = moment();
+                    return moment();
+                },
+                getTodayEnd() {
+                    let self = this;
+                    self.endTime = moment().day(7);
+                    return moment().day(7)
+                },
+                showCkEditor() {
+                    let self = this;
+                    ClassicEditor.create(self.$refs.editor, {
+                        toolbar: {
+                            items: ['undo', 'redo',
+                                '|', 'heading',
+                                '|', 'bold', 'italic',
+                                '|', 'link', 'insertTable',
+                                '|', 'Blockquote',
+                                '|', 'bulletedList', 'numberedList',
+                                '|', 'outdent', 'indent']
+                        }
+                    })
+                        .then(editor => {
+                            console.log('Editor was initialized', editor);
+                            editor.model.document.on('change:data', () => {
+                                self.content = editor.getData();
+                            });
+                        })
+                        .catch(error => {
+                            console.error('There was a problem initializing the editor', error);
+                        });
+                },
+                checkIsValidData() {
+                    let isValid = true;
+                    let self = this;
 
+                    console.log("主旨" + self.title);
+                    console.log("內容" + self.content);
+                    console.log(self.startTime);
+                    console.log(self.endTime);
+                    self.dataValid.title = self.title == '' ? false : true;
+                    if (self.dataValid.title) {
+                        this.sendBillBoard();
+                    }
+                },
+                sendBillBoard() {
+                    let self = this;
+                    self.startTime = self.startTime.utc(true).toISOString();
+                    self.endTime = self.endTime.utc(true).toISOString();
+
+                    axios.post("/api/BillboardApi/Create", {
+                        startTime: self.startTime,
+                        endTime: self.endTime,
+                        content: self.content,
+                        title: self.title,
+                    }).then(response => {
+                        if (response.data == true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "新增成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    location.href = "/ApplicationForm/OvertimeRequest";
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "新增失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
+                        }
+                    });
+                },
+            },
+            mounted() {
+                this.getEmpId();
+                this.getTimeRange();
+                this.showCkEditor();
+            }
+        }).mount("#app");
     </script>
 }
