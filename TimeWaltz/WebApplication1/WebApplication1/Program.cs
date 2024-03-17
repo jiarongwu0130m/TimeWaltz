@@ -8,7 +8,7 @@ namespace WebApplication1
     public class Program
     {
         public static void Main(string[] args)
-      {
+        {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -28,7 +28,7 @@ namespace WebApplication1
             builder.Services.AddScoped<PublicHolidayService>();
             builder.Services.AddScoped<AgentEmployeeService>();
             builder.Services.AddScoped<LeaveService>();
-
+            builder.Services.AddScoped<ShiftService>();
 
             builder.Services.AddScoped<AccessService>();
             builder.Services.AddScoped<UserService>();
