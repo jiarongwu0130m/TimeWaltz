@@ -348,5 +348,44 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
+        public static List<OvertimeViewModel> ToViewModel(List<OvertimeApplication> entities)
+        {
+            var models = new List<OvertimeViewModel>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
+
+        public static OvertimeViewModel ToViewModel(OvertimeApplication entity)
+        {
+            var model = new OvertimeViewModel
+            {
+                Id = entity.Id,
+                OvertimeDate = entity.StartTime,
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
+                EmployeesId = entity.EmployeesId,
+                Reason = entity.Reason,
+                Status = entity.Status,
+                ApprovalEmployeeId = entity.ApprovalEmployeeId,
+            };
+            return model;
+        }
+
+
+        public static EmpIdNameGet GetNameAndIdPare(Employee entity)
+        {
+            var model = new EmpIdNameGet
+            {
+                EmployeeId = entity.Id,
+                EmployeeName = entity.Name,
+            };
+
+            return model;
+        }
+
     }
 }

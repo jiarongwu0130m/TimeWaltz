@@ -4134,6 +4134,16 @@ textarea,
   margin-bottom: 8px;
 }
 
+    .form-group.boxed .form-control.form-select, .form-group.basic .form-control.form-select {
+        background-image: url("data:image/svg+xml,%0A%3Csvg width='13px' height='8px' viewBox='0 0 13 8' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline id='Path' stroke='%23A9ABAD' stroke-width='2' points='1.59326172 1.79663086 6.59326172 6.79663086 11.5932617 1.79663086'%3E%3C/polyline%3E%3C/g%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right center !important
+    }
+
+    .form-group.boxed .form-control.form-select {
+        background-position: right 12px center !important
+    }
+
 .input-group .input-group-text {
   background: transparent;
   border: 0;

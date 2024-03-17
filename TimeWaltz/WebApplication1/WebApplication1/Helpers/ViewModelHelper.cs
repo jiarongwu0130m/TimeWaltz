@@ -94,6 +94,19 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
+        public static OvertimeApplication ToEntity(OvertimeRequestDto dto)
+        {
+            var entity = new OvertimeApplication
+            {
+                EmployeesId = 1,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Status = dto.Status,
+                Reason = dto.Reason,
+                ApprovalEmployeeId = 2,
+            };
+            return entity;
+        }
 
         public static User ToEntity(UserViewModel model)
         {
