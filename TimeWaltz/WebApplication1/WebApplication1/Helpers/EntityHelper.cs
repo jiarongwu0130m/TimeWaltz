@@ -5,6 +5,7 @@ using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.Enums;
+using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Helpers
 {
@@ -292,6 +293,36 @@ namespace WebApplication1.Helpers
                 EmployeesId = entity.EmployeesId,
             };
             return model;
+        }
+
+        public static UserEditViewModel ToEditViewModel(User entity)
+        {
+            var model = new UserEditViewModel
+            {
+                Id = entity.Id,
+                DepartmentName = entity.DepartmentId,
+                EmployeesName = entity.EmployeesId,
+            };
+            return model;
+        }
+        public static UserViewModel ToViewModel(User entity)
+        {
+            var model = new UserViewModel
+            {
+                Id = entity.Id,
+                Account = entity.Account,
+                Stop = entity.Stop? 1:0,
+            };
+            return model;
+        }
+        public static List<UserViewModel> ToViewModel(List<User> entities)
+        {
+            var models = new List<UserViewModel>(); foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
         }
         public static List<CompRequestViewModel> ToViewModel(List<AdditionalClockIn> entities)
         {

@@ -1,7 +1,9 @@
+﻿using WebApplication1.Models.BasicSettingViewModels;
 ﻿using WebApplication1.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Helpers
 {
@@ -106,5 +108,19 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
+        public static User ToEntity(UserViewModel model)
+        {
+
+            var entity = new User
+            {
+                Account = model.Account,
+                //Password = model.Password,
+                EmployeesId = model.EmployeesID,
+                DepartmentId = (int)model.DepartmentID,
+                Stop = model.Stop==1 ? true : false,
+                PasswordDate = DateTime.Now
+            };
+            return entity;
+        }
     }
 }

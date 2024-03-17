@@ -1,0 +1,61 @@
+﻿@model  WebApplication1.Models.SettingViewModels.UserCreateViewModel
+@{
+    Layout = "_Layout";
+    ViewBag.title = "帳號新增";
+}
+
+<div class="container">
+
+    <form asp-action="AccountCreate" asp-controller="Setting" method="post">
+
+        <div class="col-md-4">
+            <div asp-validation-summary="All" class="text-danger" style="color:red"></div>
+            <div class="form-group">
+                <label asp-for="Account" class="control-label">帳號</label>
+                <input asp-for="Account" class="form-control" />
+                <span asp-validation-for="Account" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">密碼</label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="EmployeesName" class="control-label">姓名</label>
+                <select asp-for="EmployeesName" class="form-control" asp-items="@Model.EmployeesNameSelectList"></select>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="DepartmentName" class="control-label">單位</label>
+                <select asp-for="DepartmentName" class="form-control" asp-items="@Model.DepartmentNameSelectList"></select>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Stop" class="control-label">啟用/停用</label>
+                <select asp-for="Stop" class="form-control">
+                    <option value="0">啟用</option>
+                    <option value="1">停用</option>
+                </select>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+@*         <div class="form-group">
+            <label asp-for="Stop" class="control-label">啟用/停用</label>
+            <select asp-for="Stop" class="form-control" asp-items="ViewBag.GenderEnum"></select>
+            <span asp-validation-for="Stop" class="text-danger"></span>
+        </div> *@
+        <div class="form-group">
+            <input id="select" type="submit" class="nav-link" value="新增" />
+            <a asp-controller="Setting" asp-action="Account" class="nav-link">返回</a>
+        </div>
+    </form>
+</div>
+
