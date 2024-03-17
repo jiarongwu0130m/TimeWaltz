@@ -14,12 +14,14 @@
         </div>
         <div class="col-md-2">
             <label>單位：</label>
-            <select name="DepartmentID" asp-items="ViewBag.GenderEnumDepart" style="width: 100px;"></select>
+            <select name="DepartmentName" asp-items="ViewBag.GenderEnumDepart" style="width: 100px;">
+                <option value="">請選擇</option>
+                </select>
             <span class="text-danger"></span>
         </div>
         <div class="col-md-2">
             <label>姓名：</label>
-            <input type="text" name="Account" value="" style="width: 100px;" />
+            <input type="text" name="EmployeesName" value="" style="width: 100px;" />
         </div>
     </div>
     <br />
@@ -49,7 +51,13 @@
                                 帳號
                             </th>
                             <th>
-                                啟用/停用
+                                姓名
+                            </th>
+                            <th>
+                                單位
+                            </th>
+                            <th>
+                                停用/啟用
                             </th>
                             <th>
                                 修改/刪除
@@ -64,8 +72,13 @@
                                     @Html.DisplayFor(modelItem => item.Account)
                                 </td>
                                 <td>
-                                    <a asp-action="AccountStop" asp-controller="Setting" asp-route-Id="@item.Id" class="btn btn-outline-dark">停用</a>
-                                    <a asp-action="AccountStop" asp-controller="Setting" asp-route-Id="@item.Id" class="btn btn-outline-dark">啟用</a>
+                                    @Html.DisplayFor(modelItem => item.EmployeesName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DepartmentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StopName)
                                 </td>
                                 <td>
                                     <a asp-action="AccountEdit" asp-controller="Setting" asp-route-Id="@item.Id" class="btn btn-outline-dark">修改/刪除</a>

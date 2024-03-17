@@ -21,6 +21,13 @@ public partial class User
 
     public string Salt { get; set; } = null!;
 
+    [NotMapped]
+    public string? EmployeesName { get; set; }
+
+    [NotMapped]
+    public string? DepartmentName { get; set; }
+
+
     public virtual Department Department { get; set; } = null!;
 
     public virtual UserOfDepartment Id1 { get; set; } = null!;

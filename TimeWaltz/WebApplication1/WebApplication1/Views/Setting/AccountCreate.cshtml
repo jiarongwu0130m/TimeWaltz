@@ -9,6 +9,7 @@
     <form asp-action="AccountCreate" asp-controller="Setting" method="post">
 
         <div class="col-md-4">
+            <div asp-validation-summary="All" class="text-danger" style="color:red"></div>
             <div class="form-group">
                 <label asp-for="Account" class="control-label">帳號</label>
                 <input asp-for="Account" class="form-control" />
@@ -33,6 +34,16 @@
             <div class="form-group">
                 <label asp-for="DepartmentName" class="control-label">單位</label>
                 <select asp-for="DepartmentName" class="form-control" asp-items="@Model.DepartmentNameSelectList"></select>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Stop" class="control-label">啟用/停用</label>
+                <select asp-for="Stop" class="form-control">
+                    <option value="0">啟用</option>
+                    <option value="1">停用</option>
+                </select>
                 <span class="text-danger"></span>
             </div>
         </div>

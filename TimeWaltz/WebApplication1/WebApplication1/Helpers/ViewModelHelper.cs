@@ -1,3 +1,4 @@
+﻿using WebApplication1.Models.BasicSettingViewModels;
 ﻿using WebApplication1.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
@@ -101,9 +102,9 @@ namespace WebApplication1.Helpers
             {
                 Account = model.Account,
                 //Password = model.Password,
-                EmployeesId = model.EmployeesName.Value,
-                DepartmentId = model.DepartmentName.Value,
-                Stop = model.Stop,
+                EmployeesId = model.EmployeesID,
+                DepartmentId = (int)model.DepartmentID,
+                Stop = model.Stop==1 ? true : false,
                 PasswordDate = DateTime.Now
             };
             return entity;

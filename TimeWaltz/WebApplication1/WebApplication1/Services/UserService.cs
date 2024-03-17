@@ -1,5 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
+using WebApplication1.Helpers;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.SettingViewModels;
 
@@ -26,9 +28,91 @@ namespace WebApplication1.Services
             return _timeWaltzContext.Users.ToList();
         }
 
+        public List<UserViewModel> GetUserViewModel()
+        {
+
+            var query = _timeWaltzContext.Users
+                .Join(_timeWaltzContext.Employees, x => x.EmployeesId, d => d.Id, (x, d) => new { x, d })
+                 .Join(_timeWaltzContext.Departments, x => x.x.DepartmentId, y => y.Id, (xd, y) => new { xd, y })
+                 .Select(x => new UserViewModel
+                 {
+                     Id = x.xd.x.Id,
+                     Account = x.xd.x.Account,
+                     EmployeesID = x.xd.x.EmployeesId,
+                     DepartmentID = x.xd.x.DepartmentId,
+                     EmployeesName = x.xd.d.Name,
+                     DepartmentName = x.y.DepartmentName,
+                     StopName = (x.xd.x.Stop ? "啟用" : "停用"),
+
+                 }).ToList();
+
+            return query;
+        }
+        public List<UserViewModel> GetUserViewModel(UserViewModel entity)
+        {
+
+            var query = _timeWaltzContext.Users
+                .Join(_timeWaltzContext.Employees, x => x.EmployeesId, d => d.Id, (x, d) => new { x, d })
+                 .Join(_timeWaltzContext.Departments, x => x.x.DepartmentId, y => y.Id, (xd, y) => new { xd, y });
+            if (!string.IsNullOrEmpty(entity.EmployeesName))
+            {
+                query = query.Where(x => x.xd.d.Name.Contains(entity.EmployeesName.ToString()));
+            }
+
+            if (!string.IsNullOrEmpty(entity.DepartmentName))
+            {
+                query = query.Where(x => x.xd.x.DepartmentId.ToString() == entity.DepartmentName);
+            }
+
+            if (!string.IsNullOrEmpty(entity.Account))
+            {
+                query = query.Where(x => x.xd.x.Account.Contains(entity.Account));
+            }
+            var query1= query.Select(x => new UserViewModel
+                 {
+                     Id = x.xd.x.Id,
+                     Account = x.xd.x.Account,
+                     EmployeesID = x.xd.x.EmployeesId,
+                     DepartmentID = x.xd.x.DepartmentId,
+                     EmployeesName = x.xd.d.Name,
+                     DepartmentName = x.y.DepartmentName,
+                     StopName = (x.xd.x.Stop ? "啟用" : "停用"),
+
+                 }).ToList();
+
+            return query1;
+        }
         public User? GetUserOrNull(int id)
         {
             return _timeWaltzContext.Users.FirstOrDefault(x => x.Id == id);
+        }
+
+        public List<User> GetUserOrNull(UserViewModel entity)
+        {
+            var query = _timeWaltzContext.Users
+                .Join(_timeWaltzContext.Employees, x => x.EmployeesId, d => d.Id, (x, d) => new { x, d });
+
+            if (!string.IsNullOrEmpty(entity.EmployeesName))
+            {
+                query = query.Where(x => x.d.Name.Contains(entity.EmployeesName.ToString()));
+            }
+
+            if (!string.IsNullOrEmpty(entity.DepartmentName.ToString()))
+            {
+                query = query.Where(x => x.x.DepartmentId.ToString() == entity.DepartmentName);
+            }
+
+            if (!string.IsNullOrEmpty(entity.Account))
+            {
+                query = query.Where(x => x.x.Account.Contains(entity.Account));
+            }
+
+            return query.Select(x => x.x).ToList(); 
+        }
+        public List<User> GetUserCreateOrNull(UserCreateViewModel entity)
+        {
+            List<User> entities = _timeWaltzContext.Users.Where(x => x.Account == entity.Account).ToList();
+                return entities;
         }
 
         public void DeleteeUserType(User entity)
@@ -46,11 +130,15 @@ namespace WebApplication1.Services
 
             if (entity != null)
             {
+                if (Salt != "")
+                {
+                    entity.Salt = Salt;
+                    entity.Password = model.Password;
+                }
                 entity.PasswordDate = DateTime.Now;
-                entity.EmployeesId = Convert.ToInt32(model.DepartmentName);
-                entity.DepartmentId = Convert.ToInt32(model.EmployeesName);
-                entity.Salt = Salt;
-                entity.Stop = model.Stop;
+                entity.EmployeesId = Convert.ToInt32(model.EmployeesName);
+                entity.DepartmentId = Convert.ToInt32(model.DepartmentName);
+                entity.Stop = model.Stop==1?true:false;
 
                 _timeWaltzContext.SaveChanges();
             }

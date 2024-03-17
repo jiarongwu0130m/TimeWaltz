@@ -311,19 +311,42 @@ namespace WebApplication1.Helpers
             {
                 Id = entity.Id,
                 Account = entity.Account,
-                Stop = entity.Stop,
+                Stop = entity.Stop? 1:0,
             };
             return model;
         }
         public static List<UserViewModel> ToViewModel(List<User> entities)
         {
-            var models = new List<UserViewModel>();
+            var models = new List<UserViewModel>(); foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
+        public static List<CompRequestViewModel> ToViewModel(List<AdditionalClockIn> entities)
+        {
+            var models = new List<CompRequestViewModel>();
             foreach (var entity in entities)
             {
                 models.Add(ToViewModel(entity));
             }
 
             return models;
+        }
+
+        public static CompRequestViewModel ToViewModel(AdditionalClockIn entity)
+        {
+            var model = new CompRequestViewModel
+            {
+                Id = entity.Id,
+                EmployeesId = entity.EmployeesId,
+                AdditionalTime = entity.AdditionalTime,
+                Status = entity.Status,
+                Reason = entity.Reason,
+                ApprovalEmployeeId = entity.ApprovalEmployeeId,
+            };
+            return model;
         }
     }
 }

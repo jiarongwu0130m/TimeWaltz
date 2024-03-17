@@ -6,6 +6,7 @@ using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.SettingViewModels;
 using WebApplication1.Services;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication1.Controllers
 {
@@ -15,14 +16,14 @@ namespace WebApplication1.Controllers
         private readonly UserService _UserService;
         private readonly DropDownBasicSettingService _dropDownBasicSettingService;
 
-        public SettingController(TimeWaltzContext db, UserService UserService,DropDownBasicSettingService dropDownBasicSettingService)
+        public SettingController(TimeWaltzContext db, UserService UserService, DropDownBasicSettingService dropDownBasicSettingService)
         {
             _db = db;
             _UserService = UserService;
             _dropDownBasicSettingService = dropDownBasicSettingService;
         }
 
-        
+
         #region 帳號設定 
         /// <summary>
         /// 帳號查詢select
@@ -30,24 +31,31 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         public IActionResult Account()
         {
-            var Id = 1;
-            var entities = _UserService.GetUserOrNull();
+            var model = _UserService.GetUserViewModel();
 
-            var model = EntityHelper.ToViewModel(entities);
-            ViewBag.GenderEnumDepart = _db.Departments.Select(se => new SelectListItem
-            {
-                Text = se.DepartmentName.ToString(),
-                Value = se.Id.ToString()
-            });
-            ViewBag.GenderEnumEmployees = _db.Employees.Select(se => new SelectListItem
-            {
-                Text = se.Name.ToString(),
-                Value = se.Id.ToString()
-            });
+            ViewBag.GenderEnumDepart = DropDownHelper
+                       .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
+            ViewBag.GenderEnumEmployees = DropDownHelper
+                       .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
 
             return View(model);
-
         }
+        /// <summary>
+        /// 帳號查詢select
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult Account(UserViewModel models)
+        {
+            var model = _UserService.GetUserViewModel(models);
+
+            ViewBag.GenderEnumDepart = DropDownHelper
+                       .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
+            ViewBag.GenderEnumEmployees = DropDownHelper
+                       .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
+            return View(model);
+        }
+
 
         /// <summary>
         /// 新增帳號頁面
@@ -55,20 +63,14 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         public IActionResult AccountCreate()
         {
-            //if (employeeNameDropDownData != null)
-            //{
-                var model = new UserCreateViewModel
-                {
-                    EmployeesNameSelectList = DropDownHelper
-                       .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData()),
-                    DepartmentNameSelectList = DropDownHelper
-                       .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData()),
-                };
-                return View(model);
-            //}
-
-            return RedirectToAction("PersonalData");
-
+            var model = new UserCreateViewModel
+            {
+                EmployeesNameSelectList = DropDownHelper
+                   .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData()),
+                DepartmentNameSelectList = DropDownHelper
+                   .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData()),
+            };
+            return View(model);
         }
 
         /// <summary>
@@ -79,31 +81,42 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult AccountCreate(UserCreateViewModel model)
         {
+            model.EmployeesNameSelectList = DropDownHelper
+                   .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
+            model.DepartmentNameSelectList = DropDownHelper
+               .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
+            
+
+            //帳號是否重複
+            if (_UserService.GetUserCreateOrNull(model).Count!=0)
+            {
+                ModelState.AddModelError(string.Empty, "帳號重複");
+                return View(model);
+            }
 
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            //密碼加鹽
-            string Salts = _UserService.GenerateSalt();
 
+            //密碼鹽
+            string Salts = _UserService.GenerateSalt();
             //密碼雜湊
             model.Password = _UserService.SHA256EncryptString(model.Password + Salts);
-
 
             _db.Users.Add(new User
             {
                 Account = model.Account,
                 Password = model.Password,
-                Stop = model.Stop,
+                Stop = model.Stop==1?true:false,
                 Salt = Salts,
                 DepartmentId = Convert.ToInt32(model.DepartmentName),
                 EmployeesId = Convert.ToInt32(model.EmployeesName),
                 PasswordDate = DateTime.Now
-            }) ;
+            });
             _db.SaveChanges();
 
-            return RedirectToAction("Setting", "Account");
+            return RedirectToAction("Account", "Setting");
         }
 
         /// <summary>
@@ -122,12 +135,10 @@ namespace WebApplication1.Controllers
                         .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
                 model.DepartmentNameSelectList = DropDownHelper
                    .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
-                model.StopSelectList = DropDownHelper
-                    .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
 
                 return View(model);
             }
-            return RedirectToAction("PersonalData");
+            return RedirectToAction("Account", "Setting");
         }
 
         [HttpPost]
@@ -138,20 +149,29 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         public IActionResult AccountEdit(UserEditViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            model.EmployeesNameSelectList = DropDownHelper
+                    .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
+            model.DepartmentNameSelectList = DropDownHelper
+               .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(model);
+            //}
 
             //密碼加鹽
-            string Salts = _UserService.GenerateSalt();
+            string Salts = "";
 
+            if (model.Password != null)
+            {
+                model.Password = _UserService.SHA256EncryptString(model.Password + Salts);
+
+                Salts = _UserService.GenerateSalt();
+            }
             //密碼雜湊
-            model.Password = _UserService.SHA256EncryptString(model.Password + Salts);
 
 
             _UserService.EditUserType(model, Salts);
-            return RedirectToAction("Department");
+            return RedirectToAction("Account", "Setting");
         }
 
 
@@ -160,7 +180,7 @@ namespace WebApplication1.Controllers
         {
             var entity = _UserService.GetUserOrNull(id);
             _UserService.DeleteUserType(entity);
-            return RedirectToAction("Department");
+            return RedirectToAction("Account", "Setting");
         }
 
         #endregion
