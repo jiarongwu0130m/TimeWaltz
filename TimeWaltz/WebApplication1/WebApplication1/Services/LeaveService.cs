@@ -34,7 +34,7 @@ namespace WebApplication1.Services
         /// <returns></returns>
         public Employee GetNameOrNull(int userId)
         {
-            return _timeWaltzContext.Employees.Find(userId);
+            return _timeWaltzContext.Employees.Where(x=>x.IsDelete == false).FirstOrDefault(x=>x.Id == userId);
         }
         /// <summary>
         /// 新增一筆LeaveRequest

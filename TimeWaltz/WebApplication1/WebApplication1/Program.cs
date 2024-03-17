@@ -29,6 +29,8 @@ namespace WebApplication1
             builder.Services.AddScoped<AgentEmployeeService>();
             builder.Services.AddScoped<LeaveService>();
             builder.Services.AddScoped<RequestStatusService>();
+            builder.Services.AddScoped<SpecialHolidayDaysService>();
+            builder.Services.AddScoped<SpecialVacationService>();
             builder.Services.AddScoped<ApprovalService>();
             builder.Services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)

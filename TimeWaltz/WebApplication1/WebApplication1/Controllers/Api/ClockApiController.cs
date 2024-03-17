@@ -19,18 +19,18 @@ namespace WebApplication1.Controllers.Api
             _timeWaltzDb = timeWaltzDb;
         }
 
-        [HttpGet]
-        public bool Info()
-        {
-            var empId = User.GetEmployeeId();
-            var allClock = _timeWaltzDb.Clocks.Where(x => x.EmployeesId == empId &&
-            EF.Functions.DateDiffDay(x.Date, DateTime.Now) == 0);
+        //[HttpGet]
+        //public bool Info()
+        //{
+        //    var empId = User.GetEmployeeId();
+        //    var allClock = _timeWaltzDb.Clocks.Where(x => x.EmployeesId == empId &&
+        //    EF.Functions.DateDiffDay(x.Date, DateTime.Now) == 0);
 
-            allClock.GroupBy(x => x.Status).Select(x=>new { 
+        //    allClock.GroupBy(x => x.Status).Select(x=>new { 
                 
-            });
+        //    });
 
-        }
+        //}
         [HttpPost]
         public bool On(ClockOnDto dto)
         {

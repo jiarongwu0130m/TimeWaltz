@@ -14,6 +14,7 @@ public partial class TimeWaltzContext : DbContext
         : base(options)
     {
     }
+    public virtual DbSet<SpecialHolidayDays> SpecialHolidayDays { get; set; }
     public virtual DbSet<SpecialHoliday> SpecialHoliday { get; set; }
     public virtual DbSet<SpecialGrade> SpecialGrade { get; set; }
     public virtual DbSet<Access> Accesses { get; set; }
@@ -58,7 +59,7 @@ public partial class TimeWaltzContext : DbContext
 
     public virtual DbSet<ShiftSchedule> ShiftSchedules { get; set; }
 
-    public virtual DbSet<SpacialVacation> SpacialVacations { get; set; }
+    public virtual DbSet<SpecialVacation> SpecialVacations { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -426,13 +427,13 @@ public partial class TimeWaltzContext : DbContext
             entity.Property(e => e.StartTime).HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<SpacialVacation>(entity =>
+        modelBuilder.Entity<SpecialVacation>(entity =>
         {
-            entity.ToTable("SpacialVacation");
+            entity.ToTable("SpecialVacation");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Date).HasColumnType("datetime");
-            entity.Property(e => e.SpacialVacationName).HasMaxLength(50);
+            entity.Property(e => e.SpecialVacationName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<User>(entity =>

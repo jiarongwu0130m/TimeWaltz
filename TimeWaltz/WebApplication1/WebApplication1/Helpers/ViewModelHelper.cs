@@ -112,6 +112,14 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
-
+        public static SpecialVacation ToDto(SpecialVacationCreateDto dto)
+        {
+            var entity = new SpecialVacation
+            {
+                SpecialVacationName = dto.SpecialVacationName,
+                Date = dto.Date,
+            };
+            return entity;
+        }
     }
 }

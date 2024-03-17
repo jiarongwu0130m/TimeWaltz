@@ -34,6 +34,13 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        public IActionResult SpecialVacationCreate()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
         public IActionResult PersonalDataCreate()
         {
             return View();

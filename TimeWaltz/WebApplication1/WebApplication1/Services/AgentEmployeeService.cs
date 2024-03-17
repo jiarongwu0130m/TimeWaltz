@@ -16,7 +16,7 @@ namespace WebApplication1.Services
         {
             var user = _timeWaltzContext.Employees.FirstOrDefault(e => e.Id == UserId);
             var userDepartmentId = user.DepartmentId;
-            var entities = _timeWaltzContext.Employees.Where(e => e.DepartmentId == userDepartmentId).Select(e=> new AgentEmployee
+            var entities = _timeWaltzContext.Employees.Where(e => e.DepartmentId == userDepartmentId && e.IsDelete == false).Select(e=> new AgentEmployee
             {
                 Id = e.Id,
                 AgentEmployeeName = e.Name,
