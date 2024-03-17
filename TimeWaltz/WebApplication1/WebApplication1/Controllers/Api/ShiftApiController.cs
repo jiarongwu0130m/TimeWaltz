@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Extensibility;
+using WebApplication1.Helpers;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
+using WebApplication1.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,10 +15,19 @@ namespace WebApplication1.Controllers.Api
     public class ShiftApiController : ControllerBase
     {
         private readonly TimeWaltzContext _timeWaltzDb;
+        private readonly ShiftService _shiftService;
 
-        public ShiftApiController(TimeWaltzContext timeWaltzDb)
+        public ShiftApiController(TimeWaltzContext timeWaltzDb, ShiftService shiftService)
         {
             _timeWaltzDb = timeWaltzDb;
+            _shiftService = shiftService;
+        }
+
+        public ActionResult UpdateShift()
+        {
+            DateTime startDate = DateTime.Now;
+            var result = _shiftService.GenerateAllEmployeeShift(startDate, 30);
+            return Ok(new { status = result });
         }
 
         [HttpGet("{id}")]
@@ -41,9 +54,11 @@ namespace WebApplication1.Controllers.Api
 
         // GET: api/<ShiftApiController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<ShiftDto> Get()
         {
-            return new string[] { "value1", "value2" };
+            var entities = _shiftService.GetAllShiftData();
+            var models = EntityHelper.ToDto(entities);
+            return models;
         }
 
         // GET api/<ShiftApiController>/5

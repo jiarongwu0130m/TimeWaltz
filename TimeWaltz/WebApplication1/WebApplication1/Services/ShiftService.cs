@@ -17,7 +17,7 @@ namespace WebApplication1.Services
             {
                 var endDate = startDate.AddDays(GenDays);
                 var employees = _db.Employees.Where(x => x.ShiftScheduleId != null).ToList();
-                for (var date = startDate; date < endDate; date.AddDays(1))
+                for (var date = startDate; date < endDate; date = date.AddDays(1))
                 {
                     if (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday)
                     {
@@ -46,7 +46,17 @@ namespace WebApplication1.Services
             }
         }
 
-
-
+        public List<Shift> GetAllShiftData()
+        {
+            return _db.Shifts
+                .Join(_db.Employees, s => s.ShiftScheduleId, e => e.ShiftScheduleId, (s, e) => new { s, e })
+                .Join(_db.ShiftSchedules, se => se.s.ShiftScheduleId, d => d.Id, (se, d) => new Shift
+                {
+                    StartTime = se.s.ShiftsDate.ToString("yyyy-MM-dd") + " " + d.StartTime.ToString("HH:mm"),
+                    EndTime = se.s.ShiftsDate.ToString("yyyy-MM-dd") + " " + d.EndTime.ToString("HH:mm"),
+                    Id = se.s.Id,
+                    Title = se.e.Name + "(" + d.ShiftsName + ")",
+                }).ToList();
+        }
     }
 }

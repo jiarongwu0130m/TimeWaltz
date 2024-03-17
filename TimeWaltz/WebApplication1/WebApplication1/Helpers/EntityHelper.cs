@@ -260,7 +260,21 @@ namespace WebApplication1.Helpers
             return model;
         }
 
-
+        public static List<ShiftDto> ToDto(List<Shift> entities)
+        {
+            var models = new List<ShiftDto>();
+            foreach(var entity in entities)
+            {
+                models.Add(new ShiftDto
+                {
+                    Id = entity.Id,
+                    Title = entity.Title,
+                    StartTime = entity.StartTime,
+                    EndTime = entity.EndTime,
+                });
+            }
+            return models;
+        }
 
         public static List<DepartmentViewModel> ToViewModel(List<Department> entities)
         {
