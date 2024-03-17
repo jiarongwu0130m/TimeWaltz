@@ -71,7 +71,8 @@ namespace WebApplication1.Controllers.Api
             {
                 var fileModel = _leaveService.GetRelativeFileRoute(model);
                 var approvalModel = _leaveService.GetApprovalEmp(fileModel);
-                var entity = ViewModelHelper.ToEntity(approvalModel);
+                var leaveModel = _leaveService.AddLeaveTime(approvalModel);
+                var entity = ViewModelHelper.ToEntity(leaveModel);
                 _leaveService.CreateLeaveRequest(entity);
                 //TODO: 新增狀態表
                 _requestStatusService.NewRequestStatus(entity);

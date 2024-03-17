@@ -142,6 +142,20 @@ namespace WebApplication1.Services
                     Reason = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.Reason,
                 }).FirstOrDefault();
         }
+
+        public LeaveCreateDto AddLeaveTime(LeaveCreateDto model)
+        {
+            var leaveStart = model.StartTime;
+            var leaveEnd = model.EndTime;
+
+            _timeWaltzContext.Employees
+                .Where(e => e.Id == model.EmployeesId)
+                .Join(_timeWaltzContext.ShiftSchedules, e => e.ShiftScheduleId, d => d.Id, (e, d) => new Shift
+                {
+
+                });
+            
+        }
     }
 }
 
