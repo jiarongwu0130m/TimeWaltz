@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Areas.Employee.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.Entity;
+using WebApplication1.Models.Enums;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,17 +19,32 @@ namespace WebApplication1.Controllers.Api
         {
             _timeWaltzDb = timeWaltzDb;
         }
+        [HttpGet]
+        public object ShiftSchedule()
+        {
+            var empId = User.GetEmployeeId();
+            var shift = _timeWaltzDb.Shifts.Include(shift => shift.ShiftSchedule).FirstOrDefault(x => x.EmployeesId == empId && EF.Functions.DateDiffDay(x.ShiftsDate, DateTime.Now) == 0);
+            if (shift == null) return new {onTime="",offTime="" };
+            return new
+            {
+                onTime= shift.ShiftSchedule.StartTime,
+                offTime= shift.ShiftSchedule.EndTime,
+            };
+
+        }
 
         [HttpGet]
-        public bool Info()
+        public object Info()
         {
             var empId = User.GetEmployeeId();
             var allClock = _timeWaltzDb.Clocks.Where(x => x.EmployeesId == empId &&
-            EF.Functions.DateDiffDay(x.Date, DateTime.Now) == 0);
+            EF.Functions.DateDiffDay(x.Date, DateTime.Now) == 0).AsEnumerable();
 
-            allClock.GroupBy(x => x.Status).Select(x=>new { 
-                
-            });
+            return new
+            {
+                On = allClock.Where(x => x.Status == ClockStatusEnum.上班打卡).MinBy(x => x.Date),
+                Off = allClock.Where(x => x.Status == ClockStatusEnum.下班打卡).MaxBy(x => x.Date),
+            };
 
         }
         [HttpPost]
@@ -48,7 +64,7 @@ namespace WebApplication1.Controllers.Api
         public bool OnAndOff(ClockOnDto dto, Models.Enums.ClockStatusEnum status)
         {
             var empId = User.GetEmployeeId();
-            
+
 
             try
             {
