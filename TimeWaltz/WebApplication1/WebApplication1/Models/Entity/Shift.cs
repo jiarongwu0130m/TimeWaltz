@@ -10,6 +10,14 @@ public partial class Shift
     public int Id { get; set; }
 
     public DateTime ShiftsDate { get; set; }
+    [NotMapped]
+    public string StartTime { get; set; }
+    [NotMapped]
+    public string EndTime { get; set; }
+    [NotMapped]
+    public string ShiftScheduleName { get; set; }
+    [NotMapped]
+    public string Title { get; set; }
 
     public int EmployeesId { get; set; }
 

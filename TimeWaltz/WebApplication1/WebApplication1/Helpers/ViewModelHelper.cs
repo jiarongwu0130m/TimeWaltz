@@ -4,7 +4,6 @@ using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
-using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.SettingViewModels;
 

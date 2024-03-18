@@ -290,7 +290,21 @@ namespace WebApplication1.Helpers
                 {
                     Id = entity.Id,
                     SpecialVacationName = entity.SpecialVacationName,
-                    Date = entity.Date.ToString("yyyy-MM-dd"),
+                    Date = entity.Date.ToString("yyyy-MM-dd"), });
+            }
+            return models;
+        }
+        public static List<ShiftDto> ToDto(List<Shift> entities)
+        {
+            var models = new List<ShiftDto>();
+            foreach(var entity in entities)
+            {
+                models.Add(new ShiftDto
+                {
+                    Id = entity.Id,
+                    Title = entity.Title,
+                    StartTime = entity.StartTime,
+                    EndTime = entity.EndTime,
                 });
             }
             return models;

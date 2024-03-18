@@ -40,6 +40,7 @@ namespace WebApplication1
                 .UseSqlServerStorage(builder.Configuration.GetConnectionString("TimeWaltz")));
             builder.Services.AddHangfireServer();
 
+            builder.Services.AddScoped<ShiftService>();
 
             builder.Services.AddScoped<AccessService>();
             builder.Services.AddScoped<UserService>();
