@@ -1,0 +1,171 @@
+﻿@{
+    ViewBag.title = "新增公佈欄";
+}
+
+<div class="row" id="app">
+    <div class="col-md-12">
+        <div class="card-body">
+            <div class="row mb-2">
+                <label class="col-form-label">主旨：</label>
+                <input type="text" class="col-10 form-control" v-model="title">
+                <span class="text-danger font-weight-bold col-form-label" v-if="!dataValid.title">請輸入主旨</span>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label">公告期間：</label>
+                <input id="timeRange" type="datetime" class="form-control col-6">
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label">發布人：</label>
+                <input type="text" class="col-2 form-control" v-model="empName" readonly>
+            </div>
+            <div class="row row-cols-1 mb-2">
+                <label class="col-form-label">內容：</label>
+                <textarea ref="editor" v-model="content"></textarea>
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="button" @@click="checkIsValidData" class="btn btn-outline-primary" value="送出" />
+            <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" />            
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="/js/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    empName: '',
+                    startTime: '',
+                    endTime: '',
+                    content: '',
+                    title: '',
+                    dataValid: {
+                        title: true,
+                    }
+                }
+            },
+            methods: {
+                getEmpId() {
+                    let self = this;
+                    fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
+                        .then(result => {
+                            self.empName = result.employeeName;
+                        })
+                },
+                getTimeRange() {
+                    let self = this;
+
+                    $('#timeRange').daterangepicker({
+                        "startDate": this.getToday(),
+                        "endDate": this.getTodayEnd(),
+                        timePicker: true,
+                        timePickerIncrement: 15,
+                        locale: {
+                            format: 'YYYY-MM-DD HH:mm'
+                        }
+                    },
+                        function (start, end, _) {
+                            self.startTime = start;
+                            self.endTime = end;
+                        });
+                },
+                getToday() {
+                    let self = this;
+                    self.startTime = moment();
+                    return moment();
+                },
+                getTodayEnd() {
+                    let self = this;
+                    self.endTime = moment().day(7);
+                    return moment().day(7)
+                },
+                showCkEditor() {
+                    let self = this;
+                    ClassicEditor.create(self.$refs.editor, {
+                        toolbar: {
+                            items: ['undo', 'redo',
+                                '|', 'heading',
+                                '|', 'bold', 'italic',
+                                '|', 'link', 'insertTable',
+                                '|', 'Blockquote',
+                                '|', 'bulletedList', 'numberedList',
+                                '|', 'outdent', 'indent']
+                        }
+                    })
+                        .then(editor => {
+                            editor.model.document.on('change:data', () => {
+                                self.content = editor.getData();
+                            });
+                        })
+                        .catch(error => {
+                            console.error('There was a problem initializing the editor', error);
+                        });
+                },
+                checkIsValidData() {
+                    let isValid = true;
+                    let self = this;
+                    self.dataValid.title = self.title == '' ? false : true;
+                    if (self.dataValid.title) {
+                        this.sendBillBoard();
+                    }
+                },
+                sendBillBoard() {
+                    let self = this;
+                    self.startTime = self.startTime.utc(true).toISOString();
+                    self.endTime = self.endTime.utc(true).toISOString();
+
+                    axios.post("/api/BillboardApi/Create", {
+                        startTime: self.startTime,
+                        endTime: self.endTime,
+                        content: self.content,
+                        title: self.title,
+                    }).then(response => {
+                        if (response.data == true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "新增成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    location.href = "/Setting/BillBoard";
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "新增失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
+                        }
+                    });
+                },
+                toList() {
+                    location.href = "/Setting/BillBoard";
+                }
+            },
+            mounted() {
+                this.getEmpId();
+                this.getTimeRange();
+                this.showCkEditor();
+            }
+        }).mount("#app");
+    </script>
+}
