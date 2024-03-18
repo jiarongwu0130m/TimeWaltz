@@ -277,6 +277,7 @@ namespace WebApplication1.Controllers
             {
                 return RedirectToAction("ShiftSchedule");
             }
+            _shiftScheduleService.ClearAllFK(id);
             _shiftScheduleService.DeleteShiftSchedule(entity);
             return RedirectToAction("ShiftSchedule");
         }

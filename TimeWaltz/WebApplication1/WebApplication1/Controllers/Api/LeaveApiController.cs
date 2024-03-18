@@ -69,9 +69,10 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
+                //在處理(多塞)從使用者那裡接收不到的資料時要再建一個新的更大的更多欄位的model才比較安全(正確)
                 var fileModel = _leaveService.GetRelativeFileRoute(model);
                 var approvalModel = _leaveService.GetApprovalEmp(fileModel);
-                var leaveModel = _leaveService.AddLeaveTime(approvalModel);
+                var leaveModel = _leaveService.AddLeaveTime2(approvalModel);
                 var entity = ViewModelHelper.ToEntity(leaveModel);
                 _leaveService.CreateLeaveRequest(entity);
                 //TODO: 新增狀態表

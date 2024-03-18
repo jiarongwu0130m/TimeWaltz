@@ -1,9 +1,12 @@
 ﻿
 using Humanizer;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using System;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.Entity;
 using WebApplication1.Models.PersonalRecordViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication1.Services
 {
@@ -144,6 +147,59 @@ namespace WebApplication1.Services
                     Reason = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.Reason,
                 }).FirstOrDefault();
         }
+
+
+
+
+        public LeaveCreateDto AddLeaveTime2(LeaveCreateDto model)
+        {
+            var emp = _timeWaltzContext.Employees.Include(x => x.Shifts).ThenInclude(x => x.ShiftSchedule).FirstOrDefault(x => x.Id == model.EmployeesId);
+            if (emp == null) throw new Exception("Not find this employee");
+
+
+            var workDays = emp.Shifts.Where(x => x.ShiftsDate.Date >= model.StartTime.Date && x.ShiftsDate.Date <= model.EndTime.Date).Select(x=> new WorkDays
+            {
+                StartTime = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay,
+                EndTime = x.ShiftsDate.Date+ x.ShiftSchedule.EndTime.TimeOfDay,
+            });
+
+            var totalMinute = CalculateLeaveTime(model.StartTime,model.EndTime,workDays);
+
+            model.LeaveHours = (int)totalMinute.TotalMinutes;
+            return model;
+
+        }
+
+        public TimeSpan CalculateLeaveTime(DateTime startTime, DateTime endTime, IEnumerable<WorkDays> workDays)
+        {
+            var currentDay = startTime.Date;
+            var totalDuration = TimeSpan.Zero;
+            while (currentDay <= endTime.Date)
+            {
+                var workDay = workDays.FirstOrDefault(x => x.StartTime.Date == currentDay.Date);
+                if (workDay != null)
+                {
+                    var currentLeaveStart = startTime > workDay.StartTime? startTime:workDay.StartTime;
+                    var currentLeaveEnd = endTime < workDay.EndTime ? endTime : workDay.EndTime;
+
+                    //break time
+                    var breakTimeStart = workDay.StartTime.Date + TimeSpan.FromHours(12);
+                    var breakTimeEnd = workDay.StartTime.Date + TimeSpan.FromHours(13);
+                    if(currentLeaveStart < breakTimeEnd && currentLeaveEnd > breakTimeStart)
+                    {
+                        if (currentLeaveStart < breakTimeStart) currentLeaveStart = breakTimeEnd;
+                        if (currentLeaveEnd > breakTimeEnd) currentLeaveEnd = currentLeaveEnd > breakTimeStart ? currentLeaveEnd - TimeSpan.FromHours(1) : currentLeaveEnd;
+                    }
+                    var total = currentLeaveEnd - currentLeaveStart;
+                    totalDuration += total;
+                }
+                currentDay = currentDay.AddDays(1);
+            }
+            return totalDuration;
+        }
+
+
+
         /// <summary>
         /// 計算一次假單的請假時數並存入資料庫
         /// </summary>
@@ -156,12 +212,11 @@ namespace WebApplication1.Services
             var leaveEnd = model.EndTime;
 
             var emp = _timeWaltzContext.Employees
+                .Where(x=>x.Id == model.EmployeesId)
                 .Join(_timeWaltzContext.ShiftSchedules, e => e.ShiftScheduleId, shiftSchedule => shiftSchedule.Id, (e, shiftSchedule) => new { e, shiftSchedule })
                 .Join(_timeWaltzContext.Shifts, eshiftSchedule => eshiftSchedule.e.Id, shift=>shift.EmployeesId, (eshiftSchedule, shift)=> new { eshiftSchedule, shift})
-                .FirstOrDefault(eshiftScheduleshift => eshiftScheduleshift.eshiftSchedule.e.Id == model.EmployeesId);
+                .ToList();
             if (emp == null) throw new Exception("程式錯誤");
-
-            var Shifts = emp.eshiftSchedule.shiftSchedule.Shifts;
 
             //請假時間是否多於一天的判斷
             if (!IsSameDay(leaveStart, leaveEnd))
@@ -170,20 +225,20 @@ namespace WebApplication1.Services
                 TimeSpan startTimeOfDay, endTimeOfDay;
                 var fullDays = CalculateFullDays(leaveStart, leaveEnd, out startTimeOfDay, out endTimeOfDay);
 
-                for(var i = 0; i < 5; i++) 
+                for (var i = 0; i < 5; i++)
                 {
                     leaveStart.AddDays(i);
-                    var Have = Shifts.FirstOrDefault(x => x.ShiftsDate == leaveStart);
-                    if(Have != null)
+                    var Have = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == leaveStart.Date);
+                    if (Have != null)
                     {
                         model.LeaveHours = model.LeaveHours + 8;
                     }
                 }
-                var ShiftB = Shifts.FirstOrDefault(x => x.ShiftsDate.Date == model.StartTime.Date);
+                var ShiftB = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
                 if (ShiftB != null)
                 {
-                    var shiftStart = emp.eshiftSchedule.shiftSchedule.StartTime;
-                    var shiftEnd = emp.eshiftSchedule.shiftSchedule.EndTime;
+                    var shiftStart = ShiftB.eshiftSchedule.shiftSchedule.StartTime;
+                    var shiftEnd = ShiftB.eshiftSchedule.shiftSchedule.EndTime;
                     //確認請假開始時間即結束時間在同一天
                     //判斷請假時間與班別時間的關係取得符合班別上下班時間的請假時間
                     var leaveStartTime = GetCorrectStartTime(leaveStart.TimeOfDay, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
@@ -193,12 +248,12 @@ namespace WebApplication1.Services
 
                     model.LeaveHours = leaveTime / 60;
                     return model;
-                }                
-                var ShiftC = Shifts.FirstOrDefault(x => x.ShiftsDate.Date == model.EndTime.Date);
-                if(ShiftC != null)
+                }
+                var ShiftC = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
+                if (ShiftC != null)
                 {
-                    var shiftStart = emp.eshiftSchedule.shiftSchedule.StartTime;
-                    var shiftEnd = emp.eshiftSchedule.shiftSchedule.EndTime;
+                    var shiftStart = ShiftC.eshiftSchedule.shiftSchedule.StartTime;
+                    var shiftEnd = ShiftC.eshiftSchedule.shiftSchedule.EndTime;
                     //確認請假開始時間即結束時間在同一天
                     //判斷請假時間與班別時間的關係取得符合班別上下班時間的請假時間
                     var leaveStartTime = GetCorrectStartTime(leaveStart.TimeOfDay, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
@@ -206,21 +261,21 @@ namespace WebApplication1.Services
                     //算出扣除掉午休時間的請假時間
                     var leaveTime = GetLeaveTimeSkipBreakTime(leaveStartTime, leaveEndTime);
 
-                    model.LeaveHours = leaveTime / 60;
+                    model.LeaveHours = leaveTime;
                     return model;
                 }
             }
             else
             {
                 //判斷請假單日期在班表上是否有班
-                var ShiftA = Shifts.FirstOrDefault(x => x.ShiftsDate == model.StartTime.Date);
-                if(ShiftA == null)
+                var ShiftA = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
+                if (ShiftA == null)
                 {
                     model.LeaveHours = 0;
                     return model;
                 }
-                var shiftStart = emp.eshiftSchedule.shiftSchedule.StartTime;
-                var shiftEnd = emp.eshiftSchedule.shiftSchedule.EndTime;
+                var shiftStart = ShiftA.eshiftSchedule.shiftSchedule.StartTime;
+                var shiftEnd = ShiftA.eshiftSchedule.shiftSchedule.EndTime;
                 //確認請假開始時間即結束時間在同一天
                 //判斷請假時間與班別時間的關係取得符合班別上下班時間的請假時間
                 var leaveStartTime = GetCorrectStartTime(leaveStart.TimeOfDay, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
@@ -234,7 +289,7 @@ namespace WebApplication1.Services
 
             throw new NotImplementedException("程式設計錯誤");
 
-            
+
 
         }
         /// <summary>
@@ -320,7 +375,7 @@ namespace WebApplication1.Services
             }
             else
             {
-                leaveStart = leaveEnd;
+                leaveEnd = leaveStart;
                 return leaveEnd;
             }
         }
@@ -339,19 +394,24 @@ namespace WebApplication1.Services
 
             if(leaveStartTime < ss && leaveEndTime <= ee && leaveEndTime > ss)
             {
-                return (ss - leaveStartTime).Minutes;
+                var data = (ss - leaveStartTime);
+                return data.Minutes + data.Hours * 60;
             }
             else if(leaveStartTime < ss && leaveEndTime <= ss || leaveEndTime > ee && leaveStartTime >= ee)
             {
-                return (leaveEndTime - leaveStartTime).Minutes;
+                var data = (leaveEndTime - leaveStartTime);
+                return data.Minutes + data.Hours * 60;
             }
             else if(leaveStartTime < ss && leaveEndTime > ee)
             {
-                return (ss - leaveStartTime).Minutes + (leaveEndTime - ee).Minutes;
+                var data1 = (ss - leaveStartTime);
+                var data2 = (leaveEndTime - ee);
+                return data1.Minutes + data1.Hours * 60 + data2.Minutes + data2.Hours * 60;
             }
             else if(leaveEndTime > ee && leaveStartTime < ee && leaveStartTime >= ss)
             {
-                return (leaveEndTime - ee).Minutes;
+                var data = (leaveEndTime - ee);
+                return data.Minutes + data.Hours * 60;
             }
             else if(leaveStartTime >= ss && leaveEndTime <= ee)
             {

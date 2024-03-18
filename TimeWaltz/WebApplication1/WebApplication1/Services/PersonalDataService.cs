@@ -79,7 +79,7 @@ namespace WebApplication1.Services
                 }
                 else
                 {
-                    throw new Exception("資料庫錯誤");
+                    entity.ShiftsName = "此班別已被刪除，請重新設定或洽管理員";
                 }
 
             }

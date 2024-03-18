@@ -96,5 +96,16 @@ namespace WebApplication1.Services
                 MaxAdditionalClockIn = s.MaxAdditionalClockIn,
             }).ToList();
         }
+
+        public void ClearAllFK(int id)
+        {
+            var emp = _timeWaltzContext.Employees.Where(x=>x.ShiftScheduleId == id).ToList();
+            foreach(var e in emp)
+            {
+                e.ShiftScheduleId = null;
+            }
+            var shi = _timeWaltzContext.Shifts.Where(x => x.ShiftScheduleId == id).ToList();
+            _timeWaltzContext.Shifts.RemoveRange(shi);
+        }
     }
 }
