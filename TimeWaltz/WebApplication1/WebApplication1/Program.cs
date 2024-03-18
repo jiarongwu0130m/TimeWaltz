@@ -42,6 +42,7 @@ namespace WebApplication1
 
             builder.Services.AddScoped<ShiftService>();
 
+            builder.Services.AddScoped<BillboardService>();
             builder.Services.AddScoped<AccessService>();
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<DropDownBasicSettingService>();

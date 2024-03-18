@@ -85,10 +85,10 @@ namespace WebApplication1.Controllers
                    .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
             model.DepartmentNameSelectList = DropDownHelper
                .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
-            
+
 
             //帳號是否重複
-            if (_UserService.GetUserCreateOrNull(model).Count!=0)
+            if (_UserService.GetUserCreateOrNull(model).Count != 0)
             {
                 ModelState.AddModelError(string.Empty, "帳號重複");
                 return View(model);
@@ -108,7 +108,7 @@ namespace WebApplication1.Controllers
             {
                 Account = model.Account,
                 Password = model.Password,
-                Stop = model.Stop==1?true:false,
+                Stop = model.Stop == 1 ? true : false,
                 Salt = Salts,
                 DepartmentId = Convert.ToInt32(model.DepartmentName),
                 EmployeesId = Convert.ToInt32(model.EmployeesName),
@@ -209,13 +209,33 @@ namespace WebApplication1.Controllers
         #endregion
         #region 公佈欄 
         /// <summary>
-        /// ●公佈欄
+        /// 公佈欄-瀏覽頁面
         /// </summary>
         /// <returns></returns>
         public IActionResult BillBoard()
         {
             return View();
         }
+
+        /// <summary>
+        /// 公佈欄-新增頁面
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult BillBoardCreate()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 公佈欄-編輯頁面
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult BillBoardEdit(int id)
+        {
+            return View();
+        }
+
+
 
         #endregion
     }
