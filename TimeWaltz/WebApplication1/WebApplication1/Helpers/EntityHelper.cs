@@ -311,7 +311,7 @@ namespace WebApplication1.Helpers
             {
                 Id = entity.Id,
                 Account = entity.Account,
-                Stop = entity.Stop? 1:0,
+                Stop = entity.Stop ? 1 : 0,
             };
             return model;
         }
@@ -384,6 +384,46 @@ namespace WebApplication1.Helpers
                 EmployeeName = entity.Name,
             };
 
+            return model;
+        }
+
+        public static List<BillboardDto> ToViewModel(List<Billboard> entities)
+        {
+            var models = new List<BillboardDto>();
+            foreach (var entity in entities)
+            {
+                models.Add(ToViewModel(entity));
+            }
+
+            return models;
+        }
+
+        public static BillboardDto ToViewModel(Billboard entity)
+        {
+            var model = new BillboardDto
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                StartTime = entity.StartTime,
+                EmployeeId = entity.EmployeesId
+
+            };
+            return model;
+        }
+
+        public static BillboardEditDto ToEditViewModel(Billboard entity)
+        {
+            var model = new BillboardEditDto
+            {
+                Id = entity.Id,
+                EmployeesID = entity.EmployeesId,
+                Title = entity.Title,
+                Content = entity.Content,
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
+                PathRoute = entity.PathRoute,
+
+            };
             return model;
         }
 

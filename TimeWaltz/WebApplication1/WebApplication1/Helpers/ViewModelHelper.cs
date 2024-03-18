@@ -135,5 +135,17 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
+        public static Billboard ToEntity(BillboardEditDto dto)
+        {
+            var entity = new Billboard
+            {
+                EmployeesId = dto.EmployeesID,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Title = dto.Title,
+                Content = dto.Content,
+            };
+            return entity;
+        }
     }
 }
