@@ -163,12 +163,12 @@ namespace WebApplication1.Controllers
 
             if (model.Password != null)
             {
+                Salts = _UserService.GenerateSalt();
+
                 model.Password = _UserService.SHA256EncryptString(model.Password + Salts);
 
-                Salts = _UserService.GenerateSalt();
             }
             //密碼雜湊
-
 
             _UserService.EditUserType(model, Salts);
             return RedirectToAction("Account", "Setting");
