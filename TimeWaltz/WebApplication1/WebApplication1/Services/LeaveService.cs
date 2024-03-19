@@ -197,7 +197,7 @@ namespace WebApplication1.Services
 
             var totalTimeSpan = 計算總共請假時間(model.StartTime,model.EndTime,workDays);
 
-            model.LeaveHours = (int)totalTimeSpan.TotalMinutes;
+            model.LeaveMinutes = (int)totalTimeSpan.TotalMinutes;
             return model;
 
         }
@@ -263,7 +263,7 @@ namespace WebApplication1.Services
                     var Have = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == leaveStart.Date);
                     if (Have != null)
                     {
-                        model.LeaveHours = model.LeaveHours + 8;
+                        model.LeaveMinutes = model.LeaveMinutes + 8;
                     }
                 }
                 var ShiftB = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
@@ -278,7 +278,7 @@ namespace WebApplication1.Services
                     //算出扣除掉午休時間的請假時間
                     var leaveTime = GetLeaveTimeSkipBreakTime(leaveStartTime, leaveEndTime);
 
-                    model.LeaveHours = leaveTime / 60;
+                    model.LeaveMinutes = leaveTime / 60;
                     return model;
                 }
                 var ShiftC = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
@@ -293,7 +293,7 @@ namespace WebApplication1.Services
                     //算出扣除掉午休時間的請假時間
                     var leaveTime = GetLeaveTimeSkipBreakTime(leaveStartTime, leaveEndTime);
 
-                    model.LeaveHours = leaveTime;
+                    model.LeaveMinutes = leaveTime;
                     return model;
                 }
             }
@@ -303,7 +303,7 @@ namespace WebApplication1.Services
                 var ShiftA = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
                 if (ShiftA == null)
                 {
-                    model.LeaveHours = 0;
+                    model.LeaveMinutes = 0;
                     return model;
                 }
                 var shiftStart = ShiftA.eshiftSchedule.shiftSchedule.StartTime;
@@ -315,7 +315,7 @@ namespace WebApplication1.Services
                 //算出扣除掉午休時間的請假時間
                 var leaveTime = GetLeaveTimeSkipBreakTime(leaveStartTime, leaveEndTime);
 
-                model.LeaveHours = leaveTime / 60;
+                model.LeaveMinutes = leaveTime / 60;
                 return model;
             }
 

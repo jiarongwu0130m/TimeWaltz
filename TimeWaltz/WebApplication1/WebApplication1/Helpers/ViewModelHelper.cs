@@ -22,7 +22,7 @@ namespace WebApplication1.Helpers
                 Reason = model.Reason,
                 FileRoute = model.RelativeFileRoute,
                 AgentEmployeeId = model.AgentEmployeeId,
-                LeaveHours = model.LeaveHours,
+                LeaveMinutes = model.LeaveMinutes,
                 ApprovalEmployeeId = model.ApprovalEmployeeId,
             };
             return entity;

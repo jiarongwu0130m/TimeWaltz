@@ -21,7 +21,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
 
         public int AgentEmployeeId { get; set; }
         public string AgentEmployeeName { get; set; }
-        public int LeaveHours { get; set; }
+        public decimal LeaveMinutes { get; set; }
         [NotMapped]
         public string ApprovalStatus { get; set; }
     }
@@ -32,7 +32,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
         public string VacationType { get; set; }
         public string ApprovalEmpName { get; set; }
         public string AgentEmployeeName { get; set; }
-        public int LeaveHours { get; set; }
+        public decimal LeaveMinutes { get; set; }
         public string ApprovalStatus { get; set; }
         public string? Reason { get; set; }
         public string? ApprovalRemark { get; set; }
@@ -52,7 +52,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
         public string? RelativeFileRoute { get; set; }
         public int ApprovalEmployeeId { get; set; }
         public int AgentEmployeeId { get; set; }
-        public int LeaveHours { get; set; }
+        public decimal LeaveMinutes { get; set; }
     }
 
     public class LeaveDropDownDto

@@ -431,7 +431,7 @@ namespace WebApplication1.Helpers
                     VacationType = entity.VacationType,
                     ApprovalEmpName = entity.ApporvalEmpName,
                     AgentEmployeeName = entity.AgentEmployeeName,
-                    LeaveHours = entity.LeaveHours,
+                    LeaveMinutes = entity.LeaveMinutes,
                 };
                 models.Add(model);
             }
@@ -448,7 +448,7 @@ namespace WebApplication1.Helpers
                 VacationType = entity.VacationType,
                 ApprovalEmpName = entity.ApporvalEmpName,
                 AgentEmployeeName = entity.AgentEmployeeName,
-                LeaveHours = entity.LeaveHours,
+                LeaveMinutes = entity.LeaveMinutes,
                 ApprovalStatus = entity.ApprovalStatus.ToString(),
                 ApprovalRemark = entity.ApprovalRemark,
                 Reason = entity.Reason,

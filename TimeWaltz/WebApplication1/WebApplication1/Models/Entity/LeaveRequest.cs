@@ -33,7 +33,7 @@ public partial class LeaveRequest
     [NotMapped]
     public string ApporvalEmpName { get; set; }
 
-    public int LeaveHours { get; set; }
+    public decimal LeaveMinutes { get; set; }
     [NotMapped]
     public string ApprovalRemark { get; set; }
     [NotMapped]
