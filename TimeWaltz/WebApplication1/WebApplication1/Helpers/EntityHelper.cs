@@ -2,6 +2,7 @@
 using Repository.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
+
 using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Helpers
@@ -15,23 +16,20 @@ namespace WebApplication1.Helpers
             _dbContext = timeWaltzContext;
         }
 
-
-        public static List<PersonalDataViewModel> ToViewModel(List<Employee> entities)
+        public static List<PersonalDataDto> ToPersonalListDto(List<Employee> entities)
         {
-            var models = new List<PersonalDataViewModel>();
+            var models = new List<PersonalDataDto>();
             foreach (var entity in entities)
             {
-                models.Add(ToViewModel(entity));
+                models.Add(ToPersonalDto(entity));
             }
 
             return models;
         }
 
-        public static PersonalDataViewModel ToViewModel(Employee entity)
+        public static PersonalDataDto ToPersonalDto(Employee entity)
         {
-
-
-            var model = new PersonalDataViewModel
+            var model = new PersonalDataDto
             {
                 Id = entity.Id,
                 //ShiftsName = entity.ShiftsName,//todo
@@ -39,7 +37,7 @@ namespace WebApplication1.Helpers
                 Name = entity.Name,
                 HireDate = entity.HireDate,
                 Email = entity.Email,
-                Gender = entity.Gender,
+                Gender = entity.Gender.ToString(),
                 EmployeesNo = entity.EmployeesNo,
 
             };
@@ -180,6 +178,20 @@ namespace WebApplication1.Helpers
             return models;
         }
 
+        public static PersonalDataEditDto ToEditDto(Employee entity)
+        {
+            var model = new PersonalDataEditDto
+            {
+                Id = entity.Id,
+                ShiftScheduleId = entity.ShiftScheduleId,
+                DepartmentId = entity.DepartmentId,
+                Name = entity.Name,
+                Email = entity.Email,
+
+            };
+            return model;
+        }
+
         /// <summary>
         /// 給編輯頁面用的ToEditDto，傳入一個entity，回傳一個Dto
         /// </summary>
@@ -256,7 +268,56 @@ namespace WebApplication1.Helpers
             };
             return model;
         }
+        /// <summary>
+        /// 傳入一個SpecialVacationList實體模型，傳回一個SpecialVacationDtoList
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public static List<SpecialVacationDto> ToDto(List<SpecialVacation> entities)
+        {
+            var models = new List<SpecialVacationDto>();
 
+            foreach(var entity in entities)
+            {
+                models.Add(new SpecialVacationDto
+                {
+                    Id = entity.Id,
+                    SpecialVacationName = entity.SpecialVacationName,
+                    Date = entity.Date.ToString("yyyy-MM-dd"), });
+            }
+            return models;
+        }
+        public static List<ShiftDto> ToDto(List<Shift> entities)
+        {
+            var models = new List<ShiftDto>();
+            foreach(var entity in entities)
+            {
+                models.Add(new ShiftDto
+                {
+                    Id = entity.Id,
+                    Title = entity.Title,
+                    StartTime = entity.StartTime,
+                    EndTime = entity.EndTime,
+                });
+            }
+            return models;
+        }
+        /// <summary>
+         /// 傳入一個SpecialVacation實體模型，傳回一個SpecialVacationEditDto
+         /// </summary>
+         /// <param name="entities"></param>
+         /// <returns></returns>
+        public static SpecialVacationEditDto ToDto(SpecialVacation entity)
+        {
+            var model = new SpecialVacationEditDto
+            {
+                Id = entity.Id,
+                SpecialVacationName = entity.SpecialVacationName,
+                Date = entity.Date,
+            };
+           
+            return model;
+        }
 
 
         public static List<DepartmentViewModel> ToViewModel(List<Department> entities)
@@ -342,6 +403,48 @@ namespace WebApplication1.Helpers
                 //Status = entity.Status,//todo
                 Reason = entity.Reason,
                 ApprovalEmployeeId = entity.ApprovalEmployeeId,
+            };
+            return model;
+        }
+
+        
+        public static List<LeaveDto> ToDto(List<LeaveRequest> entities)
+        {
+            var models = new List<LeaveDto>();
+
+            foreach (var entity in entities)
+            {
+                var model = new LeaveDto
+                {
+                    Id = entity.Id,
+                    EmployeesId = entity.EmployeesId,
+                    Date = entity.StartTime.ToString("yyyy-MM-dd") + "~" + entity.EndTime.ToString("yyyy-MM-dd"),
+                    StartTime = entity.StartTime.ToString("HH:mm"),
+                    EndTime = entity.EndTime.ToString("HH:mm"),
+                    VacationType = entity.VacationType,
+                    ApprovalEmpName = entity.ApporvalEmpName,
+                    AgentEmployeeName = entity.AgentEmployeeName,
+                    LeaveMinutes = entity.LeaveMinutes,
+                };
+                models.Add(model);
+            }
+            return models;
+        }
+
+        public static LeaveEditDto ToDto(LeaveRequest entity)
+        {
+            var model = new LeaveEditDto
+            {
+
+                Name = entity.EmployeeName,
+                TimeRange = entity.StartTime.ToString("yyyy-MM-dd HH:mm") + "~" + entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                VacationType = entity.VacationType,
+                ApprovalEmpName = entity.ApporvalEmpName,
+                AgentEmployeeName = entity.AgentEmployeeName,
+                LeaveMinutes = entity.LeaveMinutes,
+                ApprovalStatus = entity.ApprovalStatus.ToString(),
+                ApprovalRemark = entity.ApprovalRemark,
+                Reason = entity.Reason,
             };
             return model;
         }

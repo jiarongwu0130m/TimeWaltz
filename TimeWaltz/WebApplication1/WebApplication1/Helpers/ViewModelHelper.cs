@@ -1,13 +1,35 @@
-﻿using WebApplication1.Models.BasicSettingViewModels;
+﻿using Repository.Enum;
+ using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.SettingViewModels;
 using Repository.Models;
+using WebApplication1.Models.Entity;
+using WebApplication1.Models.PersonalRecordViewModels;
+using Employee = Repository.Models.Employee;
+using LeaveRequest = Repository.Models.LeaveRequest;
 
 namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
-        public static Employee ToEntity(PersonalDataCreateViewModel model)
+        public static LeaveRequest ToEntity(LeaveCreateDto model)
+        {
+            var entity = new LeaveRequest
+            {
+                EmployeesId = model.EmployeesId,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                VacationDetailsId = model.VacationDetailsId,
+                Reason = model.Reason,
+                FileRoute = model.RelativeFileRoute,
+                AgentEmployeeId = model.AgentEmployeeId,
+                LeaveMinutes = model.LeaveMinutes,
+                ApprovalEmployeeId = model.ApprovalEmployeeId,
+            };
+            return entity;
+        }
+
+        public static Employee ToEntity(PersonalDataCreateDto model)
         {
             var entity = new Employee
             {
@@ -16,7 +38,7 @@ namespace WebApplication1.Helpers
                 Name = model.Name,
                 HireDate = model.HireDate,
                 Email = model.Email,
-                Gender = model.Gender,
+                Gender = (GenderEnum)model.Gender,
                 EmployeesNo = model.EmployeesNo,
             };
             return entity;
@@ -58,7 +80,7 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-       
+
         public static PublicHoliday ToEntity(PublicHolidayCreateViewModel model)
         {
             var entity = new PublicHoliday
@@ -72,7 +94,7 @@ namespace WebApplication1.Helpers
         public static Department ToEntity(DepartmentCreateViewModel model)
         {
             var entity = new Department
-            {                
+            {
                 DepartmentName = model.DepartmentName,
                 //Id = model.EmployeesId,//todo
             };
@@ -92,6 +114,15 @@ namespace WebApplication1.Helpers
             return entity;
         }
 
+        public static SpecialVacation ToDto(SpecialVacationCreateDto dto)
+        {
+            var entity = new SpecialVacation
+            {
+                SpecialVacationName = dto.SpecialVacationName,
+                Date = dto.Date,
+            };
+            return entity;
+        }
         public static OvertimeApplication ToEntity(OvertimeRequestDto dto)
         {
             var entity = new OvertimeApplication
@@ -113,9 +144,9 @@ namespace WebApplication1.Helpers
             {
                 Account = model.Account,
                 //Password = model.Password,
-                //EmployeesId = model.EmployeesID,//todo
+                //EmployeesId = model.EmployeesID,
                 //DepartmentId = (int)model.DepartmentID,//todo
-                Stop = model.Stop==1 ? true : false,
+                Stop = model.Stop == 1 ? true : false,
                 PasswordDate = DateTime.Now
             };
             return entity;

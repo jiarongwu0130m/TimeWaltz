@@ -1,67 +1,74 @@
-﻿@model WebApplication1.Models.BasicSettingViewModels.PersonalDataCreateViewModel
-@{
+﻿@{
     ViewData["Title"] = "新增員工個人資料";
 }
 
 <form asp-action="CreatePersonalData" asp-asp-controller="BasicSetting" method="post" id="app">
     <section class="content">
         <div class="card-body">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ShiftName" class="control-label"></label>
-                <select class="form-control" asp-for="ShiftScheduleId" asp-items="@Model.ShiftNameSelectItems"></select>
-                <span class="text-danger"></span>
-            </div>  
-            <div class="form-group">
-                <label asp-for="DepartmentName" class="control-label"></label>
-                <select class="form-control" asp-for="DepartmentId" asp-items="@Model.DepartmentNameSelectItem"></select>
-                <span class="text-danger"></span>
-            </div>            
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input name="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HireDate" class="control-label"></label>
-                <input name="HireDate" class="form-control" id="dateInput" />
-                <span asp-validation-for="HireDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input name="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label class="control-label">姓名</label>
+                <input class="form-control" :class="validation.name" v-model.trim="name" />
+
+                <span class="text-danger" v-if="!validation.name">姓名不得為空</span>
             </div>
             <div class="form-group">
                 <label class="control-label">性別</label>
-                <select asp-for="Gender" asp-items="@Model.GenderSelectItems" class="form-control"></select>
+                <select class="form-control" :class="validation.gender" v-model="gender">
+                    <option value="" disabled>請選擇</option>
+                    <option v-for="item in genderSelectItems" :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger" v-if="!validation.gender">性別不得為空</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">部門</label>
+                <select class="form-control" :class="validation.departmentId" v-model="departmentId">
+                    <option value="" disabled>請選擇</option>
+                    <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger" v-if="!validation.departmentId">部門不得為空</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">班別</label>
+                <select class="form-control" v-model="shiftScheduleId">
+                    <option value="" disabled>請選擇</option>
+                    <option v-for="item in shiftNameSelectItems" :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger" v-if="!validation.shiftScheduleId">班別不得為空</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">入職日期</label>
+                <input type="date" class="form-control" id="hireDate" />
                 <span class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmployeesNo" class="control-label"></label>
-                <input name="EmployeesNo" class="form-control" />
-                <span asp-validation-for="EmployeesNo" class="text-danger"></span>
+                <label class="control-label">Email</label>
+                <input type="email" name="Email" class="form-control" :class="validation.email" v-model="email" />
+                <div class="invalid-feedback">
+                    Email格式錯誤!
+                </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="新增" class="btn btn-primary" />
+                <label class="control-label">員工編號</label>
+                <input name="EmployeesNo" class="form-control" :class="validation.employeesNo" v-model="employeesNo" />
+                <div class="invalid-feedback">
+                    員工編號不得為空!
+                </div>
+                <span class="text-danger" v-if="!validation.employeesNo">員工編號不得為空</span>
+        </div>
+            <div class="form-group">
+                <input type="button" value="新增" @@click="validateAndSubmit" class="btn btn-primary" />
             </div>
         </div>
         <div>
-            <a asp-action="ListPersonalData" asp-controller="BasicSetting"></a>
+            <a asp-action="PersonalData" asp-controller="BasicSetting"></a>
         </div>
     </section>
 </form>
-@section Scripts{
+@section Scripts {
     <script>
 
-        $(function () {
-            $('#dateInput').daterangepicker({
-                singleDatePicker: true,
-                locale: {
-                    format: 'YYYY/MM/DD'
-                }
-            });
-        });
+
+
     </script>
 
     <script>
@@ -69,13 +76,116 @@
             data() {
                 return {
                     genderSelectItems: [],
+                    id: null,
+                    departmentNameSelectItem: [],
+                    shiftNameSelectItems: [],
+                    departmentId: '',
+                    email: '',
+                    name: '',
+                    shiftScheduleId: '',
+                    hireDate: this.getToday(),
+                    gender: '',
+                    employeesNo: '',
+                    today: null,
+                    validation: {
+                        employeesNo: true,
+                        gender: true,
+                        departmentId: true,
+                        email: null,
+                        name: true,
+                        shiftScheduleId: true,
+                    },
                 }
             },
-            mounted() {
-                fetch("/api/PersonalDataApi/DropDownList").then(res => res.json())
-                    .then(result => {
-                        this.genderSelectItems = result.genderSelectItems;
+            watch: {
+                "email": {
+                    handler(newVal, oldVal) {
+                        this.validation.email = newVal.includes('@@') ? "is-valid" : "is-invalid";
+                    },
+                    immediate: false
+                }, 
+            },
+            methods: {
+                getToday() {
+                    var now = moment();
+                    var newNow = now.format("YYYY-MM-DD")
+                    return newNow;
+                },
+                getDateTimeRangePicker() {
+                    let self = this;
+                    $('#hireDate').daterangepicker({
+                        "startDate": self.getToday(),
+                        singleDatePicker: true,
+                        locale: {
+                            format: 'YYYY-MM-DD'
+                        }
+                    }, function (start, _, _) {
+                        self.hireDate = start.format("YYYY-MM-DD");
+                    });
+                },
+                validateAndSubmit(){
+                    let isValid = true;
+                    this.validation.name = this.name == '' ? false : true;
+                    this.validation.gender = this.gender == '' ? false : true;
+                    this.validation.departmentId = this.departmentId == '' ? false : true;
+                    this.validation.employeesNo = this.employeesNo == '' ? false : true;
+                    this.validation.shiftScheduleId = this.shiftScheduleId == '' ? false : true;
+                    if (this.validation.name && this.validation.gender && this.validation.departmentId && this.validation.employeesNo && this.shiftScheduleId) {
+                        this.send();
+                    }
+                },
+                send: function () {
+                    let self = this;
+                    console.log(self.name, self.gender, self.departmentId, self.shiftScheduleId, self.hireDate, self.email, self.employeesNo)
+                    fetch("/api/PersonalDataApi/Create", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            name: self.name,
+                            email: self.email,
+                            hireDate: self.hireDate,
+                            gender: self.gender,
+                            employeesNo: self.employeesNo,
+                            departmentId: self.departmentId,
+                            shiftScheduleId: self.shiftScheduleId,
+                        }),
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                    }).then(res => res.json()).then(result => {
+                        console.log(result);
+                        if (result.status == true) {
+                            alert("新增成功");
+                            location.href = "/BasicSetting/PersonalData"
+                        } else {
+                            alert("新增失敗");
+                        }
                     })
+                },
+                getGenderDropDownList() {
+                    let self = this;
+                    fetch("/api/PersonalDataApi/DropDownList").then(res => res.json())
+                        .then(result => {
+                            console.log(result);
+                            // const selectItems = [{ disabled: true, group: null, selected: true, text: '請選擇', value: '' }, ...result.genderSelectItems]
+                            // console.log(selectItems)
+                            self.genderSelectItems = result.genderSelectItems;
+
+                        })
+                },
+                getDepAndShfDropDownList() {
+                    let self = this;
+                    fetch("/api/PersonalDataApi/GetDepAndShiftDorpDownList").then(res => res.json())
+                        .then(result => {
+                            console.log(result);
+                            self.departmentNameSelectItem = result.departmentNameSelectItem;
+                            self.shiftNameSelectItems = result.shiftNameSelectItems;
+                        })
+                },
+            },
+            mounted() {
+                this.getGenderDropDownList();
+                this.getDepAndShfDropDownList();
+                this.getDateTimeRangePicker();
             }
         }).mount("#app");
     </script>

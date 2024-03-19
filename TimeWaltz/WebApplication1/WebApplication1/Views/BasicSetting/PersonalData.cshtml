@@ -1,111 +1,213 @@
-﻿@model IEnumerable<WebApplication1.Models.BasicSettingViewModels.PersonalDataViewModel>
-
-@{
+﻿@{
     Layout = "_Layout";
     ViewData["Title"] = "";
 }
-<style>
-    .thinkcss-right {
-        text-align: right;
-    }
-</style>
-<div class="row">
-    <form asp-action="ListVacationType" asp-controller="BasicSetting" method="post">
-        <div class="row">
-            <div class="form-group col-sm-12">
-                <label>假別名稱查詢：</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <input name="QueryName" type="text">
-            </div>
-            <div class="col-sm-4">
-                <input name="QueryDepartmentName" type="text">
-            </div>
-            <div class="col-sm-4">
-                <input name="QueryEmployeesNo" type="text">
-            </div>
-        </div>
-        <div class="row">            
-            <div class="col form-group">
-                <button type="submit" class="btn btn-outline-dark">查詢</button>
-            </div>
-            <div class="form-group col-12">
-                <a asp-controller="BasicSetting" asp-action="PersonalDataCreate" class="btn btn-outline-success">新增</a>
-            </div>
 
-
+<div class="row" id="app">
+    <form asp-action="VacationType" asp-controller="BasicSetting" method="post">
+        <div class="row">
+            <div class="col">
+                <div>
+                    <label class="form-label">班別名稱</label>
+                    <div class="row gx-0">
+                        <div class="col-6">
+                            <input type="text" class="form-control" v-model="search.shiftName">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    <label class="form-label">部門名稱</label>
+                    <div class="row gx-0">
+                        <div class="col-6">
+                            <input type="text" class="form-control" v-model="search.depName">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    <label class="form-label">員工名稱</label>
+                    <div class="row gx-0">
+                        <div class="col-6">
+                            <input type="text" class="form-control" v-model="search.empName">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    <label class="form-label">員工編號</label>
+                    <div class="row gx-0">
+                        <div class="col-6">
+                            <input type="text" class="form-control" v-model="search.empNo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    <label class="form-label"></label>
+                    <div class="row gx-0">
+                        <div class="col-6">
+                            <a asp-controller="BasicSetting" asp-action="PersonalDataCreate" class="btn btn-outline-success">新增</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-12">
+                </div>
+            </div>
         </div>
-        
+        <hr />
 
     </form>
-    
+
 
     <table class="table table-bordered">
         <thead>
         <thead>
             <tr>
                 <th>
-                        @Html.DisplayNameFor(model => model.ShiftsName)
+                    班別名稱
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.DepartmentName)
+                    部門
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                    員工名稱
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.HireDate)
+                    雇傭日期
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.Email)
+                    員工信箱
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.Gender)
+                    性別
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.EmployeesNo)
+                    員工編號
                 </th>
                 <th></th>
             </tr>
         </thead>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ShiftsName)
-                    </td>
+            <tr v-for="emp in filterEmpNo">
+                <td>
+                    {{emp.shiftsName}}
+                </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DepartmentName)
-                    </td>
+                <td>
+                    {{emp.departmentName}}
+                </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
+                <td>
+                    {{emp.name}}
+                </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HireDate.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmployeesNo)
-                    </td>
-                    <td>
-                        @Html.ActionLink("詳細", "PersonalDataEdit", new { id = item.Id }) |
-                        @Html.ActionLink("刪除", "PersonalDataDelete", new { id = item.Id })
-                    </td>
-                </tr>
-            }
+                <td>
+                    {{emp.hireDate}}
+                </td>
+                <td>
+                    {{emp.email}}
+                </td>
+                <td>
+                    {{emp.gender}}
+                </td>
+                <td>
+                    {{emp.employeesNo}}
+                </td>
+                <td>
+                    <a href="#" @@click="edit(emp.id, $event)">編輯</a> |
+                    <a href="#" @@click="getOut(emp.id, $event)">刪除</a> 
+
+                </td>
+            </tr>
+
         </tbody>
     </table>
 
-</div> 
+</div>
+@section Scripts {
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    empList: [],
+                    formatedHireDate: null,
+                    search: {
+                        shiftName: '',
+                        depName: '',
+                        empName: '',
+                        empNo: '',
+
+                    },
+                }
+            },
+            computed: {
+                filterShiftName() {
+                    if (this.search.shiftName) return this.empList.filter(x => x.shiftsName.includes(this.search.shiftName));
+                    return this.empList;
+                },
+                filterDepName() {
+                    if (this.search.depName) return this.filterShiftName.filter(x => x.departmentName.includes(this.search.depName));
+                    return this.filterShiftName;
+                },
+                filterEmpName() {
+                    if (this.search.empName) return this.filterDepName.filter(x => x.name.includes(this.search.empName));
+                    return this.filterDepName;
+                },
+                filterEmpNo() {
+                    if (this.search.empNo) return this.filterEmpName.filter(x => x.employeesNo.includes(this.search.empNo));
+                    return this.filterEmpName;
+                },
+            },
+            methods: {
+                getOut(id, event) {
+                    let self = this
+                    event.preventDefault();
+                    fetch(`/api/PersonalDataApi/Delete/${id}`, {
+                        method: "POST",
+
+                    }).then(res => res.json()).then(result => {
+                        if (result.status) {
+                            alert("刪除成功")
+                            this.getEmpList();
+                        } else {
+                            alert("刪除失敗")
+                        }
+                    })
+
+
+                },
+                edit(id, event) {
+                    event.preventDefault();
+                    location.href = `/BasicSetting/PersonalDataEdit/${id}`
+
+                },
+                getEmpList() {
+                    let self = this;
+                    fetch("/api/PersonalDataApi/GetPersonalData")
+                        .then(res => res.json())
+                        .then(result => {
+                            //emp陣列
+                            result.forEach((emp) => {
+                                emp.hireDate = moment(emp.hireDate).format("YYYY-MM-DD")
+                            })
+                            self.empList = result;
+                        });
+                },
+            },
+            mounted() {
+                this.getEmpList();
+            },
+
+
+        }).mount('#app');
+
+    </script>
+
+}

@@ -24,11 +24,11 @@ namespace WebApplication1.Controllers.Api
         {
             var empId = User.GetEmployeeId();
             var shift = _timeWaltzDb.Shifts.Include(shift => shift.ShiftSchedule).FirstOrDefault(x => x.EmployeesId == empId && EF.Functions.DateDiffDay(x.ShiftsDate, DateTime.Now) == 0);
-            if (shift == null) return new {onTime="",offTime="" };
+            if (shift == null) return new { onTime = "", offTime = "" };
             return new
             {
-                onTime= shift.ShiftSchedule.StartTime,
-                offTime= shift.ShiftSchedule.EndTime,
+                onTime = shift.ShiftSchedule.StartTime,
+                offTime = shift.ShiftSchedule.EndTime,
             };
 
         }
@@ -134,3 +134,4 @@ namespace WebApplication1.Controllers.Api
         }
     }
 }
+

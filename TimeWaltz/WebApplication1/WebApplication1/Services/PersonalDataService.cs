@@ -13,19 +13,20 @@ namespace WebApplication1.Services
         }
         public void CreatePersonalData(Employee entity)
         {
-            if(entity == null)
+            if (entity == null)
             {
                 throw new ArgumentNullException("新增錯誤");
             }
+            entity.IsDelete = false;
             _timeWaltzContext.Employees.Add(entity);
             _timeWaltzContext.SaveChanges();
 
-            
+
         }
 
-        public void DeletePersonalData(Employee entity)
+        public void SoftDeletePersonalData(Employee entity)
         {
-            _timeWaltzContext.Employees.Remove(entity);
+            entity.IsDelete = true;
             _timeWaltzContext.SaveChanges();
         }
 
@@ -38,12 +39,32 @@ namespace WebApplication1.Services
             }).ToList();
 
             return entities;
-            
-        }
 
+        }
+        /// <summary>
+        /// 給GetPersonalData用，Join部門以及班別
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public List<Employee> GetPersonalDataList()
         {
-            var entities =  _timeWaltzContext.Employees.ToList();
+            
+            var entities = _timeWaltzContext.Employees
+                .Where(x=>x.IsDelete == false)
+                .Join(_timeWaltzContext.Departments, e => e.DepartmentId, d => d.Id, (e, d) => new Employee
+                {
+                    Id = e.Id,
+                    ShiftScheduleId = e.ShiftScheduleId,
+                    DepartmentId = e.DepartmentId,
+                    Name = e.Name,
+                    HireDate = e.HireDate,
+                    Email = e.Email,
+                    Gender = e.Gender,
+                    EmployeesNo = e.EmployeesNo,
+                    DepartmentName = d.DepartmentName,
+                    ShiftsName = "",
+                }).ToList();
+
 
             foreach (var entity in entities)
             {
@@ -54,31 +75,38 @@ namespace WebApplication1.Services
                     //entity.DepartmentName = department.DepartmentName;//todo
                 }
                 var shiftSchedule = _timeWaltzContext.ShiftSchedules.FirstOrDefault(s => s.Id == entity.ShiftScheduleId);
-                if(shiftSchedule != null)
+                if (shiftSchedule != null)
                 {
                     //entity.ShiftsName = shiftSchedule.ShiftsName;//todo
                 }
+                else
+                {
+                    entity.ShiftsName = "此班別已被刪除，請重新設定或洽管理員";
+                }
+
             }
-            
+
             return entities;
         }
 
+
         public Employee? GetPersonalDataOrNull(int id)
         {
-            return _timeWaltzContext.Employees.Where(e => e.Id == id).FirstOrDefault();
+
+            return _timeWaltzContext.Employees.Where(x=>x.IsDelete == false).FirstOrDefault(x=>x.Id == id);
         }
 
-        
 
-        public void EditPersonalData(PersonalDataEditViewModel model)
+
+        public void EditPersonalData(PersonalDataEditDto model)
         {
-            var entity = _timeWaltzContext.Employees.FirstOrDefault(e=>e.Id == model.Id);
+            var entity = _timeWaltzContext.Employees.Where(x => x.IsDelete == false).FirstOrDefault(e => e.Id == model.Id);
             entity.DepartmentId = model.DepartmentId;
             entity.ShiftScheduleId = model.ShiftScheduleId;
             entity.Name = model.Name;
             entity.Email = model.Email;
             _timeWaltzContext.SaveChanges();
-            
+
         }
 
         public List<Department> GetDepartmentDropDownData()
@@ -90,5 +118,7 @@ namespace WebApplication1.Services
             }).ToList();
             return entities;
         }
+
+
     }
 }

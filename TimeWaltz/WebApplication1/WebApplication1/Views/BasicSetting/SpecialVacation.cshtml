@@ -1,0 +1,133 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "特殊假日一覽";
+}
+<div class="row" id="app">
+
+    <div class="form-inline mb-3">
+        <div class="form-group">
+            <label>日期查詢：</label>
+            <form asp-action="specialVacation" asp-controller="BasicSetting" method="post">
+                <div class="input-group col">
+                    <div class="input-group-prepend">
+                    </div>
+                    <label name="Date">時間區間查詢</label>
+                    <input name="Date" id="dateInput">
+                </div>
+            </form>
+        </div>
+        <div class="form-group">
+            <a asp-controller="BasicSetting" asp-action="specialVacationCreate" class="btn btn-outline-success">新增</a>
+
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <thead>
+            <tr>
+                <th>
+                    特殊假日名稱
+                </th>
+                <th>
+                    日期
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="item in filterDate">
+                <td>
+                    {{item.specialVacationName}}
+                </td>
+                <td>
+                    {{item.date}}
+                </td>
+                <td>
+                    <a href="#" @@click="edit(item.id, $event)" class="btn btn-primary">編輯</a> |
+                    <a href="#" @@click="getOut(item.id, $event)" class="btn btn-primary">刪除</a>
+                </td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+</div>
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    specialVacationList: [],
+                    search:{
+                        startDate: null,
+                        endDate: null,
+                    }
+                }
+            },
+            computed: {
+                filterDate(){
+                    let data = this.specialVacationList
+
+                    if (this.search.startDate) {
+                        data = data
+                        .filter(x => new Date(x.date) >= new Date(this.search.startDate))
+
+                    }
+                    if (this.search.endDate) {
+                        data = data
+                        .filter(x => new Date(x.date) <= new Date(this.search.endDate))
+                    }
+                    console.log(data)
+                    return data;
+                },
+            },
+            methods: {
+                getDateRangePicker() {
+                    let self = this;
+                    $('#dateInput').daterangepicker({
+                        locale: {
+                            format: 'YYYY-MM-DD'
+                        }
+                    }, function (start, end, _) {
+                        self.search.startDate = start.format('YYYY-MM-DD');
+                        self.search.endDate = end.format('YYYY-MM-DD');
+
+                    });
+                },
+                edit(id, event) {
+                    event.preventDefault();
+                    location.href = `/BasicSetting/SpecialVacationEdit/${id}`
+                },
+                getOut(id, event) {
+                    let self = this
+                    event.preventDefault();
+                    axios.post(`/api/specialvacationapi/Delete/${id}`).then((response) => {
+                        if (response.status) {
+                            alert("刪除成功")
+                            this.getListData();
+                        } else {
+                            alert("刪除失敗")
+                        }
+                    })
+                },
+                getListData() {
+                    let self = this;
+                    axios('/api/specialvacationapi/list').then((response) => {
+                        console.log(response);
+                        self.specialVacationList = response.data;
+                        console.log(self.specialVacationList)
+                    })
+                        .catch((error) => console.log(error));
+                },
+            },
+            mounted() {
+                this.getListData();
+                this.getDateRangePicker();
+
+            },
+        }).mount('#app')
+
+
+    </script>
+}

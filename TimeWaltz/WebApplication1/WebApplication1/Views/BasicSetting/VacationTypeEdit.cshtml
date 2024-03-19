@@ -2,7 +2,8 @@
     Layout = "_Layout";
     ViewData["Title"] = "修改假別";
 }
-<form asp-action="EditVacationType" asp-controller="BasicSetting" method="post" id="app">    <section class="content">
+<form asp-action="VacationTypeEdit" asp-controller="BasicSetting" method="post" id="app">
+    <section class="content">
         <div class="card-body">
             <input name="id" type="hidden"/>            
             <div class="form-group">
@@ -28,12 +29,12 @@
             </div>
             <div class="form-group">
                 <label  class="control-label">可請天數</label>
-                <input name="NumberOfDays" class="form-control" v-model="numberOfDays" />
+                <input name="NumberOfDays" class="form-control" v-model.number="numberOfDays" />
                 <span  class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label  class="control-label">最小可請時數</label>
-                <input naem="MinVacationHours" class="form-control" v-model="minVacationHours" />
+                <input naem="MinVacationHours" class="form-control" v-model.number="minVacationHours" />
                 <span  class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,7 +45,7 @@
                 <div class="row float-right">
                     <div class="col ">                        
                         <input @@click="send" type="button" value="送出" class="btn btn-primary" />
-                        <a asp-action="VacationTypeList" asp-controller="BasicSetting" class="btn btn-primary">返回</a>
+                        <a asp-action="VacationType" asp-controller="BasicSetting" class="btn btn-primary">返回</a>
                     </div>
                 </div>
             </div>
@@ -56,7 +57,7 @@
         Vue.createApp({
             data() {
                 return {
-                    Id: null,
+                    id: null,
                     genderSelectItems: [],
                     cycleSelectItems: [],
                     cycle: '',
@@ -68,20 +69,15 @@
             },
             methods: {
                 checkId() {
-                    // 定义 URL
                     var url = location.pathname;
-
-                    // 使用正则表达式匹配数字部分
                     var match = url.match(/\/(\d+)$/);
 
-                    // 检查是否有匹配
                     if (match) {
-                        // 获取最后一个数字
                         var lastNumber = parseInt(match[1]);
-                        this.Id = lastNumber;
+                        this.id = lastNumber;
 
                     } else {
-                        location.href = "/BasicSetting/VacationTypeList";
+                        location.href = "/BasicSetting/VacationType";
                     }
 
                 },
@@ -91,12 +87,12 @@
                     fetch("/api/VacationDetailsApi/VacationEdit", {
                         method: "POST",
                         body: JSON.stringify({
-                            Id: self.Id,
-                            VacationType: self.vacationType,
-                            Gender: self.gender,
-                            Cycle: self.cycle,
-                            NumberOfDays: self.numberOfDays,
-                            MinVacationHours: self.minVacationHours,
+                            id: self.id,
+                            vacationType: self.vacationType,
+                            gender: self.gender,
+                            cycle: self.cycle,
+                            numberOfDays: self.numberOfDays,
+                            minVacationHours: self.minVacationHours,
                         }),
                         headers: {
                             "content-type": "application/json",
@@ -104,7 +100,7 @@
                     }).then(res => res.json()).then(result => {
                         if (result.status) {
                             alert("修改成功");
-                            location.href = "/BasicSetting/VacationTypeList";
+                            location.href = "/BasicSetting/VacationType";
                         } else {
                             alert("修改失敗");
                         }

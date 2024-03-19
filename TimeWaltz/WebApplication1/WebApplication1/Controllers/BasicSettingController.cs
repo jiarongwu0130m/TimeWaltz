@@ -31,40 +31,34 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        public IActionResult SpecialVacation()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult SpecialVacationEdit(int id)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult SpecialVacationCreate()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
         public IActionResult PersonalDataCreate()
         {
-            var sDropDownData = _personalDataService.GetShiftNameDropDownData();
-            var dDropDownData = _personalDataService.GetDepartmentDropDownData();
-
-            var model = new PersonalDataCreateViewModel
-            {
-                GenderSelectItems = DropDownHelper.GetGenderDropDownList(),
-                DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData),
-                ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData)
-            };
-
-            return View(model);
+            return View();
         }
            
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult PersonalDataCreate(PersonalDataCreateViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var entity = ViewModelHelper.ToEntity(model);
-            _personalDataService.CreatePersonalData(entity);
-            return RedirectToAction("PersonalData");
-        }
+       
         [HttpGet]
         public IActionResult PersonalData()
         {
-            var entities = _personalDataService.GetPersonalDataList();            
-            var models = EntityHelper.ToViewModel(entities);
-            
-            return View(models);
+            return View();
         }
       
         public IActionResult PersonalDataDelete(int id)
@@ -74,41 +68,17 @@ namespace WebApplication1.Controllers
             {
                 return RedirectToAction("PersonalData");
             }
-            _personalDataService.DeletePersonalData(entity);
+            _personalDataService.SoftDeletePersonalData(entity);
             return RedirectToAction("PersonalData");
         }
 
         [HttpGet]
         public IActionResult PersonalDataEdit(int id)
         {
-            var sDropDownData = _personalDataService.GetShiftNameDropDownData();
-            var dDropDownData = _personalDataService.GetDepartmentDropDownData();
-
-            
-            var entity = _personalDataService.GetPersonalDataOrNull(id);
-            if (entity == null)
-            {
-                return RedirectToAction("PersonalData");
-            }
-            var model = EntityHelper.ToEditViewModel(entity);           
-            model.DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData);
-            model.ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData);
-            
-
-            return View(model);
+            return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult PersonalDataEdit(PersonalDataEditViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            _personalDataService.EditPersonalData(model);
-            return RedirectToAction("PersonalData");
-        }
+        
 
        
 
@@ -304,6 +274,7 @@ namespace WebApplication1.Controllers
             {
                 return RedirectToAction("ShiftSchedule");
             }
+            _shiftScheduleService.ClearAllFK(id);
             _shiftScheduleService.DeleteShiftSchedule(entity);
             return RedirectToAction("ShiftSchedule");
         }

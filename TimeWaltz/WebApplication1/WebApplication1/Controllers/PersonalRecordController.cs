@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-
+        [HttpGet]
         public IActionResult Leave()
         {
             var status = _timeWaltzContext.RequestStatuses.Where(x => x.TableType == TableTypeEnum.請假單);
@@ -40,14 +40,18 @@ namespace WebApplication1.Controllers
                     ApprovalStatus = s.Status.ToString()
                 }).ToString();
             return Json(data);
-
         }
         [HttpGet]
         public IActionResult LeaveCreate()
         {
             return View();
         }
-        
+        [HttpGet]
+        public IActionResult LeaveEdit()
+        {
+            return View();
+        }
+
 
         [HttpGet]
         public IActionResult AgentEmployeeSetting()
