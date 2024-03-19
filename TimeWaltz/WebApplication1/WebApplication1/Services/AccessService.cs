@@ -1,7 +1,5 @@
-﻿using System.Text;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.SettingViewModels;
-using System.Security.Cryptography;
+﻿using WebApplication1.Models.SettingViewModels;
+using Repository.Models;
 
 
 namespace WebApplication1.Services

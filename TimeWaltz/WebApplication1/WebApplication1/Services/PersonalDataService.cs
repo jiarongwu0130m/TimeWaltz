@@ -1,9 +1,5 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Repository.Models;
 using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Services
 {
@@ -72,10 +68,16 @@ namespace WebApplication1.Services
 
             foreach (var entity in entities)
             {
+                //TODO: 在這種假如資料正常情況下(有串好)不可能是null的時候要寫log或直接丟錯(因為也許空空的到前面也不能用)
+                var department = _timeWaltzContext.Departments.FirstOrDefault(d => d.Id == entity.DepartmentId);
+                if(department != null)
+                {
+                    //entity.DepartmentName = department.DepartmentName;//todo
+                }
                 var shiftSchedule = _timeWaltzContext.ShiftSchedules.FirstOrDefault(s => s.Id == entity.ShiftScheduleId);
                 if (shiftSchedule != null)
                 {
-                    entity.ShiftsName = shiftSchedule.ShiftsName;
+                    //entity.ShiftsName = shiftSchedule.ShiftsName;//todo
                 }
                 else
                 {

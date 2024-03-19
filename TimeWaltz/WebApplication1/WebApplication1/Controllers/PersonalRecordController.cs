@@ -1,11 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Helpers;
-using WebApplication1.Models;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
+﻿using Microsoft.AspNetCore.Mvc;
+using Repository.Enums;
+using Repository.Models;
 using WebApplication1.Models.PersonalRecordViewModels;
-
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -34,9 +30,20 @@ namespace WebApplication1.Controllers
         }
         [HttpGet]
         public IActionResult Leave()
-        {           
-            return View();
-
+        {
+            var status = _timeWaltzContext.RequestStatuses.Where(x => x.TableType == TableTypeEnum.請假單);
+            var data = _timeWaltzContext.LeaveRequests.Join(status,
+                l => l.Id,
+                s => s.TableId,
+                (l, s) => new LeaveViewModel
+                {
+                    StartTime = l.StartTime,
+                    EndTime = l.EndTime,
+                    LeaveHour = (int)l.LeaveMinutes,//todo
+                    VacationName = l.VacationDetails.VacationType.ToString(),
+                    ApprovalStatus = s.Status.ToString()
+                }).ToString();
+            return Json(data);
         }
         [HttpGet]
         public IActionResult LeaveCreate()

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
-using WebApplication1.Models.PersonalRecordViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Repository.Enum;
+using Repository.Enums;
+using Repository.Models;
 
 namespace WebApplication1.Helpers
 {
@@ -22,21 +21,23 @@ namespace WebApplication1.Helpers
             }).ToList();
             return vacationType;
         }
+
+        //public static List<SelectListItem> GetAgentDropDownList(List<AgentEmployee> data)
+        //{
+        //    var employee = data.Select(e => new SelectListItem
+        //    {
+        //        Value = e.EmployeesId.ToString(),
+        //        Text = e.AgentEmployeeName,
+        //    }).ToList();
+        //    return employee;
+        //}
+
         /// <summary>
         /// 在請假申請單中用來選擇代理人的下拉式選單
         /// 傳入一個代理人List的entityModel
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static List<SelectListItem> GetAgentDropDownList(List<AgentEmployee> data)
-        {
-            var employee = data.Select(a => new SelectListItem
-            {
-                Value = a.Id.ToString(),
-                Text = a.AgentEmployeeName,
-            }).ToList();
-            return employee;
-        }
         public static List<SelectListItem> GetAgentDropDownList(List<Employee> data)
         {
             var employee =  data.Select(e => new SelectListItem

@@ -1,0 +1,138 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "TimeWaltz2Context",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Repository",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[Access]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AccessRoleBind]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AdditionalClockIn]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AgentEmployees]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Approval]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Billboard]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Clock]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CompLeave]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Department]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Employees]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Flextime]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LeaveRequest]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OvertimeApplication]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PublicHoliday]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RequestStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Role]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Shift]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShiftSchedule]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SpacialVacation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SpecialGrade]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SpecialHoliday]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[User]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserOfAdmin]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VacationDetails]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "(localdb)\\MSSQLLocalDB.TimeWaltz2",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

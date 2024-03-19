@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using WebApplication1.Models.Enums;
+using Repository.Enums;
 
 namespace WebApplication1.Models.BasicSettingViewModels
 {
