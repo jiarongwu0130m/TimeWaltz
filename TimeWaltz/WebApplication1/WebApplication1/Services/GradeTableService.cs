@@ -1,5 +1,5 @@
-﻿using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
+﻿using Repository.Models;
+using WebApplication1.Models.BasicSettingViewModels;
 
 namespace WebApplication1.Services
 {
@@ -13,7 +13,7 @@ namespace WebApplication1.Services
         }
         public int CreateGradeTable(SpecialGrade entity)
         {            
-            _timeWaltzContext.SpecialGrade.Add(entity);
+            _timeWaltzContext.SpecialGrades.Add(entity);
             _timeWaltzContext.SaveChanges();
 
             return entity.Id;
@@ -28,7 +28,7 @@ namespace WebApplication1.Services
 
         public int EditGradeTable(SpecialGradeEditViewModel model)
         {
-            var entity = _timeWaltzContext.SpecialGrade.FirstOrDefault(x => x.Id == model.Id);
+            var entity = _timeWaltzContext.SpecialGrades.FirstOrDefault(x => x.Id == model.Id);
             entity.ServiceLength = model.ServiceLength;
             entity.Days = model.Days;
 
@@ -40,12 +40,12 @@ namespace WebApplication1.Services
 
         public List<SpecialGrade> GetGradeTableList()
         {
-            return _timeWaltzContext.SpecialGrade.ToList();
+            return _timeWaltzContext.SpecialGrades.ToList();
         }
 
         public SpecialGrade? GetGradeTableOrNull(int Id)
         {
-            return _timeWaltzContext.SpecialGrade.FirstOrDefault(g => g.Id == Id);
+            return _timeWaltzContext.SpecialGrades.FirstOrDefault(g => g.Id == Id);
         }
     }
 }

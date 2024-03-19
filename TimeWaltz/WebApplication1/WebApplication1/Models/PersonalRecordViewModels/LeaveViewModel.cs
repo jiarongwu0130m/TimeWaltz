@@ -1,6 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc.Rendering;
-using WebApplication1.Models.Enums;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebApplication1.Models.PersonalRecordViewModels
 {

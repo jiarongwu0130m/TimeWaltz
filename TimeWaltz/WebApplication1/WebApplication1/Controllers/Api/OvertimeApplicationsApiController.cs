@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Repository.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.ApplicationFormViewModels;
-using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Api

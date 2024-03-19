@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
+using Repository.Enums;
+using Repository.Models;
 using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Areas.Employee.Controllers

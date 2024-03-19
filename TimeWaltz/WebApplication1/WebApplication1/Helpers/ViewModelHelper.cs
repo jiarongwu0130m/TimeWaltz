@@ -1,11 +1,12 @@
-using System.Drawing;
-using WebApplication1.Models.Enums;
-using WebApplication1.Models.PersonalRecordViewModels;
-using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models;
+﻿using Repository.Enum;
+ using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.ApplicationFormViewModels;
-using WebApplication1.Models.Entity;
 using WebApplication1.Models.SettingViewModels;
+using Repository.Models;
+using WebApplication1.Models.Entity;
+using WebApplication1.Models.PersonalRecordViewModels;
+using Employee = Repository.Models.Employee;
+using LeaveRequest = Repository.Models.LeaveRequest;
 
 namespace WebApplication1.Helpers
 {
@@ -72,7 +73,7 @@ namespace WebApplication1.Helpers
             var entity = new VacationDetail
             {
                 VacationType = model.VacationType,
-                Gender = model.Gender,
+                Gender = (Repository.Enum.GenderEnum?)model.Gender,
                 NumberOfDays = model.NumberOfDays,
                 Cycle = model.Cycle,
                 MinVacationHours = model.MinVacationHours
@@ -95,7 +96,7 @@ namespace WebApplication1.Helpers
             var entity = new Department
             {
                 DepartmentName = model.DepartmentName,
-                EmployeesId = model.EmployeesId,
+                //Id = model.EmployeesId,//todo
             };
             return entity;
         }
@@ -106,8 +107,8 @@ namespace WebApplication1.Helpers
             {
                 EmployeesId = model.EmployeesId,
                 AdditionalTime = model.AdditionalTime,
-                Status = model.Status,
-                Reason = model.Reason,
+                //Status = model.Status,//todo
+                //Reason = model.Reason,//todo
                 ApprovalEmployeeId = model.ApprovalEmployeeId,
             };
             return entity;
@@ -143,8 +144,8 @@ namespace WebApplication1.Helpers
             {
                 Account = model.Account,
                 //Password = model.Password,
-                EmployeesId = model.EmployeesID,
-                DepartmentId = (int)model.DepartmentID,
+                //EmployeesId = model.EmployeesID,
+                //DepartmentId = (int)model.DepartmentID,//todo
                 Stop = model.Stop == 1 ? true : false,
                 PasswordDate = DateTime.Now
             };

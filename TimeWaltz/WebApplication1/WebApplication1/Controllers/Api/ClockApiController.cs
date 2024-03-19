@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Repository.Enums;
+using Repository.Models;
 using WebApplication1.Areas.Employee.Models;
 using WebApplication1.Helpers;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -50,18 +50,18 @@ namespace WebApplication1.Controllers.Api
         [HttpPost]
         public bool On(ClockOnDto dto)
         {
-            return OnAndOff(dto, Models.Enums.ClockStatusEnum.上班打卡);
+            return OnAndOff(dto, ClockStatusEnum.上班打卡);
         }
 
         [HttpPost]
         public bool Off(ClockOnDto dto)
         {
-            return OnAndOff(dto, Models.Enums.ClockStatusEnum.下班打卡);
+            return OnAndOff(dto, ClockStatusEnum.下班打卡);
         }
 
 
         [NonAction]
-        public bool OnAndOff(ClockOnDto dto, Models.Enums.ClockStatusEnum status)
+        public bool OnAndOff(ClockOnDto dto, ClockStatusEnum status)
         {
             var empId = User.GetEmployeeId();
 

@@ -1,12 +1,5 @@
-﻿
-using Humanizer;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using System;
-using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.PersonalRecordViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using Microsoft.EntityFrameworkCore;
+using Repository.Models;
 
 namespace WebApplication1.Services
 {
@@ -20,10 +13,18 @@ namespace WebApplication1.Services
             this._timeWaltzContext = timeWaltzContext;
             this._env = webHostEnvironment;
         }
+        public List<Employee> GetAgentDropDownData(int userId)
+        {
+            var employee = _timeWaltzContext.Employees.ToList();
+            var agentEmployee = _timeWaltzContext.Employees.Include(x=>x.AgentEmployees).FirstOrDefault(x => x.Id == userId).AgentEmployees;
+            return agentEmployee.ToList();
+        }
+
         /// <summary>
         /// 取得假別下拉選單
         /// </summary>
         /// <returns></returns>
+
         public List<VacationDetail> GetVacationDropDownData()
         {
             return _timeWaltzContext.VacationDetails.ToList();

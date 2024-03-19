@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Repository.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
-using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Services
 {

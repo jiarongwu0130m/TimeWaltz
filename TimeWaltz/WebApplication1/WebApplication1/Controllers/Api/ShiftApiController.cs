@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.Extensibility;
+using Repository.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
 using WebApplication1.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -44,9 +43,9 @@ namespace WebApplication1.Controllers.Api
             }
 
             foreach (var shift in shiftsResult)
-            {
-                shift.ShiftScheduleStartTime = shift.ShiftSchedule.StartTime;
-                shift.ShiftScheduleEndTime = shift.ShiftSchedule.EndTime;
+            {//todo
+                //shift.ShiftScheduleStartTime = shift.ShiftSchedule.StartTime;
+                //shift.ShiftScheduleEndTime = shift.ShiftSchedule.EndTime;
                 shift.ShiftsDate = shift.ShiftsDate.Date;
             }
             return Ok(shiftsResult);

@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
-using System.Drawing;
-using WebApplication1.Models;
+﻿using Repository.Enum;
+using Repository.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
-using WebApplication1.Models.PersonalRecordViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Helpers
@@ -39,8 +32,8 @@ namespace WebApplication1.Helpers
             var model = new PersonalDataDto
             {
                 Id = entity.Id,
-                ShiftsName = entity.ShiftsName,
-                DepartmentName = entity.DepartmentName,
+                //ShiftsName = entity.ShiftsName,//todo
+                //DepartmentName = entity.DepartmentName,//todo
                 Name = entity.Name,
                 HireDate = entity.HireDate,
                 Email = entity.Email,
@@ -58,7 +51,7 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 ShiftScheduleId = entity.ShiftScheduleId,
                 DepartmentId = entity.DepartmentId,
-                DepartmentName = entity.DepartmentName,
+                //DepartmentName = entity.DepartmentName,//todo
                 Name = entity.Name,
                 Email = entity.Email,
 
@@ -99,8 +92,8 @@ namespace WebApplication1.Helpers
             var model = new SpecialHolidayViewModel
             {
                 Id = entity.Id,
-                HowToGive = entity.HowToGive,
-                GiveDay = entity.GiveDay,
+                //HowToGive = entity.HowToGive,//todo
+                //GiveDay = entity.GiveDay,//todo
             };
             return model;
         }
@@ -160,7 +153,7 @@ namespace WebApplication1.Helpers
             {
                 Id = entity.Id,
                 FlexibleTime = entity.FlexibleTime,
-                MoveUp = entity.MoveUp,
+                MoveUp = entity.MoveUp.Value,
             };
             return model;
         }
@@ -210,7 +203,7 @@ namespace WebApplication1.Helpers
             {
                 Id = entity.Id,
                 VacationType = entity.VacationType,
-                Gender = entity.Gender,
+                Gender = (Repository.Enums.GenderLimitEnum?)entity.Gender,
                 Cycle = entity.Cycle,
                 NumberOfDays = entity.NumberOfDays,
                 MinVacationHours = entity.MinVacationHours,
@@ -344,8 +337,8 @@ namespace WebApplication1.Helpers
             {
                 Id = entity.Id,
                 DepartmentName = entity.DepartmentName,
-                EmployeesId = entity.EmployeesId,
-                EmployeeName = entity.EmployeeName,
+                EmployeesId = entity.Id,
+                //EmployeeName = entity.EmployeeName, //todo
             };
             return model;
         }
@@ -355,7 +348,7 @@ namespace WebApplication1.Helpers
             {
                 Id = entity.Id,
                 DepartmentName = entity.DepartmentName,
-                EmployeesId = entity.EmployeesId,
+                EmployeesId = entity.Id,
             };
             return model;
         }
@@ -365,8 +358,8 @@ namespace WebApplication1.Helpers
             var model = new UserEditViewModel
             {
                 Id = entity.Id,
-                DepartmentName = entity.DepartmentId,
-                EmployeesName = entity.EmployeesId,
+                //DepartmentName = entity.DepartmentId,//todo
+                EmployeesName = entity.Id,
             };
             return model;
         }
@@ -407,7 +400,7 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 EmployeesId = entity.EmployeesId,
                 AdditionalTime = entity.AdditionalTime,
-                Status = entity.Status,
+                //Status = entity.Status,//todo
                 Reason = entity.Reason,
                 ApprovalEmployeeId = entity.ApprovalEmployeeId,
             };

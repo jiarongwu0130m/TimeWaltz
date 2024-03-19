@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using WebApplication1.Models.Enums;
+using Repository.Enums;
+
 
 namespace WebApplication1.Models.ApplicationFormViewModels
 {

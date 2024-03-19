@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using WebApplication1.Models.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using Repository.Enums;
 
 namespace WebApplication1.Models.PersonalRecordViewModels
 {
