@@ -124,33 +124,65 @@ namespace WebApplication1.Services
         /// <exception cref="NotImplementedException"></exception>
         public LeaveRequest? GetEditDataOrNull(int Id)
         {
-            return _timeWaltzContext.LeaveRequests.Where(x => x.Id == Id)
-                 .Join(_timeWaltzContext.VacationDetails, l => l.VacationDetailsId, v => v.Id, (l, v) => new { l, v })
-                 .Join(_timeWaltzContext.Employees, lv => lv.l.EmployeesId, e => e.Id, (lv, e) => new { lv, e })
-                 .Join(_timeWaltzContext.Departments, lve => lve.e.Id, d => d.EmployeesId, (lve, d) => new { lve, d })
-                 .Join(_timeWaltzContext.Employees, lved => lved.lve.lv.l.AgentEmployeeId, a => a.Id, (lved, a) => new { lved, a })
-                 .Join(_timeWaltzContext.Employees, lveda => lveda.lved.lve.lv.l.ApprovalEmployeeId, ap => ap.Id, (lveda, ap) => new { lveda, ap })
-                 .Join(_timeWaltzContext.RequestStatuses, lvedaap => lvedaap.lveda.lved.lve.lv.l.Id, r => r.TableId, (lvedaap, r) => new { lvedaap, r })
-                 .Join(_timeWaltzContext.Approvals, lvedaapr => lvedaapr.lvedaap.lveda.lved.lve.lv.l.Id, app => app.TableId, (lvedaapr, app) => new { lvedaapr, app })
-                 .Where(lvedaaprapp => lvedaaprapp.app.TableType == (Models.Enums.TableTypeEnum)1)
-                .Where(lvedaaprapp => (int)lvedaaprapp.lvedaapr.r.TableType == 1).Select(lvedaaprapp => new LeaveRequest
-                {
-                    VacationType = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.v.VacationType,
-                    AgentEmployeeName = lvedaaprapp.lvedaapr.lvedaap.lveda.a.Name,
-                    ApprovalStatus = lvedaaprapp.lvedaapr.r.Status,
-                    ApporvalEmpName = lvedaaprapp.lvedaapr.lvedaap.ap.Name,
-                    Id = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.Id,
-                    StartTime = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.StartTime,
-                    EndTime = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.EndTime,
-                    EmployeeName = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.e.Name,
-                    ApprovalRemark = lvedaaprapp.app.Remark,
-                    Reason = lvedaaprapp.lvedaapr.lvedaap.lveda.lved.lve.lv.l.Reason,
-                }).FirstOrDefault();
+            var leaveRequest = _timeWaltzContext.LeaveRequests.FirstOrDefault(x=>x.Id == Id);
+            if (leaveRequest == null) throw new NullReferenceException("Not find this user");
+
+
+            var approval = _timeWaltzContext.Approvals.Where(x=>(int)x.TableType == 1).FirstOrDefault(x =>x.TableId == Id);
+            if (approval == null) throw new NullReferenceException("Not find this user");
+
+            var requestStatus = _timeWaltzContext.RequestStatuses.Where(x => (int)x.TableType == 1).FirstOrDefault(x => x.TableId == Id);
+            if (requestStatus == null) throw new NullReferenceException("Not find this user");
+
+            return new LeaveRequest
+            {
+                Id = leaveRequest.Id,
+                StartTime = leaveRequest.StartTime,
+                EndTime = leaveRequest.EndTime,
+                Reason = leaveRequest.Reason,
+                EmployeeName = leaveRequest.Employees.Name,
+                AgentEmployeeName = leaveRequest.AgentEmployee.Name,
+                ApporvalEmpName = leaveRequest.ApprovalEmployee.Name,
+                VacationType = leaveRequest.VacationDetails.VacationType,
+                ApprovalRemark = approval.Remark,
+                ApprovalStatus = requestStatus.Status,
+            };
         }
 
+        #region New Logic
+        private static TimeSpan 計算總共請假時間(DateTime leaveStart, DateTime leaveEnd, IEnumerable<WorkDays> workDays)
+        {
+            TimeSpan totalLeaveHours = TimeSpan.Zero;
+            foreach (var workDay in workDays)
+            {
+                if (!IsOverlap(leaveStart, leaveEnd, workDay.Start, workDay.End)) continue;
 
+                var breakTime = GetTodayBreakTime(workDay.Start.Date);
 
+                var start = MaxTime(leaveStart, workDay.Start);
+                var end = MinTime(leaveEnd, workDay.End);
 
+                if (IsOverlap(start, end, breakTime.start, breakTime.end))
+                {
+                    if (start < breakTime.start)
+                        totalLeaveHours += (breakTime.start - start);
+
+                    if (end > breakTime.end)
+                        totalLeaveHours += (end - breakTime.end);
+                }
+                else
+                {
+                    totalLeaveHours += (end - start);
+                }
+            }
+            return totalLeaveHours;
+        }
+        private static DateTime MaxTime(DateTime dateTime1, DateTime dateTime2) => dateTime1 > dateTime2 ? dateTime1 : dateTime2;
+        private static DateTime MinTime(DateTime dateTime1, DateTime dateTime2) => dateTime1 < dateTime2 ? dateTime1 : dateTime2;
+        private static bool IsOverlap(DateTime start, DateTime end, DateTime compareStart, DateTime compareEnd) => start < compareEnd && end > compareStart;
+        private static (DateTime start, DateTime end) GetTodayBreakTime(DateTime today) => (today.AddHours(12), today.AddHours(13));
+
+        #endregion
         public LeaveCreateDto AddLeaveTime2(LeaveCreateDto model)
         {
             var emp = _timeWaltzContext.Employees.Include(x => x.Shifts).ThenInclude(x => x.ShiftSchedule).FirstOrDefault(x => x.Id == model.EmployeesId);
@@ -159,13 +191,13 @@ namespace WebApplication1.Services
 
             var workDays = emp.Shifts.Where(x => x.ShiftsDate.Date >= model.StartTime.Date && x.ShiftsDate.Date <= model.EndTime.Date).Select(x=> new WorkDays
             {
-                StartTime = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay,
-                EndTime = x.ShiftsDate.Date+ x.ShiftSchedule.EndTime.TimeOfDay,
+                Start = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay,
+                End = x.ShiftsDate.Date+ x.ShiftSchedule.EndTime.TimeOfDay,
             });
 
-            var totalMinute = CalculateLeaveTime(model.StartTime,model.EndTime,workDays);
+            var totalTimeSpan = 計算總共請假時間(model.StartTime,model.EndTime,workDays);
 
-            model.LeaveHours = (int)totalMinute.TotalMinutes;
+            model.LeaveHours = (int)totalTimeSpan.TotalMinutes;
             return model;
 
         }
@@ -176,15 +208,15 @@ namespace WebApplication1.Services
             var totalDuration = TimeSpan.Zero;
             while (currentDay <= endTime.Date)
             {
-                var workDay = workDays.FirstOrDefault(x => x.StartTime.Date == currentDay.Date);
+                var workDay = workDays.FirstOrDefault(x => x.Start.Date == currentDay.Date);
                 if (workDay != null)
                 {
-                    var currentLeaveStart = startTime > workDay.StartTime? startTime:workDay.StartTime;
-                    var currentLeaveEnd = endTime < workDay.EndTime ? endTime : workDay.EndTime;
+                    var currentLeaveStart = startTime > workDay.Start? startTime:workDay.Start;
+                    var currentLeaveEnd = endTime < workDay.End ? endTime : workDay.End;
 
                     //break time
-                    var breakTimeStart = workDay.StartTime.Date + TimeSpan.FromHours(12);
-                    var breakTimeEnd = workDay.StartTime.Date + TimeSpan.FromHours(13);
+                    var breakTimeStart = workDay.Start.Date + TimeSpan.FromHours(12);
+                    var breakTimeEnd = workDay.Start.Date + TimeSpan.FromHours(13);
                     if(currentLeaveStart < breakTimeEnd && currentLeaveEnd > breakTimeStart)
                     {
                         if (currentLeaveStart < breakTimeStart) currentLeaveStart = breakTimeEnd;

@@ -2,8 +2,8 @@
 {
     public class WorkDays
     {
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
 
     }
 }
