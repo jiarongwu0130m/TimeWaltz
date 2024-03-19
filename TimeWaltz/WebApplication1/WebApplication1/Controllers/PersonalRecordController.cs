@@ -141,10 +141,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Clock");
         }
 
-        public IActionResult Attendance()
-        {
-            return View();
-        }
+       
 
         public IActionResult Overtime()
         {
