@@ -28,57 +28,59 @@ namespace WebApplication1.Services
 
         public List<UserViewModel> GetUserViewModel()
         {
+            //todo
+            //var query = _timeWaltzContext.Users
+            //    .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d })
+            //     .Join(_timeWaltzContext.Departments, x => x.x.DepartmentId, y => y.Id, (xd, y) => new { xd, y })
+            //     .Select(x => new UserViewModel
+            //     {
+            //         Id = x.xd.x.Id,
+            //         Account = x.xd.x.Account,
+            //         EmployeesID = x.xd.x.EmployeesId,
+            //         DepartmentID = x.xd.x.DepartmentId,
+            //         EmployeesName = x.xd.d.Name,
+            //         DepartmentName = x.y.DepartmentName,
+            //         StopName = (x.xd.x.Stop ? "啟用" : "停用"),
 
-            var query = _timeWaltzContext.Users
-                .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d })
-                 .Join(_timeWaltzContext.Departments, x => x.x.DepartmentId, y => y.Id, (xd, y) => new { xd, y })
-                 .Select(x => new UserViewModel
-                 {
-                     Id = x.xd.x.Id,
-                     Account = x.xd.x.Account,
-                     EmployeesID = x.xd.x.EmployeesId,
-                     DepartmentID = x.xd.x.DepartmentId,
-                     EmployeesName = x.xd.d.Name,
-                     DepartmentName = x.y.DepartmentName,
-                     StopName = (x.xd.x.Stop ? "啟用" : "停用"),
+            //     }).ToList();
 
-                 }).ToList();
-
-            return query;
+            //return query;
+            return new List<UserViewModel>();
         }
         public List<UserViewModel> GetUserViewModel(UserViewModel entity)
         {
 
-            var query = _timeWaltzContext.Users
-                .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d })
-                 .Join(_timeWaltzContext.Departments, x => x, y => y.Id, (xd, y) => new { xd, y });
-            if (!string.IsNullOrEmpty(entity.EmployeesName))
-            {
-                query = query.Where(x => x.xd.d.Name.Contains(entity.EmployeesName.ToString()));
-            }
+            //var query = _timeWaltzContext.Users
+            //    .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d })
+            //     .Join(_timeWaltzContext.Departments, x => x, y => y.Id, (xd, y) => new { xd, y });
+            //if (!string.IsNullOrEmpty(entity.EmployeesName))
+            //{
+            //    query = query.Where(x => x.xd.d.Name.Contains(entity.EmployeesName.ToString()));
+            //}
 
-            if (!string.IsNullOrEmpty(entity.DepartmentName))
-            {
-                query = query.Where(x => x.xd.x.DepartmentId.ToString() == entity.DepartmentName);
-            }
+            //if (!string.IsNullOrEmpty(entity.DepartmentName))
+            //{
+            //    query = query.Where(x => x.xd.x.DepartmentId.ToString() == entity.DepartmentName);
+            //}
 
-            if (!string.IsNullOrEmpty(entity.Account))
-            {
-                query = query.Where(x => x.xd.x.Account.Contains(entity.Account));
-            }
-            var query1= query.Select(x => new UserViewModel
-                 {
-                     Id = x.xd.x.Id,
-                     Account = x.xd.x.Account,
-                     EmployeesID = x.xd.x.EmployeesId,
-                     DepartmentID = x.xd.x.DepartmentId,
-                     EmployeesName = x.xd.d.Name,
-                     DepartmentName = x.y.DepartmentName,
-                     StopName = (x.xd.x.Stop ? "啟用" : "停用"),
+            //if (!string.IsNullOrEmpty(entity.Account))
+            //{
+            //    query = query.Where(x => x.xd.x.Account.Contains(entity.Account));
+            //}
+            //var query1= query.Select(x => new UserViewModel
+            //     {
+            //         Id = x.xd.x.Id,
+            //         Account = x.xd.x.Account,
+            //         EmployeesID = x.xd.x.EmployeesId,
+            //         DepartmentID = x.xd.x.DepartmentId,
+            //         EmployeesName = x.xd.d.Name,
+            //         DepartmentName = x.y.DepartmentName,
+            //         StopName = (x.xd.x.Stop ? "啟用" : "停用"),
 
-                 }).ToList();
+            //     }).ToList();//todo
 
-            return query1;
+            //return query1;
+            return new List<UserViewModel>();
         }
         public User? GetUserOrNull(int id)
         {
@@ -87,25 +89,26 @@ namespace WebApplication1.Services
 
         public List<User> GetUserOrNull(UserViewModel entity)
         {
-            var query = _timeWaltzContext.Users
-                .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d });
+            //var query = _timeWaltzContext.Users
+            //    .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d });
 
-            if (!string.IsNullOrEmpty(entity.EmployeesName))
-            {
-                query = query.Where(x => x.d.Name.Contains(entity.EmployeesName.ToString()));
-            }
+            //if (!string.IsNullOrEmpty(entity.EmployeesName))
+            //{
+            //    query = query.Where(x => x.d.Name.Contains(entity.EmployeesName.ToString()));
+            //}
 
-            if (!string.IsNullOrEmpty(entity.DepartmentName.ToString()))
-            {
-                query = query.Where(x => x.x.DepartmentId.ToString() == entity.DepartmentName);
-            }
+            //if (!string.IsNullOrEmpty(entity.DepartmentName.ToString()))
+            //{
+            //    query = query.Where(x => x.x.DepartmentId.ToString() == entity.DepartmentName);
+            //}
 
-            if (!string.IsNullOrEmpty(entity.Account))
-            {
-                query = query.Where(x => x.x.Account.Contains(entity.Account));
-            }
+            //if (!string.IsNullOrEmpty(entity.Account))
+            //{
+            //    query = query.Where(x => x.x.Account.Contains(entity.Account));
+            //}
 
-            return query.Select(x => x.x).ToList(); 
+            //return query.Select(x => x.x).ToList(); //todo
+            return new List<User>();
         }
         public List<User> GetUserCreateOrNull(UserCreateViewModel entity)
         {
@@ -134,8 +137,8 @@ namespace WebApplication1.Services
                     entity.Password = model.Password;
                 }
                 entity.PasswordDate = DateTime.Now;
-                entity.EmployeesId = Convert.ToInt32(model.EmployeesName);
-                entity.DepartmentId = Convert.ToInt32(model.DepartmentName);
+                //entity.EmployeesId = Convert.ToInt32(model.EmployeesName);//todo
+                //entity.DepartmentId = Convert.ToInt32(model.DepartmentName);
                 entity.Stop = model.Stop==1?true:false;
 
                 _timeWaltzContext.SaveChanges();

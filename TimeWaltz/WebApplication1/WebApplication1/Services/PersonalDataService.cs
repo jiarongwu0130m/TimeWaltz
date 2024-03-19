@@ -51,12 +51,12 @@ namespace WebApplication1.Services
                 var department = _timeWaltzContext.Departments.FirstOrDefault(d => d.Id == entity.DepartmentId);
                 if(department != null)
                 {
-                    entity.DepartmentName = department.DepartmentName;
+                    //entity.DepartmentName = department.DepartmentName;//todo
                 }
                 var shiftSchedule = _timeWaltzContext.ShiftSchedules.FirstOrDefault(s => s.Id == entity.ShiftScheduleId);
                 if(shiftSchedule != null)
                 {
-                    entity.ShiftsName = shiftSchedule.ShiftsName;
+                    //entity.ShiftsName = shiftSchedule.ShiftsName;//todo
                 }
             }
             

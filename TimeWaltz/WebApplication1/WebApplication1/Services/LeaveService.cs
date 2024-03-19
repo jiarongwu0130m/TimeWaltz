@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Repository.Models;
 
 namespace WebApplication1.Services
@@ -11,20 +12,11 @@ namespace WebApplication1.Services
         {
             this._timeWaltzContext = timeWaltzContext;
         }
-        public List<AgentEmployee> GetAgentDropDownData(int UserId)
+        public List<Employee> GetAgentDropDownData(int userId)
         {
             var employee = _timeWaltzContext.Employees.ToList();
-            var agentEmployee = _timeWaltzContext.AgentEmployees
-                .Where(a => a.EmployeesId == UserId).ToList();
-            foreach(var a in agentEmployee)
-            {
-                employee.Where(e => e.Id == a.AgentEmployeesId).Select(e => new AgentEmployee
-                {                    
-                    EmployeesId = e.Id,
-                    AgentEmployeeName = e.Name,
-                });
-            }
-            return agentEmployee;
+            var agentEmployee = _timeWaltzContext.Employees.Include(x=>x.AgentEmployees).FirstOrDefault(x => x.Id == userId).AgentEmployees;
+            return agentEmployee.ToList();
         }
 
         public List<VacationDetail> GetVacationDropDownData()

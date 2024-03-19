@@ -29,7 +29,7 @@ namespace WebApplication1.Services
 
 
             entity.VacationType = model.VacationType;
-            entity.Gender = model.Gender;
+            entity.Gender = (Repository.Enum.GenderEnum?)model.Gender;
             entity.NumberOfDays = model.NumberOfDays;
             entity.Cycle = model.Cycle;
             entity.MinVacationHours = model.MinVacationHours;
@@ -43,7 +43,7 @@ namespace WebApplication1.Services
 
            
             entity.VacationType = model.VacationType;
-            entity.Gender = model.Gender;
+            entity.Gender = (Repository.Enum.GenderEnum?)model.Gender;
             entity.NumberOfDays = model.NumberOfDays;
             entity.Cycle = model.Cycle;
             entity.MinVacationHours = model.MinVacationHours;

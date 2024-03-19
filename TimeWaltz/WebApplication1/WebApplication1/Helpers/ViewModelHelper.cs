@@ -85,8 +85,8 @@ namespace WebApplication1.Helpers
             {
                 EmployeesId = model.EmployeesId,
                 AdditionalTime = model.AdditionalTime,
-                Status = model.Status,
-                Reason = model.Reason,
+                //Status = model.Status,//todo
+                //Reason = model.Reason,//todo
                 ApprovalEmployeeId = model.ApprovalEmployeeId,
             };
             return entity;
@@ -113,8 +113,8 @@ namespace WebApplication1.Helpers
             {
                 Account = model.Account,
                 //Password = model.Password,
-                EmployeesId = model.EmployeesID,
-                DepartmentId = (int)model.DepartmentID,
+                //EmployeesId = model.EmployeesID,//todo
+                //DepartmentId = (int)model.DepartmentID,//todo
                 Stop = model.Stop==1 ? true : false,
                 PasswordDate = DateTime.Now
             };

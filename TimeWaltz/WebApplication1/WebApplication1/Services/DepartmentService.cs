@@ -16,14 +16,6 @@ namespace WebApplication1.Services
         {
             
             var entities = _timeWaltzDb.Departments.ToList();
-            foreach(var entity in entities)
-            {
-                var employee = _timeWaltzDb.Employees.FirstOrDefault(e=>e.Id == entity.EmployeesId);
-                if (employee != null)
-                {
-                    entity.EmployeeName = employee.Name;
-                }
-            }
             return entities;                               
         }
 
@@ -59,7 +51,7 @@ namespace WebApplication1.Services
             var entity = _timeWaltzDb.Departments.FirstOrDefault(x => x.Id == model.Id);
 
             entity.DepartmentName = model.DepartmentName;
-            entity.EmployeesId = model.EmployeesId;
+            //entity.EmployeesId = model.EmployeesId;//todo
 
             _timeWaltzDb.SaveChanges();
             return model.Id;

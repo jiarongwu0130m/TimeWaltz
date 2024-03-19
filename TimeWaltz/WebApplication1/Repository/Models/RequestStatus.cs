@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Repository.Enums;
 
 namespace Repository.Models;
 
@@ -15,7 +16,7 @@ public partial class RequestStatus
     [Column("ID")]
     public int Id { get; set; }
 
-    public int TableType { get; set; }
+    public TableTypeEnum TableType { get; set; }
 
     [Column("TableID")]
     public int TableId { get; set; }

@@ -94,7 +94,7 @@ namespace WebApplication1.Helpers
             var model = new SpecialHolidayViewModel
             {
                 Id = entity.Id,
-                HowToGive = entity.HowToGive,
+                //HowToGive = entity.HowToGive,//todo
                 //GiveDay = entity.GiveDay,//todo
             };
             return model;
@@ -339,7 +339,7 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 EmployeesId = entity.EmployeesId,
                 AdditionalTime = entity.AdditionalTime,
-                Status = entity.Status,
+                //Status = entity.Status,//todo
                 Reason = entity.Reason,
                 ApprovalEmployeeId = entity.ApprovalEmployeeId,
             };

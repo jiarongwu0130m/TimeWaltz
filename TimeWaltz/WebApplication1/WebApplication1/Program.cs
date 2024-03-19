@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WebApplication1.Models.Entity;
+using Repository.Models;
 using WebApplication1.Services;
 
 

@@ -70,9 +70,9 @@ namespace WebApplication1.Services
         }
 
 
-        //public List<int> GetAgentemployee(int UserId)
-        //{
-        //    return _timeWaltzContext.AgentEmployees.Where(a=> a.EmployeesId == UserId).Select(x=>x.AgentEmployeesId).ToList();
-        //}
+        public List<int> GetAgentemployee(int UserId)
+        {
+            return _timeWaltzContext.Employees.FirstOrDefault(x=>x.Id==UserId).AgentEmployees.Select(x=>x.Id).ToList();
+        }
     }
 }

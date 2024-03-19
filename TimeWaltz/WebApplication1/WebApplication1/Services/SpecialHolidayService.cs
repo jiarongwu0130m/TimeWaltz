@@ -24,8 +24,8 @@ namespace WebApplication1.Services
         public int EditSpecialHoliday(SpecialHolidayViewModel model)
         {
             var entity = GetSpecialHolidayOrNull();
-            entity.HowToGive = model.HowToGive;
-            entity.GiveDay = model.GiveDay;
+            //entity.HowToGive = model.HowToGive;
+            //entity.GiveDay = model.GiveDay;//todo
 
             _timeWaltzContext.SaveChanges();
             return model.Id;

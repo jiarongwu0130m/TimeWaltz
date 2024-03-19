@@ -1,11 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Helpers;
-using WebApplication1.Models;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
+﻿using Microsoft.AspNetCore.Mvc;
+using Repository.Enums;
+using Repository.Models;
 using WebApplication1.Models.PersonalRecordViewModels;
-
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -39,7 +35,7 @@ namespace WebApplication1.Controllers
                 {
                     StartTime = l.StartTime,
                     EndTime = l.EndTime,
-                    LeaveHour = l.LeaveHours,
+                    LeaveHour = (int)l.LeaveMinutes,//todo
                     VacationName = l.VacationDetails.VacationType.ToString(),
                     ApprovalStatus = s.Status.ToString()
                 }).ToString();
