@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Repository.Enum;
 using Repository.Enums;
 using Repository.Models;
 
@@ -20,7 +21,7 @@ namespace WebApplication1.Helpers
             }).ToList();
             return vacationType;
         }
-<<<<<<< HEAD
+
         //public static List<SelectListItem> GetAgentDropDownList(List<AgentEmployee> data)
         //{
         //    var employee = data.Select(e => new SelectListItem
@@ -30,23 +31,13 @@ namespace WebApplication1.Helpers
         //    }).ToList();
         //    return employee;
         //}
-=======
+
         /// <summary>
         /// 在請假申請單中用來選擇代理人的下拉式選單
         /// 傳入一個代理人List的entityModel
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static List<SelectListItem> GetAgentDropDownList(List<AgentEmployee> data)
-        {
-            var employee = data.Select(a => new SelectListItem
-            {
-                Value = a.Id.ToString(),
-                Text = a.AgentEmployeeName,
-            }).ToList();
-            return employee;
-        }
->>>>>>> 6294efb4a5ce87ed96d4a9fa589d8fca49a8ba03
         public static List<SelectListItem> GetAgentDropDownList(List<Employee> data)
         {
             var employee =  data.Select(e => new SelectListItem

@@ -1,4 +1,4 @@
-﻿namespace Repository.Enums
+﻿namespace Repository.Enum
 {
     public enum RequestStatusEnum
     {       

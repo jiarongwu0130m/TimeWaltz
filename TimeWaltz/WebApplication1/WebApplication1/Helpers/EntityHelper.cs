@@ -2,8 +2,11 @@
 using Repository.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.BasicSettingViewModels;
-
+using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Models.SettingViewModels;
+using Employee = Repository.Models.Employee;
+using LeaveRequest = Repository.Models.LeaveRequest;
+using Shift = Repository.Models.Shift;
 
 namespace WebApplication1.Helpers
 {
@@ -273,7 +276,7 @@ namespace WebApplication1.Helpers
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
-        public static List<SpecialVacationDto> ToDto(List<SpecialVacation> entities)
+        public static List<SpecialVacationDto> ToDto(List<SpacialVacation> entities)
         {
             var models = new List<SpecialVacationDto>();
 
@@ -282,7 +285,7 @@ namespace WebApplication1.Helpers
                 models.Add(new SpecialVacationDto
                 {
                     Id = entity.Id,
-                    SpecialVacationName = entity.SpecialVacationName,
+                    SpecialVacationName = entity.SpacialVacationName,
                     Date = entity.Date.ToString("yyyy-MM-dd"), });
             }
             return models;
