@@ -14,12 +14,12 @@ namespace WebApplication1.Controllers.Api
         {
             _attendanceService = attendanceService;
         }
-        [HttpGet]
-        public ActionResult GetAttendanceData()
-        {
-            var userId = 1;
-            var entities = _attendanceService.GetAttendanceData(userId);
+        //[HttpGet]
+        //public ActionResult GetAttendanceData()
+        //{
+        //    var userId = 1;
+        //    var entities = _attendanceService.GetAttendanceData(userId);
 
-        }
+        //}
     }
 }
