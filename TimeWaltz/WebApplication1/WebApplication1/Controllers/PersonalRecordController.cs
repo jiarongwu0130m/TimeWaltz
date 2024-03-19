@@ -24,6 +24,10 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+        public IActionResult Attendance()
+        {
+            return View();
+        }
         [HttpGet]
         public IActionResult Leave()
         {
@@ -144,10 +148,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Clock");
         }
 
-        public IActionResult Attendance()
-        {
-            return View();
-        }
+       
 
         public IActionResult Overtime()
         {
