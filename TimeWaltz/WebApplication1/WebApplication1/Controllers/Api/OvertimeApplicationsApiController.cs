@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Repository.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.ApplicationFormViewModels;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Api
