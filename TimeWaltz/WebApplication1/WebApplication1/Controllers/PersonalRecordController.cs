@@ -28,6 +28,10 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+        public IActionResult Attendance()
+        {
+            return View();
+        }
         [HttpGet]
         public IActionResult Leave()
         {           
