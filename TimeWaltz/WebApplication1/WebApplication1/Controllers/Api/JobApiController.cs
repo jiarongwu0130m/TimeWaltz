@@ -12,11 +12,13 @@ namespace WebApplication1.Controllers.Api
     {
         private readonly TimeWaltzContext _timeWaltzContext;
         private readonly SpecialHolidayDaysService _specialHolidayDaysService;
+        private readonly ShiftService _shiftService;
 
-        public JobApiController(TimeWaltzContext timeWaltzContext, SpecialHolidayDaysService specialHolidayDaysService)
+        public JobApiController(TimeWaltzContext timeWaltzContext, SpecialHolidayDaysService specialHolidayDaysService, ShiftService shiftService)
         {
             _timeWaltzContext = timeWaltzContext;
-            this._specialHolidayDaysService = specialHolidayDaysService;
+            _specialHolidayDaysService = specialHolidayDaysService;
+            _shiftService = shiftService;
         }
 
         public void KeepUpdateSpecialHolidayDays()
@@ -27,9 +29,17 @@ namespace WebApplication1.Controllers.Api
                ,
                Cron.Daily);
         }
+        public void KeepUpdateShift()
+        {
+            RecurringJob.AddOrUpdate(
+               "SpecialHolidayDaysJob",
+               () => _shiftService.GetAllShiftData()
+               ,
+               Cron.Monthly(10));
+        }
 
 
-       
-        
+
+
     }
 }

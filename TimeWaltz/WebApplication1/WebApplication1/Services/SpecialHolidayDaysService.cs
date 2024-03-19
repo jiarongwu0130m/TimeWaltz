@@ -17,20 +17,23 @@ namespace WebApplication1.Services
             {
                 var monthsPassed = GetDayPassed(e.HireDate);
                 var serviceDays = GetServiceDays(monthsPassed);
+                var thisYear = new DateTime(DateTime.Now.Year + e.HireDate.Month + e.HireDate.Day);
 
                 var temp1 = _timeWaltzContext.SpecialHolidayDays.FirstOrDefault(x => x.EmployeeId == e.Id);
                 //TODO: 撈出該員工所有請過的特休假，用來扣除
+                var alreadyLeave = (int)_timeWaltzContext.LeaveRequests.Where(x=>x.EmployeesId == e.Id && x.StartTime > thisYear).Select(x=>x.LeaveMinutes).Sum();
+                int renewServiceDays = serviceDays.Days - alreadyLeave;
                 if (temp1 == null)
                 {
                     _timeWaltzContext.SpecialHolidayDays.Add(new SpecialHolidayDays
                     {
                         EmployeeId = e.Id,
-                        AvailableDays = serviceDays.Days,
+                        AvailableDays = renewServiceDays,
                     });
                 }
                 else
                 {
-                    temp1.AvailableDays = serviceDays.Days;
+                    temp1.AvailableDays = renewServiceDays;
                 }
                 _timeWaltzContext.SaveChanges();
             }
