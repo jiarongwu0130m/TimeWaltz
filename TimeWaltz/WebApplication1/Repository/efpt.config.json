@@ -1,6 +1,6 @@
 ﻿{
    "CodeGenerationMode": 3,
-   "ContextClassName": "TimeWaltzContext",
+   "ContextClassName": "TimeWaltz2Context",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": false,
@@ -60,10 +60,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[GradeTable]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[LeaveRequest]",
          "ObjectType": 0
       },
@@ -93,6 +89,10 @@
       },
       {
          "Name": "[dbo].[SpacialVacation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SpecialGrade]",
          "ObjectType": 0
       },
       {

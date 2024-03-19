@@ -1,5 +1,6 @@
-﻿using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
+﻿using Repository.Models;
+using WebApplication1.Models.BasicSettingViewModels;
+
 
 namespace WebApplication1.Services
 {
@@ -15,7 +16,7 @@ namespace WebApplication1.Services
 
         public int CreatePublicHoliday(SpecialHoliday entity)
         {
-            _timeWaltzContext.SpecialHoliday.Add(entity);
+            _timeWaltzContext.SpecialHolidays.Add(entity);
             _timeWaltzContext.SaveChanges();
             return entity.Id;
         }
@@ -34,7 +35,7 @@ namespace WebApplication1.Services
 
         public SpecialHoliday GetSpecialHoliday()
         {
-            var entity =  _timeWaltzContext.SpecialHoliday.FirstOrDefault();
+            var entity =  _timeWaltzContext.SpecialHolidays.FirstOrDefault();
             if (entity == null)
             {
                 throw new Exception("請先去資料庫新建一筆資料!");
@@ -44,14 +45,14 @@ namespace WebApplication1.Services
 
         public SpecialHoliday? GetSpecialHolidayOrNull()
         {
-            return _timeWaltzContext.SpecialHoliday.FirstOrDefault();
+            return _timeWaltzContext.SpecialHolidays.FirstOrDefault();
         }
 
         public int DeleteSpecialHoliday(SpecialHoliday entity)
         {
             if(entity != null)
             {
-                _timeWaltzContext.SpecialHoliday.Remove(entity);
+                _timeWaltzContext.SpecialHolidays.Remove(entity);
                 _timeWaltzContext.SaveChanges() ;
                 return entity.Id;
             }

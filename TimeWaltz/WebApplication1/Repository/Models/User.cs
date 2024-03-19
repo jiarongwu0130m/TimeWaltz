@@ -34,7 +34,7 @@ public partial class User
 
     [ForeignKey("Id")]
     [InverseProperty("User")]
-    public virtual UserOfAdmin Id1 { get; set; }
+    public virtual UserOfAdmin UserOfAdmin { get; set; }
 
     [ForeignKey("Id")]
     [InverseProperty("User")]

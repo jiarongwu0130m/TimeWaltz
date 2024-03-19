@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using WebApplication1.Helpers;
-using WebApplication1.Models;
 using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers

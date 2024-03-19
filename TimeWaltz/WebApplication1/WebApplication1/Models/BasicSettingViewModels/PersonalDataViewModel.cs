@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Repository.Enum;
 using System.ComponentModel.DataAnnotations;
-using WebApplication1.Models.Enums;
 
 namespace WebApplication1.Models.BasicSettingViewModels
 {

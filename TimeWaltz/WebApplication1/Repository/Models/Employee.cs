@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Repository.Enum;
 
 namespace Repository.Models;
 
@@ -30,7 +31,7 @@ public partial class Employee
     [StringLength(50)]
     public string Email { get; set; }
 
-    public int Gender { get; set; }
+    public GenderEnum Gender { get; set; }
 
     [Required]
     [StringLength(50)]

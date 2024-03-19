@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Repository.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.ApplicationFormViewModels;
-using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
 using WebApplication1.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

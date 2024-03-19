@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplication1.Models;
-using WebApplication1.Models.Entity;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using Repository.Models;
+
 
 namespace WebApplication1.Services
 {

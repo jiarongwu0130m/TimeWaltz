@@ -1,4 +1,4 @@
-﻿namespace WebApplication1.Models.Enums
+﻿namespace Repository.Enums
 {
     public enum GenderLimitEnum
     {

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Repository.Models;
 using System.Security.Cryptography;
 using System.Text;
-using WebApplication1.Helpers;
-using WebApplication1.Models.Entity;
 using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Services
@@ -32,7 +30,7 @@ namespace WebApplication1.Services
         {
 
             var query = _timeWaltzContext.Users
-                .Join(_timeWaltzContext.Employees, x => x.EmployeesId, d => d.Id, (x, d) => new { x, d })
+                .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d })
                  .Join(_timeWaltzContext.Departments, x => x.x.DepartmentId, y => y.Id, (xd, y) => new { xd, y })
                  .Select(x => new UserViewModel
                  {
@@ -52,8 +50,8 @@ namespace WebApplication1.Services
         {
 
             var query = _timeWaltzContext.Users
-                .Join(_timeWaltzContext.Employees, x => x.EmployeesId, d => d.Id, (x, d) => new { x, d })
-                 .Join(_timeWaltzContext.Departments, x => x.x.DepartmentId, y => y.Id, (xd, y) => new { xd, y });
+                .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d })
+                 .Join(_timeWaltzContext.Departments, x => x, y => y.Id, (xd, y) => new { xd, y });
             if (!string.IsNullOrEmpty(entity.EmployeesName))
             {
                 query = query.Where(x => x.xd.d.Name.Contains(entity.EmployeesName.ToString()));
@@ -90,7 +88,7 @@ namespace WebApplication1.Services
         public List<User> GetUserOrNull(UserViewModel entity)
         {
             var query = _timeWaltzContext.Users
-                .Join(_timeWaltzContext.Employees, x => x.EmployeesId, d => d.Id, (x, d) => new { x, d });
+                .Join(_timeWaltzContext.Employees, x => x.Id, d => d.Id, (x, d) => new { x, d });
 
             if (!string.IsNullOrEmpty(entity.EmployeesName))
             {

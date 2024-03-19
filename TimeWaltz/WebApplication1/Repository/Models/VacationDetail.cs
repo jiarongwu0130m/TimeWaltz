@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Repository.Enum;
+using Repository.Enums;
 
 namespace Repository.Models;
 
@@ -18,11 +20,11 @@ public partial class VacationDetail
     [StringLength(50)]
     public string VacationType { get; set; }
 
-    public int? Gender { get; set; }
+    public GenderEnum? Gender { get; set; }
 
     public int NumberOfDays { get; set; }
 
-    public int Cycle { get; set; }
+    public CycleEnum Cycle { get; set; }
 
     public int MinVacationHours { get; set; }
 

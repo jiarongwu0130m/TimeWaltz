@@ -1,9 +1,7 @@
 ﻿using WebApplication1.Models.BasicSettingViewModels;
-﻿using WebApplication1.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
-using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
 using WebApplication1.Models.SettingViewModels;
+using Repository.Models;
 
 namespace WebApplication1.Helpers
 {
@@ -53,7 +51,7 @@ namespace WebApplication1.Helpers
             var entity = new VacationDetail
             {
                 VacationType = model.VacationType,
-                Gender = model.Gender,
+                Gender = (Repository.Enum.GenderEnum?)model.Gender,
                 NumberOfDays = model.NumberOfDays,
                 Cycle = model.Cycle,
                 MinVacationHours = model.MinVacationHours
@@ -76,7 +74,7 @@ namespace WebApplication1.Helpers
             var entity = new Department
             {                
                 DepartmentName = model.DepartmentName,
-                EmployeesId = model.EmployeesId,
+                //Id = model.EmployeesId,//todo
             };
             return entity;
         }

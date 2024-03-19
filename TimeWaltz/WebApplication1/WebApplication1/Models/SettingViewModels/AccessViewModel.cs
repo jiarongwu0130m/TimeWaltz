@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
-using WebApplication1.Models.Entity;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models.SettingViewModels
 {
@@ -17,8 +15,6 @@ namespace WebApplication1.Models.SettingViewModels
         [Display(Name = "頁面")]
         public string? Action { get; set; }
 
-        [Display(Name = "權限")]
-        public virtual ICollection<AccessRoleBind> AccessRoleBinds { get; set; } = new List<AccessRoleBind>();
     }
 
     public class AccessCreateViewModel
@@ -34,9 +30,6 @@ namespace WebApplication1.Models.SettingViewModels
         [Display(Name = "頁面")]
         public string? Action { get; set; }
 
-        [Display(Name = "權限")]
-        public virtual ICollection<AccessRoleBind> AccessRoleBinds { get; set; } = new List<AccessRoleBind>();
-
     }
     public class AccessEditViewModel
     {
@@ -51,9 +44,5 @@ namespace WebApplication1.Models.SettingViewModels
 
         [Display(Name = "頁面")]
         public string? Action { get; set; }
-
-        [Display(Name = "權限")]
-        public virtual ICollection<AccessRoleBind> AccessRoleBinds { get; set; } = new List<AccessRoleBind>();
-
     }
 }

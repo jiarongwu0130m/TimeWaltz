@@ -1,4 +1,4 @@
-﻿using WebApplication1.Models.Entity;
+﻿using Repository.Models;
 using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Services

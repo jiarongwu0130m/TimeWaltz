@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Models;
 
-[Table("GradeTable")]
-public partial class GradeTable
+[Table("SpecialGrade")]
+public partial class SpecialGrade
 {
     [Key]
     public int Id { get; set; }

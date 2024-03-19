@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
+using Repository.Enums;
+using Repository.Models;
 
 namespace WebApplication1.Helpers
 {
