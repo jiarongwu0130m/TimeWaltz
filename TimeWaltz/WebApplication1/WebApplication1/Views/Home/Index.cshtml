@@ -1,201 +1,128 @@
-﻿@{
-    ViewBag.Title = "首頁";
-}
+﻿
+<div id="callBillBoard">
+    <div class="row mb-2 d-flex justify-content-around">
+        <div class="col-2">
+            <button @@click="toClock" class="btn btn-lg btn-block bg-danger">
+                <i class="fa-regular fa-clock mr-2"></i>打卡
+            </button>
+        </div>
 
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>150</h3>
+        <div class="col-2">
+            <button @@click="toLeave" class="btn btn-lg btn-block bg-success">
+                <i class="fa-regular fa-pen-to-square mr-2"></i>請假
+            </button>
+        </div>
 
-                <p>New Orders</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-bag"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <div class="col-2">
+            <button @@click="toOvertimeRequest" class="btn btn-lg btn-block bg-info">
+                <i class="fa-regular fa-bell mr-2"></i>加班
+            </button>
         </div>
     </div>
 
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Bounce Rate</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>44</h3>
-
-                <p>User Registrations</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-danger">
-            <div class="inner">
-                <h3>65</h3>
-
-                <p>Unique Visitors</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-
-</div>
-<div class="row">
-    <section class="col-lg-7 connectedSortable">
-
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="ion ion-clipboard mr-1"></i>
-                    To Do List
-                </h3>
-
-                <div class="card-tools">
-                    <ul class="pagination pagination-sm">
-                        <li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">&raquo;</a></li>
-                    </ul>
+    <div class="row mx-2 my-5">
+        <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div v-for="(item,index) in reversedItems" :key="index" :class="{ 'carousel-item': true,active: index === 0 }">
+                    <template v-if=" AfterToDay(item.startTime) && BeforeToDay(item.endTime)">
+                        <h5 class="text-info"><i class="fa-solid fa-bullhorn mr-2"></i>{{item.title}}</h5>
+                        <p class="text-gray">
+                            <span :value="item.employeeId">發布人：{{empName}}</span>
+                            <br />
+                            <span>公告時間：{{formatToDateTime(item.startTime)}}
+                        </p>
+                        </p>
+                        <p class="text-blue" v-html="item.content"></p>
+                    </template>
                 </div>
             </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                <ul class="todo-list" data-widget="todo-list">
-                    <li>
-                        <!-- drag handle -->
-                        <span class="handle">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <i class="fas fa-ellipsis-v"></i>
-                        </span>
-                        <!-- checkbox -->
-                        <div class="icheck-primary d-inline ml-2">
-                            <input type="checkbox" value="" name="todo1" id="todoCheck1">
-                            <label for="todoCheck1"></label>
-                        </div>
-                        <!-- todo text -->
-                        <span class="text">Design a nice theme</span>
-                        <!-- Emphasis label -->
-                        <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
-                        <!-- General tools such as edit or delete-->
-                        <div class="tools">
-                            <i class="fas fa-edit"></i>
-                            <i class="fas fa-trash-o"></i>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="handle">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <i class="fas fa-ellipsis-v"></i>
-                        </span>
-                        <div class="icheck-primary d-inline ml-2">
-                            <input type="checkbox" value="" name="todo2" id="todoCheck2" checked>
-                            <label for="todoCheck2"></label>
-                        </div>
-                        <span class="text">Make the theme responsive</span>
-                        <small class="badge badge-info"><i class="far fa-clock"></i> 4 hours</small>
-                        <div class="tools">
-                            <i class="fas fa-edit"></i>
-                            <i class="fas fa-trash-o"></i>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="handle">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <i class="fas fa-ellipsis-v"></i>
-                        </span>
-                        <div class="icheck-primary d-inline ml-2">
-                            <input type="checkbox" value="" name="todo3" id="todoCheck3">
-                            <label for="todoCheck3"></label>
-                        </div>
-                        <span class="text">Let theme shine like a star</span>
-                        <small class="badge badge-warning"><i class="far fa-clock"></i> 1 day</small>
-                        <div class="tools">
-                            <i class="fas fa-edit"></i>
-                            <i class="fas fa-trash-o"></i>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="handle">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <i class="fas fa-ellipsis-v"></i>
-                        </span>
-                        <div class="icheck-primary d-inline ml-2">
-                            <input type="checkbox" value="" name="todo4" id="todoCheck4">
-                            <label for="todoCheck4"></label>
-                        </div>
-                        <span class="text">Let theme shine like a star</span>
-                        <small class="badge badge-success"><i class="far fa-clock"></i> 3 days</small>
-                        <div class="tools">
-                            <i class="fas fa-edit"></i>
-                            <i class="fas fa-trash-o"></i>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="handle">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <i class="fas fa-ellipsis-v"></i>
-                        </span>
-                        <div class="icheck-primary d-inline ml-2">
-                            <input type="checkbox" value="" name="todo5" id="todoCheck5">
-                            <label for="todoCheck5"></label>
-                        </div>
-                        <span class="text">Check your messages and notifications</span>
-                        <small class="badge badge-primary"><i class="far fa-clock"></i> 1 week</small>
-                        <div class="tools">
-                            <i class="fas fa-edit"></i>
-                            <i class="fas fa-trash-o"></i>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="handle">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <i class="fas fa-ellipsis-v"></i>
-                        </span>
-                        <div class="icheck-primary d-inline ml-2">
-                            <input type="checkbox" value="" name="todo6" id="todoCheck6">
-                            <label for="todoCheck6"></label>
-                        </div>
-                        <span class="text">Let theme shine like a star</span>
-                        <small class="badge badge-secondary"><i class="far fa-clock"></i> 1 month</small>
-                        <div class="tools">
-                            <i class="fas fa-edit"></i>
-                            <i class="fas fa-trash-o"></i>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.card-body -->
-            <div class="card-footer clearfix">
-                <button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add item</button>
-            </div>
         </div>
-
-    </section>
-
+    </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    allBillBoard: [],
+                    empId: '',
+                    empName: '',
+                    startTime: '',
+                    endTime: '',
+                    content: '',
+                    title: '',
+                    active: true,
+                }
+            },
+            mounted() {
+                this.getBillboardData();
+                this.getEmpId();
+            },
+            computed: {
+                reversedItems() {
+                    return this.allBillBoard.slice().reverse();
+                }
+            },
+            methods: {
+                getEmpId() {
+                    let self = this;
+                    fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
+                        .then(result => {
+                            self.empName = result.employeeName;
+                        })
+                },
+                getBillboardData() {
+                    let self = this;
+                    axios("/api/BillboardApi/GetBillboardList").then(response => {
+                        console.log(response);
+                        self.allBillBoard = response.data;
+                        self.empId = response.data.employeesID;
+                        self.startTime = response.data.startTime;
+                        self.endTime = response.data.endTime;
+                        self.content = response.data.content;
+                        self.title = response.data.title;
+                    });
+                },
+                formatToDateTime(dateTimeString) {
+                    const options = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                    };
+                    const dateTime = new Date(dateTimeString);
+                    return dateTime.toLocaleTimeString('zh', options).replaceAll('/', '-');
+                },
+                toClock() {
+                    location.href = "/PersonalRecord/Clock";
+                },
+                toLeave() {
+                    location.href = "/PersonalRecord/LeaveCreate";
+                },
+                toOvertimeRequest() {
+                    location.href = "/ApplicationForm/OvertimeRequestCreate";
+                },
+                AfterToDay(date) {
+                    const queryDate = new Date(date).toISOString();
+                    const today = new Date().toISOString();
+                    return queryDate < today;
+                },
+                BeforeToDay(date) {
+                    const queryDate = new Date(date).toISOString();
+                    const today = new Date().toISOString();
+                    var result = queryDate > today;
+                    // console.log(queryDate);
+                    // console.log(today);
+                    // console.log(result);
+                    return queryDate > today;
+                }
+            },
+        }).mount("#callBillBoard");
+
+    </script>
+}

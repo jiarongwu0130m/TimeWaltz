@@ -512,7 +512,9 @@ namespace WebApplication1.Helpers
                 Id = entity.Id,
                 Title = entity.Title,
                 StartTime = entity.StartTime,
-                EmployeeId = entity.EmployeesId
+                EmployeeId = entity.EmployeesId,
+                Content = entity.Content,
+                EndTime= entity.EndTime,
 
             };
             return model;
