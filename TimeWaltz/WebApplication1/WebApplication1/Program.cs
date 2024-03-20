@@ -46,7 +46,8 @@ namespace WebApplication1
             builder.Services.AddScoped<AccessService>();
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<DropDownBasicSettingService>();
-
+            builder.Services.AddHttpContextAccessor();
+ 
 
             builder.Services.AddCors(opt =>
             {
@@ -72,7 +73,6 @@ namespace WebApplication1
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

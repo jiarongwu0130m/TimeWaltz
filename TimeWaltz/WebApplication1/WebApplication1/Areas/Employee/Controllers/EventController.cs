@@ -24,6 +24,7 @@ namespace WebApplication1.Areas.Employee.Controllers
         /// <returns></returns>
         public IActionResult Clock()
         {
+            var a = User;
             var toDay = DateTime.Now.Date;
             var clockRecord = _timeWaltzContext.Clocks.FirstOrDefault(res => res.Date.Date == toDay);
             ClockViewModel clockViewModel = null;

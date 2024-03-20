@@ -26,7 +26,8 @@ namespace WebApplication1.Helpers
 
         private static string GetClaimValue(ClaimsPrincipal principal, string type) 
         {
-            var result = principal.Claims.FirstOrDefault(x => x.ValueType == type);
+            
+            var result = principal.Claims.FirstOrDefault(x => x.Type == type);
             if (result == null) throw new InvalidOperationException($"{type} is null");
             return result.Value;
         }

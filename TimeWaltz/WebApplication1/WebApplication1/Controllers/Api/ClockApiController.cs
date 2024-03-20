@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Enums;
 using Repository.Models;
+using System.Security.Claims;
 using WebApplication1.Areas.Employee.Models;
+using WebApplication1.Filters;
 using WebApplication1.Helpers;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +14,7 @@ namespace WebApplication1.Controllers.Api
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
     public class ClockApiController : ControllerBase
     {
         private readonly TimeWaltzContext _timeWaltzDb;
