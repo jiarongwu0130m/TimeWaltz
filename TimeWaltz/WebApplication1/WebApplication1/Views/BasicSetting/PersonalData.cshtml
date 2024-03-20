@@ -1,26 +1,26 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["Title"] = "個人資料";
+    ViewData["Title"] = "員工資料";
 }
 
 <div id="app">
     <form asp-action="VacationType" asp-controller="BasicSetting" method="post">
         <div class="row">
             <div class="col text-center">
-                <label class="form-label">班別名稱</label>
-                <input type="text" class="form-control" v-model="search.shiftName">
+                <label class="form-label">員工編號</label>
+                <input type="text" class="form-control" v-model="search.empNo">
+            </div>
+            <div class="col text-center">
+                <label class="form-label">員工姓名</label>
+                <input type="text" class="form-control" v-model="search.empName">
             </div>
             <div class="col text-center">
                 <label class="form-label">部門名稱</label>
                 <input type="text" class="form-control" v-model="search.depName">
             </div>
             <div class="col text-center">
-                <label class="form-label">員工名稱</label>
-                <input type="text" class="form-control" v-model="search.empName">
-            </div>
-            <div class="col text-center">
-                <label class="form-label">員工編號</label>
-                <input type="text" class="form-control" v-model="search.empNo">
+                <label class="form-label">班別名稱</label>
+                <input type="text" class="form-control" v-model="search.shiftName">
             </div>
             <div class="col-auto m-auto">
                 <a asp-controller="BasicSetting" asp-action="PersonalDataCreate" class="btn btn-outline-success pull-right">新增</a>
@@ -47,7 +47,7 @@
                 <td>{{emp.name}}</td>
                 <td>{{emp.shiftsName}}</td>
                 <td>
-                    <a href="#" @@click="edit(emp.id, $event)" class="btn btn-outline-primary">編輯</a> |
+                    <a href="#" @@click="edit(emp.id, $event)" class="btn btn-outline-primary">編輯</a>
                     <a href="#" @@click="getOut(emp.id, $event)" class="btn btn-outline-secondary">刪除</a>
                 </td>
             </tr>
