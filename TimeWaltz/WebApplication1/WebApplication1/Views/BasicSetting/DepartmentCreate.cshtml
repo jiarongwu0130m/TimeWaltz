@@ -1,31 +1,55 @@
-﻿@model WebApplication1.Models.BasicSettingViewModels.DepartmentCreateViewModel
-@{
+﻿@{
     Layout = "_Layout";
-    ViewBag.title = "部門設定";
+    ViewBag.title = "新增部門";
 }
-
-
-
-<div class="row">
+<div class="row" id="app">
     <div class="col-md">
-        <form asp-action="CreateDepartment" asp-asp-controller="BasicSetting" method="post">
+        <form asp-action="DepartmentCreate" asp-asp-controller="BasicSetting" method="post">
 
             <div class="card-body">
                 <div class="form-group">
-                    <label asp-for="DepartmentName" class="control-label">部門名稱</label>
-                    <input asp-for="DepartmentName" class="form-control col-sm-3" />
+                    <label name="DepartmentName" class="control-label">部門名稱</label>
+                    <input name="DepartmentName" class="form-control col-sm-3" />
                 </div>
                 <div class="form-group">
                     <label class="control-label">部門主管</label>
-                    <select class="form-control  col-sm-3" asp-for="EmployeesId" asp-items="@Model.EmployeeNameSelectList"></select>
+                    <select v-for="item in employeeNameSelectList" class="form-control col-sm-3" v-model="employeesId">
+                        <option value="">--請選擇--</option>
+                        <option :value="item.value">{{item.text}}</option>
+                    </select>
                     <span class="text-danger"></span>
-                </div>
-                
+                </div>                
             </div>
             <div class="card-footer">
-                <input type="submit" value="送出" class="btn btn-primary" />
+                <input type="button" value="送出" class="btn btn-primary" />
                 <a asp-controller="BasicSetting" asp-action="Department" class="btn btn-outline-dark">返回</a>
             </div>
         </form>
     </div>
 </div>
+@section Scripts{
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    employeeNameSelectList: [],
+                }
+            },
+            methods: {
+                getDropDownList() {
+                    let self = this;
+                    axios.get("/api/DepartmentApi/GetDropDownList")
+                    .then((response) => {
+                        console.log(response);
+                        self.employeeNameSelectList = response.data;
+                    }).then((error) => console.log(error));
+                }
+            },
+            mounted() {
+                this.getDropDownList();
+            },
+        }).mount('#app');
+    </script>
+
+}

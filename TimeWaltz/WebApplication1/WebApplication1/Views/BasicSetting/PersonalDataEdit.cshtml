@@ -1,58 +1,54 @@
 ﻿@{
-    ViewData["Title"] = "編輯";
+    ViewData["Title"] = "編輯員工資料";
 }
 
 <form asp-action="SpecialVacationEdit" asp-asp-controller="BasicSetting" id="app">
-    <section class="content">
+    <div class="row">
         <div class="card-body">
             <div class="form-group">
                 <label class="control-label">姓名</label>
-                <input class="form-control" :class="validation.name" v-model="name" />
+                <input class="form-control col-3" :class="validation.name" v-model="name" />
                 <span class="text-danger" v-if="!validation.name">姓名不得為空</span>
             </div>
             <div class="form-group">
-                <label class="control-label">部門</label>
-                <select class="form-control" :class="validation.departmentId" v-model="departmentId">
-                    <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
-                </select>
-                <span class="text-danger" v-if="!validation.departmentId">部門不得為空</span>
+                <label class="control-label">性別</label>
+                <input type="text" class="form-control col-3" v-model="gender" disabled />
             </div>
             <div class="form-group">
-                <label class="control-label">班別名稱</label>
-                <select class="form-control" v-model="shiftScheduleId">
-                    <option v-for="item in shiftNameSelectItems" :value="item.value">{{item.text}}</option>
-                </select>
-                <span class="text-danger" v-if="!validation.shiftScheduleId">班別不得為空</span>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label">郵件地址</label>
-                <input type="email" class="form-control" :class="validation.email" v-model="email" />
+                <label class="control-label">E-mail</label>
+                <input type="email" class="form-control col-5" :class="validation.email" v-model="email" />
                 <div class="invalid-feedback">
                     Email格式錯誤!
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label">雇傭日期</label>
-                <input type="text" class="form-control" v-model="hireDate" disabled/>
+                <label class="control-label">到職日期</label>
+                <input type="text" class="form-control col-3" v-model="hireDate" disabled />
             </div>
             <div class="form-group">
                 <label class="control-label">員工編號</label>
-                <input type="text" class="form-control" v-model="employeesNo" disabled />
-            </div> <div class="form-group">
-                <label class="control-label">性別</label>
-                <input type="text" class="form-control" v-model="gender" disabled />
+                <input type="text" class="form-control col-3" v-model="employeesNo" disabled />
+            </div>
+            <div class="form-group">
+                <label class="control-label">部門</label>
+                <select class="form-control col-3" :class="validation.departmentId" v-model="departmentId">
+                    <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger" v-if="!validation.departmentId">部門不得為空</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">班別</label>
+                <select class="form-control col-3" v-model="shiftScheduleId">
+                    <option v-for="item in shiftNameSelectItems" :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="text-danger" v-if="!validation.shiftScheduleId">班別不得為空</span>
             </div>
             <div class="card-footer">
-                <div class="row float-right">
-                    <div class="col ">
-                        <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit(id)" />
-                        <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-success">返回</a>
-                    </div>
-                </div>
+                <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit(id)" />
+                <a asp-controller="BasicSetting" asp-action="PersonalData" class="btn btn-outline-success">返回</a>
             </div>
         </div>
-    </section>
+    </div>
 </form>
 @section Scripts {
     <script>

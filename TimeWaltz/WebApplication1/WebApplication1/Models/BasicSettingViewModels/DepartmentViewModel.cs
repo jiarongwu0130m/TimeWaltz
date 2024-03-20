@@ -18,10 +18,10 @@ namespace WebApplication1.Models.BasicSettingViewModels
         [NotMapped]
         public string? EmployeeName { get; set; }
         public string? QueryDepartment { get; set; }
-
-
-
-
+    }
+    public class DepartmentCreateDto
+    {
+        public List<SelectListItem>? EmployeeNameSelectList { get; set; }
     }
     public class DepartmentCreateViewModel
     {
