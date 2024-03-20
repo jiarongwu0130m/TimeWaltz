@@ -6,89 +6,7 @@
     <div class="sidebar">
 
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            個人資料
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a asp-controller="PersonalRecord" asp-action="Clock" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>打卡</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="PersonalRecord" asp-action="Attendance" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>出缺勤查詢</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="PersonalRecord" asp-action="Leave" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>請假查詢</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="PersonalRecord" asp-action="Overtime" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>加班查詢</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="PersonalRecord" asp-action="ShiftSchedule" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>班表查詢</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="PersonalRecord" asp-action="Approval" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>簽核</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="PersonalRecord" asp-action="AgentEmployeeSetting" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>代理人設定</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
-                        <p>
-                            表單申請
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a asp-controller="PersonalRecord" asp-action="LeaveCreate" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>請假單</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="ApplicationForm" asp-action="OvertimeRequest" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>加班單</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="ApplicationForm" asp-action="CompRequest" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>補打卡單</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">                
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-address-book"></i>
@@ -99,55 +17,55 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="PersonalData" class="nav-link">
+                            <a href="/BasicSetting/PersonalData" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>個人資料</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="ShiftSchedule" class="nav-link">
+                            <a href="/BasicSetting/ShiftSchedule" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>班別設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="VacationType" class="nav-link">
+                            <a href="/BasicSetting/VacationType" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>假別設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="Department" class="nav-link">
+                            <a href="/BasicSetting/Department" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>部門設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="Flextime" class="nav-link">
+                            <a href="/BasicSetting/Flextime" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>彈性上班設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="PublicHoliday" class="nav-link">
+                            <a href="/BasicSetting/PublicHoliday" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>國定假日設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="nav-link">
+                            <a href="/BasicSetting/SpecialVacation" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>特殊假設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="SpecialHoliday" class="nav-link">
+                            <a href="/BasicSetting/SpecialHoliday" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>特休設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="BasicSetting" asp-action="SpecialGrade" class="nav-link">
+                            <a href="/BasicSetting/SpecialGrade" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>年資級距表設定</p>
                             </a>
@@ -161,25 +79,25 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a asp-controller="Setting" asp-action="BillBoard" class="nav-link">
+                            <a href="/Setting/BillBoard" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>公佈欄</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Setting" asp-action="Account" class="nav-link">
+                            <a href="/Setting/Account" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>帳號設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/charts/inline.html" class="nav-link">
+                            <a href="/Setting/Access" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>權限設定</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/charts/uplot.html" class="nav-link">
+                            <a href="/Setting/Role" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>角色設定</p>
                             </a>
