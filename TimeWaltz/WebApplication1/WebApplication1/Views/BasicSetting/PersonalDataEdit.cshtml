@@ -32,6 +32,17 @@
                     Email格式錯誤!
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label">雇傭日期</label>
+                <input type="text" class="form-control" v-model="hireDate" disabled/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">員工編號</label>
+                <input type="text" class="form-control" v-model="employeesNo" disabled />
+            </div> <div class="form-group">
+                <label class="control-label">性別</label>
+                <input type="text" class="form-control" v-model="gender" disabled />
+            </div>
             <div class="card-footer">
                 <div class="row float-right">
                     <div class="col ">
@@ -52,9 +63,11 @@
                     departmentNameSelectItem: [],
                     shiftNameSelectItems: [],
                     shiftScheduleId: null,
+                    hireDate: '',
+                    employeesNo: '',
+                    gender: '',
                     email: '',
                     name: '',
-                    shiftScheduleId: null,
                     validation: {
                         employeesNo: true,
                         gender: true,
@@ -125,8 +138,10 @@
                         self.email = result.email;
                         self.id = result.id;
                         self.name = result.name;
+                        self.hireDate = result.hireDate;
+                        self.employeesNo = result.employeesNo;
+                        self.gender = result.gender;
                         self.shiftScheduleId = result.shiftScheduleId;
-
                     });
                 },
                 checkId() {

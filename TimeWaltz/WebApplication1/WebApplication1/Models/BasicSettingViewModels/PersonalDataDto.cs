@@ -25,8 +25,8 @@ namespace WebApplication1.Models.BasicSettingViewModels
     public class PersonalDataEditShowDto
     {
         public int Id { get; set; }
-        public string? ShiftScheduleName { get; set; }
-        public string DepartmentName { get; set; }
+        public int? ShiftScheduleId { get; set; }
+        public int DepartmentId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime HireDate { get; set; }

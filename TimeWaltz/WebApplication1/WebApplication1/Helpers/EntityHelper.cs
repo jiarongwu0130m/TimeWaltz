@@ -186,8 +186,8 @@ namespace WebApplication1.Helpers
             var model = new PersonalDataEditShowDto
             {
                 Id = entity.Id,
-                ShiftScheduleName = entity.ShiftScheduleId,
-                DepartmentName = entity.DepartmentId,
+                ShiftScheduleId = entity.ShiftScheduleId,
+                DepartmentId = entity.DepartmentId,
                 Name = entity.Name,
                 Email = entity.Email,
 
