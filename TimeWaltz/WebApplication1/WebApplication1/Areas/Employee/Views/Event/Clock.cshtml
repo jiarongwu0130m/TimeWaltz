@@ -1,11 +1,9 @@
 ﻿@{
     ViewBag.Title = "打卡資訊";
 }
-<div id="app">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form method="post">
-                <div class="card card-light">
+<div class="secion mt-2" id="app">
+    <div class="card">
+            <form method="post">                
                     <div class="card-header">
                         <h3 class="card-title d-flex justify-content-between">
                             <span>打卡時間</span>
@@ -17,7 +15,7 @@
                     <div class="card-body">
                         <div class="row form-group boxed">
                             <label class="col-form-label col-md-auto font-weight-bold">上班時間</label>
-                            <input :value="timeFormat(startClockInDate)" type="text" class="form-control col-md-5" id="startTime" readonly>
+                            <input :value="timeFormat(startClockInDate)" type="text" class="form-control col-md-6" id="startTime" readonly>
                         </div>
                         <div class="row form-group boxed">
                             <label class="col-form-label col-md-auto font-weight-bold">打卡地點</label>
@@ -25,11 +23,11 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label class="col-form-label col-md-auto">經度：</label>
-                                        <input v-model="startClockInLongitude" type="text" class="form-control col-md-2" id="StartAddLng" readonly>
+                                        <input v-model="startClockInLongitude" type="text" class="form-control" id="StartAddLng" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="col-form-label col-md-auto">緯度：</label>
-                                        <input v-model="startClockInLatitude" type="text" class="form-control col-md-2" id="StartAddLat" readonly>
+                                        <input v-model="startClockInLatitude" type="text" class="form-control" id="StartAddLat" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -37,7 +35,7 @@
                         <hr>
                         <div class="row form-group boxed">
                             <label class="col-form-label col-md-auto font-weight-bold">下班時間</label>
-                            <input :value="timeFormat(endClockInDate)" type="text" class="form-control col-md-5" id="endTime" readonly>
+                            <input :value="timeFormat(endClockInDate)" type="text" class="form-control col-md-6" id="endTime" readonly>
                         </div>
                         <div class="row form-group boxed">
                             <label class="col-form-label col-md-auto font-weight-bold">打卡地點</label>
@@ -45,11 +43,11 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label class="col-form-label col-md-auto">經度：</label>
-                                        <input v-model="endClockInLongitude" type="text" class="form-control col-md-2" id="EndAddLng" readonly>
+                                        <input v-model="endClockInLongitude" type="text" class="form-control" id="EndAddLng" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="col-form-label col-md-auto">緯度：</label>
-                                        <input v-model="endClockInLatitude" type="text" class="form-control col-md-2" id="EndAddLat" readonly>
+                                        <input v-model="endClockInLatitude" type="text" class="form-control" id="EndAddLat" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -67,10 +65,9 @@
                             </button>
                             
                         </div>
-                    </div>
-                </div>
+                    </div>                
             </form>
-        </div>
+        
         <div class="col-md-4">
             <div class="card card-light">
                 <div class="card-header">
