@@ -63,29 +63,9 @@
                         <ion-icon name="notifications-off-outline" role="img" class="md hydrated" aria-label="logo facebook"></ion-icon>
                         下班打卡
                     </button>
-
                 </div>
             </div>
         </form>
-
-        @* <div class="col-md-4">
-        <div class="card card-light">
-        <div class="card-header">
-        <h3 class="card-title">當日班表</h3>
-        </div>
-        <div class="card-body">
-        <div class="form-group boxed row">
-        <label class="col-form-label col-sm-3">上班時間</label>
-        <input :value="timeFormat(shiftScheduleStartTime)" type="text" class="col-sm-9" readonly>
-        </div>
-        <div class="form-group boxed row">
-        <label class="col-form-label col-sm-3">下班時間</label>
-        <input :value="timeFormat(shiftScheduleEndTime)" type="text" class="col-sm-9" readonly>
-        </div>
-        </div>
-        </div>
-        </div> *@
-
     </div>
 
     <div class="modal fade dialogbox" id="DialogIconedSuccess" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
@@ -128,8 +108,6 @@
         </div>
     </div>
 
-
-
     <div class="modal fade dialogbox" id="DialogIconedWarn" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -156,39 +134,35 @@
                 <div class="modal-header">
                     <h5 class="modal-title">今日班表</h5>
                 </div>
-                <form>
-                    <div class="modal-body text-left mb-2">
-                        <div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="email1">上班時間</label>
-                                <input type="text" class="form-control" :value="shiftScheduleStartTime" readonly>
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                                </i>
-                            </div>
-                        </div>
-
-                        <div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="password1">下班時間</label>
-                                <input type="text" class="form-control" :value="shiftScheduleEndTime" readonly>
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                                </i>
-                            </div>
+                <div class="modal-body text-left mb-2">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="email1">上班時間</label>
+                            <input type="text" class="form-control" :value="shiftScheduleStartTime" readonly>
+                            <i class="clear-input">
+                                <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                            </i>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <div class="btn-inline">
-                            <button type="button" class="btn btn-text-secondary" data-dismiss="modal">返回</button>
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="password1">下班時間</label>
+                            <input type="text" class="form-control" :value="shiftScheduleEndTime" readonly>
+                            <i class="clear-input">
+                                <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                            </i>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-inline">
+                        <button type="button" class="btn btn-text-secondary" data-dismiss="modal">返回</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-
+</div>
     @section Scripts {
         <script>
             const app = Vue.createApp({
@@ -312,91 +286,4 @@
                 }
             }).mount("#app");
         </script>
-
-
-
-
-
-
-
-
-        @*     <script>
-    var longitude;
-    var latitude;
-    var status;
-    var startClock = document.getElementById('startClockIn');
-    var endClock = document.getElementById('endClockIn');
-
-    var startTime = document.getElementById('startTime');
-    var endTime = document.getElementById('endTime');
-    var options = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric'
-    };
-
-    function getLocation() {
-    if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-    function (position) {
-    longitude = position.coords.longitude;
-    latitude = position.coords.latitude;
-    },
-    function (error) {
-    alert("無法取得位置");
-    }
-    );
-    } else {
-    alert("無法取得位置");
-    }
-    }
-    window.onload = getLocation;
-
-    function setStatus(value) {
-    document.getElementById('statusHidden').value = value;
-    }
-
-    startClock.addEventListener('click', (e) => {
-    e.preventDefault();
-    startTime.value = new Date().toLocaleString('zh-TW', options);
-    updateLocation('StartAddLng', 'StartAddLat');
-    document.getElementById('StartAddLng').value = longitude;
-    document.getElementById('StartAddLat').value = latitude;
-    showSuccessAlert();
-    document.forms[0].submit();
-    });
-
-    endClock.addEventListener('click', (e) => {
-    e.preventDefault();
-    endTime.value = new Date().toLocaleString('zh-TW', options);
-    updateLocation('EndAddLng', 'EndAddLat');
-    document.getElementById('EndAddLng').value = longitude;
-    document.getElementById('EndAddLat').value = latitude;
-    showSuccessAlert();
-    document.forms[0].submit();
-    });
-
-    function updateLocation(lng, lat) {
-    if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-    function (position) {
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
-    },
-    function (error) {
-    alert("無法取得位置");
-    }
-    );
-    } else {
-    alert("無法取得位置");
-    }
-    }
-    function showSuccessAlert() {
-    $('#successModal').modal('show');
-    }
-    </script> *@
     }
