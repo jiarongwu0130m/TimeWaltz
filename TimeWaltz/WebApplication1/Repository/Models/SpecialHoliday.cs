@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Repository.Enums;
 
 namespace Repository.Models;
 
@@ -14,5 +15,5 @@ public partial class SpecialHoliday
     [Key]
     public int Id { get; set; }
 
-    public int? HowToGive { get; set; }
+    public HowToGiveEnum? HowToGive { get; set; }
 }
