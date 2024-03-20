@@ -26,7 +26,8 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="EmployeesName" class="control-label">姓名</label>
-                <select asp-for="EmployeesName" class="form-control" asp-items="@Model.EmployeesNameSelectList"></select>
+                <input asp-for="EmployeesName" class="form-control" />
+                @* <select asp-for="EmployeesName" class="form-control" asp-items="@Model.EmployeesNameSelectList"></select> *@
                 <span class="text-danger"></span>
             </div>
         </div>
@@ -41,8 +42,8 @@
             <div class="form-group">
                 <label asp-for="Stop" class="control-label">啟用/停用</label>
                 <select asp-for="Stop" class="form-control">
-                    <option value="0">啟用</option>
-                    <option value="1">停用</option>
+                    <option value="false">啟用</option>
+                    <option value="true">停用</option>
                 </select>
                 <span class="text-danger"></span>
             </div>

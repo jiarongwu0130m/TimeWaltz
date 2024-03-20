@@ -26,7 +26,26 @@ namespace WebApplication1.Models.SettingViewModels
         public string StopName { get; set; }
 
     }
+    public class UserCreateModel
+    {
+        [Required]
+        [Display(Name = "帳號")]
+        public string Account { get; set; }
 
+        [Required]
+        [Display(Name = "密碼")]
+        public string Password { get; set; }
+
+        [Display(Name = "姓名")]
+        public string EmployeesName { get; set; }
+
+        [Display(Name = "單位")]
+        public int DepartmentName { get; set; }
+
+        [Display(Name = "停用/啟用")]
+        public bool Stop { get; set; }
+
+    }
     public class UserCreateViewModel
     {
         [Required]
@@ -39,7 +58,7 @@ namespace WebApplication1.Models.SettingViewModels
 
         [Display(Name = "姓名")]
         public List<SelectListItem>? EmployeesNameSelectList { get; set; }
-        public int? EmployeesName { get; set; }
+        public string EmployeesName { get; set; }
 
         [Display(Name = "單位")]
         public List<SelectListItem>? DepartmentNameSelectList { get; set; } 
@@ -63,7 +82,7 @@ namespace WebApplication1.Models.SettingViewModels
         [Display(Name = "密碼")]
         public string? Password { get; set; }
 
-        public int? EmployeesName { get; set; }
+        public string EmployeesName { get; set; }
 
         public int? DepartmentName { get; set; }
 
@@ -71,6 +90,16 @@ namespace WebApplication1.Models.SettingViewModels
         public List<SelectListItem>? StopSelectList { get; set; }
         public int Stop { get; set; }
         
+
+    }
+    public class UserEditModel
+    {
+        public int Id { get; set; }
+        public string? Password { get; set; }
+        public string EmployeesName { get; set; }
+        public int DepartmentName { get; set; }
+        public int Stop { get; set; }
+
 
     }
 }

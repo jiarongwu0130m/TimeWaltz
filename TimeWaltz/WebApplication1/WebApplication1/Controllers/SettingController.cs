@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Repository.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.SettingViewModels;
@@ -55,14 +57,7 @@ public class SettingController : Controller
     /// <returns></returns>
     public IActionResult Account()
     {
-        var model = _UserService.GetUserViewModel();
-
-        ViewBag.GenderEnumDepart = DropDownHelper
-            .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
-        ViewBag.GenderEnumEmployees = DropDownHelper
-            .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
-
-        return View(model);
+        return View();
     }
 
     /// <summary>
@@ -104,22 +99,15 @@ public class SettingController : Controller
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult AccountCreate(UserCreateViewModel model)
+    public IActionResult AccountCreate(UserCreateModel model)
     {
-        model.EmployeesNameSelectList = DropDownHelper
-            .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
-        model.DepartmentNameSelectList = DropDownHelper
-            .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
-
-
+        var u = _db.Users.FirstOrDefault(x => x.Account == model.Account);
         //帳號是否重複
-        if (_UserService.GetUserCreateOrNull(model).Count != 0)
+        if (u != null)
         {
             ModelState.AddModelError(string.Empty, "帳號重複");
             return View(model);
         }
-
-        if (!ModelState.IsValid) return View(model);
 
         //密碼鹽
         var Salts = _UserService.GenerateSalt();
@@ -130,10 +118,16 @@ public class SettingController : Controller
         {
             Account = model.Account,
             Password = model.Password,
-            Stop = model.Stop == 1 ? true : false,
+            Stop = model.Stop,
             Salt = Salts,
-            //DepartmentId = Convert.ToInt32(model.DepartmentName),//todo
-            //EmployeesId = Convert.ToInt32(model.EmployeesName),//todo
+            RoleId = 2,
+            Employee = new Employee()
+            {
+                DepartmentId = model.DepartmentName,
+                HireDate = DateTime.Now,
+                Name = model.EmployeesName,
+                EmployeesNo = DateTime.Now.Ticks.ToString()
+            },
             PasswordDate = DateTime.Now
         });
         _db.SaveChanges();
@@ -141,42 +135,60 @@ public class SettingController : Controller
         return RedirectToAction("Account", "Setting");
     }
 
+
+
+    [HttpGet]
+    public IActionResult AccountEdit(int id)
+    {
+        var user = _db.Users.Include(x => x.Employee).FirstOrDefault(x => x.Id == id);
+        var model = new UserEditViewModel()
+        {
+            Id = user.Id,
+            Stop = Convert.ToInt32(user.Stop),
+            EmployeesName = user.Employee.Name,
+            DepartmentName = user.Employee.DepartmentId,
+            EmployeesNameSelectList = DropDownHelper
+                .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData()),
+            DepartmentNameSelectList = DropDownHelper
+                .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData()),
+            StopSelectList = new List<SelectListItem>()
+            {
+                new("停用","1"),
+                new("啟用","0"),
+            }
+        };
+        return View(model);
+    }
+
     /// <summary>
     ///     修改帳號頁
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public IActionResult AccountEdit(int id)
+    [HttpPost]
+    public IActionResult AccountEdit(UserEditModel model)
     {
-        var employeeNameDropDownData = _dropDownBasicSettingService.GetEmployeeDropDownData();
-        var entity = _UserService.GetUserOrNull(id);
-        var Salts = "";
-        if (employeeNameDropDownData != null)
-        {
-            var model = EntityHelper.ToEditViewModel(entity);
-            model.EmployeesNameSelectList = DropDownHelper
-                .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
-            model.DepartmentNameSelectList = DropDownHelper
-                .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
+        var user = _db.Users.Include(x=>x.Employee).ThenInclude(x=>x.Department).FirstOrDefault(x => x.Id == model.Id);
+        if (user == null) return RedirectToAction("Account", "Setting");
 
+        try
+        {
             if (model.Password != null)
             {
-                Salts = _UserService.GenerateSalt();
-
-                model.Password = _UserService.SHA256EncryptString(model.Password + Salts);
-
+                var salts = _UserService.GenerateSalt();
+                user.Password = _UserService.SHA256EncryptString(model.Password + salts);
             }
-            //密碼雜湊
 
-            _UserService.EditUserType(model, Salts);
-            return RedirectToAction("Account", "Setting");
-
+            user.Employee.Name = model.EmployeesName;
+            user.Stop = Convert.ToBoolean(model.Stop);
+            user.Employee.DepartmentId = model.DepartmentName;
+            _db.SaveChanges();
+            return RedirectToAction("AccountEdit", "Setting",new {id = model.Id});
         }
-        //密碼雜湊
-
-
-        //_UserService.EditUserType(model, Salts);
-        return RedirectToAction("Account", "Setting");
+        catch (Exception e)
+        {
+            return RedirectToAction("Account", "Setting");
+        }
     }
 
 

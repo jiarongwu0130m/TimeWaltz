@@ -7,7 +7,7 @@
 <div class="container">
 
     <form asp-action="AccountEdit" asp-controller="Setting" method="post">
-
+        <input asp-for="Id" class="form-control" hidden/>
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Password" class="control-label">密碼</label>
@@ -18,7 +18,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="EmployeesName" class="control-label">姓名</label>
-                <select asp-for="EmployeesName" class="form-control" asp-items="@Model.EmployeesNameSelectList"></select>
+                <input asp-for="EmployeesName" class="form-control"></input>
                 <span class="text-danger"></span>
             </div>
         </div>
@@ -32,10 +32,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Stop" class="control-label">啟用/停用</label>
-                <select asp-for="Stop" class="form-control" asp-items="@Model.StopSelectList">
-                    <option value="0">停用</option>
-                    <option value="1">啟用</option>
-                </select>
+                <select asp-for="Stop" class="form-control" asp-items="@Model.StopSelectList"></select>
                 <span class="text-danger"></span>
             </div>
         </div>

@@ -356,16 +356,6 @@ namespace WebApplication1.Helpers
             return model;
         }
 
-        public static UserEditViewModel ToEditViewModel(User entity)
-        {
-            var model = new UserEditViewModel
-            {
-                Id = entity.Id,
-                //DepartmentName = entity.DepartmentId,//todo
-                EmployeesName = entity.Id,
-            };
-            return model;
-        }
         public static UserViewModel ToViewModel(User entity)
         {
             var model = new UserViewModel

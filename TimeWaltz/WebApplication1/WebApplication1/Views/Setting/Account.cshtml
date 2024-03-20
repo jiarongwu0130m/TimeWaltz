@@ -1,50 +1,52 @@
-﻿@model IEnumerable< WebApplication1.Models.SettingViewModels.UserViewModel>
-
-@{
+﻿@{
     Layout = "_Layout";
     ViewBag.title = "帳號瀏覽";
 }
 
+<div id="app" class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="帳號">帳號</label>
+                                <input type="text" class="form-control" id="帳號" v-model="search.account">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>單位</label>
+                                <select class="form-control" v-model="search.department">
+                                    <option value="">請選擇</option>
+                                    <option v-for="d in department" :value="d.id">{{d.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="姓名">姓名</label>
+                                <input type="text" class="form-control" id="姓名" v-model="search.name">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                    </div>
+                </h3>
+                <div class="card-tools">
+                    <div class="input-group">
+                        <div class="input-group-append">
+                            <a href="/setting/AccountCreate" class="btn btn-outline-dark pull-right">
+                                新增帳號
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<form asp-action="Account" asp-controller="Setting" method="post">
-    <div class="row">
-        <div class="col-md-2">
-            <label>帳號：</label>
-            <input type="text" name="Account" value="" style="width: 100px;" />
-        </div>
-        <div class="col-md-2">
-            <label>單位：</label>
-            <select name="DepartmentName" asp-items="ViewBag.GenderEnumDepart" style="width: 100px;">
-                <option value="">請選擇</option>
-                </select>
-            <span class="text-danger"></span>
-        </div>
-        <div class="col-md-2">
-            <label>姓名：</label>
-            <input type="text" name="EmployeesName" value="" style="width: 100px;" />
-        </div>
-    </div>
-    <br />
-    <div class=" row ">
-        <button type="submit" class="btn btn-outline-dark">查詢</button>
-        <div class="col-sm-auto ml-auto">
-            <a asp-controller="Setting" asp-action="AccountCreate" class="btn btn-outline-dark pull-right">新增帳號</a>
-        </div>
-    </div>
-</form>
-
-
-<div class="card-body">
-    <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
-        <div class="row">
-            <div class="col-sm-12 col-md-6"></div>
-            <div class="col-sm-12 col-md-6"></div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <table id="example2"
-                       class="table table-bordered table-hover dataTable dtr-inline"
-                       aria-describedby="example2_info">
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
                             <th>
@@ -65,84 +67,113 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Account)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EmployeesName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DepartmentName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.StopName)
-                                </td>
-                                <td>
-                                    <a asp-action="AccountEdit" asp-controller="Setting" asp-route-Id="@item.Id" class="btn btn-outline-dark">修改/刪除</a>
-                                </td>
-                            </tr>
-                        }
+                        <tr v-for="emp in filterEmp">
+                            <td class="text-center">{{emp.account}}</td>
+                            <td class="text-center">{{emp.name}}</td>
+                            <td class="text-center">{{emp.departmentName}}</td>
+                            <td class="text-center">{{stopStatusFormat(emp.stop)}}</td>
+                            <td class="text-center">
+                                <a :href="'/setting/AccountEdit/'+emp.id" class="btn btn-outline-dark">
+                                    修改
+                                </a>
+                                <button type="button" class="btn btn-outline-danger" @@click="deleteEmp(emp)">
+                                    刪除
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
-
                 </table>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-5">
-                <div class="col-sm col-md-5" id="example2_info"></div>
+            <div class="card-footer clearfix">
+                <paginate 
+                    :page-count="totalPages"
+                    :click-handler="pageChange"
+                    :prev-text="'上一頁'"
+                    :next-text="'下一頁'"
+                    :container-class="'pagination justify-content-center'">
+                </paginate>
             </div>
-            <div class="col-sm-4 col-md-8">
-                <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers"
-                         id="example2_paginate">
-                        <ul class="pagination">
-                            <li class="paginate_button page-item previous disabled"
-                                id="example2_previous">
-                                <a href="#" aria-controls="example2"
-                                   data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                            </li>
-                            <li class="paginate_button page-item active">
-                                <a href="#"
-                                   aria-controls="example2" data-dt-idx="1" tabindex="0"
-                                   class="page-link">1</a>
-                            </li>
-                            <li class="paginate_button page-item ">
-                                <a href="#"
-                                   aria-controls="example2" data-dt-idx="2" tabindex="0"
-                                   class="page-link">2</a>
-                            </li>
-                            <li class="paginate_button page-item ">
-                                <a href="#"
-                                   aria-controls="example2" data-dt-idx="3" tabindex="0"
-                                   class="page-link">3</a>
-                            </li>
-                            <li class="paginate_button page-item ">
-                                <a href="#"
-                                   aria-controls="example2" data-dt-idx="4" tabindex="0"
-                                   class="page-link">4</a>
-                            </li>
-                            <li class="paginate_button page-item ">
-                                <a href="#"
-                                   aria-controls="example2" data-dt-idx="5" tabindex="0"
-                                   class="page-link">5</a>
-                            </li>
-                            <li class="paginate_button page-item ">
-                                <a href="#"
-                                   aria-controls="example2" data-dt-idx="6" tabindex="0"
-                                   class="page-link">6</a>
-                            </li>
-                            <li class="paginate_button page-item next" id="example2_next">
-                                <a href="#" aria-controls="example2" data-dt-idx="7"
-                                   tabindex="0" class="page-link">Next</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/vuejs-paginate-next@latest/dist/vuejs-paginate-next.umd.js"></script>
+    <script>
+        const app = Vue.createApp({
+            components: {
+                paginate: VuejsPaginateNext,
+            },
+            data() {
+                return {
+                    currentPage:1,
+                    pageSize:10,
+                    search:{
+                        account:"",
+                        department:"",
+                        name:""
+                    },                    
+                    employee: [],
+                    department: [],
+                }
+            },
+            computed: {
+                totalPages() {
+                    return Math.ceil(this.filterEmp.length / this.pageSize);
+                },
+                filterEmp() {
+                    let emp = this.employee;
+                    if (this.search.account != "") {
+                        emp = emp.filter(x => x.account.includes(this.search.account))
+                    }
+                    if (this.search.name != "") {
+                        emp = emp.filter(x => x.name.includes(this.search.name))
+                    }
+                    if (this.search.department != "") {
+                        emp = emp.filter(x => x.departmentId == this.search.department)
+                    }
+                    const start = (this.currentPage - 1) * this.pageSize;
+                    const end = start + this.pageSize;
+                    return emp.slice(start, end);
+                }
+            },
+            methods: {
+                deleteEmp(emp) { 
+                    if (confirm(`確定要刪除員工${emp.name}?`)) {
+                        axios.delete('/api/setting/delEmployee', {
+                            params: { id: emp.id },
+                        }).then(res => {
+                            console.log(res.data);
+                            this.getAllEmployee();
+                        })
+                    }
+                },
+                stopStatusFormat(status) {
+                    return status ? "停用" : "啟用"
+                },
+                getAllEmployee() {
+                    let self = this;
+                    axios('/api/setting/AllEmployee').then(res => {
+                        console.log(res.data);
+                        self.employee = res.data;
+                    })
+                },
+                getDepartment() {
+                    let self = this;
+                    axios('/api/setting/AllDepartment').then(res => {
+                        console.log(res.data);
+                        self.department = res.data;
+                    })
+                },
+                pageChange(num) {
+                    this.currentPage = num
+                }
+            },
+            mounted() {
+                this.getAllEmployee();
+                this.getDepartment();
+            }
+        }).mount('#app')
+    </script>
+}
