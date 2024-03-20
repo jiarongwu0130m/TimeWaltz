@@ -17,6 +17,7 @@ namespace WebApplication1.Filters
         {
             
             db = context.HttpContext.RequestServices.GetRequiredService<TimeWaltzContext>();
+            
             var aaa = context.HttpContext.User.Identity;
             var bbb =aaa as ClaimsIdentity;
             var bbb2 = bbb.Claims.First();
