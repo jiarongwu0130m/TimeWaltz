@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Repository.Enums;
 using Repository.Models;
+using WebApplication1.Filters;
 using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Areas.Employee.Controllers
@@ -20,6 +21,7 @@ namespace WebApplication1.Areas.Employee.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
+        [TimeWaltzMobileAuthorize]
         public IActionResult Clock()
         {
             var toDay = DateTime.Now.Date;

@@ -38,7 +38,11 @@ namespace WebApplication1.Controllers
                 ViewBag.Error = "帳號密碼錯誤";
                 return View();
             }
-
+            if (user.RoleId == 2)
+            {
+                ViewBag.Error = "員工不能使用該系統";
+                return View();
+            }
             if (_UserService.SHA256EncryptString(model.Password + user.Salt) != user.Password)
             {
                 ViewBag.Error = "帳號密碼錯誤";
