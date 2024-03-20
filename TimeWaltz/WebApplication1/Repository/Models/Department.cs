@@ -19,6 +19,9 @@ public partial class Department
     [StringLength(50)]
     public string DepartmentName { get; set; }
 
+    [Required]
+    public int EmployeeId { get; set; }
+
     [InverseProperty("Department")]
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }

@@ -24,6 +24,10 @@ namespace WebApplication1.Areas.Employee.Controllers
         {
             return View();
         }
+        public IActionResult LeaveDetail()
+        {
+            return View();
+        }
         public IActionResult Attendance()
         {
             return View();

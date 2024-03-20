@@ -1,0 +1,126 @@
+﻿<form id="app">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="name">申請人</label>
+                    <label>{{name}}</label>
+                    <input class="form-control" disabled id="name" :value="name">
+                </div>
+                <div class="form-group">
+                    <label for="TimeRange">請假期間</label>
+                    <label></label>
+                    <input class="form-control" disabled id="timeRange" :value="timeRange">
+                </div>
+                <div class="form-group">
+                    <label for="vacationType">假別</label>
+                    <label></label>
+                    <input class="form-control" disabled id="vacationType" :value="vacationType">
+                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                          dir="ltr" style="width: 100%;">
+                        <span class="selection"></span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="agentEmployeeName">代理人選擇</label>
+                    <label></label>
+                    <input class="form-control" disabled id="agentEmployeeName" :value="agentEmployeeName">
+                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                          dir="ltr" style="width: 100%;">
+                        <span class="selection"></span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="approvalEmpName">代理人選擇</label>
+                    <label></label>
+                    <input class="form-control" disabled id="approvalEmpName" :value="approvalEmpName">
+                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                          dir="ltr" style="width: 100%;">
+                        <span class="selection"></span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="approvalEmpName">審核階段：</label>
+                    <label></label>
+                    <input class="form-control" disabled id="approvalEmpName" :value="approvalStatus">
+                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                          dir="ltr" style="width: 100%;">
+                        <span class="selection"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-body">
+                <div class="form-group">
+                    <label>原因：</label>
+                    <textarea disabled v-model="reason" class="form-control" rows="3"
+                              control-id="ControlID-13"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>審核備註：</label>
+                    <textarea disabled v-model="approvalRemark" class="form-control" rows="3"
+                              control-id="ControlID-13"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+
+    <script>
+        const vueLeave = Vue.createApp({
+            data() {
+                return {
+                    id: '',
+                    name: '',
+                    timeRange: '',
+                    vacationType: '',
+                    reason: '',
+                    approvalEmpName: '',
+                    agentEmployeeName: '',
+                    leaveHours: '',
+                    approvalStatus: '',
+                    approvalRemark: '',
+                }
+            },
+            methods: {
+                getLeaveData() {
+                    let self = this;
+                    fetch(`/api/LeaveApi/Edit/${self.id}`).then(res => res.json()).then(result => {
+                        console.log(result);
+                        self.agentEmployeeName = result.agentEmployeeName
+                        self.approvalEmpName = result.approvalEmpName
+                        self.approvalRemark = result.approvalRemark
+                        self.approvalStatus = result.approvalStatus
+                        self.leaveHours = result.leaveHours
+                        self.name = result.name
+                        self.timeRange = result.timeRange
+                        self.vacationType = result.vacationType
+                        self.reason = result.reason
+                    })
+                },
+                checkId() {
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        this.id = lastNumber;
+                    } else {
+                        location.href = "/PersonalRecord/Leave";
+                    }
+
+                },
+            },
+            mounted() {
+                this.checkId();
+                this.getLeaveData();
+            }
+        }).mount("#app");
+    </script>
+
+}
+
