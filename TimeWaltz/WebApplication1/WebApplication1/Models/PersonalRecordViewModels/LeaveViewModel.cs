@@ -10,7 +10,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
         public DateTime EndTime { get; set; }
         public string VacationName { get; set; }
         public string ApprovalStatus { get; set; }
-        public int LeaveHour { get; set; }
+        public int LeaveMinutes { get; set; }
 
     }
     public class LeaveCreateViewModel

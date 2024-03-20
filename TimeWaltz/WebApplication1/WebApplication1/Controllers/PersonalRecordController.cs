@@ -39,7 +39,7 @@ namespace WebApplication1.Controllers
                 {
                     StartTime = l.StartTime,
                     EndTime = l.EndTime,
-                    LeaveHour = (int)l.LeaveMinutes,//todo
+                    LeaveMinutes = (int)l.LeaveMinutes,
                     VacationName = l.VacationDetails.VacationType.ToString(),
                     ApprovalStatus = s.Status.ToString()
                 }).ToString();
