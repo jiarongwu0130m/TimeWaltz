@@ -23,6 +23,10 @@ namespace WebApplication1.Controllers.Api
         {
             _timeWaltzDb = timeWaltzDb;
         }
+        /// <summary>
+        /// 取得當日班表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public object ShiftSchedule()
         {
@@ -37,6 +41,10 @@ namespace WebApplication1.Controllers.Api
 
         }
 
+        /// <summary>
+        /// 打卡
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public object Info()
         {
@@ -51,24 +59,38 @@ namespace WebApplication1.Controllers.Api
             };
 
         }
+        /// <summary>
+        /// 回傳上班打卡資訊
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public bool On(ClockOnDto dto)
         {
             return OnAndOff(dto, ClockStatusEnum.上班打卡);
         }
 
+        /// <summary>
+        /// 回傳下班打卡資訊
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public bool Off(ClockOnDto dto)
         {
             return OnAndOff(dto, ClockStatusEnum.下班打卡);
         }
 
-
+        /// <summary>
+        /// 處理上/下班打卡資訊
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         [NonAction]
         public bool OnAndOff(ClockOnDto dto, ClockStatusEnum status)
         {
             var empId = User.GetId();
-
 
             try
             {
@@ -103,38 +125,6 @@ namespace WebApplication1.Controllers.Api
             }
 
             return Ok(clockResult);
-        }
-
-        // GET: api/<ClockApiController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<ClockApiController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<ClockApiController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<ClockApiController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ClockApiController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
