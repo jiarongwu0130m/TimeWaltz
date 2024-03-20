@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using WebApplication1.Filters;
 using WebApplication1.Helpers;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Services;
@@ -55,7 +56,8 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [Authorize]
+        //[Authorize]
+        [TimeWaltzAuthorize]
         [HttpGet]
         public IActionResult PersonalData()
         {
