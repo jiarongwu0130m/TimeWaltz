@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Filters;
 
 namespace WebApplication1.Areas.Employee.Controllers
 {
     [Area("Employee")]
+    [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
+    [TimeWaltzMobileAuthorize]
     public class QueryController : Controller
     {
         public IActionResult Overtime()

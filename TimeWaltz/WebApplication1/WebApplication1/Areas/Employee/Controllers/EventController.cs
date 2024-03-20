@@ -8,6 +8,8 @@ using WebApplication1.Models.PersonalRecordViewModels;
 namespace WebApplication1.Areas.Employee.Controllers
 {
     [Area("Employee")]
+    [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
+    [TimeWaltzMobileAuthorize]
     public class EventController : Controller
     {
         private readonly TimeWaltzContext _timeWaltzContext;
@@ -20,8 +22,6 @@ namespace WebApplication1.Areas.Employee.Controllers
         /// 打卡
         /// </summary>
         /// <returns></returns>
-        [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
-        [TimeWaltzMobileAuthorize]
         public IActionResult Clock()
         {
             var toDay = DateTime.Now.Date;
