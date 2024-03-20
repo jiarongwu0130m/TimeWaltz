@@ -22,14 +22,32 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public string? ShiftsName { get; set; }
 
     }
+    public class PersonalDataEditShowDto
+    {
+        public int Id { get; set; }
+        public string? ShiftScheduleName { get; set; }
+        public string DepartmentName { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public DateTime HireDate { get; set; }
+        public string EmployeesNo { get; set; }
+        public string Gender { get; set; }
+    }
     public class PersonalDataEditDto
     {
         public int Id { get; set; }
         public int? ShiftScheduleId { get; set; }
         public int DepartmentId { get; set; }
         public string Name { get; set; }
+        public string Email { get; set; }       
+    }
+    public class PersonalDataEditModel
+    {
+        public int Id { get; set; }
+        public int? ShiftScheduleId { get; set; }
+        public int DepartmentId { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
-
     }
     public class DepAndShiftDropDownDto
     {

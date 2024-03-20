@@ -181,13 +181,13 @@ namespace WebApplication1.Helpers
             return models;
         }
 
-        public static PersonalDataEditDto ToEditDto(Employee entity)
+        public static PersonalDataEditShowDto ToEditDto(Employee entity)
         {
-            var model = new PersonalDataEditDto
+            var model = new PersonalDataEditShowDto
             {
                 Id = entity.Id,
-                ShiftScheduleId = entity.ShiftScheduleId,
-                DepartmentId = entity.DepartmentId,
+                ShiftScheduleName = entity.ShiftScheduleId,
+                DepartmentName = entity.DepartmentId,
                 Name = entity.Name,
                 Email = entity.Email,
 
