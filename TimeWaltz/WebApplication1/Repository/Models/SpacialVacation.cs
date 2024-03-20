@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Models;
 
-[Table("SpacialVacation")]
-public partial class SpacialVacation
+[Table("SpecialVacation")]
+public partial class SpecialVacation
 {
     [Key]
     [Column("ID")]
@@ -17,7 +17,7 @@ public partial class SpacialVacation
 
     [Required]
     [StringLength(50)]
-    public string SpacialVacationName { get; set; }
+    public string SpecialVacationName { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime Date { get; set; }

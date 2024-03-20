@@ -3,7 +3,6 @@
 using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.SettingViewModels;
 using Repository.Models;
-using WebApplication1.Models.Entity;
 using WebApplication1.Models.PersonalRecordViewModels;
 using Employee = Repository.Models.Employee;
 using LeaveRequest = Repository.Models.LeaveRequest;
@@ -38,7 +37,7 @@ namespace WebApplication1.Helpers
                 Name = model.Name,
                 HireDate = model.HireDate,
                 Email = model.Email,
-                Gender = (GenderEnum)model.Gender,
+                Gender = model.Gender,
                 EmployeesNo = model.EmployeesNo,
             };
             return entity;

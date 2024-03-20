@@ -1,4 +1,4 @@
-﻿using WebApplication1.Models.Entity;
+﻿using Repository.Models;
 
 namespace WebApplication1.Services
 {
@@ -18,20 +18,20 @@ namespace WebApplication1.Services
                 var monthsPassed = GetDayPassed(e.HireDate);
                 var serviceDays = GetServiceDays(monthsPassed);
 
-                var temp1 = _timeWaltzContext.SpecialHolidayDays.FirstOrDefault(x => x.EmployeeId == e.Id);
-                //TODO: 撈出該員工所有請過的特休假，用來扣除
-                if (temp1 == null)
-                {
-                    _timeWaltzContext.SpecialHolidayDays.Add(new SpecialHolidayDays
-                    {
-                        EmployeeId = e.Id,
-                        AvailableDays = serviceDays.Days,
-                    });
-                }
-                else
-                {
-                    temp1.AvailableDays = serviceDays.Days;
-                }
+                //var temp1 = _timeWaltzContext.SpecialHolidays.FirstOrDefault(x => x.EmployeeId == e.Id);
+                ////TODO: 撈出該員工所有請過的特休假，用來扣除
+                //if (temp1 == null)
+                //{
+                //    _timeWaltzContext.SpecialHolidayDays.Add(new SpecialHolidayDays
+                //    {
+                //        EmployeeId = e.Id,
+                //        AvailableDays = serviceDays.Days,
+                //    });
+                //}
+                //else
+                //{
+                //    temp1.AvailableDays = serviceDays.Days;
+                //}
                 _timeWaltzContext.SaveChanges();
             }
         }

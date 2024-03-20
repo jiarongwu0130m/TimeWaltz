@@ -1,4 +1,6 @@
-﻿using WebApplication1.Models.Entity;
+﻿using Repository.Enums;
+using Repository.Models;
+
 
 namespace WebApplication1.Services
 {
@@ -16,7 +18,7 @@ namespace WebApplication1.Services
             _timeWaltzContext.Approvals.Add(new Approval
             {
                 TableId = entity.Id,
-                TableType = (Models.Enums.TableTypeEnum)1,
+                TableType = (int)TableTypeEnum.請假單,
             });
             _timeWaltzContext.SaveChanges();
 

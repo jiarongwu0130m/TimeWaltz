@@ -1,9 +1,5 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
-using WebApplication1.Models.PersonalRecordViewModels;
+﻿using Repository.Models;
+
 
 namespace WebApplication1.Services
 {

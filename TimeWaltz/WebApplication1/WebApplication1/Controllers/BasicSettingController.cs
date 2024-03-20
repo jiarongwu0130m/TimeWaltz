@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using WebApplication1.Helpers;
@@ -53,8 +54,8 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-           
-       
+
+        [Authorize]
         [HttpGet]
         public IActionResult PersonalData()
         {

@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using WebApplication1.Models.Entity;
+﻿using Repository.Enums;
+using Repository.Models;
+
 
 namespace WebApplication1.Services
 {
@@ -18,9 +19,9 @@ namespace WebApplication1.Services
         {
              _timeWaltzContext.Add(new RequestStatus
             {
-                 TableType = (Models.Enums.TableTypeEnum)1,
+                 TableType = TableTypeEnum.請假單,
                  TableId = entity.Id,
-                 Status = (Models.Enums.RequestStatusEnum)1,
+                 Status = (int)RequestStatusEnum.簽核中,
              });
             _timeWaltzContext.SaveChanges();
         }

@@ -32,13 +32,9 @@ public partial class User
 
     public int RoleId { get; set; }
 
-    [ForeignKey("Id")]
-    [InverseProperty("User")]
-    public virtual UserOfAdmin UserOfAdmin { get; set; }
+    public virtual UserOfAdmin? UserOfAdmin { get; set; }
 
-    [ForeignKey("Id")]
-    [InverseProperty("User")]
-    public virtual Employee IdNavigation { get; set; }
+    public virtual Employee? Employee { get; set; }
 
     [ForeignKey("RoleId")]
     [InverseProperty("Users")]

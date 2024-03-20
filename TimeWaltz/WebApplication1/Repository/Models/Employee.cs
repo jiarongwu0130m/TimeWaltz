@@ -31,7 +31,7 @@ public partial class Employee
     [StringLength(50)]
     public string Email { get; set; }
 
-    public GenderEnum Gender { get; set; }
+    public int Gender { get; set; }
 
     [Required]
     [StringLength(50)]
@@ -69,7 +69,6 @@ public partial class Employee
     [InverseProperty("Employees")]
     public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
 
-    [InverseProperty("IdNavigation")]
     public virtual User User { get; set; }
 
     [ForeignKey("EmployeesId")]
@@ -79,4 +78,8 @@ public partial class Employee
     [ForeignKey("AgentEmployeesId")]
     [InverseProperty("AgentEmployees")]
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+
+    [InverseProperty("Employee")]
+    public virtual ICollection<SpecialHolidayDays> SpecialHolidayDays { get; set; } = new List<SpecialHolidayDays>();
+    
 }

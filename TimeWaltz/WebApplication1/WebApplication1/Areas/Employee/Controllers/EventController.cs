@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Repository.Enums;
 using Repository.Models;
 using WebApplication1.Models.PersonalRecordViewModels;
@@ -18,6 +19,7 @@ namespace WebApplication1.Areas.Employee.Controllers
         /// 打卡
         /// </summary>
         /// <returns></returns>
+        [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
         public IActionResult Clock()
         {
             var toDay = DateTime.Now.Date;

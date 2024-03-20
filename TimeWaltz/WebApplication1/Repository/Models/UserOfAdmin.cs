@@ -18,6 +18,6 @@ public partial class UserOfAdmin
     [Required]
     public string Name { get; set; }
 
-    [InverseProperty("Id1")]
+    [ForeignKey("Id")]
     public virtual User User { get; set; }
 }

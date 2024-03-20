@@ -1,4 +1,5 @@
 using Hangfire;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Repository.Models;
 using WebApplication1.Services;
@@ -52,6 +53,17 @@ namespace WebApplication1
             {
                 opt.AddPolicy("forWeb", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
             });
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                })
+                .AddCookie("EmployeeAuthScheme", options =>
+                {
+                    options.LoginPath = "/Employee/Account/Login";
+                }); ;
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -67,6 +79,7 @@ namespace WebApplication1
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseHangfireDashboard();

@@ -276,7 +276,7 @@ namespace WebApplication1.Helpers
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
-        public static List<SpecialVacationDto> ToDto(List<SpacialVacation> entities)
+        public static List<SpecialVacationDto> ToDto(List<SpecialVacation> entities)
         {
             var models = new List<SpecialVacationDto>();
 
@@ -285,7 +285,7 @@ namespace WebApplication1.Helpers
                 models.Add(new SpecialVacationDto
                 {
                     Id = entity.Id,
-                    SpecialVacationName = entity.SpacialVacationName,
+                    SpecialVacationName = entity.SpecialVacationName,
                     Date = entity.Date.ToString("yyyy-MM-dd"), });
             }
             return models;
@@ -298,9 +298,9 @@ namespace WebApplication1.Helpers
                 models.Add(new ShiftDto
                 {
                     Id = entity.Id,
-                    Title = entity.Title,
-                    StartTime = entity.StartTime,
-                    EndTime = entity.EndTime,
+                    //Title = entity.Title,
+                    //StartTime = entity.StartTime,
+                    //EndTime = entity.EndTime,
                 });
             }
             return models;
@@ -424,9 +424,9 @@ namespace WebApplication1.Helpers
                     Date = entity.StartTime.ToString("yyyy-MM-dd") + "~" + entity.EndTime.ToString("yyyy-MM-dd"),
                     StartTime = entity.StartTime.ToString("HH:mm"),
                     EndTime = entity.EndTime.ToString("HH:mm"),
-                    VacationType = entity.VacationType,
-                    ApprovalEmpName = entity.ApporvalEmpName,
-                    AgentEmployeeName = entity.AgentEmployeeName,
+                    //VacationType = entity.VacationType,
+                    //ApprovalEmpName = entity.ApporvalEmpName,
+                    //AgentEmployeeName = entity.AgentEmployeeName,
                     LeaveMinutes = entity.LeaveMinutes,
                 };
                 models.Add(model);
@@ -439,14 +439,14 @@ namespace WebApplication1.Helpers
             var model = new LeaveEditDto
             {
 
-                Name = entity.EmployeeName,
-                TimeRange = entity.StartTime.ToString("yyyy-MM-dd HH:mm") + "~" + entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
-                VacationType = entity.VacationType,
-                ApprovalEmpName = entity.ApporvalEmpName,
-                AgentEmployeeName = entity.AgentEmployeeName,
-                LeaveMinutes = entity.LeaveMinutes,
-                ApprovalStatus = entity.ApprovalStatus.ToString(),
-                ApprovalRemark = entity.ApprovalRemark,
+                //Name = entity.EmployeeName,
+                //TimeRange = entity.StartTime.ToString("yyyy-MM-dd HH:mm") + "~" + entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                //VacationType = entity.VacationType,
+                //ApprovalEmpName = entity.ApporvalEmpName,
+                //AgentEmployeeName = entity.AgentEmployeeName,
+                //LeaveMinutes = entity.LeaveMinutes,
+                //ApprovalStatus = entity.ApprovalStatus.ToString(),
+                //ApprovalRemark = entity.ApprovalRemark,
                 Reason = entity.Reason,
             };
             return model;
