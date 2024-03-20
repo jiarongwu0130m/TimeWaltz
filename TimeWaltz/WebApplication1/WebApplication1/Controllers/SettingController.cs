@@ -150,6 +150,7 @@ public class SettingController : Controller
     {
         var employeeNameDropDownData = _dropDownBasicSettingService.GetEmployeeDropDownData();
         var entity = _UserService.GetUserOrNull(id);
+        var Salts = "";
         if (employeeNameDropDownData != null)
         {
             var model = EntityHelper.ToEditViewModel(entity);
@@ -174,7 +175,7 @@ public class SettingController : Controller
         //密碼雜湊
 
 
-        _UserService.EditUserType(model, Salts);
+        //_UserService.EditUserType(model, Salts);
         return RedirectToAction("Account", "Setting");
     }
 

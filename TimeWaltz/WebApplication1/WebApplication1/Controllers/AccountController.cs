@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebApplication1.Models.Account;
-using WebApplication1.Models.Entity;
 using WebApplication1.Services;
+using Repository.Models;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace WebApplication1.Controllers
@@ -50,9 +49,9 @@ namespace WebApplication1.Controllers
             var claims = new List<Claim>
             {
                 new Claim("Id",user.Id.ToString()),
-                new Claim("EmployeesId",user.EmployeesId.ToString()),
+                new Claim("EmployeesId",user.Id.ToString()),
                 new Claim(ClaimTypes.Role,"user"),
-                new Claim("DepartmentId", user.DepartmentId.ToString()),
+                //new Claim("DepartmentId", user.DepartmentId.ToString()),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
