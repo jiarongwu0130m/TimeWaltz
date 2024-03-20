@@ -158,37 +158,18 @@ public class SettingController : Controller
             model.DepartmentNameSelectList = DropDownHelper
                 .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
 
-            return View(model);
-        }
+            if (model.Password != null)
+            {
+                Salts = _UserService.GenerateSalt();
 
-        return RedirectToAction("Account", "Setting");
-    }
+                model.Password = _UserService.SHA256EncryptString(model.Password + Salts);
 
-    [HttpPost]
-    /// <summary>
-    /// 修改帳號
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public IActionResult AccountEdit(UserEditViewModel model)
-    {
-        model.EmployeesNameSelectList = DropDownHelper
-            .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData());
-        model.DepartmentNameSelectList = DropDownHelper
-            .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData());
-        //if (!ModelState.IsValid)
-        //{
-        //    return View(model);
-        //}
+            }
+            //密碼雜湊
 
-        //密碼加鹽
-        var Salts = "";
+            _UserService.EditUserType(model, Salts);
+            return RedirectToAction("Account", "Setting");
 
-        if (model.Password != null)
-        {
-            model.Password = _UserService.SHA256EncryptString(model.Password + Salts);
-
-            Salts = _UserService.GenerateSalt();
         }
         //密碼雜湊
 
