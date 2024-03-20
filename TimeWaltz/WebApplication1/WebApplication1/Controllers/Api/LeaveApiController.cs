@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public LeaveDropDownDto GetDropDownList()
         {
-            var UserId = User.GetEmployeeId();
+            var UserId = User.GetId();
 
             var vacation = _vacationTypeService.GetVacationDetailsList();
             var agent = _db.Employees.FirstOrDefault(x => x.Id == UserId).Department.Employees.ToList();
@@ -68,7 +68,7 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public EmpIdNameGet GetEmployeeName()
         {
-            var UserId = User.GetEmployeeId();
+            var UserId = User.GetId();
             var userName = _db.Employees.FirstOrDefault(x => x.Id == UserId).Name;
             var UserAndName = new EmpIdNameGet
             {
