@@ -444,13 +444,14 @@ namespace WebApplication1.Helpers
 
         public static EmpIdNameGet GetNameAndIdPare(Employee entity)
         {
-            var model = new EmpIdNameGet
-            {
-                EmployeeId = entity.Id,
-                EmployeeName = entity.Name,
-            };
+            //var model = new EmpIdNameGet
+            //{
+            //    EmployeeId = entity.Id,
+            //    EmployeeName = entity.Name,
+            //};
 
-            return model;
+            //return model;
+            return new EmpIdNameGet();
         }
 
         public static List<BillboardDto> ToViewModel(List<Billboard> entities)

@@ -27,8 +27,6 @@
                     <template v-if=" AfterToDay(item.startTime) && BeforeToDay(item.endTime)">
                         <h5 class="text-info"><i class="fa-solid fa-bullhorn mr-2"></i>{{item.title}}</h5>
                         <p class="text-gray">
-                            <span :value="item.employeeId">發布人：{{empName}}</span>
-                            <br />
                             <span>公告時間：{{formatToDateTime(item.startTime)}}
                         </p>
                         </p>
@@ -59,7 +57,7 @@
             },
             mounted() {
                 this.getBillboardData();
-                this.getEmpId();
+                // this.getEmpId();
             },
             computed: {
                 reversedItems() {
@@ -67,13 +65,13 @@
                 }
             },
             methods: {
-                getEmpId() {
-                    let self = this;
-                    fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
-                        .then(result => {
-                            self.empName = result.employeeName;
-                        })
-                },
+                // getEmpId() {
+                //     let self = this;
+                //     fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
+                //         .then(result => {
+                //             self.empName = result.employeeName;
+                //         })
+                // },
                 getBillboardData() {
                     let self = this;
                     axios("/api/BillboardApi/GetBillboardList").then(response => {
