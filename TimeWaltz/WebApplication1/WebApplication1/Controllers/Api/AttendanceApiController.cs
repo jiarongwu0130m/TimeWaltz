@@ -1,4 +1,6 @@
-﻿using WebApplication1.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models.PersonalRecordViewModels;
+using WebApplication1.Services;
 
 
 namespace WebApplication1.Controllers.Api
@@ -11,12 +13,14 @@ namespace WebApplication1.Controllers.Api
         {
             _attendanceService = attendanceService;
         }
-        //[HttpGet]
-        //public ActionResult GetAttendanceData()
-        //{
-        //    var userId = 1;
-        //    var entities = _attendanceService.GetAttendanceData(userId);
 
-        //}
+
+        [HttpGet]
+        public AttendanceViewModel GetAttendanceData()
+        {
+            var userId = 1;
+            return  _attendanceService.GetAttendanceData(userId);
+
+        }
     }
 }
