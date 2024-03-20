@@ -30,17 +30,17 @@
 
         <div class="login-form mt-1">
             <div class="section">
-                <img src="/mobile/assets/img/sample/photo/vector4.png" alt="image" class="form-image">
+                
+                <img src="~/img/timewaltz.png" alt="TimeWaltz" class="form-image" />
             </div>
             <div class="section mt-1">
-                <h1>Get started</h1>
-                <h4>Fill the form to log in</h4>
+                <h1>TimeWaltz</h1>
             </div>
             <div class="section mt-1 mb-5">
                 <form action="/employee/account/login" method="post">
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <input type="text" class="form-control" name="account" id="email1" placeholder="Email address">
+                            <input type="text" class="form-control" name="account" id="email1" placeholder="請輸入帳號">
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
@@ -49,21 +49,21 @@
 
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <input type="password" class="form-control" name="password" id="password1" placeholder="Password">
+                            <input type="password" class="form-control" name="password" id="password1" placeholder="請輸入密碼">
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
                         </div>
                     </div>
 
-                    <div class="form-links mt-2">
+                    @* <div class="form-links mt-2">
                         <div>
                             <a href="page-register.html">Register Now</a>
                         </div>
                         <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
-                    </div>
+                    </div> *@
 
-                    <div class="form-button-group mb-5">
+                    <div class="form-group mt-5">
                         <button type="submit" class="btn btn-primary btn-block btn-lg">Log in</button>
                     </div>
                     @{
