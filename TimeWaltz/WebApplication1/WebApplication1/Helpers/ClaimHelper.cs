@@ -7,7 +7,7 @@ namespace WebApplication1.Helpers
     {
         public static int GetId(this ClaimsPrincipal principal) 
         {
-            var result = GetClaimValue(principal, "id");
+            var result = GetClaimValue(principal, "Id");
             return Convert.ToInt32(result);
         }
         public static string GetName(this ClaimsPrincipal principal)
