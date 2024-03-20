@@ -22,7 +22,7 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public object ShiftSchedule()
         {
-            var empId = User.GetEmployeeId();
+            var empId = User.GetId();
             var shift = _timeWaltzDb.Shifts.Include(shift => shift.ShiftSchedule).FirstOrDefault(x => x.EmployeesId == empId && EF.Functions.DateDiffDay(x.ShiftsDate, DateTime.Now) == 0);
             if (shift == null) return new { onTime = "", offTime = "" };
             return new
@@ -36,7 +36,7 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public object Info()
         {
-            var empId = User.GetEmployeeId();
+            var empId = User.GetId();
             var allClock = _timeWaltzDb.Clocks.Where(x => x.EmployeesId == empId &&
             EF.Functions.DateDiffDay(x.Date, DateTime.Now) == 0).AsEnumerable();
 
@@ -63,7 +63,7 @@ namespace WebApplication1.Controllers.Api
         [NonAction]
         public bool OnAndOff(ClockOnDto dto, ClockStatusEnum status)
         {
-            var empId = User.GetEmployeeId();
+            var empId = User.GetId();
 
 
             try
