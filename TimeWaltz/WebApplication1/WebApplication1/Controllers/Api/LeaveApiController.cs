@@ -18,18 +18,16 @@ namespace WebApplication1.Controllers.Api
         private readonly VacationTypeService _vacationTypeService;
         private readonly TimeWaltzContext _db;
         private readonly LeaveService _leaveService;
-        private readonly AgentEmployeeService _agentEmployeeService;
         private readonly RequestStatusService _requestStatusService;
         private readonly ApprovalService _approvalService;
         private readonly IWebHostEnvironment _env;
 
 
-        public LeaveApiController(VacationTypeService vacationTypeService, TimeWaltzContext timeWaltzContext, LeaveService leaveService, AgentEmployeeService agentEmployeeService, RequestStatusService requestStatusService, ApprovalService approvalService, IWebHostEnvironment webHostEnvironment)
+        public LeaveApiController(VacationTypeService vacationTypeService, TimeWaltzContext timeWaltzContext, LeaveService leaveService, RequestStatusService requestStatusService, ApprovalService approvalService, IWebHostEnvironment webHostEnvironment)
         {
             this._vacationTypeService = vacationTypeService;
             this._db = timeWaltzContext;
             _leaveService = leaveService;
-            _agentEmployeeService = agentEmployeeService;
             this._requestStatusService = requestStatusService;
             this._approvalService = approvalService;
             this._env = webHostEnvironment;

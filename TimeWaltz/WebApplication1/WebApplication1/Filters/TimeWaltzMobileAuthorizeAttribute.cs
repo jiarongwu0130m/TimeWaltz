@@ -15,19 +15,23 @@ namespace WebApplication1.Filters
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            
             db = context.HttpContext.RequestServices.GetRequiredService<TimeWaltzContext>();
+            var aaa = context.HttpContext.User.Identity;
+            var bbb =aaa as ClaimsIdentity;
+            var bbb2 = bbb.Claims.First();
             var userClaims = context.HttpContext.User.Claims;
             var hasRequiredClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
             var path = GetPathName(context);
 
             if (hasRequiredClaim == null)
             {
-                context.Result = new RedirectToActionResult("Login", "Account", new { area = "", returnurl = context.HttpContext.Request.Path });
+                context.Result = new RedirectToActionResult("Login", "Account", new { area = "employee", returnurl = context.HttpContext.Request.Path });
                 return;
             }
             if (!CheckUserPermissionFromDatabase(int.Parse(hasRequiredClaim.Value), path.controllerName, path.actionName))
             {
-                context.Result = new RedirectToActionResult("Login", "Account", new { area = "", returnurl = context.HttpContext.Request.Path });
+                context.Result = new RedirectToActionResult("Login", "Account", new { area = "employee", returnurl = context.HttpContext.Request.Path });
                 return;
             }
         }
