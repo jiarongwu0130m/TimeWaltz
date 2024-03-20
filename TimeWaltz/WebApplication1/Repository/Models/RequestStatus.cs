@@ -21,5 +21,5 @@ public partial class RequestStatus
     [Column("TableID")]
     public int TableId { get; set; }
 
-    public int Status { get; set; }
+    public RequestStatusEnum Status { get; set; }
 }

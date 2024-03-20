@@ -15,12 +15,12 @@ namespace WebApplication1.Services
 
 
 
-        public void NewRequestStatus(LeaveRequest entity)
+        public void NewRequestStatus(int empId)
         {
              _timeWaltzContext.Add(new RequestStatus
             {
                  TableType = TableTypeEnum.請假單,
-                 TableId = entity.Id,
+                 TableId = empId,
                  Status = (int)RequestStatusEnum.簽核中,
              });
             _timeWaltzContext.SaveChanges();
