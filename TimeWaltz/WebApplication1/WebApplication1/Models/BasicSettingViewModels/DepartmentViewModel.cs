@@ -19,6 +19,13 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public string? EmployeeName { get; set; }
         public string? QueryDepartment { get; set; }
     }
+
+    public class DepartmentDto
+    {
+        public int Id { get; set; }
+        public string DepartmentName { get; set; }
+        public int EmployeesId { get; set; }
+    }
     public class DepartmentCreateShowDto
     {
         public List<SelectListItem>? EmployeeNameSelectList { get; set; }
@@ -42,17 +49,22 @@ namespace WebApplication1.Models.BasicSettingViewModels
 
     }
 
+    public class DepartmentEditDto
+    {
+        public int Id { get; set; }
+        public string DepartmentName { get; set; }
+        public int EmployeesId { get; set; }
+
+
+
+    }
     public class DepartmentEditViewModel
     {
         public int Id { get; set; }
 
-        [Display(Name = "部門名稱")]
         public string DepartmentName { get; set; }
 
-        public List<SelectListItem>? EmployeeNameSelectList { get; set; }
-
-        [Display(Name = "部門主管")]
-        public int? EmployeesId { get; set; }
+        public int EmployeesId { get; set; }
 
 
 

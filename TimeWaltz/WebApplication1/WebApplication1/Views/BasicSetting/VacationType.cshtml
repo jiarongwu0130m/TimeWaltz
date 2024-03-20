@@ -57,7 +57,7 @@
                         </thead>
                         <tbody>
                             <template v-if="isSwitch">
-                                <tr v-for="vacation in filterByVacationType">
+                                <tr v-for="vacation in filterByVacationType()">
                                     <td>
                                         {{vacation.vacationType}}
                                     </td>
