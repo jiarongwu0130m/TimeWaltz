@@ -5,6 +5,7 @@ using WebApplication1.Models.Account;
 using WebApplication1.Services;
 using Repository.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace WebApplication1.Controllers
@@ -20,18 +21,18 @@ namespace WebApplication1.Controllers
             _TimeWaltzContext = timeWaltz;
             _UserService=UserService;
         }
-
-
-
-
+        #region 登入
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            
-            HttpContext.Response.Cookies.Append("sick","running nose");
 
             //去資料庫比對資料
-            var user = _TimeWaltzContext.Users.FirstOrDefault(x => x.Account == model.Account && x.Stop==true );
+            var user = _TimeWaltzContext.Users.Include(x => x.UserOfAdmin).Include(x => x.Role).FirstOrDefault(x => x.Account == model.Account && x.Stop == false);
             if (user == null)
             {
                 ViewBag.Error = "帳號密碼錯誤";
@@ -44,14 +45,12 @@ namespace WebApplication1.Controllers
                 return View();
             }
 
-            
-
             var claims = new List<Claim>
             {
                 new Claim("Id",user.Id.ToString()),
-                new Claim("EmployeesId",user.Id.ToString()),
-                new Claim(ClaimTypes.Role,"user"),
-                //new Claim("DepartmentId", user.DepartmentId.ToString()),
+                new Claim("Name",user.UserOfAdmin?.Name),
+                new Claim(ClaimTypes.Role,user.RoleId.ToString()),
+                new Claim("RoleName",user.Role.RoleName),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -60,6 +59,19 @@ namespace WebApplication1.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
             return RedirectToAction("index", "home");
         }
+        #endregion
 
+
+        [HttpGet]
+        public IActionResult GenPwd(string pwd)
+        {
+           var  salt= _UserService.GenerateSalt();
+            var  result =_UserService.SHA256EncryptString(pwd + salt);
+            return Json(new 
+            {
+                pwd= result,
+                salt = salt
+            });
+        }
     }
 }
