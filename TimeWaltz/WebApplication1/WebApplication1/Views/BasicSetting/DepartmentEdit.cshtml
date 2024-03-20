@@ -1,22 +1,22 @@
-﻿@model WebApplication1.Models.BasicSettingViewModels.DepartmentEditViewModel
-@{
+﻿@{
     Layout = "_Layout";
     ViewBag.title = "部門修改";
 }
-
-
-<form asp-controller="BasicSetting" asp-action="EditDepartment" method="post">
+<form asp-controller="BasicSetting" asp-action="DepartmentEdit" method="post" id="app">
     <section class="content">
         <div class="card-body">
-            <input asp-for="Id" type="hidden" />
+            <input name="Id" type="hidden" />
 
             <div class="form-group">
-                <label asp-for="DepartmentName" class="control-label">部門名稱</label>
-                <input asp-for="DepartmentName" class="form-control col-sm-3" />
+                <label name="DepartmentName" class="control-label">部門名稱</label>
+                <input name="DepartmentName" class="form-control col-sm-3" v-model="departmentName" />
             </div>
             <div class="form-group">
                 <label class="control-label">部門主管</label>
-                <select class="form-control  col-sm-3" asp-for="EmployeesId" asp-items="@Model.EmployeeNameSelectList"></select>
+                <select class="form-control  col-sm-3" name="EmployeesId" v-model="employeesId">
+                    <option value="" disabled>--請選擇--</option>
+                    <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
+                </select>
                 <span class="text-danger"></span>
             </div>
 
@@ -24,7 +24,7 @@
             <div class="card-footer">
                 <div class="row float-right">
                     <div class="col ">
-                        <input type="submit" value="送出" class="btn btn-primary" />
+                        <input type="button" value="送出" @@click="send" class="btn btn-primary" />
                         <a asp-controller="BasicSetting" asp-action="Department" class="btn btn-outline-dark">返回</a>
                     </div>
                 </div>
@@ -32,3 +32,65 @@
         </div>
     </section>
 </form>
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    employeeNameSelectList: [],
+                    employeesId: '',
+                    departmentName: '',
+                    id: null,
+                }
+            },
+            methods: {
+                send() {
+                    let self = this;
+                    axios.post('/api/DepartmentApi/Edit', {
+                        employeesId: self.employeesId,
+                        departmentName: self.departmentName
+                    })
+                        .then((response) => console.log(response))
+                        .then((error) => console.log(error));
+                },
+                getDropDownList() {
+                    let self = this;
+                    axios.get("/api/DepartmentApi/GetDropDownList")
+                        .then((response) => {
+                            console.log(response);
+                            self.employeeNameSelectList = response.data.employeeNameSelectList;
+                        }).then((error) => console.log(error));
+                },
+                getEditData() {
+                    let self = this;
+                    axios(`/api/DepartmentApi/GetEditData/${self.id}`)
+                        .then((response) => {
+                            console.log(response);
+                            self.employeesId = response.data.employeesId;
+                            self.departmentName = response.data.departmentName;
+                        }).then((error) => console.log(error));
+                },
+                checkId() {
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        this.id = lastNumber;
+                    } else {
+                        location.href = "/BasicSetting/PersonalData";
+                    }
+
+                },
+
+            },
+            mounted() {
+                this.getDropDownList();
+                this.checkId();
+                this.getEditData();
+            },
+        }).mount('#app');
+    </script>
+
+
+}

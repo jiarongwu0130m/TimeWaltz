@@ -1,27 +1,17 @@
-﻿@model IEnumerable<WebApplication1.Models.BasicSettingViewModels.DepartmentViewModel>
-
-@{
+﻿@{
     Layout = "_Layout";
     ViewBag.title = "部門瀏覽";
 }
-
-
-<div class="row">
-
-
+<div class="row" id="app">
     <div class="col-12 mb-3">
         <div class="row">
-
             <label class="col-form-label col-auto">部門名稱查詢：</label>
             <form asp-action="Department" asp-controller="BasicSetting" method="post">
-
                 <div class="row form-group">
-                    <input name="QueryDepartment" class="form-control col-6" type="text" autocomplete="off">
-
-                    <button type="submit" class="btn btn-outline-info">查詢</button>
+                    <input name="QueryDepartment" class="form-control col-6" type="text" autocomplete="off" v-model="queryDepartmentName">
+                    <button type="button" class="btn btn-outline-info" @@click="changeSwitch">查詢</button>
                 </div>
             </form>
-
             <div class="col-auto ml-auto">
                 <a asp-controller="BasicSetting" asp-action="DepartmentCreate" class="btn btn-outline-success pull-right">新增</a>
             </div>
@@ -31,38 +21,43 @@
         <table id="example2" class="table table-bordered">
             <thead>
                 <tr>
-
                     <th>
-                        @Html.DisplayNameFor(model => model.DepartmentName)
+                        部門名稱
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EmployeesId)
+                        部門主管
                     </th>
                     <th scope="col">詳細資料</th>
 
                 </tr>
             </thead>
             <tbody>
-                @{
-                    foreach (var item in Model)
-                    {
-                        <tr class="text-center">
-                            <td>@item.DepartmentName</td>
-                            <td>@item.EmployeeName</td>
-                            <td>
-                                <a asp-controller="BasicSetting" asp-action="DepartmentEdit" asp-route-id="@item.Id" class="btn btn-outline-primary">檢視</a>
-                                <a asp-controller="BasicSetting" asp-action="DepartmentDelete" asp-route-id="@item.Id" class="btn btn-outline-secondary" onclick="return confirmDelete();">刪除</a>
-                            </td>
-                        </tr>
-                    }
-                }
+                <template v-if="isSwitch">
+                    <tr class="text-center" v-for="item in filterByDepartmentName">
+                        <td>{{item.departmentName}}</td>
+                        <td>{{item.employeesId}}</td>
+                        <td>
+                            <a asp-controller="BasicSetting" asp-action="DepartmentEdit">檢視</a> |
+                            <a href="#" @@click="getOut">刪除</a>
+                        </td>
+                    </tr>
+                </template>
+                <template v-else>
+                    <tr class="text-center" v-for="item in departmentListData">
+                        <td>{{item.departmentName}}</td>
+                        <td>{{item.employeesId}}</td>
+                        <td>
+                            <a asp-controller="BasicSetting" asp-action="DepartmentEdit">檢視</a> |
+                            <a href="#" @@click="getOut">刪除</a>
+                        </td>
+                    </tr>
+                </template>
+                
             </tbody>
 
         </table>
     </div>
 </div>
-
-
 
 <script>
     function confirmDelete() {
@@ -73,3 +68,49 @@
         return result;
     }
 </script>
+
+@section Scripts {
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    id: null,
+                    departmentName: null,
+                    employeesId: null,
+                    departmentListData: [],
+                    queryDepartmentName: '',
+                    isSwitch: false,
+                }
+            },
+            methods: {
+                changeSwitch() {
+                    this.isSwitch = !this.isSwitch;
+                },
+                filterByDepartmentName() {
+                    if (this.queryDepartmentName != '') return this.departmentListData.filter(x => x.departmentListData.includes(this.queryDepartmentName));
+                    return this.departmentListData;
+                },
+                getOut() {
+                    let self = this;
+                    axios.post(`/api/DepartmentApi/GetListData/${self.id}`)
+                        .then((response) => console.log(respone))
+                        .then((error) => console.log(error));
+                },
+                getListData() {
+                    let self = this;
+                    axios('/api/DepartmentApi/GetListData')
+                        .then((response) => {
+                            console.log(response)
+                            self.departmentListData = response.data;
+                        })
+                        .then((error) => console.log(error));
+                },
+            },
+            mounted() {
+                this.getListData();
+            },
+
+        }).mount('#app');
+    </script>
+}

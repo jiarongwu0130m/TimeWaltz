@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <label class="control-label">部門主管</label>
                     <select class="form-control col-sm-3" v-model="employeesId">
-                        <option value="">--請選擇--</option>
+                        <option value="" disabled>--請選擇--</option>
                         <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
                     </select>
                     <span class="text-danger"></span>

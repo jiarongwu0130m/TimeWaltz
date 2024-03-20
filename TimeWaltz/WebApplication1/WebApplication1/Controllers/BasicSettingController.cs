@@ -397,30 +397,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult DepartmentEdit(int id)
         {
-            var employeeNameDropDownData = _departmentService.GetEmployeeDropDownData();
-            var entity = _departmentService.GetDepartmentOrNull(id);
-            if (employeeNameDropDownData != null)
-            {
-                var model = EntityHelper.ToEditViewModel(entity);
-
-                model.EmployeeNameSelectList = DropDownHelper
-                       .GetEmployeeNameDropDownList(employeeNameDropDownData);
-
-                return View(model);
-            }
-
-            return RedirectToAction("PersonalData");
-        }
-
-        [HttpPost]
-        public IActionResult DepartmentEdit(DepartmentEditViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            _departmentService.EditDepartment(model);
-            return RedirectToAction("Department");
+                return View();
         }
 
 

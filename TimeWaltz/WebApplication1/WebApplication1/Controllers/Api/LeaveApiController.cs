@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Repository.Enums;
 using Repository.Models;
 using System.Drawing;
@@ -42,11 +43,11 @@ namespace WebApplication1.Controllers.Api
             var UserId = User.GetId();
 
             var vacation = _vacationTypeService.GetVacationDetailsList();
-            var agent = _db.Employees.FirstOrDefault(x => x.Id == UserId).Department.Employees.ToList();
+            var agent = _db.Employees.Include(x => x.DepartmentId).FirstOrDefault(x => x.Id == UserId);
 
             var dto = new LeaveDropDownDto
             {
-                AgentDropDownList = agent.Select(e => new SelectListItem
+                AgentDropDownList = agent.Department.Employees.Select(e => new SelectListItem
                 {
                     Value = e.Id.ToString(),
                     Text = e.Name,

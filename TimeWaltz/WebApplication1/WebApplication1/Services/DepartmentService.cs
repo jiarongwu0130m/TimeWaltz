@@ -13,8 +13,7 @@ namespace WebApplication1.Services
         }
 
         public List<Department> GetDepartment()
-        {
-            
+        {            
             var entities = _timeWaltzDb.Departments.ToList();
             return entities;                               
         }
@@ -46,15 +45,14 @@ namespace WebApplication1.Services
             }
         }
 
-        public int EditDepartment(DepartmentEditViewModel model)
+        public void EditDepartment(DepartmentEditViewModel model)
         {
             var entity = _timeWaltzDb.Departments.FirstOrDefault(x => x.Id == model.Id);
 
             entity.DepartmentName = model.DepartmentName;
-            //entity.EmployeesId = model.EmployeesId;//todo
+            entity.EmployeeId = model.EmployeesId;
 
             _timeWaltzDb.SaveChanges();
-            return model.Id;
         }
 
 
