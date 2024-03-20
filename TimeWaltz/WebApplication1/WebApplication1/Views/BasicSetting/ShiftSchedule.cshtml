@@ -1,77 +1,47 @@
 ﻿@model IEnumerable<WebApplication1.Models.BasicSettingViewModels.ShiftSchedulesViewModel>
 @{
-    ViewBag.Title = "班別查詢";
+    ViewBag.Title = "班別設定";
 }
 
 <div class="row">
+    <div class="col-8">
 
-    <div class="form-inline mb-3">
-        <div class="form-group">
-            <label>日期區間查詢：</label>
-            <form asp-action="ShiftSchedule" asp-controller="BasicSetting" method="post">
-                <div class="input-group col">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            <i class="far fa-calendar-alt"></i>
-                        </span>
-                    </div>
-                    <input type="hidden" name="StartTime" id="startTime" value="@DateTime.Now.Date" />
-                    <input type="hidden" name="EndTime" id="endTime" value="@DateTime.Now.Date" />
-                    <input type="text" id="reservation" />
-                    <button type="submit" class="btn btn-outline-dark">查詢</button>
-                    <a class="btn btn-outline-success" asp-controller="BasicSetting" asp-action="ShiftScheduleCreate">新增</a>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">班別名稱</th>
-                <th scope="col">上班時間</th>
-                <th scope="col">下班時間</th>
-                <th scope="col">補卡上限(次)</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ShiftName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartTime.TimeOfDay)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EndTime.TimeOfDay)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MaxAdditionalClockIn)
-                    </td>
-                    <td>
-                        @Html.ActionLink("詳細", "ShiftScheduleEdit", new { id = item.Id }) |
-                        @Html.ActionLink("刪除", "ShiftScheduleDelete", new { id = item.Id })
-                    </td>
+                    <th>班別名稱</th>
+                    <th scope="col">上班時間</th>
+                    <th scope="col">下班時間</th>
+                    <th scope="col">補卡上限(次)</th>
+                    <th>詳細</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShiftName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartTime.TimeOfDay)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndTime.TimeOfDay)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MaxAdditionalClockIn)
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-primary" href="/basicsetting/ShiftScheduleEdit/@item.Id">編輯</a>
+                            <a class="btn btn-outline-secondary" href="/basicsetting/ShiftScheduleDelete/@item.Id">刪除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-@section Scripts {
-    <script>
-        $('#reservation').daterangepicker({}, function (start, end, _) {
-            console.log(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
-            $('#startTime').val(start.format('YYYY-MM-DD'));
-            $('#endTime').val(end.format('YYYY-MM-DD'));
-
-
-        }
-        )
-    </script>
-}
 
