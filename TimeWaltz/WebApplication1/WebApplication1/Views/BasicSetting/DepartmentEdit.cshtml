@@ -50,7 +50,38 @@
                         employeesId: self.employeesId,
                         departmentName: self.departmentName
                     })
-                        .then((response) => console.log(response))
+                        .then((response) => {
+                            console.log(response)
+                            if (response.status) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "儲存成功!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                }).then((result) => {
+                                    if (result.value) {
+                                        this.getListData();
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "儲存失敗!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                });
+                            }
+                        })
                         .then((error) => console.log(error));
                 },
                 getDropDownList() {
@@ -78,7 +109,7 @@
                         var lastNumber = parseInt(match[1]);
                         this.id = lastNumber;
                     } else {
-                        location.href = "/BasicSetting/PersonalData";
+                        location.href = "/BasicSetting/department";
                     }
 
                 },

@@ -356,58 +356,16 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult DepartmentCreate(DepartmentCreateViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var entity = ViewModelHelper.ToEntity(model);
-            _departmentService.CreateDepartment(entity);
-            return RedirectToAction("Department");
-
-        }
         [HttpGet]
         public IActionResult Department()
         {
-            var entities = _departmentService.GetDepartment();
-            var models = EntityHelper.ToViewModel(entities);
-            return View(models);
-
+            return View();
         }
-
-        [HttpPost]
-        public IActionResult Department(DepartmentViewModel selectedModel)
-        {
-            var entities = _departmentService.GetSelectedDepartment(selectedModel);
-            if (entities != null)
-            {
-                var models = EntityHelper.ToViewModel(entities);
-                return View(models);
-            }
-            else
-            {
-                return View(selectedModel);
-            }
-
-        }
-
 
         [HttpGet]
         public IActionResult DepartmentEdit(int id)
         {
                 return View();
         }
-
-
-        public IActionResult DepartmentDelete(int id)
-        {
-            var entity = _departmentService.GetDepartmentOrNull(id);
-            _departmentService.DeleteDepartment(entity);
-            return RedirectToAction("Department");
-        }
-
-
     }
 }

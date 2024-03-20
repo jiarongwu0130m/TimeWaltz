@@ -123,8 +123,22 @@ namespace WebApplication1.Controllers.Api
             catch (Exception ex)
             {
                 return Ok(new { status = false });
+            }            
+        }
+        [HttpPost]
+        [Route("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var entity = _departmentService.GetDepartmentOrNull(id);
+                _departmentService.DeleteDepartment(entity);
+                return Ok(new { status = true });
             }
-            
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
 
         }
     }

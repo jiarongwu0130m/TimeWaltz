@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Repository.Enums;
@@ -14,6 +15,8 @@ namespace WebApplication1.Controllers.Api
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
+
     public class LeaveApiController : ControllerBase
     {
         private readonly VacationTypeService _vacationTypeService;
@@ -37,13 +40,13 @@ namespace WebApplication1.Controllers.Api
         /// 請假申請單畫面，取下拉式選單資料
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet]        
         public LeaveDropDownDto GetDropDownList()
         {
             var UserId = User.GetId();
 
             var vacation = _vacationTypeService.GetVacationDetailsList();
-            var agent = _db.Employees.Include(x => x.DepartmentId).FirstOrDefault(x => x.Id == UserId);
+            var agent = _db.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == UserId);
 
             var dto = new LeaveDropDownDto
             {

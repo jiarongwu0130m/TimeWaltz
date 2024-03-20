@@ -45,7 +45,39 @@
                         departmentName : self.departmentName,
                         employeesId : self.employeesId,
                     })
-                        .then((response) => console.log(response))
+                        .then((response) => {
+                            console.log(response)
+                            if(response.status){
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "新增成功!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                }).then((result) => {
+                                    if (result.value) {
+                                        location.href = `/basicsetting/department`
+                                    }
+                                });
+
+                            }else{
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "新增失敗!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                });
+                            }                            
+                        })
                         .catch((error) => console.log(error));
                 },
                 getDropDownList() {

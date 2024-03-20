@@ -80,7 +80,7 @@
                     let isValid = true;
                     this.validation.vacationType = this.vacationType == '' ? false : true;
                     this.validation.gender = this.gender == null ? false : true;
-                    this.validation.cycle = this.cycle == '' ? false : true;
+                    this.validation.cycle = this.cycle == null ? false : true;
                     this.validation.numberOfDays = this.numberOfDays == '' ? false : true;
                     this.validation.minVacationHours = this.minVacationHours == '' ? false : true;
                     if (this.validation.vacationType && this.validation.gender && this.validation.cycle && this.validation.numberOfDays && this.minVacationHours) {
