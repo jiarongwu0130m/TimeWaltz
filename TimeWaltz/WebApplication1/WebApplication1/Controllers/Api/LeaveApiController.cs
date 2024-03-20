@@ -101,7 +101,6 @@ namespace WebApplication1.Controllers.Api
                 model.RelativeFileRoute = relativePath;
 
                 var approvalEmp = _leaveService.GetApprovalEmp(model.EmployeesId);
-                if (approvalEmp == null) throw new Exception("資料庫錯誤");
 
                 model.ApprovalEmployeeId = approvalEmp;
 

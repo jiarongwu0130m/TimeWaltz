@@ -19,9 +19,14 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public string? EmployeeName { get; set; }
         public string? QueryDepartment { get; set; }
     }
-    public class DepartmentCreateDto
+    public class DepartmentCreateShowDto
     {
         public List<SelectListItem>? EmployeeNameSelectList { get; set; }
+    }
+    public class DepartmentCreateDto
+    {
+        public string DepartmentName { get; set; }
+        public int EmployeesId { get; set; }
     }
     public class DepartmentCreateViewModel
     {

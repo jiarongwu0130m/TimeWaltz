@@ -9,19 +9,19 @@
             <div class="card-body">
                 <div class="form-group">
                     <label name="DepartmentName" class="control-label">部門名稱</label>
-                    <input name="DepartmentName" class="form-control col-sm-3" />
+                    <input name="DepartmentName" class="form-control col-sm-3" v-model="departmentName"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">部門主管</label>
-                    <select v-for="item in employeeNameSelectList" class="form-control col-sm-3" v-model="employeesId">
+                    <select class="form-control col-sm-3" v-model="employeesId">
                         <option value="">--請選擇--</option>
-                        <option :value="item.value">{{item.text}}</option>
+                        <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
                     </select>
                     <span class="text-danger"></span>
                 </div>                
             </div>
             <div class="card-footer">
-                <input type="button" value="送出" class="btn btn-primary" />
+                <input type="button" value="送出" @@click="send" class="btn btn-primary" />
                 <a asp-controller="BasicSetting" asp-action="Department" class="btn btn-outline-dark">返回</a>
             </div>
         </form>
@@ -34,15 +34,26 @@
             data() {
                 return {
                     employeeNameSelectList: [],
+                    employeesId: '',
+                    departmentName: '',
                 }
             },
             methods: {
+                send() {
+                    let self = this;
+                    axios.post("/api/DepartmentApi/Create", {
+                        departmentName : self.departmentName,
+                        employeesId : self.employeesId,
+                    })
+                        .then((response) => console.log(response))
+                        .catch((error) => console.log(error));
+                },
                 getDropDownList() {
                     let self = this;
                     axios.get("/api/DepartmentApi/GetDropDownList")
                     .then((response) => {
                         console.log(response);
-                        self.employeeNameSelectList = response.data;
+                            self.employeeNameSelectList = response.data.employeeNameSelectList;
                     }).then((error) => console.log(error));
                 }
             },

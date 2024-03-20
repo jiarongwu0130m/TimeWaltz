@@ -15,13 +15,14 @@ namespace WebApplication1.Controllers
         private readonly GradeTableService _gradeTableService;
         private readonly SpecialHolidayService _specialHolidayService;
         private readonly ShiftScheduleService _shiftScheduleService;
-        private readonly VacationTypeService _vacationTypeService;      
+        private readonly VacationTypeService _vacationTypeService;
         private readonly PublicHolidayService _publicHolidayService;
         private readonly FlextimeService _flextimeService;
         private readonly DepartmentService _departmentService;
 
-        public BasicSettingController(PersonalDataService personalDataService, GradeTableService gradeTableService, SpecialHolidayService specialHolidayService,VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService, DepartmentService departmentService) { 
-        
+        public BasicSettingController(PersonalDataService personalDataService, GradeTableService gradeTableService, SpecialHolidayService specialHolidayService, VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService, DepartmentService departmentService)
+        {
+
             _shiftScheduleService = shiftScheduleService;
             _personalDataService = personalDataService;
             _gradeTableService = gradeTableService;
@@ -63,11 +64,11 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-      
+
         public IActionResult PersonalDataDelete(int id)
         {
             var entity = _personalDataService.GetPersonalDataOrNull(id);
-            if(entity == null)
+            if (entity == null)
             {
                 return RedirectToAction("PersonalData");
             }
@@ -81,9 +82,9 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        
 
-       
+
+
 
         [HttpGet]
         public IActionResult SpecialGradeCreate()
@@ -110,20 +111,20 @@ namespace WebApplication1.Controllers
             var models = EntityHelper.ToViewModel(entities);
             return View(models);
         }
-        
+
         public IActionResult SpecialGradeDelete(int id)
         {
             var entity = _gradeTableService.GetGradeTableOrNull(id);
-            if(entity != null)
+            if (entity != null)
             {
                 _gradeTableService.DeleteGradeTable(entity);
                 return RedirectToAction("SpecialGrade");
             }
-            
+
             return RedirectToAction("SpecialGrade");
         }
 
-        [HttpGet]        
+        [HttpGet]
         public IActionResult EditGradeTable(int id)
         {
             var entity = _gradeTableService.GetGradeTableOrNull(id);
@@ -150,12 +151,12 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult SpecialHoliday()
         {
-            var entity = _specialHolidayService.GetSpecialHoliday();            
+            var entity = _specialHolidayService.GetSpecialHoliday();
             var model = EntityHelper.ToViewModel(entity);
             ViewBag.HowToGiveDropDownList = DropDownHelper.GetHowToGiveDropDownList();
 
             return View(model);
-        }        
+        }
         [HttpPost]
         public IActionResult SpecialHoliday(SpecialHolidayViewModel model)
         {
@@ -168,8 +169,8 @@ namespace WebApplication1.Controllers
             _specialHolidayService.EditSpecialHoliday(model);
             return View(model);
         }
-        
-               
+
+
         [HttpGet]
         public IActionResult PublicHolidayCreate()
         {
@@ -200,7 +201,7 @@ namespace WebApplication1.Controllers
         public IActionResult PublicHoliday(PublicHolidayViewModel selectedModel)
         {
             var entities = _publicHolidayService.GetSelectedPublicHolidayList(selectedModel);
-            if(entities != null)
+            if (entities != null)
             {
                 var models = EntityHelper.ToViewModel(entities);
                 return View(models);
@@ -251,7 +252,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("ShiftSchedule");
         }
         public IActionResult ShiftSchedule()
-        {  
+        {
             var entities = _shiftScheduleService.GetShiftScheduleList();
             var models = EntityHelper.ToViewModel(entities);
 
@@ -262,17 +263,17 @@ namespace WebApplication1.Controllers
         public IActionResult ShiftSchedule(ShiftSchedulesViewModel selectedModel)
         {
             var entities = _shiftScheduleService.GetSelectedShiftScheduleList(selectedModel);
-            if(entities != null)
+            if (entities != null)
             {
                 var models = EntityHelper.ToViewModel(entities);
                 return View(models);
-            }           
+            }
             return View(selectedModel);
         }
         public IActionResult ShiftScheduleDelete(int id)
         {
             var entity = _shiftScheduleService.GetShiftScheduleOrNull(id);
-            if(entity == null)
+            if (entity == null)
             {
                 return RedirectToAction("ShiftSchedule");
             }
@@ -310,15 +311,15 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult VacationTypeCreate()
         {
-            
+
             return View();
         }
-        
+
         [HttpGet]
         public IActionResult VacationType()
         {
             return View();
-        }              
+        }
         public IActionResult VacationTypeDelete(int id)
         {
             var entity = _vacationTypeService.GetVacationTypeOrNull(id);
@@ -328,9 +329,9 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         public IActionResult VacationTypeEdit(int id)
-        {           
+        {
             return View();
-        }        
+        }
         public IActionResult Flextime()
         {
             var FlextimeEntity = _flextimeService.GetFlextime();
@@ -349,25 +350,10 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        
+
         public IActionResult DepartmentCreate()
-        {           
-            var employeeNameDropDownData = _departmentService.GetEmployeeDropDownData();
-            
-
-            if (employeeNameDropDownData != null) 
-            { 
-                var model = new DepartmentCreateViewModel
-                {                    
-                    EmployeeNameSelectList = DropDownHelper
-                       .GetEmployeeNameDropDownList(employeeNameDropDownData),
-                };
-                return View(model);
-            }
-           
-            
-            return RedirectToAction("PersonalData");
-
+        {
+            return View();
         }
 
         [HttpPost]
@@ -380,7 +366,7 @@ namespace WebApplication1.Controllers
             var entity = ViewModelHelper.ToEntity(model);
             _departmentService.CreateDepartment(entity);
             return RedirectToAction("Department");
-            
+
         }
         [HttpGet]
         public IActionResult Department()
