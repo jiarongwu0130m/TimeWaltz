@@ -8,13 +8,11 @@ namespace WebApplication1.Controllers
 {
     public class PersonalRecordController : Controller
     {
-        private readonly AgentEmployeeService _agentEmployeeService;
         private readonly ClockService _clockService;
         private readonly TimeWaltzContext _timeWaltzContext;
 
-        public PersonalRecordController(AgentEmployeeService agentEmployeeService, ClockService clockService, TimeWaltzContext timeWaltzContext)
+        public PersonalRecordController(ClockService clockService, TimeWaltzContext timeWaltzContext)
         {
-            _agentEmployeeService = agentEmployeeService;
             _clockService = clockService;
             _timeWaltzContext = timeWaltzContext;
         }
@@ -39,7 +37,7 @@ namespace WebApplication1.Controllers
                 {
                     StartTime = l.StartTime,
                     EndTime = l.EndTime,
-                    LeaveHour = (int)l.LeaveMinutes,//todo
+                    LeaveMinutes = (int)l.LeaveMinutes,
                     VacationName = l.VacationDetails.VacationType.ToString(),
                     ApprovalStatus = s.Status.ToString()
                 }).ToString();
@@ -56,18 +54,7 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-
-        [HttpGet]
-        public IActionResult AgentEmployeeSetting()
-        {            
-            return View();
-        }
-        [HttpPost]
-        public IActionResult AgentEmployeeSetting(AgentEmployeeViewModel model)
-        {
-            _agentEmployeeService.EditAgentEmployee(model);
-            return View();
-        }
+        
         public IActionResult Clock()
         {
             var toDay = DateTime.Now.Date;

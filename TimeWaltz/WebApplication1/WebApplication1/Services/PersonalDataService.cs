@@ -17,7 +17,7 @@ namespace WebApplication1.Services
             {
                 throw new ArgumentNullException("新增錯誤");
             }
-            //entity.IsDelete = false;
+            entity.User.Stop= false;
             _timeWaltzContext.Employees.Add(entity);
             _timeWaltzContext.SaveChanges();
 
@@ -26,7 +26,7 @@ namespace WebApplication1.Services
 
         public void SoftDeletePersonalData(Employee entity)
         {
-            //entity.IsDelete = true;
+            entity.User.Stop = true;
             _timeWaltzContext.SaveChanges();
         }
 
@@ -46,69 +46,43 @@ namespace WebApplication1.Services
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public List<Employee> GetPersonalDataList()
+        public List<PersonalDataDto> GetPersonalDataList()
         {
-            
-            //var entities = _timeWaltzContext.Employees
-                //.Where(x=>x.IsDelete == false)
-                //.Join(_timeWaltzContext.Departments, e => e.DepartmentId, d => d.Id, (e, d) => new Employee
-                //{
-                //    Id = e.Id,
-                //    ShiftScheduleId = e.ShiftScheduleId,
-                //    DepartmentId = e.DepartmentId,
-                //    Name = e.Name,
-                //    HireDate = e.HireDate,
-                //    Email = e.Email,
-                //    Gender = e.Gender,
-                //    EmployeesNo = e.EmployeesNo,
-                //    DepartmentName = d.DepartmentName,
-                //    ShiftsName = "",
-                //}).ToList();
 
-
-            //foreach (var entity in entities)
-            //{
-            //    //TODO: 在這種假如資料正常情況下(有串好)不可能是null的時候要寫log或直接丟錯(因為也許空空的到前面也不能用)
-            //    var department = _timeWaltzContext.Departments.FirstOrDefault(d => d.Id == entity.DepartmentId);
-            //    if(department != null)
-            //    {
-            //        //entity.DepartmentName = department.DepartmentName;//todo
-            //    }
-            //    var shiftSchedule = _timeWaltzContext.ShiftSchedules.FirstOrDefault(s => s.Id == entity.ShiftScheduleId);
-            //    if (shiftSchedule != null)
-            //    {
-            //        //entity.ShiftsName = shiftSchedule.ShiftsName;//todo
-            //    }
-            //    else
-            //    {
-            //        entity.ShiftsName = "此班別已被刪除，請重新設定或洽管理員";
-            //    }
-
-            //}
-
-            //return entities;
-            return new List<Employee>();
+            return _timeWaltzContext.Employees
+                .Where(x => x.User.Stop == false)
+                .Select(e => new PersonalDataDto
+                {
+                    Id = e.Id,
+                    ShiftsName = e.ShiftSchedule.ShiftsName,
+                    DepartmentName = e.Name,
+                    Name = e.Name,
+                    HireDate = e.HireDate,
+                    Email = e.Email,
+                    Gender = e.Gender.ToString(),
+                    EmployeesNo = e.EmployeesNo,
+                }).ToList();
         }
+
 
 
         public Employee? GetPersonalDataOrNull(int id)
         {
-
-            //return _timeWaltzContext.Employees.Where(x=>x.IsDelete == false).FirstOrDefault(x=>x.Id == id);
-            return new Employee();
+            return _timeWaltzContext.Employees.Where(x=>x.User.Stop == false).FirstOrDefault(x=>x.Id == id);
         }
 
 
 
-        public void EditPersonalData(PersonalDataEditDto model)
+        public void EditPersonalData(PersonalDataEditModel model)
         {
-            //var entity = _timeWaltzContext.Employees.Where(x => x.IsDelete == false).FirstOrDefault(e => e.Id == model.Id);
-            //entity.DepartmentId = model.DepartmentId;
-            //entity.ShiftScheduleId = model.ShiftScheduleId;
-            //entity.Name = model.Name;
-            //entity.Email = model.Email;
-            //_timeWaltzContext.SaveChanges();
-
+            var entity = _timeWaltzContext.Employees
+                .Where(x => x.User.Stop == false)
+                .FirstOrDefault(e => e.Id == model.Id);
+            entity.DepartmentId = model.DepartmentId;
+            entity.ShiftScheduleId = model.ShiftScheduleId;
+            entity.Name = model.Name;
+            entity.Email = model.Email;
+            _timeWaltzContext.SaveChanges();
         }
 
         public List<Department> GetDepartmentDropDownData()

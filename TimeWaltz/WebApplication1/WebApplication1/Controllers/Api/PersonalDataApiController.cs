@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Repository.Enum;
+using Repository.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Services;
@@ -23,7 +26,11 @@ namespace WebApplication1.Controllers.Api
         {
             var model = new GenderDropDownDto
             {
-                GenderSelectItems = DropDownHelper.GetGenderDropDownList(),
+                GenderSelectItems = Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
+                {
+                    Text = c.ToString(),
+                    Value = ((int)c).ToString()
+                }).ToList(),
             };
             return model;
         }
@@ -33,8 +40,7 @@ namespace WebApplication1.Controllers.Api
         /// <returns></returns>
         public List<PersonalDataDto> GetPersonalData()
         {
-            var entities = _personalDataService.GetPersonalDataList();
-            var models = EntityHelper.ToPersonalListDto(entities);
+            var models = _personalDataService.GetPersonalDataList();
             return models;
         }
 
@@ -56,7 +62,6 @@ namespace WebApplication1.Controllers.Api
                     DepartmentNameSelectItem = DropDownHelper.GetDepartmentNameDropDownList(dDropDownData),
                     ShiftNameSelectItems = DropDownHelper.GetShiftNameDropDownList(sDropDownData),
                 };
-
                 return model;
             }
             catch (Exception ex)
@@ -72,12 +77,22 @@ namespace WebApplication1.Controllers.Api
         /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<PersonalDataEditDto> GetEditData(int id)
+        public ActionResult<PersonalDataEditShowDto> GetEditData(int id)
         {
             try
             {
                 var entity = _personalDataService.GetPersonalDataOrNull(id);
-                var model = EntityHelper.ToEditDto(entity);
+                var model = new PersonalDataEditShowDto
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    Email = entity.Email,
+                    DepartmentId = entity.DepartmentId,
+                    ShiftScheduleId = entity.ShiftScheduleId,
+                    EmployeesNo = entity.EmployeesNo,
+                    Gender = entity.Gender.ToString(),
+                    HireDate = entity.HireDate,
+                };
                 return model;
             }
             catch (Exception ex)
@@ -89,14 +104,22 @@ namespace WebApplication1.Controllers.Api
         /// <summary>
         /// 編輯畫面修改資料庫
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("{id}")]
-        public ActionResult Edit(PersonalDataEditDto model)
+        public ActionResult Edit(PersonalDataEditDto dto)
         {
             try
             {
+                var model = new PersonalDataEditModel
+                {
+                    Id = dto.Id,
+                    ShiftScheduleId = dto.ShiftScheduleId,
+                    DepartmentId = dto.DepartmentId,
+                    Email = dto.Email,
+                    Name = dto.Name,
+                };
                 _personalDataService.EditPersonalData(model);
                 return Ok(new {status = true});
             }
@@ -104,7 +127,6 @@ namespace WebApplication1.Controllers.Api
             {
                 return Ok(new { status = false });
             }
-
         }
         /// <summary>
         /// 新增一筆個人資料
@@ -116,7 +138,16 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var entity = ViewModelHelper.ToEntity(model);
+                var entity = new Employee
+                {
+                    ShiftScheduleId = model.ShiftScheduleId,
+                    DepartmentId = model.DepartmentId,
+                    Email = model.Email,
+                    Name = model.Name,
+                    Gender = model.Gender,
+                    HireDate = model.HireDate,
+                    EmployeesNo = model.EmployeesNo,
+                };
                 _personalDataService.CreatePersonalData(entity);
                 return Ok(new { status = true });
             }
