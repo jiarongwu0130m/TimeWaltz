@@ -7,19 +7,14 @@ namespace WebApplication1.Models.PersonalRecordViewModels
     public class LeaveDto
     {
         public int Id { get; set; }
-        public string Date { get; set; }
         public int EmployeesId { get; set; }
         public string StartTime { get; set; }
-
         public string EndTime { get; set; }
-        public int VacationDetailsId { get; set; }
         public string VacationType { get; set; }
 
-        public int ApprovalEmployeeId { get; set; }
         public string ApprovalEmpName { get; set; }
 
 
-        public int AgentEmployeeId { get; set; }
         public string AgentEmployeeName { get; set; }
         public decimal LeaveMinutes { get; set; }
         [NotMapped]

@@ -34,16 +34,6 @@ namespace WebApplication1.Services
             throw new NotImplementedException();
         }
         /// <summary>
-        /// 取得請假當事人的姓名以及employeeId
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public Employee GetNameOrNull(int userId)
-        {
-            //return _timeWaltzContext.Employees.Where(x => x. == false).FirstOrDefault(x => x.Id == userId);
-            return new Employee();
-        }
-        /// <summary>
         /// 新增一筆LeaveRequest
         /// </summary>
         /// <param name="entity"></param>
@@ -81,28 +71,26 @@ namespace WebApplication1.Services
         /// 取得請假歷史紀錄清單資料
         /// </summary>
         /// <returns></returns>
-        public List<LeaveRequest> GetLeaveListData()
+        public List<LeaveDto> GetLeaveListData()
         {
-            //var entities = _timeWaltzContext.LeaveRequests
-            //    .Join(_timeWaltzContext.VacationDetails, l => l.VacationDetailsId, v => v.Id, (l, v) => new { l, v })
-            //    .Join(_timeWaltzContext.Employees, lv => lv.l.EmployeesId, e => e.Id, (lv, e) => new { lv, e })
-            //    .Join(_timeWaltzContext.Departments, lve => lve.e.Id, d => d.EmployeesId, (lve, d) => new { lve, d })
-            //    .Join(_timeWaltzContext.Employees, lved => lved.lve.lv.l.AgentEmployeeId, a => a.Id, (lved, a) => new { lved, a })
-            //    .Join(_timeWaltzContext.Employees, lveda => lveda.lved.lve.lv.l.ApprovalEmployeeId, ap => ap.Id, (lveda, ap) => new { lveda, ap })
-            //    .Join(_timeWaltzContext.RequestStatuses, lvedaap => lvedaap.lveda.lved.lve.lv.l.Id, r => r.TableId, (lvedaap, r) => new { lvedaap, r })
-            //    .Where(lvedaapr => (int)lvedaapr.r.TableType == 1).Select(lvedaapr => new LeaveRequest
-            //    {
-            //        VacationType = lvedaapr.lvedaap.lveda.lved.lve.lv.v.VacationType,
-            //        AgentEmployeeName = lvedaapr.lvedaap.lveda.a.Name,
-            //        ApprovalStatus = lvedaapr.r.Status,
-            //        ApporvalEmpName = lvedaapr.lvedaap.ap.Name,
-            //        Id = lvedaapr.lvedaap.lveda.lved.lve.lv.l.Id,
-            //        StartTime = lvedaapr.lvedaap.lveda.lved.lve.lv.l.StartTime,
-            //        EndTime = lvedaapr.lvedaap.lveda.lved.lve.lv.l.EndTime,
-            //        EmployeeName = lvedaapr.lvedaap.lveda.lved.lve.e.Name,
-            //    }).Distinct().ToList();
-            //return entities;
-            return new List<LeaveRequest>();
+            var approval = _timeWaltzContext.Approvals
+                .Where(x=>x.TableType == (int)TableTypeEnum.請假單)
+                .Join(_timeWaltzContext.LeaveRequests, x=>x.TableId, y=>y.Id, (x, y)=> new {x, y}).ToList();
+
+            return _timeWaltzContext.LeaveRequests
+                .Join(_timeWaltzContext.Approvals, x => x.Id, y => y.TableId, (x, y) => new { x, y })
+                .Where(xy => xy.y.TableType == (int)TableTypeEnum.請假單)
+                .Select(xy => new LeaveDto
+            {
+                Id = xy.x.Id,
+                EmployeesId = xy.x.EmployeesId,
+                VacationType = xy.x.VacationDetails.VacationType,
+                AgentEmployeeName = xy.x.AgentEmployee.Name,
+                ApprovalEmpName = xy.x.AgentEmployee.Name,
+                StartTime = xy.x.StartTime.ToString("yyyy-MM-dd HH:mm"),
+                EndTime = xy.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                ApprovalStatus = xy.y.Status.ToString(),
+            }).ToList();
         }
         /// <summary>
         /// 取得簽核人資料

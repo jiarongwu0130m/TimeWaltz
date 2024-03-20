@@ -137,22 +137,7 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var entities = _leaveService.GetLeaveListData();
-                var models = new List<LeaveDto>();
-                foreach (var entity in entities)
-                {
-                    models.Add(new LeaveDto
-                    {
-                        Id = entity.Id,
-                        Date = entity.StartTime.ToString("yyyy-MM-dd") + "-" + entity.EndTime.ToString("yyyy-MM-dd"),
-                        StartTime = entity.StartTime.ToString("HH:mm"),
-                        EndTime = entity.EndTime.ToString("HH:mm"),
-                        EmployeesId = entity.EmployeesId,
-                        VacationType = entity.VacationDetails.VacationType,
-                        ApprovalEmpName = entity.ApprovalEmployee.Name,
-                        AgentEmployeeName = entity.AgentEmployee.Name,
-                    });
-                }
+                var models = _leaveService.GetLeaveListData();
                 return Ok(models);
             }
             catch (Exception ex)
