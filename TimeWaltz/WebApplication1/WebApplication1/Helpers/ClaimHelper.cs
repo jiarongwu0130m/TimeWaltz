@@ -1,21 +1,34 @@
-﻿using System.Security.Claims;
+﻿using Repository.Models;
+using System.Security.Claims;
 
 namespace WebApplication1.Helpers
 {
     public static class ClaimHelper
     {
-        public static int GetEmployeeId(this ClaimsPrincipal principal) 
+        public static int GetId(this ClaimsPrincipal principal) 
         {
-            //var result = principal.Claims.FirstOrDefault(x => x.ValueType == "id");
-            //if (result == null)
-            //{
-            //    throw new InvalidOperationException("護照裡面沒東西");
-            //}
-            //else {
-            //    return Convert.ToInt32(result.Value);
-            //}
+            var result = GetClaimValue(principal, "id");
+            return Convert.ToInt32(result);
+        }
+        public static string GetName(this ClaimsPrincipal principal)
+        {
+            return GetClaimValue(principal, "Name");
+        }
+        public static int GetRoleId(this ClaimsPrincipal principal)
+        {
+            var result= GetClaimValue(principal, ClaimTypes.Role);
+            return Convert.ToInt32(result);
+        }
+        public static string GetRoleName(this ClaimsPrincipal principal)
+        {
+            return GetClaimValue(principal, "RoleName");
+        }
 
-            return 1;
+        private static string GetClaimValue(ClaimsPrincipal principal, string type) 
+        {
+            var result = principal.Claims.FirstOrDefault(x => x.ValueType == type);
+            if (result == null) throw new InvalidOperationException($"{type} is null");
+            return result.Value;
         }
 
     }

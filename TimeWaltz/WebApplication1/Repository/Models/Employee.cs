@@ -13,7 +13,6 @@ public partial class Employee
 {
     [Key]
     [Column("ID")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("ShiftScheduleID")]
