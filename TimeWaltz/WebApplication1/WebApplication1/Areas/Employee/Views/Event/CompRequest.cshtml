@@ -2,7 +2,68 @@
     ViewBag.title = "補打卡申請單";
 }
 
+@* <div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>補打卡申請單</span>
+                <label class="border rounded border-success text-success" style="font-size:16px">
+                    編輯中
+                </label>
+            </h3>
+        </div>
 
+        <div class="card-body">
+            <div class="row form-group basic">
+                <label class="col-form-label">申請人：</label>
+                <input type="text" class="form-control" v-model="empName" readonly>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+
+
+            <div class="row form-group basic">
+                <label class="col-form-label">補打卡日期：</label>
+                <input id="timeRange" type="datetime" class="form-control">
+                <span class="text-danger font-weight-bold col-form-label" v-if="!dataValid.overtimeResult">請選擇補打卡日期</span>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+
+            <div class="row form-group basic" v-if="isValid(startTime)">
+                <label class="col-form-label text-green">加班時數：{{ overtimeResult }}</label>
+            </div>
+
+            <div class="row form-group basic">
+                <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" id="ovetimeCheck" v-model="status">
+                    <label class="custom-control-label" for="ovetimeCheck">加班轉補休</label>
+                </div>
+            </div>
+
+            <div class="row form-group basic">
+                <label class="col-form-label">加班原因：</label>
+                <textarea cols="5" rows="5" class="form-control" v-model="reason"></textarea>
+                <span class="text-danger font-weight-bold" v-if="!dataValid.reason">請說明加班原因</span>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <div class="row justify-content-around">
+                <button type="button" class="btn btn-facebook" @@click="checkIsValidData">
+                    <ion-icon name="checkmark-done-outline"></ion-icon>
+                    送出
+                </button>
+                <button type="button" class="btn btn-dribbble" @@click="toList">
+                    <ion-icon name="close-outline"></ion-icon>
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+</div> *@
 
 
 
