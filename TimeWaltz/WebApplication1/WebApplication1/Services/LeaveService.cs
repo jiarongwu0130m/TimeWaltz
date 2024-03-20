@@ -167,7 +167,7 @@ namespace WebApplication1.Services
         private static (DateTime start, DateTime end) GetTodayBreakTime(DateTime today) => (today.AddHours(12), today.AddHours(13));
 
         #endregion
-        public LeaveCreateDto AddLeaveTime2(LeaveCreateDto model)
+        public int AddLeaveTime2(LeaveCreateModel model)
         {
             var emp = _timeWaltzContext.Employees.Include(x => x.Shifts).ThenInclude(x => x.ShiftSchedule).FirstOrDefault(x => x.Id == model.EmployeesId);
             if (emp == null) throw new Exception("Not find this employee");
@@ -181,8 +181,7 @@ namespace WebApplication1.Services
 
             var totalTimeSpan = 計算總共請假時間(model.StartTime,model.EndTime,workDays);
 
-            model.LeaveMinutes = (int)totalTimeSpan.TotalMinutes;
-            return model;
+            return (int)totalTimeSpan.TotalMinutes;
 
         }
 

@@ -11,22 +11,7 @@ namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
-        public static LeaveRequest ToEntity(LeaveCreateDto model)
-        {
-            var entity = new LeaveRequest
-            {
-                EmployeesId = model.EmployeesId,
-                StartTime = model.StartTime,
-                EndTime = model.EndTime,
-                VacationDetailsId = model.VacationDetailsId,
-                Reason = model.Reason,
-                FileRoute = model.RelativeFileRoute,
-                AgentEmployeeId = model.AgentEmployeeId,
-                LeaveMinutes = model.LeaveMinutes,
-                ApprovalEmployeeId = model.ApprovalEmployeeId,
-            };
-            return entity;
-        }
+        
 
         public static Employee ToEntity(PersonalDataCreateDto model)
         {

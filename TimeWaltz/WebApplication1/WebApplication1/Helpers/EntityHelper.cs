@@ -411,28 +411,7 @@ namespace WebApplication1.Helpers
         }
 
         
-        public static List<LeaveDto> ToDto(List<LeaveRequest> entities)
-        {
-            var models = new List<LeaveDto>();
-
-            foreach (var entity in entities)
-            {
-                var model = new LeaveDto
-                {
-                    Id = entity.Id,
-                    EmployeesId = entity.EmployeesId,
-                    Date = entity.StartTime.ToString("yyyy-MM-dd") + "~" + entity.EndTime.ToString("yyyy-MM-dd"),
-                    StartTime = entity.StartTime.ToString("HH:mm"),
-                    EndTime = entity.EndTime.ToString("HH:mm"),
-                    //VacationType = entity.VacationType,
-                    //ApprovalEmpName = entity.ApporvalEmpName,
-                    //AgentEmployeeName = entity.AgentEmployeeName,
-                    LeaveMinutes = entity.LeaveMinutes,
-                };
-                models.Add(model);
-            }
-            return models;
-        }
+        
 
         
         public static List<OvertimeViewModel> ToViewModel(List<OvertimeApplication> entities)

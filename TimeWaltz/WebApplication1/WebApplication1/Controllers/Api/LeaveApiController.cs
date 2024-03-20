@@ -107,6 +107,9 @@ namespace WebApplication1.Controllers.Api
 
                 model.ApprovalEmployeeId = approvalEmp;
 
+                model.LeaveMinutes = _leaveService.AddLeaveTime2(model);
+
+                _db.SaveChanges();
 
                 var entity = new LeaveRequest
                 {

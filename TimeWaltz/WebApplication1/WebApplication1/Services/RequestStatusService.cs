@@ -21,7 +21,7 @@ namespace WebApplication1.Services
             {
                  TableType = TableTypeEnum.請假單,
                  TableId = empId,
-                 Status = (int)RequestStatusEnum.簽核中,
+                 Status = RequestStatusEnum.簽核中,
              });
             _timeWaltzContext.SaveChanges();
         }
