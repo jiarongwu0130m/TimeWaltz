@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Models.ApplicationFormViewModels
 {
@@ -40,9 +39,5 @@ namespace WebApplication1.Models.ApplicationFormViewModels
         public int ApprovalEmployeeId { get; set; } = 2;
     }
 
-    public class EmpIdNameGet
-    {
-        public int EmployeeId { get; set;}
-        public string EmployeeName { get; set; }
-    }
+    
 }

@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.title = "公佈欄";
+}
+
+<div class="row" id="app">
+    <div class="col-12">
+        <div class="row mb-3">
+            <label class="col-form-label col-auto">公告日期查詢：</label>
+            <div class="input-group date col-5 col-md-3" id="reservationdate">
+                <div class="input-group-append">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+                <input name="QueryCompRequest" type="text" class="form-control" autocomplete="off" v-model="search.date">
+            </div>
+            <div class="col-auto ml-auto">
+                <button @@click="toCreate" class="btn btn-outline-success pull-right">新增</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <table id="example2" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th v-bind:title="title('list')">{{ title('list') }}</th>
+                    <th v-bind:title="title('startTime')">{{ title('startTime') }}</th>
+                    <th v-bind:title="title('employeesID')">{{ title('employeesID') }}</th>
+                    <th v-bind:title="title('title')">{{ title('title') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="text-center" v-for="item in allBillBoard">
+                    <td>{{item.id}}</td>
+                    <td>{{formatToDateTime(item.startTime)}}</td>
+                    <td>{{item.employeeId}}</td>
+                    <td>{{item.title}}</td>
+                    <td>
+                        <button @@click="toDetail(item.id,$event)" class="btn btn-outline-primary">編輯</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    allBillBoard: [],
+                    originalBillBoard: [],
+                    search: {
+                        date: '',
+                    },
+                }
+            },
+            computed: {
+                title() {
+                    return key => {
+                        const localizationData = {
+                            'list': '項次',
+                            'title': '主旨',
+                            'startTime': '公告開始時間',
+                            'employeesID': '發布人',
+                        };
+                        return localizationData[key] || key;
+                    };
+                }
+            },
+            mounted() {
+                this.getSearchTime();
+                this.getBillBoardData();
+
+            },
+            methods: {
+                getSearchTime() {
+                    let self = this;
+                    const dateInputRef = document.querySelector('#reservationdate');
+
+                    $(dateInputRef).daterangepicker({
+                        singleDatePicker: true,
+                        locale: {
+                            format: 'YYYY-MM-DD'
+                        }
+                    }).on('apply.daterangepicker', (ev, picker) => {
+                        self.search.date = picker.startDate.format('YYYY-MM-DD');
+                        dateInputRef.value = self.search.date;
+                        self.searchBillBoard();
+                    });
+
+                },
+                searchBillBoard() {
+                    if (this.search.date.trim() !== '') {
+                        const filteredBillBoard = this.originalBillBoard.filter(item => {                            
+                            const requestDate = new Date(item.startTime);
+                            const selectedDate = new Date(this.search.date);
+                            return requestDate >= selectedDate;
+                        });
+                        this.allBillBoard = filteredBillBoard;
+                    }
+                },
+                getToday() {
+                    return moment();
+                },
+                toCreate() {
+                    location.href = "/Setting/BillBoardCreate";
+                },
+                getBillBoardData() {
+                    axios("/api/BillboardApi/GetBillboardList").then(response => {
+                        this.allBillBoard = response.data;
+                        this.originalBillBoard = response.data;
+                    });
+                },
+                formatToDateTime(dateTimeString) {
+                    const options = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                    };
+                    const dateTime = new Date(dateTimeString);
+                    return dateTime.toLocaleTimeString('zh', options).replaceAll('/', '-');
+                },
+                toDetail(id, event) {
+                    event.preventDefault();
+                    location.href = `/Setting/BillBoardEdit/${id}`;
+                }
+            },
+        }).mount("#app");
+    </script>
+}

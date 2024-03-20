@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.title = "編輯公佈欄";
+}
+
+<div class="row" id="app">
+    <div class="col-md-12">
+        <div class="card-body">
+            <div class="row mb-2">
+                <label class="col-form-label">主旨：</label>
+                <input type="text" class="col-10 form-control" v-model="title">
+                <span class="text-danger font-weight-bold col-form-label" v-if="!dataValid.title">要驗證主旨不可為null</span>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label">公告期間：</label>
+                <input id="timeRange" type="datetime" class="form-control col-6">
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label">發布人：</label>
+                <input type="text" class="col-2 form-control" v-model="empName" readonly>
+            </div>
+            <div class="row row-cols-1 mb-2">
+                <label class="col-form-label">內容：</label>
+                <textarea ref="editor" v-model="content"></textarea>
+                @* <textarea ref="editor" v-model="content"></textarea> *@
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="button" @@click="checkIsValidData" class="btn btn-outline-primary" value="儲存" />
+            <input type="button" @@click="toList" class="btn btn-outline-dark" value="返回" />
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="/js/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    empId: '',
+                    empName: '',
+                    startTime: '',
+                    endTime: '',
+                    content: '',
+                    title: '',
+                    dataValid: {
+                        title: true,
+                    },
+                    originData: {
+                        startTime: '',
+                        endTime: '',
+                    }
+                }
+            },
+            mounted() {
+                this.checkId();
+                this.getBillboardData();
+                this.getEmpId();
+                this.getTimeRange();
+            },
+            methods: {
+                checkId() {
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        this.Id = lastNumber;
+
+                    } else {
+                        location.href = "/Setting/BillBoard";
+                    }
+                },
+                getEmpId() {
+                    let self = this;
+                    fetch(`/api/OvertimeApplicationsApi/GetEmoloyeeName`).then(res => res.json())
+                        .then(result => {
+                            self.empName = result.employeeName;
+                        })
+                },
+                getBillboardData() {
+                    let self = this;
+                    axios(`/api/BillboardApi/GetBillBoardData/${this.Id}`).then(response => {
+                        self.empId = response.data.employeesID;
+                        self.startTime = response.data.startTime;
+                        self.originData.startTime = response.data.startTime;
+                        self.endTime = response.data.endTime;
+                        self.originData.endTime = response.data.endTime;
+                        self.content = response.data.content;
+                        self.title = response.data.title;
+                        self.getTimeRange();
+                        self.showCkEditor();
+                    });
+                },
+
+                getTimeRange() {
+                    let self = this;
+                    $('#timeRange').daterangepicker({
+                        "startDate": self.startTime,
+                        "endDate": self.endTime,
+                        timePicker: true,
+                        timePickerIncrement: 15,
+                        locale: {
+                            format: 'YYYY-MM-DD HH:mm'
+                        }
+                    },
+                        function (start, end, _) {
+                            self.startTime = start;
+                            self.endTime = end;
+                        });
+                },
+                showCkEditor() {
+                    let self = this;
+                    ClassicEditor.create(self.$refs.editor, {
+                        toolbar: {
+                            items: ['undo', 'redo',
+                                '|', 'heading',
+                                '|', 'bold', 'italic',
+                                '|', 'link', 'insertTable',
+                                '|', 'Blockquote',
+                                '|', 'bulletedList', 'numberedList',
+                                '|', 'outdent', 'indent']
+                        }
+                    })
+                        .then(editor => {
+                            editor.setData(self.content);
+                            editor.model.document.on('change:data', () => {
+                                self.content = editor.getData();
+                            });
+                        })
+                        .catch(error => {
+                            console.error('There was a problem initializing the editor', error);
+                        });
+                },
+                checkIsValidData() {
+                    let isValid = true;
+                    let self = this;
+                    self.dataValid.title = self.title == '' ? false : true;
+                    if (self.dataValid.title) {
+                        this.sendBillBoard();
+                    }
+                },
+                sendBillBoard() {
+                    let self = this;
+
+                    if (self.originData.startTime != self.startTime) {
+                        self.startTime = self.startTime.utc(true).toISOString();
+                    }
+                    if (self.originData.endTime != self.endTime) {
+                        self.endTime = self.endTime.utc(true).toISOString();
+                    }
+
+                    axios.post("/api/BillboardApi/Edit", {
+                        id: this.Id,
+                        startTime: self.startTime,
+                        endTime: self.endTime,
+                        content: self.content,
+                        title: self.title,
+                    }).then(response => {
+                        if (response.data == true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "修改成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    location.href = "/Setting/BillBoard";
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "修改失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
+                        }
+                    });
+                },
+                toList() {
+                    location.href = "/Setting/BillBoard";
+                }
+            },
+        }).mount("#app");
+    </script>
+}

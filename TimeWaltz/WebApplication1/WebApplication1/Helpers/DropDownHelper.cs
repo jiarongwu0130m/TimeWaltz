@@ -1,11 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
+using Repository.Enum;
+using Repository.Enums;
+using Repository.Models;
 
 namespace WebApplication1.Helpers
 {
     public class DropDownHelper
     {
+        /// <summary>
+        /// 在請假申請單用來選擇假別的下拉式選單
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static List<SelectListItem> GetVacationTypeDropDownList(List<VacationDetail> data)
         {
             var vacationType = data.Select(v => new SelectListItem
@@ -15,15 +21,23 @@ namespace WebApplication1.Helpers
             }).ToList();
             return vacationType;
         }
-        public static List<SelectListItem> GetAgentDropDownList(List<AgentEmployee> data)
-        {
-            var employee = data.Select(e => new SelectListItem
-            {
-                Value = e.EmployeesId.ToString(),
-                Text = e.AgentEmployeeName,
-            }).ToList();
-            return employee;
-        }
+
+        //public static List<SelectListItem> GetAgentDropDownList(List<AgentEmployee> data)
+        //{
+        //    var employee = data.Select(e => new SelectListItem
+        //    {
+        //        Value = e.EmployeesId.ToString(),
+        //        Text = e.AgentEmployeeName,
+        //    }).ToList();
+        //    return employee;
+        //}
+
+        /// <summary>
+        /// 在請假申請單中用來選擇代理人的下拉式選單
+        /// 傳入一個代理人List的entityModel
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static List<SelectListItem> GetAgentDropDownList(List<Employee> data)
         {
             var employee =  data.Select(e => new SelectListItem
@@ -62,13 +76,14 @@ namespace WebApplication1.Helpers
         }
         public static List<SelectListItem> GetGenderDropDownList()
         {
-            return Enum.GetValues(typeof(GenderLimitEnum)).Cast<GenderLimitEnum>().Select(c => new SelectListItem
+            return Enum.GetValues(typeof(GenderEnum)).Cast<GenderEnum>().Select(c => new SelectListItem
             {
                 Text = c.ToString(),
                 Value = ((int)c).ToString()
             }).ToList();
 
         }
+
         /// <summary>
         /// 性別限制Enum的下拉式選單
         /// </summary>
@@ -110,5 +125,6 @@ namespace WebApplication1.Helpers
 
         }
 
+        
     }
 }

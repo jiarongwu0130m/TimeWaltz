@@ -1,11 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Helpers;
-using WebApplication1.Models;
-using WebApplication1.Models.Entity;
-using WebApplication1.Models.Enums;
+﻿using Microsoft.AspNetCore.Mvc;
+using Repository.Enums;
+using Repository.Models;
 using WebApplication1.Models.PersonalRecordViewModels;
-
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -28,7 +24,11 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-
+        public IActionResult Attendance()
+        {
+            return View();
+        }
+        [HttpGet]
         public IActionResult Leave()
         {
             var status = _timeWaltzContext.RequestStatuses.Where(x => x.TableType == TableTypeEnum.請假單);
@@ -39,19 +39,23 @@ namespace WebApplication1.Controllers
                 {
                     StartTime = l.StartTime,
                     EndTime = l.EndTime,
-                    LeaveHour = l.LeaveHours,
+                    LeaveHour = (int)l.LeaveMinutes,//todo
                     VacationName = l.VacationDetails.VacationType.ToString(),
                     ApprovalStatus = s.Status.ToString()
                 }).ToString();
             return Json(data);
-
         }
         [HttpGet]
         public IActionResult LeaveCreate()
         {
             return View();
         }
-        
+        [HttpGet]
+        public IActionResult LeaveEdit()
+        {
+            return View();
+        }
+
 
         [HttpGet]
         public IActionResult AgentEmployeeSetting()
@@ -144,10 +148,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Clock");
         }
 
-        public IActionResult Attendance()
-        {
-            return View();
-        }
+       
 
         public IActionResult Overtime()
         {

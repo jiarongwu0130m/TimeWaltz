@@ -91,7 +91,10 @@ namespace WebApplication1.Controllers.Api
                 return Ok(new { status = false });
             }
         }
-
+        /// <summary>
+        /// 取得假別清單資料
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public List<VacationDto> GetVacationList()
         {
@@ -99,7 +102,11 @@ namespace WebApplication1.Controllers.Api
             var models = EntityHelper.ToDto(entities);
             return models;
         }
-
+        /// <summary>
+        /// 傳入ID並刪除
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult VacationDelete([FromForm] int Id)
         {

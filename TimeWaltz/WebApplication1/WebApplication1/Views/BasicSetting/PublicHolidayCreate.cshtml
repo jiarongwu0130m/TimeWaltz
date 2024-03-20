@@ -4,7 +4,7 @@
     ViewData["Title"] = "新增國定假日";
 }
 
-<form asp-action="CreatePublicHoliday" asp-asp-controller="BasicSetting" method="post">
+<form asp-action="PublicHolidayCreate" asp-asp-controller="BasicSetting" method="post">
     <section class="content">
         <div class="card-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -24,7 +24,7 @@
                 <div class="row float-right">
                     <div class="col ">
                         <input type="submit" value="送出" class="btn btn-primary" />
-                        <a asp-controller="BasicSetting" asp-action="ListPublicHoliday" class="btn btn-outline-success">返回</a>
+                        <a asp-controller="BasicSetting" asp-action="PublicHoliday" class="btn btn-outline-success">返回</a>
                     </div>
                 </div>
             </div>

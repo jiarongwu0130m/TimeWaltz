@@ -7,10 +7,12 @@ using WebApplication1.Models.Account;
 using WebApplication1.Models.Entity;
 using WebApplication1.Services;
 
+
 namespace WebApplication1.Controllers
 {
     public class AccountController : Controller
     {
+
         private TimeWaltzContext _TimeWaltzContext;
         private UserService _UserService;
 
@@ -20,10 +22,7 @@ namespace WebApplication1.Controllers
             _UserService=UserService;
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+
 
 
         [HttpPost]

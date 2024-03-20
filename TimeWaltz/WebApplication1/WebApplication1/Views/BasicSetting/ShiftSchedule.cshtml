@@ -8,7 +8,7 @@
     <div class="form-inline mb-3">
         <div class="form-group">
             <label>日期區間查詢：</label>
-            <form asp-action="ListShiftSchedule" asp-controller="BasicSetting" method="post">
+            <form asp-action="ShiftSchedule" asp-controller="BasicSetting" method="post">
                 <div class="input-group col">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
@@ -31,7 +31,6 @@
                 <th scope="col">班別名稱</th>
                 <th scope="col">上班時間</th>
                 <th scope="col">下班時間</th>
-                <th scope="col">休息時間(小時)</th>
                 <th scope="col">補卡上限(次)</th>
                 <th></th>
             </tr>
@@ -48,9 +47,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.EndTime.TimeOfDay)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BreakTimeHours)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.MaxAdditionalClockIn)

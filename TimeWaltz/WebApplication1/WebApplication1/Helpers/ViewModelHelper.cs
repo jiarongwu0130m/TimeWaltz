@@ -1,15 +1,34 @@
-﻿using WebApplication1.Models.BasicSettingViewModels;
-﻿using WebApplication1.Models;
+﻿using Repository.Enum;
+ using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.ApplicationFormViewModels;
-using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
 using WebApplication1.Models.SettingViewModels;
+using Repository.Models;
+using WebApplication1.Models.PersonalRecordViewModels;
+using Employee = Repository.Models.Employee;
+using LeaveRequest = Repository.Models.LeaveRequest;
 
 namespace WebApplication1.Helpers
 {
     public class ViewModelHelper
     {
-        public static Employee ToEntity(PersonalDataCreateViewModel model)
+        public static LeaveRequest ToEntity(LeaveCreateDto model)
+        {
+            var entity = new LeaveRequest
+            {
+                EmployeesId = model.EmployeesId,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                VacationDetailsId = model.VacationDetailsId,
+                Reason = model.Reason,
+                FileRoute = model.RelativeFileRoute,
+                AgentEmployeeId = model.AgentEmployeeId,
+                LeaveMinutes = model.LeaveMinutes,
+                ApprovalEmployeeId = model.ApprovalEmployeeId,
+            };
+            return entity;
+        }
+
+        public static Employee ToEntity(PersonalDataCreateDto model)
         {
             var entity = new Employee
             {
@@ -53,14 +72,14 @@ namespace WebApplication1.Helpers
             var entity = new VacationDetail
             {
                 VacationType = model.VacationType,
-                Gender = model.Gender,
+                Gender = (Repository.Enum.GenderEnum?)model.Gender,
                 NumberOfDays = model.NumberOfDays,
                 Cycle = model.Cycle,
                 MinVacationHours = model.MinVacationHours
             };
             return entity;
         }
-       
+
         public static PublicHoliday ToEntity(PublicHolidayCreateViewModel model)
         {
             var entity = new PublicHoliday
@@ -74,9 +93,9 @@ namespace WebApplication1.Helpers
         public static Department ToEntity(DepartmentCreateViewModel model)
         {
             var entity = new Department
-            {                
+            {
                 DepartmentName = model.DepartmentName,
-                EmployeesId = model.EmployeesId,
+                //Id = model.EmployeesId,//todo
             };
             return entity;
         }
@@ -87,13 +106,22 @@ namespace WebApplication1.Helpers
             {
                 EmployeesId = model.EmployeesId,
                 AdditionalTime = model.AdditionalTime,
-                Status = model.Status,
-                Reason = model.Reason,
+                //Status = model.Status,//todo
+                //Reason = model.Reason,//todo
                 ApprovalEmployeeId = model.ApprovalEmployeeId,
             };
             return entity;
         }
 
+        public static SpecialVacation ToDto(SpecialVacationCreateDto dto)
+        {
+            var entity = new SpecialVacation
+            {
+                SpecialVacationName = dto.SpecialVacationName,
+                Date = dto.Date,
+            };
+            return entity;
+        }
         public static OvertimeApplication ToEntity(OvertimeRequestDto dto)
         {
             var entity = new OvertimeApplication
@@ -115,10 +143,35 @@ namespace WebApplication1.Helpers
             {
                 Account = model.Account,
                 //Password = model.Password,
-                EmployeesId = model.EmployeesID,
-                DepartmentId = (int)model.DepartmentID,
-                Stop = model.Stop==1 ? true : false,
+                //EmployeesId = model.EmployeesID,
+                //DepartmentId = (int)model.DepartmentID,//todo
+                Stop = model.Stop == 1 ? true : false,
                 PasswordDate = DateTime.Now
+            };
+            return entity;
+        }
+
+        public static Billboard ToEntity(BillboardCreat dto)
+        {
+            var entity = new Billboard
+            {
+                EmployeesId = 1,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Title = dto.Title,
+                Content = dto.Content,
+            };
+            return entity;
+        }
+        public static Billboard ToEntity(BillboardEditDto dto)
+        {
+            var entity = new Billboard
+            {
+                EmployeesId = dto.EmployeesID,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Title = dto.Title,
+                Content = dto.Content,
             };
             return entity;
         }

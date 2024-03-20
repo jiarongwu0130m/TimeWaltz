@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Repository.Models;
 using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
 
 namespace WebApplication1.Services
 {
@@ -30,7 +29,7 @@ namespace WebApplication1.Services
 
 
             entity.VacationType = model.VacationType;
-            entity.Gender = model.Gender;
+            entity.Gender = (Repository.Enum.GenderEnum?)model.Gender;
             entity.NumberOfDays = model.NumberOfDays;
             entity.Cycle = model.Cycle;
             entity.MinVacationHours = model.MinVacationHours;
@@ -44,7 +43,7 @@ namespace WebApplication1.Services
 
            
             entity.VacationType = model.VacationType;
-            entity.Gender = model.Gender;
+            entity.Gender = (Repository.Enum.GenderEnum?)model.Gender;
             entity.NumberOfDays = model.NumberOfDays;
             entity.Cycle = model.Cycle;
             entity.MinVacationHours = model.MinVacationHours;

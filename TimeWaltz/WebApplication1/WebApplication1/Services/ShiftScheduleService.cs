@@ -1,5 +1,5 @@
-﻿using WebApplication1.Models.BasicSettingViewModels;
-using WebApplication1.Models.Entity;
+﻿using Repository.Models;
+using WebApplication1.Models.BasicSettingViewModels;
 
 namespace WebApplication1.Services
 {
@@ -95,6 +95,17 @@ namespace WebApplication1.Services
                 BreakTime = s.BreakTime,
                 MaxAdditionalClockIn = s.MaxAdditionalClockIn,
             }).ToList();
+        }
+
+        public void ClearAllFK(int id)
+        {
+            var emp = _timeWaltzContext.Employees.Where(x=>x.ShiftScheduleId == id).ToList();
+            foreach(var e in emp)
+            {
+                e.ShiftScheduleId = null;
+            }
+            var shi = _timeWaltzContext.Shifts.Where(x => x.ShiftScheduleId == id).ToList();
+            _timeWaltzContext.Shifts.RemoveRange(shi);
         }
     }
 }

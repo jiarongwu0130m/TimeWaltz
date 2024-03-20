@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "新增特殊假日";
+}
+
+<form asp-action="SpecialVacationCreate" asp-asp-controller="BasicSetting" method="post" id="app">
+    <section class="content">
+        <div class="card-body">
+            <div class="form-group">
+                <label name="SpecialVacationName" class="control-label"></label>
+                <input name="SpecialVacationName" v-model="specialVacationName" class="form-control" :class="validation.specialVacationName" />
+                <span class="text-danger" v-if="!validation.specialVacationName"></span>
+            </div>
+            <div class="form-group">
+                <label name="Date" class="control-label"></label>
+                <input id="dateInput" name="Date" class="form-control" />
+                <span class="text-danger"></span>
+            </div>
+            <div class="card-footer">
+                <div class="row float-right">
+                    <div class="col ">
+                        <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit" />
+                        <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-success">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    date: this.getToday(),
+                    specialVacationName: '',
+                    validation: {
+                        specialVacationName: true,
+                    }
+                }
+            },
+            methods: {
+                validateAndSubmit() {
+                    let isValid = true;
+                    this.validation.specialVacationName = this.specialVacationName == '' ? false : true;
+                    if (this.validation.specialVacationName) {
+                        this.send();
+                    }
+                },
+                send() {
+                    let self = this;
+                    console.log(this.specialVacationName, this.date)
+                    axios.post('/api/specialvacationapi/create', {
+                        specialVacationName: this.specialVacationName,
+                        date: this.date,
+                    }).then((response) => {
+                        if (response.status) {
+                            alert('新增成功')
+                        } else {
+                            alert('新增失敗')
+                        }
+                    })
+                        .catch((error) => console.log(error));
+                },
+                getToday() {
+                    var now = moment();
+                    var today = now.format('YYYY-MM-DD');
+                    return today;
+                },
+                getDatePicker() {
+                    $('#dateInput').daterangepicker({
+                        singleDatePicker: true,
+                        locale: {
+                            format: 'YYYY/MM/DD'
+                        }
+                    }, function (start, _, _) {
+                        this.date = start.format('YYYY-MM-DD');
+                    });
+                },
+            },
+            mounted() {
+                this.getDatePicker();
+            },
+
+        }).mount('#app');
+
+
+    </script>
+
+}
