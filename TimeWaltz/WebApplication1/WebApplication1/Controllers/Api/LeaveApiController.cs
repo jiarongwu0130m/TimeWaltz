@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Repository.Enums;
 using Repository.Models;
+using System.Drawing;
 using WebApplication1.Helpers;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Services;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication1.Controllers.Api
 {
@@ -11,6 +15,7 @@ namespace WebApplication1.Controllers.Api
     [ApiController]
     public class LeaveApiController : ControllerBase
     {
+        private readonly VacationTypeService _vacationTypeService;
         private readonly TimeWaltzContext _db;
         private readonly LeaveService _leaveService;
         private readonly AgentEmployeeService _agentEmployeeService;
@@ -19,8 +24,9 @@ namespace WebApplication1.Controllers.Api
         private readonly IWebHostEnvironment _env;
 
 
-        public LeaveApiController(TimeWaltzContext timeWaltzContext , LeaveService leaveService, AgentEmployeeService agentEmployeeService, RequestStatusService requestStatusService, ApprovalService approvalService, IWebHostEnvironment webHostEnvironment)
+        public LeaveApiController(VacationTypeService vacationTypeService, TimeWaltzContext timeWaltzContext, LeaveService leaveService, AgentEmployeeService agentEmployeeService, RequestStatusService requestStatusService, ApprovalService approvalService, IWebHostEnvironment webHostEnvironment)
         {
+            this._vacationTypeService = vacationTypeService;
             this._db = timeWaltzContext;
             _leaveService = leaveService;
             _agentEmployeeService = agentEmployeeService;
@@ -35,16 +41,25 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public LeaveDropDownDto GetDropDownList()
         {
-            var UserId = 1;
-            var vacation = _leaveService.GetVacationDropDownData();
-            var agent = _agentEmployeeService.GetAgentDropDownData(UserId);
-            
-            var model = new LeaveDropDownDto 
+            var UserId = User.GetEmployeeId();
+
+            var vacation = _vacationTypeService.GetVacationDetailsList();
+            var agent = _db.Employees.FirstOrDefault(x => x.Id == UserId).Department.Employees.ToList();
+
+            var dto = new LeaveDropDownDto
             {
-                AgentDropDownList = DropDownHelper.GetAgentDropDownList(agent),
-                VacationDropDownList = DropDownHelper.GetVacationTypeDropDownList(vacation),
+                AgentDropDownList = agent.Select(e => new SelectListItem
+                {
+                    Value = e.Id.ToString(),
+                    Text = e.Name,
+                }).ToList(),
+                VacationDropDownList = vacation.Select(v => new SelectListItem
+                {
+                    Value = v.Id.ToString(),
+                    Text = v.VacationType
+                }).ToList(),
             };
-            return model;
+            return dto;
         }
         /// <summary>
         /// 請假申請單頁面，取得請假當事人的員工ID和姓名
@@ -53,49 +68,62 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public EmpIdNameGet GetEmployeeName()
         {
-            var UserId = 1;
-            var userNameAndIdPare = _leaveService.GetNameOrNull(UserId);
-            var employee = EntityHelper.GetNameAndIdPare(userNameAndIdPare);
-            
+            var UserId = User.GetEmployeeId();
+            var userName = _db.Employees.FirstOrDefault(x => x.Id == UserId).Name;
+            var UserAndName = new EmpIdNameGet
+            {
+                EmployeeId = UserId,
+                EmployeeName = userName,
+            };
 
-            return employee;
+            return UserAndName;
         }
         /// <summary>
         /// 新增一筆請假，修改資料庫
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Create([FromForm]LeaveCreateDto model)
+        public ActionResult Create([FromForm] LeaveCreateDto dto)
         {
             try
             {
                 //在處理(多塞)從使用者那裡接收不到的資料時要再建一個新的更大的更多欄位的model才比較安全(正確)
-                
-                //var relativePath = "";
-                //if (model.FileRoute != null)
-                //{
-                //    var dir = $"{_env.WebRootPath}";
-                //    relativePath = $"/pic/{Guid.NewGuid()}_{model.FileRoute.FileName}";
+                var model = new LeaveCreateModel
+                {
+                    EmployeesId = dto.EmployeesId,
+                    StartTime = dto.StartTime,
+                    EndTime = dto.EndTime,
+                    VacationDetailsId = dto.VacationDetailsId,
+                    Reason = dto.Reason,
+                    AgentEmployeeId = dto.AgentEmployeeId
+                };
+
+                var relativePath = _leaveService.GetRelativeFileRoute(dto.FileRoute);
+
+                model.RelativeFileRoute = relativePath;
+
+                var approvalEmp = _leaveService.GetApprovalEmp(model.EmployeesId);
+                if (approvalEmp == null) throw new Exception("資料庫錯誤");
+
+                model.ApprovalEmployeeId = approvalEmp;
 
 
-                //    using (var fs = new FileStream(dir + relativePath, FileMode.Create))
-                //    {
-                //        model.FileRoute.CopyTo(fs);
-                //    }
+                var entity = new LeaveRequest
+                {
+                    EmployeesId = model.EmployeesId,
+                    StartTime = model.StartTime,
+                    EndTime = model.EndTime,
+                    VacationDetailsId = model.VacationDetailsId,
+                    Reason = model.Reason,
+                    FileRoute = model.RelativeFileRoute,
+                    AgentEmployeeId = model.AgentEmployeeId,
+                    ApprovalEmployeeId = model.ApprovalEmployeeId,
+                    LeaveMinutes = model.LeaveMinutes
+                };
+                _requestStatusService.NewRequestStatus(entity.Id);
+                _approvalService.NewApproval(entity.Id);
+                _leaveService.CreateLeaveRequest(entity);
 
-                //    model.RelativeFileRoute = relativePath;
-
-                    
-                //}
-
-                //var approvalModel = _leaveService.GetApprovalEmp(fileModel);
-                //var leaveModel = _leaveService.AddLeaveTime2(approvalModel);
-                //var entity = ViewModelHelper.ToEntity(leaveModel);
-                //_leaveService.CreateLeaveRequest(entity);
-                ////TODO: 新增狀態表
-                //_requestStatusService.NewRequestStatus(entity);
-                ////TODO: 新增簽核表
-                //_approvalService.NewApproval(entity);
                 return Ok(new { status = true });
 
             }
@@ -105,19 +133,18 @@ namespace WebApplication1.Controllers.Api
             }
         }
         [HttpGet]
-        public ActionResult<LeaveDto> List() 
+        public ActionResult<LeaveDto> List()
         {
             try
             {
-                var entities = _leaveService.GetLeaveListData();
-                var models = EntityHelper.ToDto(entities);
+                var models = _leaveService.GetLeaveListData();
                 return Ok(models);
             }
             catch (Exception ex)
             {
                 return Ok(new { status = false });
             }
-            
+
         }
         [HttpGet]
         [Route("{id}")]
@@ -125,9 +152,8 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var entity = _leaveService.GetEditDataOrNull(Id);
-                var model = EntityHelper.ToDto(entity);
-                return Ok(model);
+                var dto = _leaveService.GetEditDataOrNull(Id);
+                return Ok(dto);
             }
             catch
             {

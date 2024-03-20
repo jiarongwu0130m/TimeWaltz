@@ -434,23 +434,7 @@ namespace WebApplication1.Helpers
             return models;
         }
 
-        public static LeaveEditDto ToDto(LeaveRequest entity)
-        {
-            var model = new LeaveEditDto
-            {
-
-                //Name = entity.EmployeeName,
-                //TimeRange = entity.StartTime.ToString("yyyy-MM-dd HH:mm") + "~" + entity.EndTime.ToString("yyyy-MM-dd HH:mm"),
-                //VacationType = entity.VacationType,
-                //ApprovalEmpName = entity.ApporvalEmpName,
-                //AgentEmployeeName = entity.AgentEmployeeName,
-                //LeaveMinutes = entity.LeaveMinutes,
-                //ApprovalStatus = entity.ApprovalStatus.ToString(),
-                //ApprovalRemark = entity.ApprovalRemark,
-                Reason = entity.Reason,
-            };
-            return model;
-        }
+        
         public static List<OvertimeViewModel> ToViewModel(List<OvertimeApplication> entities)
         {
             var models = new List<OvertimeViewModel>();

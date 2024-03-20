@@ -13,11 +13,11 @@ namespace WebApplication1.Services
             this._timeWaltzContext = timeWaltzContext;
         }
 
-        public void NewApproval(LeaveRequest entity)
+        public void NewApproval(int empId)
         {
             _timeWaltzContext.Approvals.Add(new Approval
             {
-                TableId = entity.Id,
+                TableId = empId,
                 TableType = (int)TableTypeEnum.請假單,
             });
             _timeWaltzContext.SaveChanges();

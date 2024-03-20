@@ -7,19 +7,14 @@ namespace WebApplication1.Models.PersonalRecordViewModels
     public class LeaveDto
     {
         public int Id { get; set; }
-        public string Date { get; set; }
         public int EmployeesId { get; set; }
         public string StartTime { get; set; }
-
         public string EndTime { get; set; }
-        public int VacationDetailsId { get; set; }
         public string VacationType { get; set; }
 
-        public int ApprovalEmployeeId { get; set; }
         public string ApprovalEmpName { get; set; }
 
 
-        public int AgentEmployeeId { get; set; }
         public string AgentEmployeeName { get; set; }
         public decimal LeaveMinutes { get; set; }
         [NotMapped]
@@ -27,7 +22,8 @@ namespace WebApplication1.Models.PersonalRecordViewModels
     }
     public class LeaveEditDto
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public string EmployeeName { get; set; }
         public string TimeRange { get; set; }
         public string VacationType { get; set; }
         public string ApprovalEmpName { get; set; }
@@ -49,8 +45,21 @@ namespace WebApplication1.Models.PersonalRecordViewModels
         public string? Reason { get; set; }
 
         public IFormFile? FileRoute { get; set; }
+        public int AgentEmployeeId { get; set; }
+    }
+    public class LeaveCreateModel
+    {
+        public int EmployeesId { get; set; }
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
+        public int VacationDetailsId { get; set; }
+
+        public string? Reason { get; set; }
+
         public string? RelativeFileRoute { get; set; }
         public int ApprovalEmployeeId { get; set; }
+
         public int AgentEmployeeId { get; set; }
         public decimal LeaveMinutes { get; set; }
     }

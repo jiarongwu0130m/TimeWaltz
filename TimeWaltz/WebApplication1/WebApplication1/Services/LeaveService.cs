@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Humanizer;
+using Microsoft.EntityFrameworkCore;
+using Repository.Enums;
 using Repository.Models;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.PersonalRecordViewModels;
@@ -27,23 +29,9 @@ namespace WebApplication1.Services
         /// </summary>
         /// <returns></returns>
 
-        public List<VacationDetail> GetVacationDropDownData()
-        {
-            return _timeWaltzContext.VacationDetails.ToList();
-        }
         internal string GetApprovalStatusOrDefault()
         {
             throw new NotImplementedException();
-        }
-        /// <summary>
-        /// 取得請假當事人的姓名以及employeeId
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public Employee GetNameOrNull(int userId)
-        {
-            //return _timeWaltzContext.Employees.Where(x => x. == false).FirstOrDefault(x => x.Id == userId);
-            return new Employee();
         }
         /// <summary>
         /// 新增一筆LeaveRequest
@@ -57,70 +45,61 @@ namespace WebApplication1.Services
         /// <summary>
         /// 處裡上傳檔案
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public LeaveCreateDto GetRelativeFileRoute(LeaveCreateDto model)
+        public string GetRelativeFileRoute(IFormFile file)
         {
             var relativePath = "";
-            if (model.FileRoute != null)
+            if (file!= null)
             {
                 var dir = $"{_env.WebRootPath}";
-                relativePath = $"/pic/{Guid.NewGuid()}_{model.FileRoute.FileName}";
+                relativePath = $"/pic/{Guid.NewGuid()}_{file.FileName}";
 
 
                 using (var fs = new FileStream(dir + relativePath, FileMode.Create))
                 {
-                    model.FileRoute.CopyTo(fs);
+                    file.CopyTo(fs);
                 }
 
-                model.RelativeFileRoute = relativePath;
-                return model;
+                
+                return relativePath;
             }
-            return model;
+            return "";
 
         }
         /// <summary>
         /// 取得請假歷史紀錄清單資料
         /// </summary>
         /// <returns></returns>
-        public List<LeaveRequest> GetLeaveListData()
+        public List<LeaveDto> GetLeaveListData()
         {
-            //var entities = _timeWaltzContext.LeaveRequests
-            //    .Join(_timeWaltzContext.VacationDetails, l => l.VacationDetailsId, v => v.Id, (l, v) => new { l, v })
-            //    .Join(_timeWaltzContext.Employees, lv => lv.l.EmployeesId, e => e.Id, (lv, e) => new { lv, e })
-            //    .Join(_timeWaltzContext.Departments, lve => lve.e.Id, d => d.EmployeesId, (lve, d) => new { lve, d })
-            //    .Join(_timeWaltzContext.Employees, lved => lved.lve.lv.l.AgentEmployeeId, a => a.Id, (lved, a) => new { lved, a })
-            //    .Join(_timeWaltzContext.Employees, lveda => lveda.lved.lve.lv.l.ApprovalEmployeeId, ap => ap.Id, (lveda, ap) => new { lveda, ap })
-            //    .Join(_timeWaltzContext.RequestStatuses, lvedaap => lvedaap.lveda.lved.lve.lv.l.Id, r => r.TableId, (lvedaap, r) => new { lvedaap, r })
-            //    .Where(lvedaapr => (int)lvedaapr.r.TableType == 1).Select(lvedaapr => new LeaveRequest
-            //    {
-            //        VacationType = lvedaapr.lvedaap.lveda.lved.lve.lv.v.VacationType,
-            //        AgentEmployeeName = lvedaapr.lvedaap.lveda.a.Name,
-            //        ApprovalStatus = lvedaapr.r.Status,
-            //        ApporvalEmpName = lvedaapr.lvedaap.ap.Name,
-            //        Id = lvedaapr.lvedaap.lveda.lved.lve.lv.l.Id,
-            //        StartTime = lvedaapr.lvedaap.lveda.lved.lve.lv.l.StartTime,
-            //        EndTime = lvedaapr.lvedaap.lveda.lved.lve.lv.l.EndTime,
-            //        EmployeeName = lvedaapr.lvedaap.lveda.lved.lve.e.Name,
-            //    }).Distinct().ToList();
-            //return entities;
-            return new List<LeaveRequest>();
+            var approval = _timeWaltzContext.Approvals
+                .Where(x=>x.TableType == (int)TableTypeEnum.請假單)
+                .Join(_timeWaltzContext.LeaveRequests, x=>x.TableId, y=>y.Id, (x, y)=> new {x, y}).ToList();
+
+            return _timeWaltzContext.LeaveRequests
+                .Join(_timeWaltzContext.Approvals, x => x.Id, y => y.TableId, (x, y) => new { x, y })
+                .Where(xy => xy.y.TableType == (int)TableTypeEnum.請假單)
+                .Select(xy => new LeaveDto
+            {
+                Id = xy.x.Id,
+                EmployeesId = xy.x.EmployeesId,
+                VacationType = xy.x.VacationDetails.VacationType,
+                AgentEmployeeName = xy.x.AgentEmployee.Name,
+                ApprovalEmpName = xy.x.AgentEmployee.Name,
+                StartTime = xy.x.StartTime.ToString("yyyy-MM-dd HH:mm"),
+                EndTime = xy.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                ApprovalStatus = xy.y.Status.ToString(),
+            }).ToList();
         }
         /// <summary>
         /// 取得簽核人資料
         /// </summary>
-        /// <param name="fileModel"></param>
+        /// <param name="empId"></param>
         /// <returns></returns>
-        public LeaveCreateDto GetApprovalEmp(LeaveCreateDto fileModel)
+        public int GetApprovalEmp(int empId)
         {
-            //var emp = _timeWaltzContext.Employees.FirstOrDefault(x => x.Id == fileModel.EmployeesId).DepartmentId;
-            //var sameEmp = _timeWaltzContext.Departments.FirstOrDefault(x => x.Id == emp).EmployeesId;
-            //if (sameEmp != null)
-            //{
-            //    fileModel.ApprovalEmployeeId = (int)sameEmp;
-            //}
-            //return fileModel;
-            return new LeaveCreateDto();
+            return _timeWaltzContext.Departments.FirstOrDefault(x => x.EmployeeId == empId).EmployeeId;
         }
         /// <summary>
         /// 取得請假詳細資料
@@ -128,7 +107,7 @@ namespace WebApplication1.Services
         /// <param name="userId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public LeaveRequest? GetEditDataOrNull(int Id)
+        public LeaveEditDto? GetEditDataOrNull(int Id)
         {
             var leaveRequest = _timeWaltzContext.LeaveRequests.FirstOrDefault(x=>x.Id == Id);
             if (leaveRequest == null) throw new NullReferenceException("Not find this user");
@@ -140,18 +119,17 @@ namespace WebApplication1.Services
             var requestStatus = _timeWaltzContext.RequestStatuses.Where(x => (int)x.TableType == 1).FirstOrDefault(x => x.TableId == Id);
             if (requestStatus == null) throw new NullReferenceException("Not find this user");
 
-            return new LeaveRequest
+            return new LeaveEditDto
             {
                 Id = leaveRequest.Id,
-                StartTime = leaveRequest.StartTime,
-                EndTime = leaveRequest.EndTime,
+                TimeRange = leaveRequest.StartTime.ToString("yyyy-MM-dd HH:mm") + "-" + leaveRequest.EndTime.ToString("yyyy-MM-dd HH:mm"),
                 Reason = leaveRequest.Reason,
-                //EmployeeName = leaveRequest.Employees.Name,
-                //AgentEmployeeName = leaveRequest.AgentEmployee.Name,
-                //ApporvalEmpName = leaveRequest.ApprovalEmployee.Name,
-                //VacationType = leaveRequest.VacationDetails.VacationType,
-                //ApprovalRemark = approval.Remark,
-                //ApprovalStatus = requestStatus.Status,
+                EmployeeName = leaveRequest.Employees.Name,
+                AgentEmployeeName = leaveRequest.AgentEmployee.Name,
+                ApprovalEmpName = leaveRequest.ApprovalEmployee.Name,
+                VacationType = leaveRequest.VacationDetails.VacationType,
+                ApprovalRemark = approval.Remark,
+                ApprovalStatus = requestStatus.Status.ToString(),                
             };
         }
 
@@ -238,225 +216,6 @@ namespace WebApplication1.Services
 
 
 
-        /// <summary>
-        /// 計算一次假單的請假時數並存入資料庫
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public LeaveCreateDto AddLeaveTime(LeaveCreateDto model)
-        {
-            var leaveStart = model.StartTime;
-            var leaveEnd = model.EndTime;
-
-            var emp = _timeWaltzContext.Employees
-                .Where(x=>x.Id == model.EmployeesId)
-                .Join(_timeWaltzContext.ShiftSchedules, e => e.ShiftScheduleId, shiftSchedule => shiftSchedule.Id, (e, shiftSchedule) => new { e, shiftSchedule })
-                .Join(_timeWaltzContext.Shifts, eshiftSchedule => eshiftSchedule.e.Id, shift=>shift.EmployeesId, (eshiftSchedule, shift)=> new { eshiftSchedule, shift})
-                .ToList();
-            if (emp == null) throw new Exception("程式錯誤");
-
-            //請假時間是否多於一天的判斷
-            if (!IsSameDay(leaveStart, leaveEnd))
-            {
-                //請假開始時間及結束時間在不同天
-                TimeSpan startTimeOfDay, endTimeOfDay;
-                var fullDays = CalculateFullDays(leaveStart, leaveEnd, out startTimeOfDay, out endTimeOfDay);
-
-                for (var i = 0; i < 5; i++)
-                {
-                    leaveStart.AddDays(i);
-                    var Have = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == leaveStart.Date);
-                    if (Have != null)
-                    {
-                        model.LeaveMinutes = model.LeaveMinutes + 8;
-                    }
-                }
-                var ShiftB = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
-                if (ShiftB != null)
-                {
-                    var shiftStart = ShiftB.eshiftSchedule.shiftSchedule.StartTime;
-                    var shiftEnd = ShiftB.eshiftSchedule.shiftSchedule.EndTime;
-                    //確認請假開始時間即結束時間在同一天
-                    //判斷請假時間與班別時間的關係取得符合班別上下班時間的請假時間
-                    var leaveStartTime = GetCorrectStartTime(leaveStart.TimeOfDay, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
-                    var leaveEndTime = GetCorrectEndTime(leaveStartTime, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
-                    //算出扣除掉午休時間的請假時間
-                    var leaveTime = GetLeaveTimeSkipBreakTime(leaveStartTime, leaveEndTime);
-
-                    model.LeaveMinutes = leaveTime / 60;
-                    return model;
-                }
-                var ShiftC = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
-                if (ShiftC != null)
-                {
-                    var shiftStart = ShiftC.eshiftSchedule.shiftSchedule.StartTime;
-                    var shiftEnd = ShiftC.eshiftSchedule.shiftSchedule.EndTime;
-                    //確認請假開始時間即結束時間在同一天
-                    //判斷請假時間與班別時間的關係取得符合班別上下班時間的請假時間
-                    var leaveStartTime = GetCorrectStartTime(leaveStart.TimeOfDay, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
-                    var leaveEndTime = GetCorrectEndTime(leaveStartTime, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
-                    //算出扣除掉午休時間的請假時間
-                    var leaveTime = GetLeaveTimeSkipBreakTime(leaveStartTime, leaveEndTime);
-
-                    model.LeaveMinutes = leaveTime;
-                    return model;
-                }
-            }
-            else
-            {
-                //判斷請假單日期在班表上是否有班
-                var ShiftA = emp.FirstOrDefault(x => x.shift.ShiftsDate.Date == model.StartTime.Date);
-                if (ShiftA == null)
-                {
-                    model.LeaveMinutes = 0;
-                    return model;
-                }
-                var shiftStart = ShiftA.eshiftSchedule.shiftSchedule.StartTime;
-                var shiftEnd = ShiftA.eshiftSchedule.shiftSchedule.EndTime;
-                //確認請假開始時間即結束時間在同一天
-                //判斷請假時間與班別時間的關係取得符合班別上下班時間的請假時間
-                var leaveStartTime = GetCorrectStartTime(leaveStart.TimeOfDay, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
-                var leaveEndTime = GetCorrectEndTime(leaveStartTime, leaveEnd.TimeOfDay, shiftStart.TimeOfDay, shiftEnd.TimeOfDay);
-                //算出扣除掉午休時間的請假時間
-                var leaveTime = GetLeaveTimeSkipBreakTime(leaveStartTime, leaveEndTime);
-
-                model.LeaveMinutes = leaveTime / 60;
-                return model;
-            }
-
-            throw new NotImplementedException("程式設計錯誤");
-
-
-
-        }
-        /// <summary>
-        /// 判斷請假時間是否多於一天
-        /// </summary>
-        /// <param name="leaveStart"></param>
-        /// <param name="leaveEnd"></param>
-        /// <returns></returns>
-        public bool IsSameDay(DateTime leaveStart, DateTime leaveEnd)
-        {
-            return leaveStart.Date == leaveEnd.Date;
-        }
-        /// <summary>
-        /// 計算請假開始時間及結束時間中有幾個完整的一天
-        /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <param name="startTimeOfDay"></param>
-        /// <param name="endTimeOfDay"></param>
-        /// <returns></returns>
-        static int CalculateFullDays(DateTime startTime, DateTime endTime, out TimeSpan startTimeOfDay, out TimeSpan endTimeOfDay)
-        {
-            // 設置開始日期的開始時間為當天的開始
-            startTime = startTime.Date;
-            startTimeOfDay = startTime.TimeOfDay;
-
-            // 設置結束日期的結束時間為當天的結束
-            endTime = endTime.Date.AddDays(1).AddSeconds(-1);
-            endTimeOfDay = endTime.TimeOfDay;
-
-            // 計算完整的天數
-            int fullDays = (int)(endTime - startTime).TotalDays;
-
-            // 確保完整的天數不為負數
-            return Math.Max(0, fullDays);
-        }
-        /// <summary>
-        /// 取得符合班表的正確的請假開始時間
-        /// </summary>
-        /// <param name="leaveStart"></param>
-        /// <param name="leaveEnd"></param>
-        /// <param name="shiftStart"></param>
-        /// <param name="shiftEnd"></param>
-        /// <returns></returns>
-
-        public TimeSpan GetCorrectStartTime(TimeSpan leaveStart,TimeSpan leaveEnd, TimeSpan shiftStart, TimeSpan shiftEnd)
-        {
-            if (leaveStart <= shiftStart && leaveEnd <= shiftEnd)
-            {               
-                leaveStart = shiftStart;
-                return leaveStart;
-            }
-            else if (leaveStart <= shiftStart && leaveEnd >= shiftEnd)
-            {
-                leaveStart = shiftStart;
-                return leaveStart;
-            }
-            else
-            {
-                leaveStart = leaveEnd;
-                return leaveStart;
-            }
-        }
-        /// <summary>
-        /// 取得符合班表的請假結束時間
-        /// </summary>
-        /// <param name="leaveStart"></param>
-        /// <param name="leaveEnd"></param>
-        /// <param name="shiftStart"></param>
-        /// <param name="shiftEnd"></param>
-        /// <returns></returns>
-        public TimeSpan GetCorrectEndTime(TimeSpan leaveStart, TimeSpan leaveEnd, TimeSpan shiftStart, TimeSpan shiftEnd)
-        {
-            if (leaveEnd >= shiftEnd && leaveStart >= shiftStart)
-            {
-                leaveEnd = shiftEnd;
-                return leaveEnd;
-            }
-            else if (leaveStart <= shiftStart && leaveEnd >= shiftEnd)
-            {
-                leaveEnd = shiftEnd;
-                return leaveEnd;
-            }
-            else
-            {
-                leaveEnd = leaveStart;
-                return leaveEnd;
-            }
-        }
-        /// <summary>
-        /// 取得扣除午休時間(12:00~13:00)的請假時間
-        /// </summary>
-        /// <param name="leaveStartTime"></param>
-        /// <param name="leaveEndTime"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public int GetLeaveTimeSkipBreakTime(TimeSpan leaveStartTime, TimeSpan leaveEndTime)
-        {
-            //一天之中請假時間與午休的關係
-            TimeSpan ss = new DateTime(2024, 3, 17, 12, 0, 0).TimeOfDay;
-            TimeSpan ee = new DateTime(2024, 3, 17, 13, 0, 0).TimeOfDay;
-
-            if(leaveStartTime < ss && leaveEndTime <= ee && leaveEndTime > ss)
-            {
-                var data = (ss - leaveStartTime);
-                return data.Minutes + data.Hours * 60;
-            }
-            else if(leaveStartTime < ss && leaveEndTime <= ss || leaveEndTime > ee && leaveStartTime >= ee)
-            {
-                var data = (leaveEndTime - leaveStartTime);
-                return data.Minutes + data.Hours * 60;
-            }
-            else if(leaveStartTime < ss && leaveEndTime > ee)
-            {
-                var data1 = (ss - leaveStartTime);
-                var data2 = (leaveEndTime - ee);
-                return data1.Minutes + data1.Hours * 60 + data2.Minutes + data2.Hours * 60;
-            }
-            else if(leaveEndTime > ee && leaveStartTime < ee && leaveStartTime >= ss)
-            {
-                var data = (leaveEndTime - ee);
-                return data.Minutes + data.Hours * 60;
-            }
-            else if(leaveStartTime >= ss && leaveEndTime <= ee)
-            {
-                return 0;
-            }
-            throw new Exception("程式設計錯誤");
-        }
     }
  
 }
