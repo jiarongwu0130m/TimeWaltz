@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.title = "簽核";
+}
+
+<style>
+    .thinkcss-right {
+        text-align: right;
+    }
+</style>
+<div id="app">
+    <div class="row">
+        <div class="form-inline col-sm-6 col-md-8">
+            <div class="form-group col-sm-12">
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div class="row">
+                <div class="col-sm-12 col-md-6"></div>
+                <div class="col-sm-12 col-md-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="example2"
+                           class="table table-bordered table-hover dataTable dtr-inline"
+                           aria-describedby="example2_info">
+                        <thead>
+                            <tr>
+                                <th class="sorting sorting_asc" tabindex="0" rowspan="1"
+                                    colspan="1">
+                                    表單名稱
+                                </th>
+                                <th class="sorting" rowspan="1" colspan="1">
+                                    申請人
+                                </th>
+                                <th class="sorting" rowspan="1" colspan="1">
+                                    簽核
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-if="isSwitch">
+                                <tr v-for="vacation in filterByVacationType">
+                                    <td>
+                                        {{vacation.vacationType}}
+                                    </td>
+                                    <td>
+                                        {{vacation.gender}}
+                                    </td>
+                                    <td>
+                                        <a href="#" @@click="edit(vacation.id, $event)">簽核</a> 
+                                    </td>
+                                </tr>
+                            </template>
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    ApprovalList: [],
+                    search: '',
+                    isSwitch: false,
+                }
+            },
+            methods: {
+                changeSwitch() {
+                    this.isSwitch = !this.isSwitch;
+                },
+                filterByVacationType() {
+                    if (this.search != '') return this.vacationList.filter(x => x.vacationType.includes(this.search));
+                    return this.vacationList;
+                },
+                edit(id, event) {
+                    event.preventDefault();
+                    location.href = `/Query/ApprovalEdit/${id}`
+                },
+            },
+            mounted() {
+                this.getVacationListData()
+            }
+        }).mount("#app");
+
+    </script>
+
+
+}

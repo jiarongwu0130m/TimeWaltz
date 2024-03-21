@@ -6,15 +6,19 @@ namespace WebApplication1.Services
     public class ClockService
     {
         private readonly TimeWaltzContext _timeWaltzDb;
+        private readonly ApprovalService _approvalService;
 
-        public ClockService(TimeWaltzContext timeWaltzDb) 
+        public ClockService(TimeWaltzContext timeWaltzDb, ApprovalService approvalService) 
         {
             _timeWaltzDb = timeWaltzDb;
+            _approvalService = approvalService;
         }
         public int ClockData(Clock clockDb)
         {
             _timeWaltzDb.Clocks.Add(clockDb);
             _timeWaltzDb.SaveChanges();
+            _approvalService.NewApproval_補打卡(clockDb.Id);
+
             return clockDb.EmployeesId;
         }
 

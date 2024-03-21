@@ -23,5 +23,23 @@ namespace WebApplication1.Services
             _timeWaltzContext.SaveChanges();
 
         }
+        public void NewApproval_補打卡(int empId)
+        {
+            _timeWaltzContext.Approvals.Add(new Approval
+            {
+                TableId = empId,
+                TableType = (int)TableTypeEnum.補卡單,
+            });
+            _timeWaltzContext.SaveChanges();
+        }
+        public void NewApproval_加班單(int empId)
+        {
+            _timeWaltzContext.Approvals.Add(new Approval
+            {
+                TableId = empId,
+                TableType = (int)TableTypeEnum.加班單,
+            });
+            _timeWaltzContext.SaveChanges();
+        }
     }
 }
