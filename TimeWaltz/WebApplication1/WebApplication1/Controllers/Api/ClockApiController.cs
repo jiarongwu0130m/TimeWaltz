@@ -7,6 +7,7 @@ using System.Security.Claims;
 using WebApplication1.Areas.Employee.Models;
 using WebApplication1.Filters;
 using WebApplication1.Helpers;
+using WebApplication1.Models.ApplicationFormViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -113,6 +114,24 @@ namespace WebApplication1.Controllers.Api
             }
         }
 
+        public CompRequestEmpIdNameGet GetEmployeeName()
+        {
+
+            var UserId = User.GetId();
+            var userName = _timeWaltzDb.Employees.Where(x => x.Id == UserId).FirstOrDefault();
+            
+            string approvalEmployeeName = _timeWaltzDb.Employees.Where(
+                x => x.Id == _timeWaltzDb.Employees.Where(x => x.Id == UserId).Select(x => x.Department.EmployeeId).FirstOrDefault()).Select(x=>x.Name).FirstOrDefault();
+            var UserAndName = new CompRequestEmpIdNameGet
+            {
+                EmployeeId = UserId,
+                EmployeeName = userName.Name,
+                approvalEmployeeName= approvalEmployeeName,
+
+            };
+
+            return UserAndName;
+        }
         [HttpGet("{id}")]
         public IActionResult GetEmpClocks(int id, [FromQuery] DateTime date)
         {

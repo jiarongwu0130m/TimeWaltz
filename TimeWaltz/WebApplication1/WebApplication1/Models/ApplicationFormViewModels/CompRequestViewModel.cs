@@ -42,4 +42,28 @@ namespace WebApplication1.Models.ApplicationFormViewModels
 
         public int ApprovalEmployeeId { get; set; }
     }
+
+    public class CompRequestEmpIdNameGet
+    {
+        public int EmployeeId { get; set; }
+        public string EmployeeName { get; set; }
+        public int approvalEmployeeid { get; set; }
+        public string approvalEmployeeName { get; set; }
+
+    }
+
+    public class CompRequestApiCreateViewModel
+    {
+
+        public int EmployeesId { get; set; }
+
+        public DateTime AdditionalTime { get; set; }
+
+        public int Status { get; set; }
+
+
+        public string? Reason { get; set; }
+
+        public int ApprovalEmployeeId { get; set; }
+    }
 }

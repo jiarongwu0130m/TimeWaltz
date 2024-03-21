@@ -39,5 +39,9 @@ namespace WebApplication1.Services
         {
             return _timeWaltzDb.AdditionalClockIns.FirstOrDefault(x => x.Id == id);
         }
+        public int getApprovalEmployeeId(int id)
+        {
+            return _timeWaltzDb.Employees.Where(x => x.Id == id).Select(x=>x.Department.EmployeeId).FirstOrDefault(); 
+        }
     }
 }
