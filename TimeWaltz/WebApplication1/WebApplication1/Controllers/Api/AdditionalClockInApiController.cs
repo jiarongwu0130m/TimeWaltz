@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Models;
 using WebApplication1.Helpers;
@@ -42,12 +43,24 @@ namespace WebApplication1.Controllers.Api
             return model;
         }
         [HttpPost]
-        public ActionResult CompRequestCreate(CompRequestCreateViewModel model)
+        public ActionResult CompRequestCreate(CompRequestApiCreateViewModel model)
         {
             try
             {
-                var entity = ViewModelHelper.ToEntity(model);
-                _compRequestService.CreateCompRequest(entity);
+                //var entity = ViewModelHelper.ToEntity(model);
+
+
+                _timeWaltzDb.AdditionalClockIns.Add(new AdditionalClockIn
+                {
+                    EmployeesId = User.GetId(),
+                    ApprovalEmployeeId= _compRequestService.getApprovalEmployeeId(User.GetId()),
+                    AdditionalTime = model.AdditionalTime,
+                    Status = model.Status,
+                    Reason = model.Reason,
+                });
+
+
+                _timeWaltzDb.SaveChanges();
                 return Ok(new { status = true });
             }
             catch (Exception ex)
