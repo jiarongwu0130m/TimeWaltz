@@ -90,7 +90,7 @@ namespace WebApplication1.Controllers.Api
                     DepartmentId = entity.DepartmentId,
                     ShiftScheduleId = entity.ShiftScheduleId,
                     EmployeesNo = entity.EmployeesNo,
-                    Gender = entity.Gender.ToString(),
+                    Gender = entity.Gender,
                     HireDate = entity.HireDate,
                 };
                 return model;
@@ -117,6 +117,7 @@ namespace WebApplication1.Controllers.Api
                     Id = dto.Id,
                     ShiftScheduleId = dto.ShiftScheduleId,
                     DepartmentId = dto.DepartmentId,
+                    Gender = dto.Gender,
                     Email = dto.Email,
                     Name = dto.Name,
                 };

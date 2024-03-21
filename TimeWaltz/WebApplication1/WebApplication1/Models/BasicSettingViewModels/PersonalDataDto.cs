@@ -31,7 +31,7 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public string Email { get; set; }
         public DateTime HireDate { get; set; }
         public string EmployeesNo { get; set; }
-        public string Gender { get; set; }
+        public int Gender { get; set; }
     }
     public class PersonalDataEditDto
     {
@@ -39,7 +39,10 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public int? ShiftScheduleId { get; set; }
         public int DepartmentId { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }       
+        public int Gender { get; set; }
+        public string Email { get; set; }
+
+
     }
     public class PersonalDataEditModel
     {
@@ -48,6 +51,7 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public int DepartmentId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public int Gender { get; set; }
     }
     public class DepAndShiftDropDownDto
     {
