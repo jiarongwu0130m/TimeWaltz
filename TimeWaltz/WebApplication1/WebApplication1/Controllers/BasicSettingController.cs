@@ -118,7 +118,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditGradeTable(int id)
+        public IActionResult SpecialGradeEdit(int id)
         {
             var entity = _gradeTableService.GetGradeTableOrNull(id);
             if (entity == null)
@@ -132,7 +132,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditGradeTable(SpecialGradeEditViewModel model)
+        public IActionResult SpecialGradeEdit(SpecialGradeEditViewModel model)
         {
             if (!ModelState.IsValid)
             {

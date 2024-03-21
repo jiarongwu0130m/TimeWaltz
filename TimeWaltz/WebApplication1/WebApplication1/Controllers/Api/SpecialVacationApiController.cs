@@ -47,7 +47,6 @@ namespace WebApplication1.Controllers.Api
         }
         [HttpPost]
         [Route("{id}")]
-
         public void Edit(SpecialVacationEditDto model)
         {
             _specialVacationService.Edit(model);            
@@ -64,6 +63,21 @@ namespace WebApplication1.Controllers.Api
             catch (Exception ex)
             {
                 throw new Exception("程式錯誤");
+            }
+        }
+        [HttpPost]
+        [Route("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var entity = _specialVacationService.GetEditDataOrNull(id);
+                _specialVacationService.Delete(entity);
+                return Ok(new { status = true });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
             }
         }
     }

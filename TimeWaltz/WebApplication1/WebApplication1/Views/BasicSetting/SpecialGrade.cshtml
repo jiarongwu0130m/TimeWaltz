@@ -1,55 +1,56 @@
 ﻿@model IEnumerable<WebApplication1.Models.BasicSettingViewModels.SpecialGradeViewModel>
-
 @{
     Layout = "_Layout";
     ViewData["Title"] = "年資級距一覽";
 }
-<style>
-    .thinkcss-right {
-        text-align: right;
-    }
-</style>
+
 <div class="row">   
     <div class="col-12">
-        <div class="thinkcss-right">
-            <a asp-controller="BasicSetting" asp-action="SpecialGradeCreate" class="btn btn-outline-success">新增</a>
-
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <div class="row">
+                        <div class="col=auto ml-auto">
+                            <a asp-controller="BasicSetting" asp-action="SpecialGradeCreate" class="btn btn-outline-success pull-right">新增</a>
+                        </div>
+                    </div>
+                </h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                    @Html.DisplayNameFor(model => model.ServiceLength)
+                            </th>
+                            <th>
+                                    @Html.DisplayNameFor(model => model.Days)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ServiceLength)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Days)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("詳細", "SpecialGradeEdit", new { id = item.Id }) |
+                                    @Html.ActionLink("刪除", "SpecialGradeDelete", new { id = item.Id })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     
-    <table class="table table-bordered">
-        <thead>
-        <thead>
-            <tr>
-                <th>
-                   年資(月)
-                </th>
-                <th>
-                  天數
-                </th>
-                <th>
-                    詳細資料
-                </th>
-            </tr>
-        </thead>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ServiceLength)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Days)
-                    </td>
-                    <td>
-                        @Html.ActionLink("詳細", "SpecialGradeEdit", new { id = item.Id }) |
-                        @Html.ActionLink("刪除", "SpecialGradeDelete", new { id = item.Id })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    
 
 </div> 

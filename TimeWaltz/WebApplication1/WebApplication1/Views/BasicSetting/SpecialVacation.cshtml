@@ -3,54 +3,65 @@
     ViewData["Title"] = "特殊假日一覽";
 }
 <div class="row" id="app">
-
-    <div class="form-inline mb-3">
-        <div class="form-group">
-            <label>日期查詢：</label>
-            <form asp-action="specialVacation" asp-controller="BasicSetting" method="post">
-                <div class="input-group col">
-                    <div class="input-group-prepend">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <div class="row">
+                        <div class="col">
+                            <form asp-action="specialVacation" asp-controller="BasicSetting" method="post">
+                                <div class="form-group">
+                                    <label name="Date">時間區間查詢</label>
+                                    <input name="Date" class="form-control" id="dateInput">
+                                </div>
+                            </form>                            
+                        </div>
                     </div>
-                    <label name="Date">時間區間查詢</label>
-                    <input name="Date" id="dateInput">
+                </h3>
+                <div class="card-tools">
+                    <div class="input-group">
+                        <div class="input-group-append">
+                            <a asp-controller="BasicSetting" asp-action="specialVacationCreate" class="btn btn-outline-success">新增</a>
+                        </div>
+                    </div>
                 </div>
-            </form>
-        </div>
-        <div class="form-group">
-            <a asp-controller="BasicSetting" asp-action="specialVacationCreate" class="btn btn-outline-success">新增</a>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                    <thead>
+                        <tr>
+                            <th>
+                                特殊假日名稱
+                            </th>
+                            <th>
+                                日期
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in filterDate">
+                            <td>
+                                {{item.specialVacationName}}
+                            </td>
+                            <td>
+                                {{item.date}}
+                            </td>
+                            <td>
+                                <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-dark">編輯</a> |
+                                <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-danger">刪除</a>
+                            </td>
+                        </tr>
 
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    
 
-    <table class="table table-bordered">
-        <thead>
-        <thead>
-            <tr>
-                <th>
-                    特殊假日名稱
-                </th>
-                <th>
-                    日期
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item in filterDate">
-                <td>
-                    {{item.specialVacationName}}
-                </td>
-                <td>
-                    {{item.date}}
-                </td>
-                <td>
-                    <a href="#" @@click="edit(item.id, $event)" class="btn btn-primary">編輯</a> |
-                    <a href="#" @@click="getOut(item.id, $event)" class="btn btn-primary">刪除</a>
-                </td>
-            </tr>
-            
-        </tbody>
-    </table>
+    
 
 </div>
 @section Scripts {
@@ -68,7 +79,6 @@
             computed: {
                 filterDate(){
                     let data = this.specialVacationList
-
                     if (this.search.startDate) {
                         data = data
                         .filter(x => new Date(x.date) >= new Date(this.search.startDate))
@@ -83,6 +93,41 @@
                 },
             },
             methods: {
+                checkIsDelete(id, e) {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger"
+                        },
+                        buttonsStyling: false
+                    });
+                    swalWithBootstrapButtons.fire({
+                        title: "確定刪除?",
+                        text: "此刪除可能無法回復",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "是",
+                        cancelButtonText: "否",
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.getOut(id, e);
+                            swalWithBootstrapButtons.fire({
+                                title: "成功刪除!",
+                                icon: "success"
+                            });
+                            this.getListData();
+                        } else if (
+                            /* Read more about handling dismissals below */
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire({
+                                title: "取消",
+                                icon: "error"
+                            });
+                        }
+                    });
+                },
                 getDateRangePicker() {
                     let self = this;
                     $('#dateInput').daterangepicker({
@@ -104,10 +149,34 @@
                     event.preventDefault();
                     axios.post(`/api/specialvacationapi/Delete/${id}`).then((response) => {
                         if (response.status) {
-                            alert("刪除成功")
-                            this.getListData();
+                            Swal.fire({
+                                icon: "success",
+                                title: "刪除成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    this.getListData();
+                                }
+                            });
+                            
                         } else {
-                            alert("刪除失敗")
+                            Swal.fire({
+                                icon: "error",
+                                title: "刪除失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
                         }
                     })
                 },

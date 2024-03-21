@@ -37,5 +37,11 @@ namespace WebApplication1.Services
         {
             return _timeWaltzContext.SpecialVacations.ToList();
         }
+
+        public void Delete(SpecialVacation entity)
+        {
+            _timeWaltzContext.Remove(entity);
+            _timeWaltzContext.SaveChanges();
+        }
     }
 }
