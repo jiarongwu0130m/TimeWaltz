@@ -3,6 +3,59 @@
     ViewData["Title"] = "請假申請";
 }
 
+<div class="secion mt-2">
+    <div class="card">
+        <form method="post">
+            <div class="card-header">
+                <h3 class="card-title d-flex justify-content-between">
+                    <span>請假申請</span>
+                </h3>
+            </div>
+            <div class="row form-group basic">
+                <label class="col-form-label">申請人</label>
+                <input type="text" class="form-control"  :value="name" disabled>
+
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+            <div class="row form-group basic">
+                <label class="col-form-label">請假期間</label>
+                <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="">
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+            <div class="row form-group basic">
+                <label class="col-form-label">假別選擇</label>
+                <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="">
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+
+
+            <div class="form-group">
+                <label for="">假別選擇</label>
+                <select class="form-control select2 select2-hidden-accessible"
+                        style="width: 100%;" data-select2-id="1" tabindex="-1"
+                        aria-hidden="true" :class="validation.vacationDetailsId" v-model="vacationDetailsId">
+                    <option value="">---請選擇---</option>
+                    <option v-for="item in vacationDropDownList" :value="item.value">{{item.text}}</option>
+                </select>
+                <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                      dir="ltr" style="width: 100%;">
+                    <span class="selection"></span>
+                </span>
+                <span class="text-danger" v-if="!validation.vacationDetailsId">假別選擇不得為空!</span>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
 <form id="app">
     <div class="row">
         <div class="col-md-4">
@@ -140,7 +193,7 @@
                         console.log(result);
                         if (result.status == true) {
                             alert("申請成功送出!")
-                            location.href = '/employee/query/Leave'                            
+                            location.href = '/employee/query/Leave'
                         } else {
                             alert("申請失敗!")
                             location.href = '/employee/event/LeaveCreate'
