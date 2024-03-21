@@ -110,8 +110,6 @@ namespace WebApplication1.Controllers.Api
 
                 model.LeaveMinutes = _leaveService.AddLeaveTime2(model);
 
-                _db.SaveChanges();
-
                 var entity = new LeaveRequest
                 {
                     EmployeesId = model.EmployeesId,
@@ -124,9 +122,12 @@ namespace WebApplication1.Controllers.Api
                     ApprovalEmployeeId = model.ApprovalEmployeeId,
                     LeaveMinutes = model.LeaveMinutes
                 };
-                _requestStatusService.NewRequestStatus(entity.Id);
-                _approvalService.NewApproval(entity.Id);
+
                 _leaveService.CreateLeaveRequest(entity);
+
+
+                _requestStatusService.NewRequestStatus(entity.Id);
+                _approvalService.NewApproval(entity.Id); 
 
                 return Ok(new { status = true });
 
