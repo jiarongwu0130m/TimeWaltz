@@ -2,123 +2,118 @@
     Layout = "_Layout";
     ViewData["Title"] = "假別瀏覽";
 }
-<style>
-    .thinkcss-right {
-        text-align: right;
-    }
-</style>
-<div id="app">
-    <div class="row" >
-        <div class="form-inline col-sm-6 col-md-8">
-            <div class="form-group col-sm-12">
-                <label>假別名稱查詢：</label>
-                <input name="QueryVacationType" v-model="search" type="text">
-                <button  class="btn btn-outline-dark" @@click="changeSwitch">查詢</button>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4 thinkcss-right">
-            <a asp-controller="BasicSetting" asp-action="VacationTypeCreate" class="btn btn-outline-success">新增</a>
 
-        </div>
-    </div>
-
-    <div class="card-body">
-        <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
-            <div class="row">
-                <div class="col-sm-12 col-md-6"></div>
-                <div class="col-sm-12 col-md-6"></div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <table id="example2"
-                           class="table table-bordered table-hover dataTable dtr-inline"
-                           aria-describedby="example2_info">
-                        <thead>
-                            <tr>
-                                <th class="sorting sorting_asc" tabindex="0" rowspan="1"
-                                    colspan="1">
-                                    假別名稱
-                                </th>
-
-                                <th class="sorting" rowspan="1" colspan="1">
-                                    可請性別
-                                </th>
-                                <th class="sorting" rowspan="1" colspan="1">
-                                    可請周期
-                                </th>
-                                <th class="sorting" rowspan="1" colspan="1">
-                                    天數
-                                </th>
-                                <th class="sorting" rowspan="1" colspan="1">
-                                    最小可請時數
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template v-if="isSwitch">
-                                <tr v-for="vacation in filterByVacationType()">
-                                    <td>
-                                        {{vacation.vacationType}}
-                                    </td>
-                                    <td>
-                                        {{vacation.gender}}
-                                    </td>
-                                    <td>
-                                        {{vacation.cycle}}
-                                    </td>
-                                    <td>
-                                        {{vacation.numberOfDays}}
-
-                                    </td>
-                                    <td>
-                                        {{vacation.minVacationHours}}
-
-                                    </td>
-                                    <td>
-                                        <a href="#" @@click="edit(vacation.id, $event)">編輯</a> |
-                                        @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
-                                        <a href="#" @@click="getOut(vacation.id, $event)">刪除</a>
-
-                                    </td>
-                                </tr>
-                            </template>                            
-                            <template v-else>
-                                <tr v-for="vacation in vacationList">
-                                    <td>
-                                        {{vacation.vacationType}}
-                                    </td>
-                                    <td>
-                                        {{vacation.gender}}
-                                    </td>
-                                    <td>
-                                        {{vacation.cycle}}
-                                    </td>
-                                    <td>
-                                        {{vacation.numberOfDays}}
-
-                                    </td>
-                                    <td>
-                                        {{vacation.minVacationHours}}
-
-                                    </td>
-                                    <td>
-                                        <a href="#" @@click="edit(vacation.id, $event)">編輯</a> |
-                                        @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
-                                        <a href="#" @@click="getOut(vacation.id, $event)">刪除</a>
-
-                                    </td>
-                                </tr>
-                            </template>
-                            
-                        </tbody>
-
-                    </table>
+<div id="app" class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>假別名稱查詢：</label>
+                                <input name="QueryVacationType" v-model="search" type="text">
+                                <button class="btn btn-outline-info" @@click="changeSwitch">查詢</button>
+                            </div>
+                        </div>
+                    </div>
+                </h3>
+                <div class="card-tools">
+                    <div class="input-group">
+                        <div class="input-group-append">
+                            <a asp-controller="BasicSetting" asp-action="VacationTypeCreate" class="btn btn-outline-success">新增</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
+            <div class="card-body  table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th class="sorting sorting_asc" tabindex="0" rowspan="1"
+                                colspan="1">
+                                假別名稱
+                            </th>
+
+                            <th class="sorting" rowspan="1" colspan="1">
+                                可請性別
+                            </th>
+                            <th class="sorting" rowspan="1" colspan="1">
+                                可請周期
+                            </th>
+                            <th class="sorting" rowspan="1" colspan="1">
+                                天數
+                            </th>
+                            <th class="sorting" rowspan="1" colspan="1">
+                                最小可請時數
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template v-if="isSwitch">
+                            <tr v-for="vacation in filterByVacationType()">
+                                <td class="text-center">
+                                    {{vacation.vacationType}}
+                                </td>
+                                <td class="text-center">
+                                    {{vacation.gender}}
+                                </td>
+                                <td class="text-center">
+                                    {{vacation.cycle}}
+                                </td>
+                                <td class="text-center">
+                                    {{vacation.numberOfDays}}
+
+                                </td>
+                                <td class="text-center">
+                                    {{vacation.minVacationHours}}
+
+                                </td>
+                                <td class="text-center">
+                                    <a href="#" @@click="edit(vacation.id, $event)">編輯</a> |
+                                    @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
+                                    <a href="#" @@click="getOut(vacation.id, $event)">刪除</a>
+
+                                </td>
+                            </tr>
+                        </template>
+                        <template v-else>
+                            <tr v-for="vacation in vacationList">
+                                <td class="text-center">
+                                    {{vacation.vacationType}}
+                                </td>
+                                <td class="text-center">
+                                    {{vacation.gender}}
+                                </td>
+                                <td class="text-center">
+                                    {{vacation.cycle}}
+                                </td>
+                                <td class="text-center">
+                                    {{vacation.numberOfDays}}
+
+                                </td>
+                                <td class="text-center">
+                                    {{vacation.minVacationHours}}
+
+                                </td>
+                                <td class="text-center">
+                                    <a href="#" @@click="edit(vacation.id, $event)">修改</a> |
+                                    @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
+                                    <a href="#" @@click="getOut(vacation.id, $event)">刪除</a>
+                                </td>
+                            </tr>
+                        </template>
+
+                    </tbody>
+
+                </table>
+
+            </div>
         </div>
     </div>
+
+    
 </div>
 @section Scripts {
 

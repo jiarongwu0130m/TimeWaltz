@@ -1,10 +1,9 @@
-﻿@model IEnumerable<WebApplication1.Models.BasicSettingViewModels.SpecialGradeViewModel>
-@{
+﻿@{
     Layout = "_Layout";
     ViewData["Title"] = "年資級距一覽";
 }
 
-<div class="row">   
+<div class="row" id="app">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -21,36 +20,57 @@
                     <thead>
                         <tr>
                             <th>
-                                    @Html.DisplayNameFor(model => model.ServiceLength)
+                                服務年資
                             </th>
                             <th>
-                                    @Html.DisplayNameFor(model => model.Days)
+                                特休天數
                             </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ServiceLength)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Days)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("詳細", "SpecialGradeEdit", new { id = item.Id }) |
-                                    @Html.ActionLink("刪除", "SpecialGradeDelete", new { id = item.Id })
-                                </td>
-                            </tr>
-                        }
+                        <tr v-for="item in specialGradeListData">
+                            <td>
+                                {{item.serviceLength}}
+                            </td>
+                            <td>
+                                {{item.days}}
+                            </td>
+                            <td>
+                                <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-primary">編輯</a>
+                                <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-secondary">刪除</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    
-    
-
 </div> 
+@section Scripts{
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    specialGradeListData: [],
+                    serviceLength: null,
+                    days: null,
+                    id: null,
+                }
+            },
+            methods: {
+                getListData() {
+                    let self = this;
+                    axios('/api/SpecialGradeApi/GetListData').then((response) => {
+                        console.log(response);
+                        self.specialGradeListData = response.data
+                    }).then((error) => console.log(error));
+                },
+            },
+            mounted() {
+                this.getListData();
+            },
+        }).mount('#app');
+    </script>
+
+}

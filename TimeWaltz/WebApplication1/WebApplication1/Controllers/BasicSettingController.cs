@@ -100,9 +100,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult SpecialGrade()
         {
-            var entities = _gradeTableService.GetGradeTableList();
-            var models = EntityHelper.ToViewModel(entities);
-            return View(models);
+            return View();
         }
 
         public IActionResult SpecialGradeDelete(int id)
