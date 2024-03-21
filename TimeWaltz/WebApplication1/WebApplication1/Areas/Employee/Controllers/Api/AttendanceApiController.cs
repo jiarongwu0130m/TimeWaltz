@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Enums;
@@ -43,44 +44,25 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
 
             var result = shifts.AsParallel().Select(x =>
             {
-                var title = "";
-                var start = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay;
-                var end = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay;
-                if (clocks.TryGetValue(x.ShiftsDate.Date, out var work))
+                var scheduleStart = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay;
+                var scheduleEnd = x.ShiftsDate.Date + x.ShiftSchedule.EndTime.TimeOfDay;
+                if (!clocks.TryGetValue(x.ShiftsDate.Date, out var work)) return new
                 {
-                    if (work.On == null || work.Off == null)
-                    {
-                        title = "打卡異常(尚未打卡)";
-                    }
-                    else
-                    {
-                        if ((work.Off.Date - work.On.Date).TotalHours < 8)
-                        {
-                            title = "打卡異常(不滿8小時)";
-                            start = work.On.Date;
-                            end = work.Off.Date;
-                        }
-                        else
-                        {
-                            title = "正常上班";
-                            start = work.On.Date;
-                            end = work.Off.Date;
-                        }
-                    }
-                }
-                else
-                {
-                    title = "打卡異常(尚未打卡)";
-                }
-
+                    start = scheduleStart.ToString("u").Replace(" ", "T"),
+                    end = scheduleEnd.ToString("u").Replace(" ", "T"),
+                    title = "打卡異常(尚未打卡)"
+                };
+                var result = CalculateWorkStatus(scheduleStart, scheduleEnd, work.On?.Date, work.Off?.Date, flex.MoveUp.GetValueOrDefault(), flex.FlexibleTime);
                 return new
                 {
-                    start = start,
-                    end = end,
-                    title = title
+                    start = work.On == null ? "" : work.On.Date.ToString("u").Replace(" ", "T"),
+                end = work.Off == null ? "" : work.Off.Date.ToString("u").Replace(" ", "T"),
+                    title = result
                 };
-            });
 
+
+            });
+            //todo 計算請假時段 移除打卡紀錄
             return result.OrderBy(x=>x.start);
 
         }
@@ -91,6 +73,27 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             var shifts = _db.Shifts.AsNoTracking().Include(x => x.ShiftSchedule)
                 .Where(x => x.EmployeesId == userId && x.ShiftsDate.Date <= DateTime.Now.Date).ToList();
             return shifts;
+        }
+        [NonAction]
+        private static string CalculateWorkStatus(DateTime scheduleStart, DateTime scheduleEnd, DateTime? workOn, DateTime? workOff, bool canEarly, int mins)
+        {
+            // 檢查是否有打卡記錄
+            if (!workOn.HasValue || !workOff.HasValue) return "無完整打卡紀錄";
+
+            // 計算彈性上班的可能的最早和最晚打卡時間
+            var earliestStart = canEarly ? scheduleStart.AddMinutes(-mins) : scheduleStart;
+            var latestStart = scheduleStart.AddMinutes(mins);
+            var earliestEnd = scheduleEnd.AddMinutes(-mins);
+            var latestEnd = scheduleEnd.AddMinutes(mins);
+
+            // 檢查上班打卡是否遲到
+            if (workOn > latestStart) return "遲到";
+
+            // 檢查下班打卡是否早退
+            if (workOff < earliestEnd) return "早退";
+
+            // 檢查工作時長是否足夠
+            return (workOff.Value - workOn.Value).TotalHours < 9 ? "時數不夠" : "正常";
         }
     }
 }
