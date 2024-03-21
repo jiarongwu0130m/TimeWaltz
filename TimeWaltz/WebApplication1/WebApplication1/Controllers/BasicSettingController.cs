@@ -178,7 +178,7 @@ namespace WebApplication1.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePublicHoliday(PublicHolidayCreateViewModel model)
+        public IActionResult PublicHolidayCreate(PublicHolidayCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {

@@ -71,13 +71,11 @@ namespace WebApplication1.Services
         /// 取得請假歷史紀錄清單資料
         /// </summary>
         /// <returns></returns>
-        public List<LeaveDto> GetLeaveListData()
+        public List<LeaveDto> GetLeaveListData(int empId)
         {
-            var approval = _timeWaltzContext.Approvals
-                .Where(x=>x.TableType == (int)TableTypeEnum.請假單)
-                .Join(_timeWaltzContext.LeaveRequests, x=>x.TableId, y=>y.Id, (x, y)=> new {x, y}).ToList();
 
             return _timeWaltzContext.LeaveRequests
+                .Where(x=>x.EmployeesId == empId)
                 .Join(_timeWaltzContext.Approvals, x => x.Id, y => y.TableId, (x, y) => new { x, y })
                 .Where(xy => xy.y.TableType == (int)TableTypeEnum.請假單)
                 .Select(xy => new LeaveDto
@@ -99,7 +97,7 @@ namespace WebApplication1.Services
         /// <returns></returns>
         public int GetApprovalEmp(int empId)
         {
-            return _timeWaltzContext.Employees.Include(x=>_timeWaltzContext.Departments).FirstOrDefault(x=>x.Id == empId).Department.EmployeeId;
+            return _timeWaltzContext.Employees.Include(x=>x.Department).FirstOrDefault(x=>x.Id == empId).Department.EmployeeId;
         }
         /// <summary>
         /// 取得請假詳細資料

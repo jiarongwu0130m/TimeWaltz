@@ -141,7 +141,8 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var models = _leaveService.GetLeaveListData();
+                var empId = User.GetId();
+                var models = _leaveService.GetLeaveListData(empId);
                 return Ok(models);
             }
             catch (Exception ex)

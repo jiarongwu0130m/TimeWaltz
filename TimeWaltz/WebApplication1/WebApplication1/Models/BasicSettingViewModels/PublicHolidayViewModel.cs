@@ -10,6 +10,11 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public DateTime Date { get; set; }
 
     }
+    public class PublicHolidayDto
+    {
+        public string HolidayName { get; set; }
+        public DateTime Date { get; set; }
+    }
     public class PublicHolidayViewModel
     {
         public int Id { get; set; }
