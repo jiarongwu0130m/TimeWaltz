@@ -1,29 +1,25 @@
-﻿@model WebApplication1.Models.BasicSettingViewModels.PublicHolidayEditViewModel
-
-@{
+﻿@{
     ViewData["Title"] = "編輯國定假日";
 }
 
-<form asp-action="PublicHolidayEdit" asp-asp-controller="BasicSetting" method="post">
+<form asp-action="PublicHolidayEdit" asp-asp-controller="BasicSetting" method="post" id="app">
     <section class="content">
         <div class="card-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="HolidayName" class="control-label"></label>
-                <input asp-for="HolidayName" class="form-control " />
-                <span asp-validation-for="HolidayName" class="text-danger"></span>
+                <label name="HolidayName" class="control-label"></label>
+                <input name="HolidayName" class="form-control" v-model="holidayName" />
+                <span class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input name="Date" id="dateInput" class="form-control" value="@Model.Date.ToString("yyyy/MM/dd")"/>
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <label name="Date" class="control-label"></label>
+                <input name="Date" id="dateInput" class="form-control" value=""/>
+                <span class="text-danger"></span>
             </div>
-
-
             <div class="card-footer">
                 <div class="row float-right">
                     <div class="col ">
-                        <input type="submit" value="送出" class="btn btn-primary" />
+                        <input type="button" @@click="send" value="送出" class="btn btn-primary" />
                         <a asp-controller="BasicSetting" asp-action="PublicHoliday" class="btn btn-outline-success">返回</a>
                     </div>
                 </div>
@@ -36,15 +32,96 @@
 
 
     <script>
-
-        $(function () {
-            $('#dateInput').daterangepicker({
-                singleDatePicker: true,
-                locale: {
-                    format: 'YYYY/MM/DD'
+        Vue.createApp({
+            data() {
+                return {
+                    id: null,
+                    date: null,
+                    holidayName: '',
                 }
-            });
-        });
+            },
+            methods: {
+                getEditData(){
+                    let self = this;
+                    console.log(self.id);
+                    axios.get(`/api/PublicHolidayApi/GetEditData/${self.id}`).then((response) => {
+                        console.log(response)
+                        self.holidayName = response.data.holidayName;
+                        self.date = response.data.date;
+                        self.id = response.data.id;
+                    }).then((error) => console.log(error));
+                },
+                send(){
+                    let self = this;
+                    axios.post(`/api/PublicHolidayApi/Edit`, {
+                        id : self.id,
+                        holidayName: self.holidayName,
+                        date: self.date,
+                    })
+                        .then((response) => {
+                            if (response.status) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "修改成功!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                }).then((result) => {
+                                    if (result.value) {
+                                        location.href = "/basicsetting/publicholiday";
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "修改失敗!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                });
+                            }
+                        })
+                        .then((error) => console.log(error));
+                },
+                getDateRangePicker() {
+                    let self = this;
+                    $('#dateInput').daterangepicker({
+                        singleDatePicker: true,
+                        locale: {
+                            format: 'YYYY/MM/DD'
+                        }
+                    }, function (start, _, _) {
+                        self.date = start
+                    });
+                },
+                checkId() {
+                    let self = this;
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        self.id = lastNumber;
+                    } else {
+                        location.href = "/BasicSetting/publicholiday";
+                    }
+
+                },
+            },
+            mounted() {
+                this.checkId();
+                this.getEditData();
+                this.getDateRangePicker();
+            },
+        }).mount('#app');
     </script>
 
 

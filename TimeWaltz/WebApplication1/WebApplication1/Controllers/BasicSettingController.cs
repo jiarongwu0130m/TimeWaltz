@@ -211,29 +211,9 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult PublicHolidayEdit(int Id)
         {
-            var entity = _publicHolidayService.GetPublicHolidayOrNull(Id);
-            var model = EntityHelper.ToEditViewModel(entity);
-            return View(model);
+            return View();
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult PublicHolidayEdit(PublicHolidayEditViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            _publicHolidayService.EditPublicHoliday(model);
-            return RedirectToAction("PublicHoliday");
-        }
-
-        public IActionResult PublicHolidayDelete(int id)
-        {
-            //TODO: 驗證是否為登入者有權限的資料
-            var entity = _publicHolidayService.GetPublicHolidayOrNull(id);
-            _publicHolidayService.DeleteVacationType(entity);
-            return RedirectToAction("PublicHoliday");
-        }
+       
         [HttpGet]
         public IActionResult ShiftScheduleCreate()
         {

@@ -1,20 +1,18 @@
-﻿@model IEnumerable<WebApplication1.Models.BasicSettingViewModels.PublicHolidayViewModel>
-
-@{
+﻿@{
     Layout = "_Layout";
     ViewData["Title"] = "國定假日一覽";
 }
-<div class="row">
+<div class="row" id="app">
 
     <div class="form-inline mb-3">
         <div class="form-group">
             <label>國定假日名稱查詢：</label>
             <form asp-action="PublicHoliday" asp-controller="BasicSetting" method="post">
                 <div class="input-group col">
-                    <div class="input-group-prepend">                        
+                    <div class="input-group-prepend">
                     </div>
                     <input name="QueryHolidayName" type="text">
-                    <button type="submit" class="btn btn-outline-dark">查詢</button>
+                    <button type="button" class="btn btn-outline-dark">查詢</button>
                 </div>
             </form>
         </div>
@@ -29,32 +27,135 @@
         <thead>
             <tr>
                 <th>
-                        @Html.DisplayNameFor(model => model.HolidayName)
+                    假別名稱
                 </th>
                 <th>
-                        @Html.DisplayNameFor(model => model.Date)
+                    日期
                 </th>
                 <th></th>
             </tr>
         </thead>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HolidayName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.ActionLink("詳細", "PublicHolidayEdit", new { id = item.Id }) |
-                        @Html.ActionLink("刪除", "PublicHolidayDelete", new { id = item.Id })
-                    </td>
-                </tr>
-            }
+            <tr v-for="item in publicHolidayListData">
+                <td>
+                    {{item.holidayName}}
+                </td>
+                <td>
+                    {{item.date}}
+                </td>
+                <td>
+                    <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-primary">編輯</a>
+                    <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-secondary">刪除</a>
+                </td>
+            </tr>
         </tbody>
     </table>
 
 </div>
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    publicHolidayListData: [],
+                    id: null,
+                    date: null,
+                    holidayName: '',
+                }
+            },
+            methods: {
+                checkIsDelete(id, e) {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger"
+                        },
+                        buttonsStyling: false
+                    });
+                    swalWithBootstrapButtons.fire({
+                        title: "確定刪除?",
+                        text: "此刪除可能無法回復",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "是",
+                        cancelButtonText: "否",
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.getOut(id, e);
+                            swalWithBootstrapButtons.fire({
+                                title: "成功刪除!",
+                                icon: "success"
+                            });
+                            this.getListData();
+                        } else if (
+                            /* Read more about handling dismissals below */
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire({
+                                title: "取消",
+                                icon: "error"
+                            });
+                        }
+                    });
+                },
+                getOut(id, event) {
+                    let self = this
+                    event.preventDefault();
+
+                    axios.post(`/api/publicholidayapi/Delete/${id}`).then((response) => {
+                        if (response.status) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "刪除成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    this.getListData();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "刪除失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
+                        }
+                    })
+                },
+                edit(id, event){
+                    event.preventDefault();
+                    location.href = `/basicsetting/publicholidayedit/${id}`
+                },
+                getListData() {
+                    let self = this;
+                    axios('/api/publicholidayapi/GetListData').then((response) => {
+                        console.log(response);
+                        self.publicHolidayListData = response.data;
+                    }).then((response) => console.log(response)).then((error) => console.log(error))
+                },
+                send(id, event) {
+                    let self = this;
+                    event.preventDefault();
+                    location.href = `/BasicSetting/PublicHolidayEdit/${id}`
+                },
+            },
+            mounted() {
+                this.getListData();
+            },
+        }).mount('#app');
+    </script>
+}

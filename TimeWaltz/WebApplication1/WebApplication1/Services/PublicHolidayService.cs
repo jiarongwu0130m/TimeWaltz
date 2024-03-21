@@ -37,7 +37,7 @@ namespace WebApplication1.Services
             return _timeWaltzContext.PublicHolidays.FirstOrDefault(p => p.Id == id);
         }
 
-        public int EditPublicHoliday(PublicHolidayEditViewModel model)
+        public int EditPublicHoliday(PublicHolidayEditDto model)
         {
             var entity = _timeWaltzContext.PublicHolidays.FirstOrDefault(p=>p.Id == model.Id);
 
