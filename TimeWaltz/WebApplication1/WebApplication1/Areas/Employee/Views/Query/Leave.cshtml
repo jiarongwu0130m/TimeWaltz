@@ -1,40 +1,31 @@
-﻿<div class="card-body" id="app">
-    <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
-        <div class="row">
-            <div class="col-sm-12 col-md-6"></div>
-            <div class="col-sm-12 col-md-6"></div>
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "請假申請查詢";
+}
+
+<div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>請假申請查詢</span>
+            </h3>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <table id="example2"
-                       class="table table-bordered table-hover dataTable dtr-inline"
-                       aria-describedby="example2_info">
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table class="table">
                     <thead>
                         <tr>
-                            <th class="sorting sorting_asc" tabindex="0" rowspan="1"
-                                colspan="1">
-                                請假日期
-                            </th>
-                            <th class=" sorting" tabindex="0" rowspan="1" colspan="1">
-                                開始時間
-                            </th>
-                            <th class="sorting" tabindex="0" rowspan="1" colspan="1">
-                                結束時間
-                            </th>
-                            <th class="sorting" tabindex="0" rowspan="1" colspan="1">
-                                假別
-                            </th>
-                            <th class="sorting" tabindex="0" rowspan="1" colspan="1">
-                                狀態
-                            </th>
-                            <th class="sorting" tabindex="0" rowspan="1" colspan="1">
-                                詳細
-                            </th>
+                            <th scope="col">項次</th>
+                            <th scope="col">請假日期</th>
+                            <th scope="col">假別</th>
+                            <th scope="col">狀態</th>
+                            <th scope="col">詳細</th>
                         </tr>
                     </thead>
                     <tbody>
-
                         <tr v-for="item in leaveRequestListData">
+                            <td>{{item.value}}</td>
                             <td class="dtr-control">{{item.date}}</td>
                             <td>{{item.startTime}}</td>
                             <td>{{item.endTime}}</td>
@@ -44,12 +35,11 @@
                                 <a href="#" @@click="edit(item.id, $event)">詳細</a>
                             </td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>
-        </div>
 
+        </div>
     </div>
 </div>
 

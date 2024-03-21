@@ -5,127 +5,147 @@
 
 <div class="secion mt-2">
     <div class="card">
-        <form method="post">
+        <form method="post" id="app">
             <div class="card-header">
+
                 <h3 class="card-title d-flex justify-content-between">
                     <span>請假申請</span>
                 </h3>
+
             </div>
-            <div class="row form-group basic">
-                <label class="col-form-label">申請人</label>
-                <input type="text" class="form-control"  :value="name" disabled>
-
-                <i class="clear-input">
-                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                </i>
-            </div>
-            <div class="row form-group basic">
-                <label class="col-form-label">請假期間</label>
-                <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="">
-                <i class="clear-input">
-                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                </i>
-            </div>
-            <div class="row form-group basic">
-                <label class="col-form-label">假別選擇</label>
-                <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="">
-                <i class="clear-input">
-                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                </i>
-            </div>
-
-
-            <div class="form-group">
-                <label for="">假別選擇</label>
-                <select class="form-control select2 select2-hidden-accessible"
-                        style="width: 100%;" data-select2-id="1" tabindex="-1"
-                        aria-hidden="true" :class="validation.vacationDetailsId" v-model="vacationDetailsId">
-                    <option value="">---請選擇---</option>
-                    <option v-for="item in vacationDropDownList" :value="item.value">{{item.text}}</option>
-                </select>
-                <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
-                      dir="ltr" style="width: 100%;">
-                    <span class="selection"></span>
-                </span>
-                <span class="text-danger" v-if="!validation.vacationDetailsId">假別選擇不得為空!</span>
-            </div>
-
-
-        </form>
-    </div>
-</div>
-
-
-<form id="app">
-    <div class="row">
-        <div class="col-md-4">
             <div class="card-body">
-                <div class="form-group">
-                    <label for="">申請人</label>
+
+                <div class="row form-group basic">
+                    <label class="col-form-label">申請人</label>
                     <input type="text" class="form-control" :value="name" disabled>
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
-                <div class="form-group">
-                    <label for="">請假期間</label>
+
+                <div class="row form-group basic">
+                    <label class="col-form-label">請假期間</label>
                     <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="">
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
-                <div class="form-group">
-                    <label for="">假別選擇</label>
-                    <select class="form-control select2 select2-hidden-accessible"
-                            style="width: 100%;" data-select2-id="1" tabindex="-1"
-                            aria-hidden="true" :class="validation.vacationDetailsId" v-model="vacationDetailsId">
-                        <option value="">---請選擇---</option>
-                        <option v-for="item in vacationDropDownList" :value="item.value">{{item.text}}</option>
-                    </select>
-                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
-                          dir="ltr" style="width: 100%;">
-                        <span class="selection"></span>
-                    </span>
-                    <span class="text-danger" v-if="!validation.vacationDetailsId">假別選擇不得為空!</span>
+
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label">假別選擇</label>
+                        <select class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;" data-select2-id="1" tabindex="-1"
+                                aria-hidden="true" :class="validation.vacationDetailsId" v-model="vacationDetailsId">
+                            <option value="">---請選擇---</option>
+                            <option v-for="item in vacationDropDownList" :value="item.value">{{item.text}}</option>
+                        </select>
+                        <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                              dir="ltr" style="width: 100%;">
+                            <span class="selection"></span>
+                        </span>
+                        <span class="text-danger" v-if="!validation.vacationDetailsId">假別選擇不得為空!</span>
+
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="">代理人選擇</label>
-                    <select class="form-control select2 select2-hidden-accessible"
-                            style="width: 100%;" data-select2-id="1" tabindex="-1"
-                            aria-hidden="true" :class="validation.agentEmployeeId" v-model="agentEmployeeId">
-                        <option value="">---請選擇---</option>
-                        <option v-for="item in agentDropDownList" :value="item.value">{{item.text}}</option>
-                    </select>
-                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
-                          dir="ltr" style="width: 100%;">
-                        <span class="selection"></span>
-                    </span>
-                    <span class="text-danger" v-if="!validation.agentEmployeeId">代理人選擇不得為空!</span>
+
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label">代理人選擇</label>
+                        <select class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;" data-select2-id="1" tabindex="-1"
+                                aria-hidden="true" :class="validation.agentEmployeeId" v-model="agentEmployeeId">
+                            <option value="">---請選擇---</option>
+                            <option v-for="item in agentDropDownList" :value="item.value">{{item.text}}</option>
+                        </select>
+                        <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                              dir="ltr" style="width: 100%;">
+                            <span class="selection"></span>
+                        </span>
+                        <span class="text-danger" v-if="!validation.agentEmployeeId">代理人選擇不得為空!</span>
+
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="">附加檔案上傳：</label><br />
+
+                <div class="row form-group basic">
+                    <label class="col-form-label">附加檔案上傳</label>
                     <input type="file" id="exampleInputFile" @@change="change">
                     <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
                           dir="ltr" style="width: 100%;">
                         <span class="selection"></span>
                     </span>
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
-            </div>
-        </div>
 
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-body">
-                <div class="form-group">
-                    <label>原因：</label>
+                <div class="row form-group basic">
+                    <label class="col-form-label">原因</label>
                     <textarea class="form-control" rows="3"
                               control-id="ControlID-13" :class="validation.reason" v-model="reason"></textarea>
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                     <span class="text-danger" v-if="!validation.reason">請假原因不得為空!</span>
+                </div>
+
+            </div>
+            <div class="card-footer">
+
+                <div class="row justify-content-around">
+                    <button type="button" class="btn btn-facebook" @@click="validateAndSubmit">
+                        <ion-icon name="notifications-outline" role="img" class="md hydrated" aria-label="logo facebook"></ion-icon>
+                        送出
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade dialogbox" id="DialogIconedSuccess" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-icon text-success">
+                    <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="checkmark circle"></ion-icon>
+                </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">送出成功</h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-inline">
+                        <a href="#" class="btn" data-dismiss="modal" id="successBack">返回</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="form-group">
-                <input type="button" value="傳送" @@click="validateAndSubmit" />
+    </div>
+
+    <div class="modal fade dialogbox" id="DialogIconedDanger" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-icon text-danger">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">送出失敗</h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-inline">
+                        <a href="#" class="btn" data-dismiss="modal" id="dangerBack">返回</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</form>
+
+</div>
+
 @section Scripts {
 
     <script>
@@ -192,11 +212,16 @@
                     }).then(res => res.json()).then(result => {
                         console.log(result);
                         if (result.status == true) {
-                            alert("申請成功送出!")
-                            location.href = '/employee/query/Leave'
+                            $('#DialogIconedSuccess').modal('show');
+                            $('#successBack').click(function () {
+                                $('#DialogIconedSuccess').modal('hide');
+                                window.location.href = "/employee/query/Leave";
+                            });
                         } else {
-                            alert("申請失敗!")
-                            location.href = '/employee/event/LeaveCreate'
+                            $('#DialogIconedDanger').modal('show');
+                            $('#dangerBack').click(function () {
+                                $('#DialogIconedDanger').modal('hide');
+                            });
                         }
                     })
                 },
