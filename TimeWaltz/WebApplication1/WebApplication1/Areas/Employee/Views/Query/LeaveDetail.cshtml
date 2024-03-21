@@ -94,7 +94,7 @@
             methods: {
                 getLeaveData() {
                     let self = this;
-                    fetch(`/api/LeaveApi/Edit/${self.id}`).then(res => res.json()).then(result => {
+                    fetch(`/mobile/LeaveApi/Edit/${self.id}`).then(res => res.json()).then(result => {
                         console.log(result);
                         self.agentEmployeeName = result.agentEmployeeName
                         self.approvalEmpName = result.approvalEmpName
@@ -115,7 +115,7 @@
                         var lastNumber = parseInt(match[1]);
                         this.id = lastNumber;
                     } else {
-                        location.href = "/PersonalRecord/Leave";
+                        location.href = "/employee/query/Leave";
                     }
 
                 },

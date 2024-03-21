@@ -249,7 +249,7 @@
                 },
                 getDropDownList() {
                     let self = this;
-                    fetch("/api/LeaveApi/GetDropDownList").then(res => res.json()).then(result => {
+                    fetch("/mobile/LeaveApi/GetDropDownList").then(res => res.json()).then(result => {
                         console.log(result);
                         //一個物件裡面有兩個陣列
                         self.agentDropDownList = result.agentDropDownList
@@ -258,7 +258,7 @@
                 },
                 getNameAndId() {
                     let self = this;
-                    fetch("/api/LeaveApi/GetEmployeeName").then(res => res.json()).then(result => {
+                    fetch("/mobile/LeaveApi/GetEmployeeName").then(res => res.json()).then(result => {
                         console.log(result);
                         self.name = result.employeeName;
                         self.employeesId = result.employeeId;
