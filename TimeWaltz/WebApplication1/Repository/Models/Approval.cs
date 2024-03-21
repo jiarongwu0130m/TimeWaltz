@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Repository.Enum;
 
 namespace Repository.Models;
 
@@ -20,7 +21,7 @@ public partial class Approval
     [Column("TableID")]
     public int TableId { get; set; }
 
-    public bool? Status { get; set; }
+    public RequestStatusEnum? Status { get; set; }
 
     [StringLength(50)]
     public string Remark { get; set; }

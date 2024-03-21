@@ -20,7 +20,7 @@ namespace WebApplication1.Services
         public List<Employee> GetAgentDropDownData(int userId)
         {
             var employee = _timeWaltzContext.Employees.ToList();
-            var agentEmployee = _timeWaltzContext.Employees.Include(x=>x.AgentEmployees).FirstOrDefault(x => x.Id == userId).AgentEmployees;
+            var agentEmployee = _timeWaltzContext.Employees.Include(x => x.AgentEmployees).FirstOrDefault(x => x.Id == userId).AgentEmployees;
             return agentEmployee.ToList();
         }
 
@@ -50,7 +50,7 @@ namespace WebApplication1.Services
         public string GetRelativeFileRoute(IFormFile file)
         {
             var relativePath = "";
-            if (file!= null)
+            if (file != null)
             {
                 var dir = $"{_env.WebRootPath}";
                 relativePath = $"/pic/{Guid.NewGuid()}_{file.FileName}";
@@ -61,7 +61,7 @@ namespace WebApplication1.Services
                     file.CopyTo(fs);
                 }
 
-                
+
                 return relativePath;
             }
             return "";
@@ -74,21 +74,29 @@ namespace WebApplication1.Services
         public List<LeaveDto> GetLeaveListData(int empId)
         {
 
-            return _timeWaltzContext.LeaveRequests
-                .Where(x=>x.EmployeesId == empId)
-                .Join(_timeWaltzContext.Approvals, x => x.Id, y => y.TableId, (x, y) => new { x, y })
-                .Where(xy => xy.y.TableType == (int)TableTypeEnum.請假單)
-                .Select(xy => new LeaveDto
-            {
-                Id = xy.x.Id,
-                EmployeesId = xy.x.EmployeesId,
-                VacationType = xy.x.VacationDetails.VacationType,
-                AgentEmployeeName = xy.x.AgentEmployee.Name,
-                ApprovalEmpName = xy.x.AgentEmployee.Name,
-                StartTime = xy.x.StartTime.ToString("yyyy-MM-dd HH:mm"),
-                EndTime = xy.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
-                ApprovalStatus = xy.y.Status.ToString(),
-            }).ToList();
+            var leaveAndApproval = _timeWaltzContext.LeaveRequests
+                .Where(x => x.EmployeesId == empId)
+                .Join(_timeWaltzContext.Approvals.Where(y => y.TableType == (int)TableTypeEnum.請假單), x => x.Id, y => y.TableId, (x, y) => new { x, y });
+            return new List<LeaveDto>();
+            //foreach (var xy in leaveAndApproval)
+            //{
+            //    if (xy != null)
+            //    {
+            //        if (xy.y.Status == )
+            //    }
+            //}
+
+            //    Select(xy => new LeaveDto
+            //{
+            //    Id = xy.x.Id,
+            //    EmployeesId = xy.x.EmployeesId,
+            //    VacationType = xy.x.VacationDetails.VacationType,
+            //    AgentEmployeeName = xy.x.AgentEmployee.Name,
+            //    ApprovalEmpName = xy.x.AgentEmployee.Name,
+            //    StartTime = xy.x.StartTime.ToString("yyyy-MM-dd HH:mm"),
+            //    EndTime = xy.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
+            //    ApprovalStatus = xy.y.Status.ToString(),
+            //}).ToList();
         }
         /// <summary>
         /// 取得簽核人資料
@@ -97,7 +105,7 @@ namespace WebApplication1.Services
         /// <returns></returns>
         public int GetApprovalEmp(int empId)
         {
-            return _timeWaltzContext.Employees.Include(x=>x.Department).FirstOrDefault(x=>x.Id == empId).Department.EmployeeId;
+            return _timeWaltzContext.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == empId).Department.EmployeeId;
         }
         /// <summary>
         /// 取得請假詳細資料
@@ -107,11 +115,11 @@ namespace WebApplication1.Services
         /// <exception cref="NotImplementedException"></exception>
         public LeaveEditDto? GetEditDataOrNull(int Id)
         {
-            var leaveRequest = _timeWaltzContext.LeaveRequests.FirstOrDefault(x=>x.Id == Id);
+            var leaveRequest = _timeWaltzContext.LeaveRequests.FirstOrDefault(x => x.Id == Id);
             if (leaveRequest == null) throw new NullReferenceException("Not find this user");
 
 
-            var approval = _timeWaltzContext.Approvals.Where(x=>(int)x.TableType == 1).FirstOrDefault(x =>x.TableId == Id);
+            var approval = _timeWaltzContext.Approvals.Where(x => (int)x.TableType == 1).FirstOrDefault(x => x.TableId == Id);
             if (approval == null) throw new NullReferenceException("Not find this user");
 
             var requestStatus = _timeWaltzContext.RequestStatuses.Where(x => (int)x.TableType == 1).FirstOrDefault(x => x.TableId == Id);
@@ -127,7 +135,7 @@ namespace WebApplication1.Services
                 ApprovalEmpName = leaveRequest.ApprovalEmployee.Name,
                 VacationType = leaveRequest.VacationDetails.VacationType,
                 ApprovalRemark = approval.Remark,
-                ApprovalStatus = requestStatus.Status.ToString(),                
+                ApprovalStatus = requestStatus.Status.ToString(),
             };
         }
 
@@ -171,13 +179,13 @@ namespace WebApplication1.Services
             if (emp == null) throw new Exception("Not find this employee");
 
 
-            var workDays = emp.Shifts.Where(x => x.ShiftsDate.Date >= model.StartTime.Date && x.ShiftsDate.Date <= model.EndTime.Date).Select(x=> new WorkDays
+            var workDays = emp.Shifts.Where(x => x.ShiftsDate.Date >= model.StartTime.Date && x.ShiftsDate.Date <= model.EndTime.Date).Select(x => new WorkDays
             {
                 Start = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay,
-                End = x.ShiftsDate.Date+ x.ShiftSchedule.EndTime.TimeOfDay,
+                End = x.ShiftsDate.Date + x.ShiftSchedule.EndTime.TimeOfDay,
             });
 
-            var totalTimeSpan = 計算總共請假時間(model.StartTime,model.EndTime,workDays);
+            var totalTimeSpan = 計算總共請假時間(model.StartTime, model.EndTime, workDays);
 
             return (int)totalTimeSpan.TotalMinutes;
 
@@ -192,13 +200,13 @@ namespace WebApplication1.Services
                 var workDay = workDays.FirstOrDefault(x => x.Start.Date == currentDay.Date);
                 if (workDay != null)
                 {
-                    var currentLeaveStart = startTime > workDay.Start? startTime:workDay.Start;
+                    var currentLeaveStart = startTime > workDay.Start ? startTime : workDay.Start;
                     var currentLeaveEnd = endTime < workDay.End ? endTime : workDay.End;
 
                     //break time
                     var breakTimeStart = workDay.Start.Date + TimeSpan.FromHours(12);
                     var breakTimeEnd = workDay.Start.Date + TimeSpan.FromHours(13);
-                    if(currentLeaveStart < breakTimeEnd && currentLeaveEnd > breakTimeStart)
+                    if (currentLeaveStart < breakTimeEnd && currentLeaveEnd > breakTimeStart)
                     {
                         if (currentLeaveStart < breakTimeStart) currentLeaveStart = breakTimeEnd;
                         if (currentLeaveEnd > breakTimeEnd) currentLeaveEnd = currentLeaveEnd > breakTimeStart ? currentLeaveEnd - TimeSpan.FromHours(1) : currentLeaveEnd;
@@ -214,6 +222,6 @@ namespace WebApplication1.Services
 
 
     }
- 
+
 }
 

@@ -125,7 +125,7 @@ namespace WebApplication1.Controllers.Api
                     LeaveMinutes = model.LeaveMinutes
                 };
                 _requestStatusService.NewRequestStatus(entity.Id);
-                _approvalService.NewApproval(entity.Id);
+                _approvalService.NewApproval(entity.Id);                
                 _leaveService.CreateLeaveRequest(entity);
 
                 return Ok(new { status = true });
