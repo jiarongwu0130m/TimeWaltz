@@ -3,45 +3,165 @@
     ViewBag.Title = "班別設定";
 }
 
-<div class="row">
-    <div class="col-8">
-
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>班別名稱</th>
-                    <th scope="col">上班時間</th>
-                    <th scope="col">下班時間</th>
-                    <th scope="col">補卡上限(次)</th>
-                    <th>詳細</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ShiftName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartTime.TimeOfDay)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EndTime.TimeOfDay)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MaxAdditionalClockIn)
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-primary" href="/basicsetting/ShiftScheduleEdit/@item.Id">編輯</a>
-                            <a class="btn btn-outline-secondary" href="/basicsetting/ShiftScheduleDelete/@item.Id">刪除</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div id="app" class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <div class="row">
+                        <div class="col-auto ml-auto">
+                            <button href="/BasicSetting/ShiftScheduleCreate" class="btn btn-outline-success pull-right">新增</button>
+                        </div>
+                    </div>
+                </h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap text-center">
+                    <thead>
+                        <tr>
+                            <th>班別名稱</th>
+                            <th scope="col">上班時間</th>
+                            <th scope="col">下班時間</th>
+                            <th scope="col">補卡上限(次)</th>
+                            <th>詳細</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center" v-for="item in allShiftSchedule">
+                            <td>{{item.shiftName}}</td>
+                            <td>{{formatToTime(item.startTime)}}</td>
+                            <td>{{formatToTime(item.endTime)}}</td>
+                            <td>{{item.maxAdditionalClockIn}}</td>
+                            <td>
+                                <button @@click="toEdit(item.id,$event)" class="btn btn-outline-primary">編輯</button>
+                                <button @@click="toDelete(item.id,$event)" class="btn btn-outline-secondary">刪除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    allShiftSchedule: [],
+                    shiftName: '',
+                    startTime: '',
+                    endTime: '',
+                    maxAdditionalClockIn: ''
+                }
+            },
+            computed: {
+                title() {
+                    return key => {
+                        const localizationData = {
+                            'shiftName': '班別名稱',
+                            'startTime': '上班時間',
+                            'endTime': '下班時間',
+                            'maxAdditionalClockIn': '補卡上限(次)',
+                            'details': '詳細',
+                        };
+                        return localizationData[key] || key;
+                    };
+                }
+            },
+            methods: {
+                getShiftSchedule() {
+                    axios("/api/ShiftScheduleApi/getShiftSchedule").then(response => {
+                        console.log(response.data);
+                        this.allShiftSchedule = response.data;
+                    })
+                },
+                formatToTime(dateTimeString) {
+                    const options = { hour: 'numeric', minute: '2-digit' };
+                    const date = new Date(dateTimeString);
+                    return date.toLocaleTimeString('zh-TW', options);
+                },
+                toEdit(id, event) {
+                    event.preventDefault();
+                    location.href = `/basicsetting/ShiftScheduleEdit/${id}`;
+                },
+                toDelete(id, event) {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger"
+                        },
+                        buttonsStyling: false
+                    });
+                    swalWithBootstrapButtons.fire({
+                        title: "確定刪除?",
+                        text: "此刪除可能無法回復",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "是",
+                        cancelButtonText: "否",
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.getOut(id, e);
+                            swalWithBootstrapButtons.fire({
+                                title: "成功刪除!",
+                                icon: "success"
+                            });
+                            this.getShiftSchedule();
+                        } else if (
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire({
+                                title: "取消",
+                                icon: "error"
+                            });
+                        }
+                    });
+                },
+                // todo: 未完成
+                getOut(id, event) {
+                    let self = this
+                    event.preventDefault();
+
+                    axios.post(`/api/publicholidayapi/Delete/${id}`).then((response) => {
+                        if (response.status) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "刪除成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    this.getListData();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "刪除失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
+                        }
+                    })
+                },
+            },
+            mounted() {
+                this.getShiftSchedule();
+            }
+        }).mount('#app');
+    </script>
+}
 

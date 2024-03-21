@@ -4,38 +4,45 @@
     ViewData["Title"] = "編輯班別設定";
 }
 
-<form asp-action="ShiftScheduleEdit" asp-asp-controller="BasicSetting" method="post">
-    <section class="content">
-        <div class="card-body">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ShiftName" class="control-label">班別名稱</label>
-                <input asp-for="ShiftName" class="form-control col-3" />
-                <span asp-validation-for="ShiftName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label">開始時間</label>
-                <input name="StartTime" id="dateInput" value="@Model.StartTime" class="form-control col-3" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndTime" class="control-label">結束時間</label>
-                <input name="EndTime" id="dateInput2" value="@Model.EndTime" class="form-control col-3" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxAdditionalClockIn" class="control-label">補卡上限次數</label>
-                <input asp-for="MaxAdditionalClockIn" type="number" class="form-control col-3" />
-                <span asp-validation-for="MaxAdditionalClockIn" class="text-danger"></span>
-            </div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <form asp-action="ShiftScheduleEdit" asp-asp-controller="BasicSetting" method="post">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="ShiftName" class="control-label">班別名稱</label>
+                        <input asp-for="ShiftName" class="form-control col-3" />
+                        <span asp-validation-for="ShiftName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StartTime" class="control-label">開始時間</label>
+                        <input name="StartTime" id="dateInput" value="@Model.StartTime" class="form-control col-3" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EndTime" class="control-label">結束時間</label>
+                        <input name="EndTime" id="dateInput2" value="@Model.EndTime" class="form-control col-3" />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MaxAdditionalClockIn" class="control-label">補卡上限次數</label>
+                        <input asp-for="MaxAdditionalClockIn" type="number" class="form-control col-3" />
+                        <span asp-validation-for="MaxAdditionalClockIn" class="text-danger"></span>
+                    </div>
 
-            <div class="card-footer">
-                <input type="submit" value="送出" class="btn btn-primary" />
-                <a asp-controller="BasicSetting" asp-action="ShiftSchedule" class="btn btn-outline-success">返回</a>
-            </div>
+                    <div class="card-footer">
+                        <input type="submit" value="送出" class="btn btn-primary" />
+                        <a asp-controller="BasicSetting" asp-action="ShiftSchedule" class="btn btn-outline-dark">返回</a>
+                    </div>
+                </div>
+            </form>
+
         </div>
-    </section>
-</form>
+    </div>
+
+</div>
+
 @section Scripts {
     <script>
 

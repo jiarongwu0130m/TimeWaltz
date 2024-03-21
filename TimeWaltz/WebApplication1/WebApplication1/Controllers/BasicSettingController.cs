@@ -206,7 +206,7 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-       
+
         [HttpGet]
         public IActionResult ShiftScheduleCreate()
         {
@@ -226,10 +226,7 @@ namespace WebApplication1.Controllers
         }
         public IActionResult ShiftSchedule()
         {
-            var entities = _shiftScheduleService.GetShiftScheduleList();
-            var models = EntityHelper.ToViewModel(entities);
-
-            return View(models);
+            return View();
         }
 
         [HttpPost]
@@ -325,7 +322,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult DepartmentEdit(int id)
         {
-                return View();
+            return View();
         }
     }
 }
