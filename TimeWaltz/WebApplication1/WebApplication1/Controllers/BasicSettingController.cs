@@ -50,13 +50,6 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-
-        [HttpGet]
-        public IActionResult PersonalDataCreate()
-        {
-            return View();
-        }
-
         //[Authorize]
         [TimeWaltzAuthorize]
         [HttpGet]

@@ -7,23 +7,27 @@
         <div class="card-body">
             <div class="form-group">
                 <label class="control-label">姓名</label>
-                <input class="form-control col-3" :class="validation.name" v-model="name" />
+                <input class="form-control col-3" v-model="name" />
+                @* <input class="form-control col-3" :class="validation.name" v-model="name" /> *@
                 <span class="text-danger" v-if="!validation.name">姓名不得為空</span>
             </div>
             <div class="form-group">
                 <label class="control-label">性別</label>
-                <input type="text" class="form-control col-3" v-model="gender" disabled />
+                <select class="form-control col-3" v-model="gender">
+                    <option v-for="item in genderSelectItems" :value="item.value">{{item.text}}</option>
+                </select>                
             </div>
             <div class="form-group">
                 <label class="control-label">E-mail</label>
-                <input type="email" class="form-control col-5" :class="validation.email" v-model="email" />
+                <input type="email" class="form-control col-5" v-model="email" />
+                @* <input type="email" class="form-control col-5" :class="validation.email" v-model="email" /> *@
                 <div class="invalid-feedback">
                     Email格式錯誤!
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label">到職日期</label>
-                <input type="text" class="form-control col-3" v-model="hireDate" disabled />
+                <input type="text" class="form-control col-3" :value="formatDateTime(hireDate)" disabled />
             </div>
             <div class="form-group">
                 <label class="control-label">員工編號</label>
@@ -31,9 +35,12 @@
             </div>
             <div class="form-group">
                 <label class="control-label">部門</label>
-                <select class="form-control col-3" :class="validation.departmentId" v-model="departmentId">
+                <select class="form-control col-3" v-model="departmentId">
                     <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
                 </select>
+                @* <select class="form-control col-3" :class="validation.departmentId" v-model="departmentId">
+                <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
+                </select> *@
                 <span class="text-danger" v-if="!validation.departmentId">部門不得為空</span>
             </div>
             <div class="form-group">
@@ -45,7 +52,7 @@
             </div>
             <div class="card-footer">
                 <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit(id)" />
-                <a asp-controller="BasicSetting" asp-action="PersonalData" class="btn btn-outline-success">返回</a>
+                <a asp-controller="BasicSetting" asp-action="PersonalData" class="btn btn-outline-dark">返回</a>
             </div>
         </div>
     </div>
@@ -56,6 +63,7 @@
             data() {
                 return {
                     id: null,
+                    genderSelectItems: [],
                     departmentNameSelectItem: [],
                     shiftNameSelectItems: [],
                     shiftScheduleId: null,
@@ -64,6 +72,7 @@
                     gender: '',
                     email: '',
                     name: '',
+                    departmentId: '',                    
                     validation: {
                         employeesNo: true,
                         gender: true,
@@ -75,17 +84,28 @@
                 }
             },
             watch: {
-                "email": {
-                    handler(newVal, oldVal) {
-                        this.validation.email = newVal.includes('@@') ? "is-valid" : "is-invalid";
-                    },
-                    immediate: false
-                },
+                // "email": {
+                //     handler(newval, oldval) {
+                //         this.validation.email = newval.includes('@@') ? "is-valid" : "is-invalid";
+                //     },
+                //     immediate: false
+                // },
             },
             methods: {
+                
+                formatDateTime(dateTimeString) {
+                    const options = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                    };
+                    const dateTime = new Date(dateTimeString);
+                    return dateTime.toLocaleString('zh', options).replaceAll('/', '-');
+                },
                 validateAndSubmit(id) {
                     let isValid = true;
                     this.validation.name = this.name == '' ? false : true;
+                    
                     this.validation.gender = this.gender == '' ? false : true;
                     this.validation.departmentId = this.departmentId == '' ? false : true;
                     this.validation.employeesNo = this.employeesNo == '' ? false : true;
@@ -102,6 +122,7 @@
                             id: self.id,
                             name: self.name,
                             email: self.email,
+                            gender: self.gender,
                             departmentId: self.departmentId,
                             shiftScheduleId: self.shiftScheduleId,
                         }),
@@ -111,20 +132,48 @@
                     }).then(res => res.json()).then(result => {
                         console.log(result)
                         if (result.status) {
-                            alert("修改成功");
+                            Swal.fire({
+                                icon: "success",
+                                title: "修改成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    location.href = "/BasicSetting/PersonalData";
+                                }
+                            });
                         } else {
-                            alert("修改失敗");
+                            Swal.fire({
+                                icon: "error",
+                                title: "修改失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
                         }
-                        location.href = `/BasicSetting/PersonalData`;
                     });
                 },
                 getDropDownListData() {
                     let self = this;
-                    fetch("/api/PersonalDataApi/GetDepAndShiftDorpDownList").then(res => res.json()).then(result => {
-                        console.log(result);
-                        self.departmentNameSelectItem = result.departmentNameSelectItem;
-                        self.shiftNameSelectItems = result.shiftNameSelectItems;
-                    })
+
+                    axios.all([
+                        axios("/api/PersonalDataApi/GetDepAndShiftDorpDownList"),
+                        axios("/api/PersonalDataApi/DropDownList")
+                    ]).then(axios.spread((response1, response2) => {
+                        console.log(response2);
+                        self.departmentNameSelectItem = response1.data.departmentNameSelectItem;
+                        self.shiftNameSelectItems = response1.data.shiftNameSelectItems;
+                        self.genderSelectItems = response2.data.genderSelectItems;
+                    }));
                 },
                 getEditData() {
                     let self = this;
@@ -150,7 +199,6 @@
                     } else {
                         location.href = "/BasicSetting/PersonalData";
                     }
-
                 },
             },
             mounted() {
