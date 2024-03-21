@@ -120,6 +120,8 @@ namespace WebApplication1.Controllers.Api
                     Gender = dto.Gender,
                     Email = dto.Email,
                     Name = dto.Name,
+                    HireDate = dto.HireDate,
+                    EmployeesNo = dto.EmployeesNo,
                 };
                 _personalDataService.EditPersonalData(model);
                 return Ok(new {status = true});

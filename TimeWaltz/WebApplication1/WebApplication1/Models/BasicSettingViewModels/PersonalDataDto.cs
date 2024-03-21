@@ -41,6 +41,8 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public string Name { get; set; }
         public int Gender { get; set; }
         public string Email { get; set; }
+        public DateTime HireDate { get; set; }
+        public string EmployeesNo { get; set; }
 
 
     }
@@ -52,6 +54,8 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public string Name { get; set; }
         public string Email { get; set; }
         public int Gender { get; set; }
+        public string EmployeesNo { get; set; }
+        public DateTime HireDate { get; set; }
     }
     public class DepAndShiftDropDownDto
     {

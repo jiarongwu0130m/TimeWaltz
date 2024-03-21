@@ -82,6 +82,9 @@ namespace WebApplication1.Services
             entity.ShiftScheduleId = model.ShiftScheduleId;
             entity.Name = model.Name;
             entity.Email = model.Email;
+            entity.Gender = model.Gender;
+            entity.EmployeesNo = model.EmployeesNo;
+            entity.HireDate = model.HireDate;
             _timeWaltzContext.SaveChanges();
         }
 

@@ -7,8 +7,7 @@
         <div class="card-body">
             <div class="form-group">
                 <label class="control-label">姓名</label>
-                <input class="form-control col-3" v-model="name" />
-                @* <input class="form-control col-3" :class="validation.name" v-model="name" /> *@
+                <input class="form-control col-3" :class="validation.name" v-model="name" />
                 <span class="text-danger" v-if="!validation.name">姓名不得為空</span>
             </div>
             <div class="form-group">
@@ -16,31 +15,31 @@
                 <select class="form-control col-3" v-model="gender">
                     <option v-for="item in genderSelectItems" :value="item.value">{{item.text}}</option>
                 </select>                
+                <span class="text-danger" v-if="!validation.gender">性別不得為無</span>
             </div>
             <div class="form-group">
                 <label class="control-label">E-mail</label>
-                <input type="email" class="form-control col-5" v-model="email" />
-                @* <input type="email" class="form-control col-5" :class="validation.email" v-model="email" /> *@
+                <input type="email" class="form-control col-5" :class="validation.email" v-model.lazy="email" />
                 <div class="invalid-feedback">
                     Email格式錯誤!
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label">到職日期</label>
-                <input type="text" class="form-control col-3" :value="formatDateTime(hireDate)" disabled />
+                <input type="text" id="dateInput" class="form-control col-3" v-model="hireDate" />
             </div>
             <div class="form-group">
                 <label class="control-label">員工編號</label>
-                <input type="text" class="form-control col-3" v-model="employeesNo" disabled />
+                <input type="text" class="form-control col-3" v-model="employeesNo"/>
             </div>
             <div class="form-group">
                 <label class="control-label">部門</label>
-                <select class="form-control col-3" v-model="departmentId">
+                @* <select class="form-control col-3" v-model="departmentId">
                     <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
-                </select>
-                @* <select class="form-control col-3" :class="validation.departmentId" v-model="departmentId">
-                <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
                 </select> *@
+                <select class="form-control col-3" :class="validation.departmentId" v-model="departmentId">
+                <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
+                </select>
                 <span class="text-danger" v-if="!validation.departmentId">部門不得為空</span>
             </div>
             <div class="form-group">
@@ -51,7 +50,7 @@
                 <span class="text-danger" v-if="!validation.shiftScheduleId">班別不得為空</span>
             </div>
             <div class="card-footer">
-                <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit(id)" />
+                <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit()" />
                 <a asp-controller="BasicSetting" asp-action="PersonalData" class="btn btn-outline-dark">返回</a>
             </div>
         </div>
@@ -84,39 +83,43 @@
                 }
             },
             watch: {
-                // "email": {
-                //     handler(newval, oldval) {
-                //         this.validation.email = newval.includes('@@') ? "is-valid" : "is-invalid";
-                //     },
-                //     immediate: false
-                // },
+                "email": {
+                    handler(newval, oldval) {
+                        if (newval != null) {
+                            this.validation.email = newval.includes('@@') ? "is-valid" : "is-invalid";
+                        }
+                    },
+                    immediate: false
+                },
             },
             methods: {
-                
-                formatDateTime(dateTimeString) {
-                    const options = {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                    };
-                    const dateTime = new Date(dateTimeString);
-                    return dateTime.toLocaleString('zh', options).replaceAll('/', '-');
-                },
-                validateAndSubmit(id) {
+                getDateRangePicker() {
+                    let self = this;
+                    $('#dateInput').daterangepicker({
+                        singleDatePicker: true,
+                        locale: {
+                            format: 'YYYY-MM-DD'
+                        }
+                    }, function (start, _, _) {
+                        self.hireDate = start
+                    });
+                },                
+                validateAndSubmit() {
+                    console.log('???')
                     let isValid = true;
                     this.validation.name = this.name == '' ? false : true;
-                    
                     this.validation.gender = this.gender == '' ? false : true;
                     this.validation.departmentId = this.departmentId == '' ? false : true;
                     this.validation.employeesNo = this.employeesNo == '' ? false : true;
                     this.validation.shiftScheduleId = this.shiftScheduleId == '' ? false : true;
                     if (this.validation.name && this.validation.gender && this.validation.departmentId && this.validation.employeesNo) {
-                        this.send(id);
+                        this.send();
                     }
                 },
-                send(id) {
+                send() {
+                    console.log('!!!')
                     let self = this;
-                    fetch(`/api/PersonalDataApi/Edit/${id}`, {
+                    fetch(`/api/PersonalDataApi/Edit/${self.id}`, {
                         method: "POST",
                         body: JSON.stringify({
                             id: self.id,
@@ -125,6 +128,9 @@
                             gender: self.gender,
                             departmentId: self.departmentId,
                             shiftScheduleId: self.shiftScheduleId,
+                            employeesNo: self.employeesNo,
+                            hireDate: self.hireDate,
+
                         }),
                         headers: {
                             "content-type": "application/json",
@@ -164,12 +170,11 @@
                 },
                 getDropDownListData() {
                     let self = this;
-
                     axios.all([
                         axios("/api/PersonalDataApi/GetDepAndShiftDorpDownList"),
                         axios("/api/PersonalDataApi/DropDownList")
                     ]).then(axios.spread((response1, response2) => {
-                        console.log(response2);
+                        console.log(response1, response2);
                         self.departmentNameSelectItem = response1.data.departmentNameSelectItem;
                         self.shiftNameSelectItems = response1.data.shiftNameSelectItems;
                         self.genderSelectItems = response2.data.genderSelectItems;
@@ -203,6 +208,7 @@
             },
             mounted() {
                 this.checkId();
+                this.getDateRangePicker();
                 this.getEditData();
                 this.getDropDownListData();
             },
