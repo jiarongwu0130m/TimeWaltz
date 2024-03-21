@@ -74,30 +74,23 @@ namespace WebApplication1.Services
         public List<LeaveDto> GetLeaveListData(int empId)
         {
 
-            var leaveAndApproval = _timeWaltzContext.LeaveRequests
+            return _timeWaltzContext.LeaveRequests
                 .Where(x => x.EmployeesId == empId)
-                .Join(_timeWaltzContext.Approvals.Where(y => y.TableType == (int)TableTypeEnum.請假單), x => x.Id, y => y.TableId, (x, y) => new { x, y });
-            return new List<LeaveDto>();
-            //foreach (var xy in leaveAndApproval)
-            //{
-            //    if (xy != null)
-            //    {
-            //        if (xy.y.Status == )
-            //    }
-            //}
-
-            //    Select(xy => new LeaveDto
-            //{
-            //    Id = xy.x.Id,
-            //    EmployeesId = xy.x.EmployeesId,
-            //    VacationType = xy.x.VacationDetails.VacationType,
-            //    AgentEmployeeName = xy.x.AgentEmployee.Name,
-            //    ApprovalEmpName = xy.x.AgentEmployee.Name,
-            //    StartTime = xy.x.StartTime.ToString("yyyy-MM-dd HH:mm"),
-            //    EndTime = xy.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
-            //    ApprovalStatus = xy.y.Status.ToString(),
-            //}).ToList();
+                .Join(_timeWaltzContext.Approvals.Where(y => y.TableType == (int)TableTypeEnum.請假單), x => x.Id, y => y.TableId, (x, y) => new { x, y })
+            .Select(xy => new LeaveDto
+            {
+                Id = xy.x.Id,
+                EmployeesId = xy.x.EmployeesId,
+                VacationType = xy.x.VacationDetails.VacationType,
+                AgentEmployeeName = xy.x.AgentEmployee.Name,
+                ApprovalEmpName = xy.x.AgentEmployee.Name,
+                StartTime = xy.x.StartTime.ToString("yyyy-MM-dd HH:mm"),
+                EndTime = xy.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                ApprovalStatus = xy.y.Status.ToString(),
+            }).ToList();
+            
         }
+
         /// <summary>
         /// 取得簽核人資料
         /// </summary>
@@ -218,8 +211,6 @@ namespace WebApplication1.Services
             }
             return totalDuration;
         }
-
-
 
     }
 

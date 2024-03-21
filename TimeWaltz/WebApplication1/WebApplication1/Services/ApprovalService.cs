@@ -13,12 +13,13 @@ namespace WebApplication1.Services
             this._timeWaltzContext = timeWaltzContext;
         }
 
-        public void NewApproval(int empId)
+        public void NewApproval(int Id)
         {
             _timeWaltzContext.Approvals.Add(new Approval
             {
-                TableId = empId,
+                TableId = Id,
                 TableType = (int)TableTypeEnum.請假單,
+                Status = Repository.Enum.RequestStatusEnum.簽核中,
             });
             _timeWaltzContext.SaveChanges();
 
