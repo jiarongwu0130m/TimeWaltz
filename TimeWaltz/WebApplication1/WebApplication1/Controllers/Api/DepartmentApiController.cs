@@ -76,13 +76,14 @@ namespace WebApplication1.Controllers.Api
                 }
                 throw new Exception("資料庫錯誤");
             }
-            catch (Exception ex) 
-            { 
-                return Ok(new {status = false});
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
             }
-            
+
         }
         [HttpPost]
+        [Route("{id}")]
         public ActionResult Edit(DepartmentEditDto dto)
         {
             try
