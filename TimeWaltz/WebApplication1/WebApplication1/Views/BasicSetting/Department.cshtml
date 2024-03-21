@@ -35,7 +35,7 @@
                     <td>{{item.departmentName}}</td>
                     <td>{{item.employeesId}}</td>
                     <td>
-                        <a asp-controller="BasicSetting" asp-action="DepartmentEdit">檢視</a> |
+                        <a href="#" @@click="edit(item.id,$event)">檢視</a> |
                         <a href="#" @@click="checkIsDelete(item.id ,$event)">刪除</a>
                     </td>
                 </tr>
@@ -70,6 +70,11 @@
                 }
             },
             methods: {
+                edit(id, event) {
+                    event.preventDefault();
+                    console.log(id)
+                    location.href = `/BasicSetting/DepartmentEdit/${id}`
+                },
                 filterByDepartmentName() {
                     let self = this;
                     if (self.queryDepartmentName != '') return self.departmentListData.filter(x => x.departmentName.includes(self.queryDepartmentName));
@@ -153,6 +158,9 @@
                         .then((response) => {
                             console.log(response)
                             self.departmentListData = response.data;
+                            self.departmentListData.employeesId = response.data.employeesId;
+                            self.departmentListData.queryDepartmentName = response.data.queryDepartmentName;
+                            self.departmentListData.id = response.data.id;
                         })
                         .then((error) => console.log(error));
                 },
