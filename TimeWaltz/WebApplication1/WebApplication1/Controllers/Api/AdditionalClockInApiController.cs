@@ -43,30 +43,29 @@ namespace WebApplication1.Controllers.Api
             return model;
         }
         [HttpPost]
-        public ActionResult CompRequestCreate(CompRequestApiCreateViewModel model)
+        public bool CompRequestCreate(CompRequestCreateViewModel model)
         {
             try
             {
-                //var entity = ViewModelHelper.ToEntity(model);
-
-
                 _timeWaltzDb.AdditionalClockIns.Add(new AdditionalClockIn
                 {
-                    EmployeesId = User.GetId(),
-                    ApprovalEmployeeId= _compRequestService.getApprovalEmployeeId(User.GetId()),
+                    EmployeesId = model.EmployeesId,
+                    ApprovalEmployeeId= model.ApprovalEmployeeId,
                     AdditionalTime = model.AdditionalTime,
-                    Status = model.Status,
+                    Status = ((int)model.Status),
                     Reason = model.Reason,
                 });
 
+                var approvalEmp = _compRequestService.GetApprovalEmp(model.EmployeesId);
+                model.ApprovalEmployeeId = approvalEmp;
+
 
                 _timeWaltzDb.SaveChanges();
-                return Ok(new { status = true });
+                return  true;
             }
             catch (Exception ex)
             {
-                return Ok(new { status = false });
-
+                return false;
             }
         }
 

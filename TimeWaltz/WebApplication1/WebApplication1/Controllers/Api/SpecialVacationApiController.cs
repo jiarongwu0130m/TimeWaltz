@@ -56,7 +56,7 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var entities = _specialVacationService.ListData();
+                var entities = _specialVacationService.GetListData();
                 var models = EntityHelper.ToDto(entities);
                 return models;
             }

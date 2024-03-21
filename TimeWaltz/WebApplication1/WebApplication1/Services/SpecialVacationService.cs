@@ -33,7 +33,7 @@ namespace WebApplication1.Services
             _timeWaltzContext.SaveChanges();
         }
 
-        public List<SpecialVacation> ListData()
+        public List<SpecialVacation> GetListData()
         {
             return _timeWaltzContext.SpecialVacations.ToList();
         }

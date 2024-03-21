@@ -30,12 +30,15 @@ namespace WebApplication1.Controllers.Api
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetEmpShifts(int id, [FromQuery] DateTime date)
+        public IActionResult GetEmpShifts(DateTime date)
         {
-            var shiftsResult = _timeWaltzDb.Shifts
-                .Where(x => x.EmployeesId == id && x.ShiftsDate == date)
-                .Include(x => x.ShiftSchedule)
-                .ToList();
+            var shiftsResult=_timeWaltzDb.Shifts.Where(x => x.ShiftsDate == date).Include(x => x.ShiftSchedule).ToList();
+
+
+            //var shiftsResult = _timeWaltzDb.Shifts
+            //    .Where(x => x.EmployeesId == id && x.ShiftsDate == date)
+            //    .Include(x => x.ShiftSchedule)
+            //    .ToList();
 
             if (shiftsResult.Count == 0)
             {

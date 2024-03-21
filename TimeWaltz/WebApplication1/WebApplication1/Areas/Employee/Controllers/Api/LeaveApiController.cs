@@ -1,19 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Repository.Enums;
 using Repository.Models;
-using System.Drawing;
 using WebApplication1.Helpers;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace WebApplication1.Controllers.Api
+namespace WebApplication1.Areas.Employee.Controllers.Api
 {
-    [Route("api/[controller]/[Action]")]
+    [Route("mobile/LeaveApi/[Action]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
 
@@ -158,9 +157,8 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
-                var empId = User.GetId();
                 var dto = _leaveService.GetEditDataOrNull(Id);
-                return dto;
+                return Ok(dto);
             }
             catch
             {

@@ -11,7 +11,6 @@
             </h3>
         </div>
         <div class="card-body">
-
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -24,13 +23,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in leaveRequestListData">
-                            <td>{{item.value}}</td>
+                        <tr v-for="(item, index) in leaveRequestListData">
+                            <td>{{++index}}</td>
                             <td class="dtr-control">{{item.date}}</td>
-                            <td>{{item.startTime}}</td>
-                            <td>{{item.endTime}}</td>
                             <td>{{item.vacationType}}</td>
-                            <td>{{item.approvalEmpName}}</td>
+                            <td>{{item.approvalStatus}}</td>
                             <td>
                                 <a href="#" @@click="edit(item.id, $event)">詳細</a>
                             </td>
@@ -52,28 +49,20 @@
                     id: null,
                     employeeId: null,
                     date: null,
-                    startTime: null,
-                    endTime: null,
-                    leaveHours: null,
-                    approvalEmpName: '',
                     vacationType: '',
-                    agentEmployeeName: '',
                     approvalStatus: '',
                 }
             },
             methods: {
                 edit(id, event) {
                     event.preventDefault();
-                    location.href = `/PersonalRecord/leaveEdit/${id}`
-
+                    location.href = `/employee/query/leavedetail/${id}`
                 },
                 getListData() {
                     let self = this;
-                    fetch("/api/LeaveApi/List").then(res => res.json()).then(result => {
+                    fetch("/mobile/LeaveApi/List").then(res => res.json()).then(result => {
                         console.log(result)
-                        self.leaveRequestListData = result
-                        self.date = result.startDate + '~' + result.endDate
-                        console.log(self.date);
+                        self.leaveRequestListData = result;
                     })
                 },
             },

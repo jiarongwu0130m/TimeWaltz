@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Repository.Enums;
 using Repository.Models;
+using System.Linq;
 using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.PersonalRecordViewModels;
 
@@ -82,13 +83,9 @@ namespace WebApplication1.Services
                 Id = xy.x.Id,
                 EmployeesId = xy.x.EmployeesId,
                 VacationType = xy.x.VacationDetails.VacationType,
-                AgentEmployeeName = xy.x.AgentEmployee.Name,
-                ApprovalEmpName = xy.x.AgentEmployee.Name,
-                StartTime = xy.x.StartTime.ToString("yyyy-MM-dd HH:mm"),
-                EndTime = xy.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                Date = xy.x.StartTime.ToString("yyyy-MM-dd") + "-" + xy.x.EndTime.ToString("yyyy-MM-dd"),
                 ApprovalStatus = xy.y.Status.ToString(),
-            }).ToList();
-            
+            }).ToList();            
         }
 
         /// <summary>
@@ -107,29 +104,29 @@ namespace WebApplication1.Services
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         public LeaveEditDto? GetEditDataOrNull(int Id)
-        {
-            var leaveRequest = _timeWaltzContext.LeaveRequests.FirstOrDefault(x => x.Id == Id);
+        {            
+            var leaveRequest = _timeWaltzContext.LeaveRequests
+                .Include(x=>x.Employees)
+                .Include(x=>x.AgentEmployee)
+                .Include(x=>x.ApprovalEmployee)
+                .Include(x=>x.VacationDetails)
+                .Join(_timeWaltzContext.Approvals.Where(x=>x.TableType == (int)TableTypeEnum.請假單), x=>x.Id, y=>y.TableId, (x, y)=>new {x, y})
+                .FirstOrDefault(xy => xy.x.Id == Id);
             if (leaveRequest == null) throw new NullReferenceException("Not find this user");
-
-
-            var approval = _timeWaltzContext.Approvals.Where(x => (int)x.TableType == 1).FirstOrDefault(x => x.TableId == Id);
-            if (approval == null) throw new NullReferenceException("Not find this user");
-
-            var requestStatus = _timeWaltzContext.RequestStatuses.Where(x => (int)x.TableType == 1).FirstOrDefault(x => x.TableId == Id);
-            if (requestStatus == null) throw new NullReferenceException("Not find this user");
-
-            return new LeaveEditDto
+            var result = new LeaveEditDto
             {
-                Id = leaveRequest.Id,
-                TimeRange = leaveRequest.StartTime.ToString("yyyy-MM-dd HH:mm") + "-" + leaveRequest.EndTime.ToString("yyyy-MM-dd HH:mm"),
-                Reason = leaveRequest.Reason,
-                EmployeeName = leaveRequest.Employees.Name,
-                AgentEmployeeName = leaveRequest.AgentEmployee.Name,
-                ApprovalEmpName = leaveRequest.ApprovalEmployee.Name,
-                VacationType = leaveRequest.VacationDetails.VacationType,
-                ApprovalRemark = approval.Remark,
-                ApprovalStatus = requestStatus.Status.ToString(),
+                Id = leaveRequest.x.Id,
+                TimeRange = leaveRequest.x.StartTime.ToString("yyyy-MM-dd HH:mm") + "-" + leaveRequest.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                Reason = leaveRequest.x.Reason,
+                EmployeeName = leaveRequest.x.Employees.Name,
+                AgentEmployeeName = leaveRequest.x.AgentEmployee.Name,
+                ApprovalEmpName = leaveRequest.x.ApprovalEmployee.Name,
+                VacationType = leaveRequest.x.VacationDetails.VacationType,
+                ApprovalRemark = leaveRequest.y.Remark == null ? "" : leaveRequest.y.Remark,
+                ApprovalStatus = leaveRequest.y.Status == null ? "" : leaveRequest.y.Status.ToString(),
+                LeaveHours = Convert.ToInt32(leaveRequest.x.LeaveMinutes / 60),
             };
+            return result;
         }
 
         #region New Logic

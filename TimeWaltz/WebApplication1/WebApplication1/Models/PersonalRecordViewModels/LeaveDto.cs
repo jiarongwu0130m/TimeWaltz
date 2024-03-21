@@ -8,16 +8,8 @@ namespace WebApplication1.Models.PersonalRecordViewModels
     {
         public int Id { get; set; }
         public int EmployeesId { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
+        public string Date { get; set; }
         public string VacationType { get; set; }
-
-        public string ApprovalEmpName { get; set; }
-
-
-        public string AgentEmployeeName { get; set; }
-        public decimal LeaveMinutes { get; set; }
-        [NotMapped]
         public string ApprovalStatus { get; set; }
     }
     public class LeaveEditDto
@@ -32,6 +24,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
         public string ApprovalStatus { get; set; }
         public string? Reason { get; set; }
         public string? ApprovalRemark { get; set; }
+        public int LeaveHours { get; internal set; }
     }
 
     public class LeaveCreateDto

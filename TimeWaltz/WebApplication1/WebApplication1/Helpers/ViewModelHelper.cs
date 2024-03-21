@@ -84,19 +84,7 @@ namespace WebApplication1.Helpers
             };
             return entity;
         }
-
-        public static AdditionalClockIn ToEntity(CompRequestCreateViewModel model)
-        {
-            var entity = new AdditionalClockIn
-            {
-                EmployeesId = model.EmployeesId,
-                AdditionalTime = model.AdditionalTime,
-                //Status = model.Status,//todo
-                //Reason = model.Reason,//todo
-                ApprovalEmployeeId = model.ApprovalEmployeeId,
-            };
-            return entity;
-        }
+        
 
         public static SpecialVacation ToDto(SpecialVacationCreateDto dto)
         {

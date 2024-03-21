@@ -8,6 +8,7 @@ using WebApplication1.Areas.Employee.Models;
 using WebApplication1.Filters;
 using WebApplication1.Helpers;
 using WebApplication1.Models.ApplicationFormViewModels;
+using WebApplication1.Models.BasicSettingViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -114,24 +115,25 @@ namespace WebApplication1.Controllers.Api
             }
         }
 
-        public CompRequestEmpIdNameGet GetEmployeeName()
+        /// <summary>
+        /// 請假申請單頁面，取得請假當事人的員工ID和姓名
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public EmpIdNameGet GetEmployeeName()
         {
-
             var UserId = User.GetId();
-            var userName = _timeWaltzDb.Employees.Where(x => x.Id == UserId).FirstOrDefault();
-            
-            string approvalEmployeeName = _timeWaltzDb.Employees.Where(
-                x => x.Id == _timeWaltzDb.Employees.Where(x => x.Id == UserId).Select(x => x.Department.EmployeeId).FirstOrDefault()).Select(x=>x.Name).FirstOrDefault();
-            var UserAndName = new CompRequestEmpIdNameGet
+            var userName = _timeWaltzDb.Employees.FirstOrDefault(x => x.Id == UserId).Name;
+            var UserAndName = new EmpIdNameGet
             {
                 EmployeeId = UserId,
-                EmployeeName = userName.Name,
-                approvalEmployeeName= approvalEmployeeName,
-
+                EmployeeName = userName,
             };
 
             return UserAndName;
         }
+
+
         [HttpGet("{id}")]
         public IActionResult GetEmpClocks(int id, [FromQuery] DateTime date)
         {
