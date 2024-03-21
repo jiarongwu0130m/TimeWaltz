@@ -150,16 +150,7 @@ namespace WebApplication1.Helpers
             return model;
         }
 
-        public static FlextimeViewModel ToViewModel(Flextime entity)
-        {
-            var model = new FlextimeViewModel
-            {
-                Id = entity.Id,
-                FlexibleTime = entity.FlexibleTime,
-                MoveUp = entity.MoveUp.Value,
-            };
-            return model;
-        }
+        
 
         public static PublicHolidayViewModel ToViewModel(PublicHoliday entity)
         {

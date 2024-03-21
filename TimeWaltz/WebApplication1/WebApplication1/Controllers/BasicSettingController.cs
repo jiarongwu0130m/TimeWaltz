@@ -332,24 +332,11 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+
         public IActionResult Flextime()
         {
-            var FlextimeEntity = _flextimeService.GetFlextime();
-            var Flextimemodel = EntityHelper.ToViewModel(FlextimeEntity);
-            return View(Flextimemodel);
-        }
-
-        [HttpPost]
-        public IActionResult Flextime(FlextimeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            _flextimeService.UpdateFlextime(model);
             return View();
         }
-
 
         public IActionResult DepartmentCreate()
         {
