@@ -158,8 +158,9 @@ namespace WebApplication1.Controllers.Api
         {
             try
             {
+                var empId = User.GetId();
                 var dto = _leaveService.GetEditDataOrNull(Id);
-                return Ok(dto);
+                return dto;
             }
             catch
             {
