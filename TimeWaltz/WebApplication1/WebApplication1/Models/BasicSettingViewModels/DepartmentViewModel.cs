@@ -24,7 +24,7 @@ namespace WebApplication1.Models.BasicSettingViewModels
     {
         public int Id { get; set; }
         public string DepartmentName { get; set; }
-        public int EmployeesId { get; set; }
+        public string EmployeesName { get; set; }
     }
     public class DepartmentCreateShowDto
     {

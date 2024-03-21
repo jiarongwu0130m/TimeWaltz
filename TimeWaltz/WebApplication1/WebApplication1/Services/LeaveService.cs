@@ -99,7 +99,7 @@ namespace WebApplication1.Services
         /// <returns></returns>
         public int GetApprovalEmp(int empId)
         {
-            return _timeWaltzContext.Departments.FirstOrDefault(x => x.EmployeeId == empId).EmployeeId;
+            return _timeWaltzContext.Employees.Include(x=>_timeWaltzContext.Departments).FirstOrDefault(x=>x.Id == empId).Department.EmployeeId;
         }
         /// <summary>
         /// 取得請假詳細資料

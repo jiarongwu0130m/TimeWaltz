@@ -109,6 +109,7 @@ namespace WebApplication1.Controllers.Api
             try
             {
                 var entities = _departmentService.GetDepartment();
+                var emp = _db.Employees.ToList();
                 var models = new List<DepartmentDto>();
                 foreach (var entity in entities)
                 {
@@ -116,7 +117,7 @@ namespace WebApplication1.Controllers.Api
                     {
                         Id = entity.Id,
                         DepartmentName = entity.DepartmentName,
-                        EmployeesId = entity.EmployeeId,
+                        EmployeesName = emp.FirstOrDefault(x=>x.Id == entity.EmployeeId).Name ,
                     });
                 }
                 return models;
