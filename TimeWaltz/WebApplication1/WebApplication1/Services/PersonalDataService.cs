@@ -55,7 +55,7 @@ namespace WebApplication1.Services
                 {
                     Id = e.Id,
                     ShiftsName = e.ShiftSchedule.ShiftsName,
-                    DepartmentName = e.Name,
+                    DepartmentName = e.Department.DepartmentName,
                     Name = e.Name,
                     HireDate = e.HireDate,
                     Email = e.Email,
