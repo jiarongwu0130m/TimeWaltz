@@ -1,4 +1,5 @@
-﻿using Repository.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Repository.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
 
 namespace WebApplication1.Services
@@ -39,9 +40,15 @@ namespace WebApplication1.Services
         {
             return _timeWaltzDb.AdditionalClockIns.FirstOrDefault(x => x.Id == id);
         }
-        public int getApprovalEmployeeId(int id)
+        
+        /// <summary>
+        /// 取得簽核人資料
+        /// </summary>
+        /// <param name="empId"></param>
+        /// <returns></returns>
+        public int GetApprovalEmp(int empId)
         {
-            return _timeWaltzDb.Employees.Where(x => x.Id == id).Select(x=>x.Department.EmployeeId).FirstOrDefault(); 
+            return _timeWaltzDb.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == empId).Department.EmployeeId;
         }
     }
 }

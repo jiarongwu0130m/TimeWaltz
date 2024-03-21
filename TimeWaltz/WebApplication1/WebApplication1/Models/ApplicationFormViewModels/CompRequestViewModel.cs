@@ -28,7 +28,6 @@ namespace WebApplication1.Models.ApplicationFormViewModels
 
     public class CompRequestCreateViewModel
     {
-        public int Id { get; set; }
 
         public int EmployeesId { get; set; }
 
@@ -39,8 +38,8 @@ namespace WebApplication1.Models.ApplicationFormViewModels
         public List<SelectListItem>? ClockStatusSelectItems { get; set; }
 
         public string? Reason { get; set; }
-
         public int ApprovalEmployeeId { get; set; }
+
     }
 
     public class CompRequestEmpIdNameGet
