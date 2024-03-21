@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models.BasicSettingViewModels
@@ -22,10 +23,15 @@ namespace WebApplication1.Models.BasicSettingViewModels
     {
         public int Id { get; set; }
         [Required]
+        [DisplayName("班別名稱")]
         public string ShiftName { get; set; }
+        [DisplayName("開始時間")]
         public DateTime StartTime { get; set; }
+        [DisplayName("結束時間")]
         public DateTime EndTime { get; set; }
+        [DisplayName("休息時數")]
         public double BreakTimeHours { get; set; }
+        [DisplayName("最大打卡次數")]
         public int MaxAdditionalClockIn { get; set; }
 
     }

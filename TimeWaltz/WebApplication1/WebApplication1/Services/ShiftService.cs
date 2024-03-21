@@ -11,6 +11,11 @@ namespace WebApplication1.Services
             _db = timeWaltzContext;
         }
 
+        public void UpdateShift()
+        {
+            DateTime startDate = DateTime.Now;
+            GenerateAllEmployeeShift(startDate, 30);
+        }
         public bool GenerateAllEmployeeShift(DateTime startDate, int GenDays)
         {
             try
