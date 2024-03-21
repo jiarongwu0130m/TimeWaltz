@@ -1,5 +1,124 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewBag.Title = "班表查詢";
+}
+@section Styles
+{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css"
+          integrity="sha256-5veQuRbWaECuYxwap/IOE/DAwNxgm4ikX7nrgsqYp88=" crossorigin="anonymous">
+}
+<div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>班表查詢</span>
+                <a @@click="shiftScheduleShow" class="iconedbox bg-info">
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                </a>
+            </h3>
+        </div>
+        <div class="card-body">
+            <full-calendar class='demo-app-calendar' ref="calendar" :options='calendarOptions'>
+                <!-- <template v-slot:event-content='arg'>
+                    <b>{{ arg.timeText }}</b>
+                    <i>XXX{{ arg.event.title }}XXX</i>
+                </template> -->
+            </full-calendar>
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+
+    <div class="modal fade dialogbox" id="shiftSchedule" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-icon text-success">
+                    <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="checkmark circle"></ion-icon>
+                </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">死社畜</h5>
+                </div>
+                <div class="modal-body">
+                    <div>班別:{{selectedEvent.title}}</div>
+                    <div>日期:{{getDate(selectedEvent.start)}}</div>
+                    <div>上班時間:{{getTime(selectedEvent.start)}}</div>
+                    <div>下班時間:{{getTime(selectedEvent.end)}}</div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-inline">
+                        <a href="#" class="btn" data-dismiss="modal">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@fullcalendar/core@6.1.5/locales-all.global.js"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@fullcalendar/vue3@6.1.5/dist/index.global.js"
+            crossorigin="anonymous"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    selectedEvent:{
+                        title:"",
+                        start:"",
+                        end:""
+                    },
+                    calendarOptions: {
+                        headerToolbar: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridDay'
+                        },
+                        initialView: 'dayGridMonth',
+                        initialEvents: [],
+                        editable: true,
+                        selectable: true,
+                        selectMirror: true,
+                        dayMaxEvents: true,
+                        weekends: true,
+                        eventClick: this.handleEventClick,
+                        // eventsSet: this.handleEvents
+                    }
+                }
+            },
+            methods: {
+                getDate(dateTimeStr) {
+                    if (dateTimeStr) return new Date(dateTimeStr).toLocaleDateString();
+                    return "";
+                },
+                getTime(dateTimeStr) {
+                    if (dateTimeStr) return new Date(dateTimeStr).toLocaleTimeString();
+                    return "";
+                },
+                getClockInfo() {
+                    let self = this;
+                    axios("/mobile/api/Shift/schedule").then(res => {
+                        console.log(res.data);
+                        for (let event of res.data) {
+                            self.$refs.calendar.getApi().addEvent({
+                                id: event.id,
+                                title: event.title,
+                                start: event.start,
+                                end: event.end,
+                                allDay: event.allDay
+                            });
+                        }
+                    })
+                },
+                handleEventClick(clickInfo) {
+                    this.selectedEvent.title = clickInfo.event.title;
+                    this.selectedEvent.start = clickInfo.event.start
+                    this.selectedEvent.end = clickInfo.event.end
+                    $('#shiftSchedule').modal('show');
+                },
+            },
+            mounted() {
+                this.getClockInfo();                
+            }
+        }).component('full-calendar', FullCalendar.Vue.default).mount("#app");
+    </script>
 }
