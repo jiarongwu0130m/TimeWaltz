@@ -36,7 +36,6 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 });
 
             return Ok(shiftsResult);
-
         }
     }
 }
