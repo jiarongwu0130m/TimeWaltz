@@ -75,7 +75,7 @@ namespace WebApplication1.Services
         {
             var entity = GetShiftScheduleOrNull(model.Id);
 
-            entity.ShiftsName = model.ShiftName;
+            entity.ShiftsName = model.ShiftsName;
             entity.StartTime = model.StartTime;
             entity.EndTime = model.EndTime;
             entity.BreakTime = (int)Math.Round(model.BreakTimeHours * 60.0);

@@ -131,7 +131,7 @@ namespace WebApplication1.Helpers
             var model = new ShiftSchedulesEditViewModel
             {
                 Id = entity.Id,
-                ShiftName = entity.ShiftsName,
+                ShiftsName = entity.ShiftsName,
                 StartTime = entity.StartTime,
                 EndTime = entity.EndTime,
                 BreakTimeHours = entity.BreakTime / 60.0,

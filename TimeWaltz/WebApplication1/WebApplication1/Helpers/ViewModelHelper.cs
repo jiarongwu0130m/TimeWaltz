@@ -42,7 +42,7 @@ namespace WebApplication1.Helpers
             var entity = new ShiftSchedule
             {
                 Id = model.Id,
-                ShiftsName = model.ShiftName,
+                ShiftsName = model.ShiftsName,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
                 BreakTime = (int)Math.Round(model.BreakTimeHours * 60.0),
