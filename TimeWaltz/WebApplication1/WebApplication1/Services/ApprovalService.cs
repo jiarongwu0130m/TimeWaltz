@@ -30,15 +30,18 @@ namespace WebApplication1.Services
             {
                 TableId = empId,
                 TableType = (int)TableTypeEnum.補卡單,
+                Status = Repository.Enum.RequestStatusEnum.簽核中,
             });
             _timeWaltzContext.SaveChanges();
         }
+        
         public void NewApproval_加班單(int empId)
         {
             _timeWaltzContext.Approvals.Add(new Approval
             {
                 TableId = empId,
                 TableType = (int)TableTypeEnum.加班單,
+                Status = Repository.Enum.RequestStatusEnum.簽核中,
             });
             _timeWaltzContext.SaveChanges();
         }
