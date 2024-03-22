@@ -22,15 +22,13 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
     {
         private readonly ApprovalRepository _approvalRepository;
         private readonly TimeWaltzContext _db;
-        private readonly CompRequestService _service;
         private readonly RequestStatusService _requestService;
         private readonly ApprovalService _approvalService;
 
-        public AttendanceApiController(ApprovalRepository approvalRepository, TimeWaltzContext db, CompRequestService service, RequestStatusService requestService, ApprovalService approvalService)
+        public AttendanceApiController(ApprovalRepository approvalRepository, TimeWaltzContext db, RequestStatusService requestService, ApprovalService approvalService)
         {
             _approvalRepository = approvalRepository;
             _db = db;
-            _service = service;
             _requestService = requestService;
             _approvalService = approvalService;
         }
@@ -123,50 +121,6 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             // 檢查工作時長是否足夠
             return (workOff.Value - workOn.Value).TotalHours < 9 ? "時數不夠" : "正常";
         }
-        [HttpPost]
-        public bool CompRequestCreate(CompRequestCreateViewModel model)
-        {
-            try
-            {
-                var approvalEmp = _service.GetApprovalEmp(model.EmployeesId);
-                model.ApprovalEmployeeId = approvalEmp;
-
-                var entity = new AdditionalClockIn
-                {
-                    EmployeesId = model.EmployeesId,
-                    ApprovalEmployeeId = model.ApprovalEmployeeId,
-                    AdditionalTime = model.AdditionalTime,
-                    Status = ((int)model.Status),
-                    Reason = model.Reason,
-                };
-                _service.CreateCompRequest(entity);
-
-
-                _approvalService.NewApproval_補打卡(entity.Id);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-        [HttpGet]
-        public ActionResult<CompRequestDto> List()
-        {
-            try
-            {
-                var empId = User.GetId();
-                var models = _service.GetCompRequesListData(empId);
-                return Ok(models);
-            }
-            catch (Exception ex)
-            {
-                return Ok(new { status = false });
-            }
-
-        }        
     }
     public class CalendarEventDto 
     {
@@ -176,20 +130,5 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
         public string End { get; set; }
 
 
-        [HttpGet]
-        [Route("{id}")]
-        public ActionResult<CompRequestDetailViewModel> GetCompRequestData(int Id)
-        {
-            try
-            {
-                var dto = _service.GetEditDataOrNull(Id);
-                return Ok(dto);
-            }
-            catch
-            {
-                return Ok(new { status = false });
-            }
-        }
-
-    }
+    }        
 }

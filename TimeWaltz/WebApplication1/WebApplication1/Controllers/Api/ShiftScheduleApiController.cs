@@ -1,5 +1,4 @@
-﻿using AspNetCore;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Models;
 using WebApplication1.Helpers;
@@ -30,13 +29,13 @@ namespace WebApplication1.Controllers.Api
         }
 
         [HttpPost]
-        public ActionResult Create(ShiftScheduleCreateDto dto)
+        public ActionResult Create(ShiftSchedulesCreateViewModel dto)
         {
             try
             {
                 var entity = new ShiftSchedule
                 {
-                    ShiftsName = dto.ShiftsName,
+                    ShiftsName = dto.ShiftName,
                     StartTime = dto.StartTime,
                     EndTime = dto.EndTime,
                     MaxAdditionalClockIn = dto.MaxAdditionalClockIn,
@@ -47,38 +46,39 @@ namespace WebApplication1.Controllers.Api
             catch (Exception ex)
             {
                 return Ok(new { status = false });
-            }           
+            }
         }
         [HttpGet]
         [Route("{id}")]
-        public ShiftScheduleEditDto GetEditData(int id)
+        public ShiftSchedulesEditViewModel GetEditData(int id)
         {
-            var entity = _context.ShiftSchedules.FirstOrDefault(x=>x.Id == id);
-            var model = new ShiftScheduleEditDto
+            var entity = _context.ShiftSchedules.FirstOrDefault(x => x.Id == id);
+            var model = new ShiftSchedulesEditViewModel
             {
                 EndTime = entity.EndTime,
                 Id = entity.Id,
                 MaxAdditionalClockIn = entity.MaxAdditionalClockIn,
-                ShiftsName = entity.ShiftsName,
-                StartTime = entity.StartTime,              
+                ShiftName = entity.ShiftsName,
+                StartTime = entity.StartTime,
             };
             return model;
         }
         [HttpPost]
         [Route("{id}")]
-        public ActionResult Edit(ShiftScheduleEditDto dto)
+        public ActionResult Edit(ShiftSchedulesEditViewModel dto)
         {
             try
             {
                 var entity = _context.ShiftSchedules.FirstOrDefault(x => x.Id == dto.Id);
-                entity.ShiftsName = dto.ShiftsName;
+                entity.ShiftsName = dto.ShiftName;
                 entity.StartTime = dto.StartTime;
                 entity.EndTime = dto.EndTime;
                 entity.MaxAdditionalClockIn = dto.MaxAdditionalClockIn;
                 _context.SaveChanges();
                 return Ok(new { status = true });
             }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 return Ok(new { status = false });
             }
         }

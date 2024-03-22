@@ -31,25 +31,27 @@
                     </i>
                 </div>
 
-                <div class="row form-group basic" v-if="search.clockData && search.shiftData">
-                    <div class="chip chip-media m-1">
-                        <i class="chip-icon bg-warning">
-                            <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
-                        </i>
-                        <span class="chip-label">當日打卡時間：{{ search.clockStart }} - {{ search.clockEnd }}</span>
-                    </div>
+                <template>
+                    <div class="row form-group basic" v-if="search.clockData && search.shiftData">
+                        <div class="chip chip-media m-1">
+                            <i class="chip-icon bg-warning">
+                                <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
+                            </i>
+                            <span class="chip-label">當日打卡時間：{{ search.clockStart }} - {{ search.clockEnd }}</span>
+                        </div>
 
-                    <div class="chip chip-media m-1">
-                        <i class="chip-icon bg-warning">
-                            <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
-                        </i>
-                        <span class="chip-label">當日班表時間：{{ search.shiftStart }} - {{ search.shiftEnd }}</span>
+                        <div class="chip chip-media m-1">
+                            <i class="chip-icon bg-warning">
+                                <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
+                            </i>
+                            <span class="chip-label">當日班表時間：{{ search.shiftStart }} - {{ search.shiftEnd }}</span>
+                        </div>
                     </div>
-                </div>
+                </template>
 
                 <div class="form-group basic">
                     <div class="input-wrapper">
-                        <label class="label">補卡時段</label>
+                        <label class="col-form-label">補卡時段</label>
                         <select class="form-control select2 select2-hidden-accessible"
                                 style="width: 100%;" data-select2-id="1" tabindex="-1"
                                 aria-hidden="true" v-model.number="status">
@@ -81,6 +83,11 @@
                         <ion-icon name="notifications-outline" role="img" class="md hydrated" aria-label="logo facebook"></ion-icon>
                         送出
                     </button>
+                    <button type="button" class="btn btn-github" @@click="toList">
+                        <ion-icon name="arrow-back-circle-outline"></ion-icon>
+                        瀏覽單據
+                    </button>
+                    
                 </div>
 
             </div>
@@ -166,13 +173,13 @@
             methods: {
                 getNameAndId() {
                     let self = this;
-                    fetch("/api/LeaveApi/GetEmployeeName").then(res => res.json()).then(result => {
+                    fetch("/mobile/api/Complement/GetEmployeeName").then(res => res.json()).then(result => {
                         self.name = result.employeeName;
                         self.employeesId = result.employeeId;
                     })
                 },
                 getDropDownList() {
-                    fetch("/api/AdditionalClockInApi/DropDownList").then(res => res.json())
+                    fetch("/mobile/api/Complement/DropDownList").then(res => res.json())
                         .then(result => {
                             this.clockStatusSelectItems = result.clockStatusSelectItems;
                         });
@@ -230,7 +237,6 @@
                                 const startTime = item.start.split('T')[1];
                                 const endTime = item.end.split('T')[1];
                                 if (startDate === self.date) {
-                                    console.log("item.start" + item.start);
                                     self.search.date = startDate;
                                     self.search.shiftStart = startTime;
                                     self.search.shiftEnd = endTime;
@@ -259,19 +265,15 @@
                     console.log(self.dataValid.status);
                     if (self.status == null) {
                         self.dataValid.status = false;
-
-                    }  else {
-
+                    } else {
                         self.dataValid.status = true;
                         self.send();
                     }
-
-
                 },
                 send() {
                     let self = this;
 
-                    axios.post("/mobile/api/Attendance/CompRequestCreate", {
+                    axios.post("/mobile/api/Complement/CompRequestCreate", {
                         employeesId: self.employeesId,
                         additionalTime: self.date,
                         status: self.status,
@@ -290,6 +292,9 @@
                             });
                         }
                     });
+                },
+                toList() {
+                    location.href = "/employee/query/Complement";
                 },
             }
         }).mount("#app");
