@@ -23,15 +23,13 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
     {
         private readonly ApprovalRepository _approvalRepository;
         private readonly TimeWaltzContext _db;
-        private readonly CompRequestService _service;
         private readonly RequestStatusService _requestService;
         private readonly ApprovalService _approvalService;
 
-        public AttendanceApiController(ApprovalRepository approvalRepository, TimeWaltzContext db, CompRequestService service, RequestStatusService requestService, ApprovalService approvalService)
+        public AttendanceApiController(ApprovalRepository approvalRepository, TimeWaltzContext db, RequestStatusService requestService, ApprovalService approvalService)
         {
             _approvalRepository = approvalRepository;
             _db = db;
-            _service = service;
             _requestService = requestService;
             _approvalService = approvalService;
         }
@@ -167,9 +165,9 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 return Ok(new { status = false });
             }
 
-        }
+        }        
     }
-    public class CalendarEventDto
+    public class CalendarEventDto 
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -177,20 +175,5 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
         public string End { get; set; }
 
 
-        [HttpGet]
-        [Route("{id}")]
-        public ActionResult<CompRequestDetailViewModel> GetCompRequestData(int Id)
-        {
-            try
-            {
-                var dto = _service.GetEditDataOrNull(Id);
-                return Ok(dto);
-            }
-            catch
-            {
-                return Ok(new { status = false });
-            }
-        }
-
-    }
+    }        
 }

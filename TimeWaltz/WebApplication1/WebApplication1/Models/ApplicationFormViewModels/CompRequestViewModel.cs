@@ -6,15 +6,7 @@ using Repository.Enums;
 namespace WebApplication1.Models.ApplicationFormViewModels
 {
 
-    public class CompRequestDto
-    {
-        public int Id { get; set; }
-        public int EmployeesId { get; set; }
-        public DateTime AdditionalTime { get; set; }
-
-        public string Status { get; set; }
-        public string ApprovalStatus { get; set; }
-    }
+    
 
     public class CompRequestViewModel
     {
@@ -53,32 +45,7 @@ namespace WebApplication1.Models.ApplicationFormViewModels
 
     }
 
-    //public class CompRequestEmpIdNameGet
-    //{
-    //    public int EmployeeId { get; set; }
-    //    public string EmployeeName { get; set; }
-    //    public int approvalEmployeeid { get; set; }
-    //    public string approvalEmployeeName { get; set; }
-
-    //}
-
-    /// <summary>
-    /// 補打卡單詳細資料用
-    /// </summary>
-    public class CompRequestDetailViewModel
-    {
-        public int Id { get; set; }
-
-        public string EmployeeName { get; set; }
 
 
-        public DateTime AdditionalTime { get; set; }
-
-        public string Status { get; set; }        
-
-        public string? Reason { get; set; }
-        public string ApprovalEmpName { get; set; }
-
-
-    }
+    
 }

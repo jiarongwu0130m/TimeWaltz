@@ -97,8 +97,8 @@
                 getListData() {
                     let self = this;
                     Promise.all([
-                        fetch("/mobile/api/Attendance/List").then(res => res.json()),
-                        fetch("/api/AdditionalClockInApi/DropDownList").then(res => res.json())
+                        fetch("/mobile/api/Complement/List").then(res => res.json()),
+                        fetch("/mobile/api/Complement/DropDownList").then(res => res.json())
                     ]).then(([additionalClockIns, dropdownList]) => {
                         this.allcompRequest = additionalClockIns;
                         this.clockStatusSelectItems = dropdownList.clockStatusSelectItems;
