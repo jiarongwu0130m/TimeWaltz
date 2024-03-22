@@ -67,6 +67,12 @@ namespace WebApplication1.Controllers
 
 
         [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
+        [HttpGet]
         public IActionResult GenPwd(string pwd)
         {
            var  salt= _UserService.GenerateSalt();
