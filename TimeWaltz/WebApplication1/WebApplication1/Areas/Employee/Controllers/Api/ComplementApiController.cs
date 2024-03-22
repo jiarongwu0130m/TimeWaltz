@@ -182,5 +182,30 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             return UserAndName;
         }
 
+        /// <summary>
+        ///取得員工打卡紀錄
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public object GetEmpClocks()
+        {
+            var UserId = User.GetId();
+
+            var clocks = _db.Clocks.AsNoTracking().Where(x => x.EmployeesId == User.GetId()).GroupBy(x => x.Date.Date)
+            .ToDictionary(k => k.Key, v => new
+            {
+                On = v.Where(x => x.Status == ClockStatusEnum.上班打卡).MinBy(x => x.Date),
+                Off = v.Where(x => x.Status == ClockStatusEnum.下班打卡).MaxBy(x => x.Date)
+            });
+
+            if (clocks == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(clocks);
+        }
+
+
     }
 }

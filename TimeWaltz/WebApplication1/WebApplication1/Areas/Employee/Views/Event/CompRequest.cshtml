@@ -229,9 +229,10 @@
 
                     axios.all([
                         axios("/mobile/api/Shift/Schedule"),
-                        axios("/mobile/api/Attendance/all")
+                        axios("/mobile/api/Complement/GetEmpClocks")
                     ])
                         .then(axios.spread(function (response1, response2) {
+                            console.log(response2);
                             response1.data.forEach(item => {
                                 const startDate = item.start.split('T')[0];
                                 const startTime = item.start.split('T')[1];
@@ -241,22 +242,26 @@
                                     self.search.shiftStart = startTime;
                                     self.search.shiftEnd = endTime;
                                     self.search.shiftData = true;
+                                    return;
                                 }
                             });
 
                             response2.data.forEach(item => {
 
-                                const startDate = item.start.split('T')[0];
-                                const startTime = item.start.split('T')[1];
-                                const endDate = item.end.split('T')[0];
-                                const endTime = item.end.split('T')[1];
+                                const startDate = item.data.split('T')[0];
+                                const startTime = item.data.on.date.split('T')[1];
+                                const endTime = item.data.off.date.split('T')[1];
 
                                 if (startDate === self.date && endDate === self.date) {
                                     self.search.clockData = true;
-                                    self.search.clockStart = startTime.split('Z')[0];
-                                    self.search.clockEnd = endTime.split('Z')[0];
+                                    self.search.clockStart = startTime;
+                                    self.search.clockEnd = endTime;
+                                    return;
                                 }
                             });
+                                console.log("self.search.clockData "+ self.search.clockData );
+                                console.log("self.search.clockStart "+ self.search.clockStart );
+                                console.log("self.search.clockEnd " + self.search.clockEnd);
                         }));
                 },
                 checkCompStatus() {
