@@ -68,7 +68,7 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public EmpIdNameGet GetEmoloyeeName()
         {
-            var UserId = 1;
+            var UserId = User.GetId();
             var userNameAndIdPare = _overtimeRequestService.GetNameOrNull(UserId);
             var employee = EntityHelper.GetNameAndIdPare(userNameAndIdPare);
 

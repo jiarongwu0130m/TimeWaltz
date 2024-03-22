@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Repository.Enums;
 using Repository.Models;
 using WebApplication1.Helpers;
+using WebApplication1.Models.ApplicationFormViewModels;
 using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Services;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
@@ -19,10 +20,12 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
     public class AttendanceApiController : ControllerBase
     {
         private readonly TimeWaltzContext _db;
+        private readonly CompRequestService _service;
 
-        public AttendanceApiController(TimeWaltzContext db)
+        public AttendanceApiController(TimeWaltzContext db,CompRequestService service)
         {
             _db = db;
+            _service = service;
         }
 
 
@@ -94,6 +97,32 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
 
             // 檢查工作時長是否足夠
             return (workOff.Value - workOn.Value).TotalHours < 9 ? "時數不夠" : "正常";
+        }
+        [HttpPost]
+        public bool CompRequestCreate(CompRequestCreateViewModel model)
+        {
+            try
+            {
+                _db.AdditionalClockIns.Add(new AdditionalClockIn
+                {
+                    EmployeesId = model.EmployeesId,
+                    ApprovalEmployeeId = model.ApprovalEmployeeId,
+                    AdditionalTime = model.AdditionalTime,
+                    Status = ((int)model.Status),
+                    Reason = model.Reason,
+                });
+
+                var approvalEmp = _service.GetApprovalEmp(model.EmployeesId);
+                model.ApprovalEmployeeId = approvalEmp;
+
+
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

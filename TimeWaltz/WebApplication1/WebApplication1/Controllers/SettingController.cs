@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Repository.Models;
+using WebApplication1.Filters;
 using WebApplication1.Helpers;
 using WebApplication1.Models.SettingViewModels;
 using WebApplication1.Services;
@@ -55,6 +56,8 @@ public class SettingController : Controller
     ///     帳號查詢select
     /// </summary>
     /// <returns></returns>
+        [TimeWaltzAuthorize]
+
     public IActionResult Account()
     {
         return View();
@@ -207,6 +210,7 @@ public class SettingController : Controller
     ///     公佈欄-瀏覽頁面
     /// </summary>
     /// <returns></returns>
+        [TimeWaltzAuthorize]
     public IActionResult BillBoard()
     {
         return View();
