@@ -59,6 +59,79 @@
                 }
             },
             methods: {
+                checkIsDelete(id, e) {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger"
+                        },
+                        buttonsStyling: false
+                    });
+                    swalWithBootstrapButtons.fire({
+                        title: "確定刪除?",
+                        text: "此刪除可能無法回復",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "是",
+                        cancelButtonText: "否",
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.getOut(id, e);
+                            swalWithBootstrapButtons.fire({
+                                title: "成功刪除!",
+                                icon: "success"
+                            });
+                            this.getListData();
+                        } else if (
+                            /* Read more about handling dismissals below */
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire({
+                                title: "取消",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }, getOut(id, event) {
+                    let self = this
+                    event.preventDefault();
+                    axios.post(`/api/SpecialGradeApi/Delete/${id}`).then((response) => {
+                        if (response.status) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "刪除成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    this.getListData();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "刪除失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
+                        }
+                    })
+                },
+                edit(id, event){
+                    event.preventDefault();
+                    location.href = `/basicsetting/SpecialGradeEdit/${id}`
+                },
                 getListData() {
                     let self = this;
                     axios('/api/SpecialGradeApi/GetListData').then((response) => {

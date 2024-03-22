@@ -125,7 +125,6 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 _leaveService.CreateLeaveRequest(entity);
 
 
-                _requestStatusService.NewRequestStatus(entity.Id);
                 _approvalService.NewApproval(entity.Id); 
 
                 return Ok(new { status = true });

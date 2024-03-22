@@ -5,6 +5,17 @@ using Repository.Enums;
 
 namespace WebApplication1.Models.ApplicationFormViewModels
 {
+
+    public class CompRequestDto
+    {
+        public int Id { get; set; }
+        public int EmployeesId { get; set; }
+        public DateTime AdditionalTime { get; set; }
+
+        public string Status { get; set; }
+        public string ApprovalStatus { get; set; }
+    }
+
     public class CompRequestViewModel
     {
         public int Id { get; set; }

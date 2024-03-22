@@ -21,11 +21,15 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
     {
         private readonly TimeWaltzContext _db;
         private readonly CompRequestService _service;
+        private readonly RequestStatusService _requestService;
+        private readonly ApprovalService _approvalService;
 
-        public AttendanceApiController(TimeWaltzContext db,CompRequestService service)
+        public AttendanceApiController(TimeWaltzContext db,CompRequestService service, RequestStatusService requestService , ApprovalService approvalService)
         {
             _db = db;
             _service = service;
+            _requestService = requestService;
+            _approvalService = approvalService;
         }
 
 
@@ -103,20 +107,22 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
         {
             try
             {
-                _db.AdditionalClockIns.Add(new AdditionalClockIn
+                var approvalEmp = _service.GetApprovalEmp(model.EmployeesId);
+                model.ApprovalEmployeeId = approvalEmp;
+
+                var entity = new AdditionalClockIn
                 {
                     EmployeesId = model.EmployeesId,
                     ApprovalEmployeeId = model.ApprovalEmployeeId,
                     AdditionalTime = model.AdditionalTime,
                     Status = ((int)model.Status),
                     Reason = model.Reason,
-                });
+                };
+                _service.CreateCompRequest(entity);
 
-                var approvalEmp = _service.GetApprovalEmp(model.EmployeesId);
-                model.ApprovalEmployeeId = approvalEmp;
+                
+                _approvalService.NewApproval_補打卡(entity.Id);
 
-
-                _db.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -124,5 +130,22 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 return false;
             }
         }
+
+        [HttpGet]
+        public ActionResult<CompRequestDto> List()
+        {
+            try
+            {
+                var empId = User.GetId();
+                var models = _service.GetCompRequesListData(empId);
+                return Ok(models);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }
+
+        }
+
     }
 }

@@ -1,5 +1,128 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "_Layout";
+    ViewBag.title = "補打卡單據";
+}
+
+<div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>補打卡單據查詢</span>
+                <a @@click="toCreate" class="iconedbox bg-success">
+                    <ion-icon name="add" role="img" class="md hydrated" aria-label="add"></ion-icon>
+                </a>
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive text-center">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th v-bind:title="title('now')">{{ title('now') }}</th>
+                            <th v-bind:title="title('AdditionalTime')">{{ title('AdditionalTime') }}</th>
+                            <th v-bind:title="title('Status')">{{ title('Status') }}</th>
+                            <th v-bind:title="title('Approval')">{{ title('Approval') }}</th>
+                            <th v-bind:title="title('Details')">{{ title('Details') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in allcompRequest">
+                            <td>{{++index}}</td>
+                            <td>{{formatDateTime(item.additionalTime)}}</td>
+                            <td>
+                                {{ clockStatusSelectItems.find(option => option.value == item.status)?.text }}
+                            </td>
+                            <td>{{item.approvalStatus}}</td>
+                            <td>
+                                <a href="#" @@click="toDetail(item.id,$event)">詳細</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    search: {
+                        date: "",
+                        status: "",
+                    },
+                    allcompRequest: [],
+                    clockStatusSelectItems: [],
+                    originalCompRequests: []
+                }
+            },
+            computed: {
+                title() {
+                    return key => {
+                        const localizationData = {
+                            'now': '項次',
+                            'AdditionalTime': '補卡時間',
+                            'Status': '補卡狀態',
+                            'Approval': '審核狀態',
+                            'Details': '詳細資料'
+                        };
+                        return localizationData[key] || key;
+                    };
+                }
+
+            },
+            methods: {
+                formatDateTime(dateTimeString) {
+                    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                    const date = new Date(dateTimeString);
+                    return date.toLocaleDateString('zh-TW', options);
+                },
+                searchCompRequests() {
+                    const filteredCompRequests = this.originalCompRequests.filter(item => {
+                        const requestDate = new Date(item.additionalTime);
+                        const selectedDate = new Date(this.search.date);
+                        return requestDate >= selectedDate;
+                    });
+                    this.allcompRequest = filteredCompRequests;
+                },
+                toCreate() {
+                    location.href = "/employee/event/CompRequest";
+                },
+                toDetail(id, event) {
+                    event.preventDefault();
+                    location.href = `/employee/query/leavedetail/${id}`;
+                }, 
+                getListData() {
+                    let self = this;
+                    Promise.all([
+                        fetch("/mobile/api/Attendance/List").then(res => res.json()),
+                        fetch("/api/AdditionalClockInApi/DropDownList").then(res => res.json())
+                    ]).then(([additionalClockIns, dropdownList]) => {
+                        this.allcompRequest = additionalClockIns;
+                        this.clockStatusSelectItems = dropdownList.clockStatusSelectItems;
+                        this.originalCompRequests = additionalClockIns;
+                    });
+                },
+            },
+            mounted() {
+                this.getListData();
+
+                const dateInputRef = document.querySelector('#reservationdate');
+
+                $(dateInputRef).daterangepicker({
+                    singleDatePicker: true,
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                }).on('apply.daterangepicker', (ev, picker) => {
+                    this.search.date = picker.startDate.format('YYYY/MM/DD');
+                    dateInputRef.value = this.search.date;
+                    this.searchCompRequests();
+                });
+
+            }
+        }).mount('#app')
+    </script>
 }

@@ -2,6 +2,12 @@
 
 namespace WebApplication1.Models.BasicSettingViewModels
 {
+    public class SpecialGradeEditDto
+    {
+        public int Id { get; set; }
+        public int ServiceLength { get; set; }
+        public int Days { get; set; }
+    }
     public class SpecialGradeCreateDto
     {
         public int ServiceLength { get; set; }

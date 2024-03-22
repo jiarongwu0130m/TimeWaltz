@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Repository.Enums;
 using Repository.Models;
 using WebApplication1.Models.ApplicationFormViewModels;
+using WebApplication1.Models.PersonalRecordViewModels;
 
 namespace WebApplication1.Services
 {
@@ -50,5 +52,21 @@ namespace WebApplication1.Services
         {
             return _timeWaltzDb.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == empId).Department.EmployeeId;
         }
+
+        public List<CompRequestDto> GetCompRequesListData(int empId)
+        {
+            return _timeWaltzDb.AdditionalClockIns
+                .Where(x => x.EmployeesId == empId)
+                .Join(_timeWaltzDb.Approvals.Where(y => y.TableType == (int)TableTypeEnum.補卡單), x => x.Id, y => y.TableId, (x, y) => new { x, y })
+            .Select(xy => new CompRequestDto
+            {
+                Id = xy.x.Id,
+                EmployeesId = xy.x.EmployeesId,
+                AdditionalTime = xy.x.AdditionalTime,
+                Status = xy.x.Status.ToString(),                
+                ApprovalStatus = xy.y.Status.ToString(),
+            }).ToList();
+        }
+
     }
 }
