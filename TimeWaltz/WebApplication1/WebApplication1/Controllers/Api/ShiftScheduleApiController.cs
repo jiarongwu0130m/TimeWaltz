@@ -35,7 +35,7 @@ namespace WebApplication1.Controllers.Api
             {
                 var entity = new ShiftSchedule
                 {
-                    ShiftsName = dto.ShiftName,
+                    ShiftsName = dto.ShiftsName,
                     StartTime = dto.StartTime,
                     EndTime = dto.EndTime,
                     MaxAdditionalClockIn = dto.MaxAdditionalClockIn,
@@ -50,27 +50,27 @@ namespace WebApplication1.Controllers.Api
         }
         [HttpGet]
         [Route("{id}")]
-        public ShiftSchedulesEditViewModel GetEditData(int id)
+        public ShiftScheduleEditDto GetEditData(int id)
         {
             var entity = _context.ShiftSchedules.FirstOrDefault(x => x.Id == id);
-            var model = new ShiftSchedulesEditViewModel
+            var model = new ShiftScheduleEditDto
             {
-                EndTime = entity.EndTime,
+                EndTime = entity.EndTime.ToString("HH:mm"),
                 Id = entity.Id,
                 MaxAdditionalClockIn = entity.MaxAdditionalClockIn,
-                ShiftName = entity.ShiftsName,
-                StartTime = entity.StartTime,
+                ShiftsName = entity.ShiftsName,
+                StartTime = entity.StartTime.ToString("HH:mm"),
             };
             return model;
         }
         [HttpPost]
         [Route("{id}")]
-        public ActionResult Edit(ShiftSchedulesEditViewModel dto)
+        public ActionResult Edit(ShiftScheduleInputEditDto dto)
         {
             try
             {
                 var entity = _context.ShiftSchedules.FirstOrDefault(x => x.Id == dto.Id);
-                entity.ShiftsName = dto.ShiftName;
+                entity.ShiftsName = dto.ShiftsName;
                 entity.StartTime = dto.StartTime;
                 entity.EndTime = dto.EndTime;
                 entity.MaxAdditionalClockIn = dto.MaxAdditionalClockIn;
@@ -81,6 +81,22 @@ namespace WebApplication1.Controllers.Api
             {
                 return Ok(new { status = false });
             }
+        }
+        [HttpPost]
+        [Route("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var entity = _context.ShiftSchedules.FirstOrDefault(x => x.Id == id);
+                _context.ShiftSchedules.Remove(entity);
+                _context.SaveChanges();
+                return Ok(new {status = true});
+            }
+            catch (Exception ex) { 
+                return Ok(new {status = false});
+            }
+
         }
     }
 }

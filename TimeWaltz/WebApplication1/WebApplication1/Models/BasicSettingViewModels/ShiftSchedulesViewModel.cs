@@ -8,6 +8,15 @@ namespace WebApplication1.Models.BasicSettingViewModels
     {
         public int Id { get; set; }
         public string ShiftsName { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public int MaxAdditionalClockIn { get; set; }
+
+    }
+    public class ShiftScheduleInputEditDto
+    {
+        public int Id { get; set; }
+        public string ShiftsName { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int MaxAdditionalClockIn { get; set; }
@@ -41,7 +50,7 @@ namespace WebApplication1.Models.BasicSettingViewModels
         public int Id { get; set; }
         [Required]
         [DisplayName("班別名稱")]
-        public string ShiftName { get; set; }
+        public string ShiftsName { get; set; }
         [DisplayName("開始時間")]
         public DateTime StartTime { get; set; }
         [DisplayName("結束時間")]
@@ -56,7 +65,7 @@ namespace WebApplication1.Models.BasicSettingViewModels
     {
         public int Id { get; set; }
         [Required]
-        public string ShiftName { get; set; }
+        public string ShiftsName { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public double BreakTimeHours { get; set; }
