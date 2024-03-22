@@ -75,3 +75,4 @@ _[Ss]cripts
 *.ncrunchsolution
 *.dot[Cc]over
 
+/TimeWaltz/WebApplication1/WebApplication1/appsettings.Development.json
