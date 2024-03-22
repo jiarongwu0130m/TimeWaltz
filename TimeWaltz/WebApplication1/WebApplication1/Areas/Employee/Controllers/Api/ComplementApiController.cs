@@ -114,9 +114,9 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             {
                 var compRequest = _db.AdditionalClockIns
                 .Include(x => x.Employees)
-                .Join(_db.Employees, 
-                x => x.ApprovalEmployeeId, 
-                y => y.Id, 
+                .Join(_db.Employees,
+                x => x.ApprovalEmployeeId,
+                y => y.Id,
                 (x, y) => new { x, y })
                 .Join(_db.Approvals.Where(
                     xy => xy.TableType == (int)TableTypeEnum.補卡單),
@@ -135,6 +135,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                     Reason = compRequest.xy.x.Reason,
                     ApprovalEmpName = compRequest.xy.y.Name,
                     ApprovalStatus = compRequest.z.Status == null ? "" : compRequest.z.Status.ToString(),
+                    ApprovalRemark = compRequest.z.Remark == null ? "" : compRequest.z.Remark,
                 };
                 return result;
             }
