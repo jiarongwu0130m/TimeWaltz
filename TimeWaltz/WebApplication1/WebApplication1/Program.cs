@@ -1,6 +1,7 @@
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Repository;
 using Repository.Models;
 using WebApplication1.Services;
 
@@ -33,6 +34,8 @@ namespace WebApplication1
             builder.Services.AddScoped<SpecialHolidayDaysService>();
             builder.Services.AddScoped<SpecialVacationService>();
             builder.Services.AddScoped<ApprovalService>();
+            builder.Services.AddScoped<ApprovalRepository>();
+            
             builder.Services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                 .UseSimpleAssemblyNameTypeSerializer()

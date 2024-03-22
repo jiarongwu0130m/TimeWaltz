@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Repository;
 using Repository.Enums;
 using Repository.Models;
 using WebApplication1.Helpers;
@@ -19,13 +20,15 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
     [Authorize(AuthenticationSchemes = "EmployeeAuthScheme")]
     public class AttendanceApiController : ControllerBase
     {
+        private readonly ApprovalRepository _approvalRepository;
         private readonly TimeWaltzContext _db;
         private readonly CompRequestService _service;
         private readonly RequestStatusService _requestService;
         private readonly ApprovalService _approvalService;
 
-        public AttendanceApiController(TimeWaltzContext db,CompRequestService service, RequestStatusService requestService , ApprovalService approvalService)
+        public AttendanceApiController(ApprovalRepository approvalRepository, TimeWaltzContext db, CompRequestService service, RequestStatusService requestService, ApprovalService approvalService)
         {
+            _approvalRepository = approvalRepository;
             _db = db;
             _service = service;
             _requestService = requestService;
@@ -38,7 +41,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
         {
             var flex = _db.Flextimes.First();
             var shifts = GetEmpShifts(User.GetId());
-            var approvalIds = _db.Approvals.AsNoTracking().Where(x => x.Status == RequestStatusEnum.簽核完成 && x.TableType == (int)TableTypeEnum.請假單).Select(x => x.TableId).ToList();
+            var approvalIds = _approvalRepository.GetId(RequestStatusEnum.簽核完成, TableTypeEnum.請假單);
             var leave = _db.LeaveRequests.AsNoTracking().Where(x => x.EmployeesId == User.GetId() && x.StartTime <= DateTime.Now.Date && approvalIds.Contains(x.Id)).ToList();
 
             var clocks = _db.Clocks.Where(x => x.EmployeesId == User.GetId()).GroupBy(x => x.Date.Date)
@@ -48,29 +51,48 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                     Off = v.Where(x => x.Status == ClockStatusEnum.下班打卡).MaxBy(x => x.Date)
                 });
 
+            var notExist = shifts.Where(x => leave.Any(z => z.StartTime <= x.ShiftsDate && x.ShiftsDate <= z.EndTime));
 
-            var result = shifts.AsParallel().Select(x =>
+            shifts.Except(notExist);
+            
+            var aa = leave.Select(x => new CalendarEventDto
+            {
+                Start = x.StartTime.ToISODateTimeString(),
+                End = x.EndTime.ToISODateTimeString(),
+                Title = "請假"
+            }) ;
+
+            var result = notExist.AsParallel().Select(x =>
             {
                 var scheduleStart = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay;
                 var scheduleEnd = x.ShiftsDate.Date + x.ShiftSchedule.EndTime.TimeOfDay;
-                if (!clocks.TryGetValue(x.ShiftsDate.Date, out var work)) return new
+                if (!clocks.TryGetValue(x.ShiftsDate.Date, out var work)) return new CalendarEventDto
                 {
-                    start = scheduleStart.ToString("u").Replace(" ", "T"),
-                    end = scheduleEnd.ToString("u").Replace(" ", "T"),
-                    title = "打卡異常(尚未打卡)"
+                    Start = scheduleStart.ToISODateTimeString(),
+                    End = scheduleEnd.ToISODateTimeString(),
+                    Title = "打卡異常(尚未打卡)"
                 };
                 var result = CalculateWorkStatus(scheduleStart, scheduleEnd, work.On?.Date, work.Off?.Date, flex.MoveUp.GetValueOrDefault(), flex.FlexibleTime);
-                return new
+                return new CalendarEventDto
                 {
-                    start = work.On == null ? "" : work.On.Date.ToString("u").Replace(" ", "T"),
-                end = work.Off == null ? "" : work.Off.Date.ToString("u").Replace(" ", "T"),
-                    title = result
+                    Start = work.On == null ? "" : work.On.Date.ToISODateTimeString(),
+                    End = work.Off == null ? "" : work.Off.Date.ToISODateTimeString(),
+                    Title = result
                 };
 
 
             });
             //todo 計算請假時段 移除打卡紀錄
-            return result.OrderBy(x=>x.start);
+
+
+            var temp = aa.Concat(result).ToList();
+            return temp.Select((x,idx) => new CalendarEventDto 
+            {
+                Id = idx,
+                End = x.End,
+                Start = x.Start,
+                Title = x.Title,
+            });
 
         }
 
@@ -120,7 +142,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 };
                 _service.CreateCompRequest(entity);
 
-                
+
                 _approvalService.NewApproval_補打卡(entity.Id);
 
                 return true;
@@ -145,7 +167,15 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 return Ok(new { status = false });
             }
 
-        }
+        }        
+    }
+    public class CalendarEventDto 
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Start { get; set; }
+        public string End { get; set; }
+
 
     }
 }
