@@ -25,6 +25,7 @@ namespace WebApplication1.Controllers.Api
             try
             {
                 var entity = ViewModelHelper.ToEntity(dto);
+                entity.EmployeesId = User.GetId();
                 _billboardService.CreateBillboard(entity);
                 return true;
             }
