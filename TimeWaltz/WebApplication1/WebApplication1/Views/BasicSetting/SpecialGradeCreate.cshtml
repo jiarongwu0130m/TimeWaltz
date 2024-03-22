@@ -8,16 +8,16 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label name="ServiceLength" class="control-label">服務年資</label>
-                        <input name="ServiceLength" class="form-control col-3" />
+                        <input name="ServiceLength" class="form-control col-3" v-model="serviceLength" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label name="Days" class="control-label">特休天數</label>
-                        <input name="Days" class="form-control col-3"/>
+                        <input name="Days" class="form-control col-3" v-model="days" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="card-footer">
-                        <input type="button" @@click="send()" value="新增" class="btn btn-primary" />
+                        <input type="button" @@click="send" value="新增" class="btn btn-primary" />
                         <a asp-controller="BasicSetting" asp-action="SpecialGrade" class="btn btn-outline-dark">返回</a>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                 send() {
                     let self = this;
                     console.log(this.specialVacationName, this.date)
-                    axios.post('/api/SpecialGradeApi/create', {
+                    axios.post('/api/SpecialGradeApi/Create', {
                         serviceLength: this.serviceLength,
                         days: this.days,
                     }).then((response) => {
