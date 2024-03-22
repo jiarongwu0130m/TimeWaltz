@@ -53,27 +53,32 @@ namespace WebApplication1.Models.ApplicationFormViewModels
 
     }
 
-    public class CompRequestEmpIdNameGet
+    //public class CompRequestEmpIdNameGet
+    //{
+    //    public int EmployeeId { get; set; }
+    //    public string EmployeeName { get; set; }
+    //    public int approvalEmployeeid { get; set; }
+    //    public string approvalEmployeeName { get; set; }
+
+    //}
+
+    /// <summary>
+    /// 補打卡單詳細資料用
+    /// </summary>
+    public class CompRequestDetailViewModel
     {
-        public int EmployeeId { get; set; }
+        public int Id { get; set; }
+
         public string EmployeeName { get; set; }
-        public int approvalEmployeeid { get; set; }
-        public string approvalEmployeeName { get; set; }
 
-    }
-
-    public class CompRequestApiCreateViewModel
-    {
-
-        public int EmployeesId { get; set; }
 
         public DateTime AdditionalTime { get; set; }
 
-        public int Status { get; set; }
-
+        public string Status { get; set; }        
 
         public string? Reason { get; set; }
+        public string ApprovalEmpName { get; set; }
 
-        public int ApprovalEmployeeId { get; set; }
+
     }
 }

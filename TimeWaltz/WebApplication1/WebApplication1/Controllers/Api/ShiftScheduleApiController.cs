@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AspNetCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Models;
 using WebApplication1.Helpers;
@@ -28,5 +29,58 @@ namespace WebApplication1.Controllers.Api
             return models;
         }
 
+        [HttpPost]
+        public ActionResult Create(ShiftScheduleCreateDto dto)
+        {
+            try
+            {
+                var entity = new ShiftSchedule
+                {
+                    ShiftsName = dto.ShiftsName,
+                    StartTime = dto.StartTime,
+                    EndTime = dto.EndTime,
+                    MaxAdditionalClockIn = dto.MaxAdditionalClockIn,
+                };
+                _service.CreateShiftSchedule(entity);
+                return Ok(new { status = true });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = false });
+            }           
+        }
+        [HttpGet]
+        [Route("{id}")]
+        public ShiftScheduleEditDto GetEditData(int id)
+        {
+            var entity = _context.ShiftSchedules.FirstOrDefault(x=>x.Id == id);
+            var model = new ShiftScheduleEditDto
+            {
+                EndTime = entity.EndTime,
+                Id = entity.Id,
+                MaxAdditionalClockIn = entity.MaxAdditionalClockIn,
+                ShiftsName = entity.ShiftsName,
+                StartTime = entity.StartTime,              
+            };
+            return model;
+        }
+        [HttpPost]
+        [Route("{id}")]
+        public ActionResult Edit(ShiftScheduleEditDto dto)
+        {
+            try
+            {
+                var entity = _context.ShiftSchedules.FirstOrDefault(x => x.Id == dto.Id);
+                entity.ShiftsName = dto.ShiftsName;
+                entity.StartTime = dto.StartTime;
+                entity.EndTime = dto.EndTime;
+                entity.MaxAdditionalClockIn = dto.MaxAdditionalClockIn;
+                _context.SaveChanges();
+                return Ok(new { status = true });
+            }
+            catch (Exception ex) { 
+                return Ok(new { status = false });
+            }
+        }
     }
 }

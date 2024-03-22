@@ -4,6 +4,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models.BasicSettingViewModels
 {
+    public class ShiftScheduleEditDto
+    {
+        public int Id { get; set; }
+        public string ShiftsName { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public int MaxAdditionalClockIn { get; set; }
+
+    }
+    public class ShiftScheduleCreateDto
+    {
+        public string ShiftsName { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public int MaxAdditionalClockIn { get; set; }
+
+    }
     public class ShiftSchedulesViewModel
     {
         public int Id { get; set; }
