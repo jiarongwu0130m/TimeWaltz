@@ -67,7 +67,6 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                     title = result
                 };
 
-
             });
             //todo 計算請假時段 移除打卡紀錄
             return result.OrderBy(x=>x.start);
@@ -145,6 +144,21 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 return Ok(new { status = false });
             }
 
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult<CompRequestDetailViewModel> GetCompRequestData(int Id)
+        {
+            try
+            {
+                var dto = _service.GetEditDataOrNull(Id);
+                return Ok(dto);
+            }
+            catch
+            {
+                return Ok(new { status = false });
+            }
         }
 
     }

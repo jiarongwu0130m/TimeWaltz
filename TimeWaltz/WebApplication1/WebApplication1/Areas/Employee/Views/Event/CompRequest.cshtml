@@ -230,6 +230,7 @@
                                 const startTime = item.start.split('T')[1];
                                 const endTime = item.end.split('T')[1];
                                 if (startDate === self.date) {
+                                    console.log("item.start" + item.start);
                                     self.search.date = startDate;
                                     self.search.shiftStart = startTime;
                                     self.search.shiftEnd = endTime;
