@@ -42,32 +42,7 @@ namespace WebApplication1.Controllers.Api
             };
             return model;
         }
-        [HttpPost]
-        public bool CompRequestCreate(CompRequestCreateViewModel model)
-        {
-            try
-            {
-                _timeWaltzDb.AdditionalClockIns.Add(new AdditionalClockIn
-                {
-                    EmployeesId = model.EmployeesId,
-                    ApprovalEmployeeId= model.ApprovalEmployeeId,
-                    AdditionalTime = model.AdditionalTime,
-                    Status = ((int)model.Status),
-                    Reason = model.Reason,
-                });
-
-                var approvalEmp = _compRequestService.GetApprovalEmp(model.EmployeesId);
-                model.ApprovalEmployeeId = approvalEmp;
-
-
-                _timeWaltzDb.SaveChanges();
-                return  true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
+        
 
         [HttpGet]
         [Route("{id}")]
