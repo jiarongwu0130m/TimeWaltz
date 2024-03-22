@@ -63,7 +63,8 @@ public class AttendanceApiController : ControllerBase
                 {
                     Start = scheduleStart.ToISODateTimeString(),
                     End = scheduleEnd.ToISODateTimeString(),
-                    Title = "打卡異常(尚未打卡)"
+                    Title = "打卡異常(尚未打卡)",
+                    BackgroundColor = "#DC4EDC"
                 };
             var result = CalculateWorkStatus(scheduleStart, scheduleEnd, work.On?.Date, work.Off?.Date,
                 flex.MoveUp.GetValueOrDefault(), flex.FlexibleTime);
@@ -71,7 +72,8 @@ public class AttendanceApiController : ControllerBase
             {
                 Start = work.On == null ? "" : work.On.Date.ToISODateTimeString(),
                 End = work.Off == null ? "" : work.Off.Date.ToISODateTimeString(),
-                Title = result
+                Title = result,
+                BackgroundColor = result == "正常" ? "#00ff00" : "#4000ff"
             };
         });
         //todo 計算請假時段 移除打卡紀錄
@@ -80,7 +82,8 @@ public class AttendanceApiController : ControllerBase
         {
             Start = x.StartTime.ToISODateTimeString(),
             End = x.EndTime.ToISODateTimeString(),
-            Title = "請假"
+            Title = "請假",
+            BackgroundColor = "#ff9f89",
         });
 
         return leaveRange.Concat(result).Select((x, idx) => new CalendarEventDto
@@ -88,7 +91,8 @@ public class AttendanceApiController : ControllerBase
             Id = idx,
             End = x.End,
             Start = x.Start,
-            Title = x.Title
+            Title = x.Title,
+            BackgroundColor = x.BackgroundColor
         });
     }
 

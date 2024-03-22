@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "班表查詢";
+    ViewBag.Title = "出缺勤查詢";
 }
 @section Styles
 {
@@ -7,24 +7,22 @@
           integrity="sha256-5veQuRbWaECuYxwap/IOE/DAwNxgm4ikX7nrgsqYp88=" crossorigin="anonymous">
 }
 <div class="secion mt-2" id="app">
-    <div class="card">
+    <div class="card h-100">
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
-                <span>班表查詢</span>
+                <span>出缺勤查詢</span>
                 <a @@click="shiftScheduleShow" class="iconedbox bg-info">
                     <ion-icon name="information-circle-outline"></ion-icon>
                 </a>
             </h3>
         </div>
-        <div class="card-body">
+        <div class="card-body h-100">
             <full-calendar class='demo-app-calendar' ref="calendar" :options='calendarOptions'>
                 <!-- <template v-slot:event-content='arg'>
                     <b>{{ arg.timeText }}</b>
                     <i>XXX{{ arg.event.title }}XXX</i>
                 </template> -->
             </full-calendar>
-        </div>
-        <div class="card-footer">
         </div>
     </div>
 
@@ -73,6 +71,7 @@
                             center: 'title',
                             right: 'dayGridMonth'
                         },
+                        height:'auto',
                         initialView: 'dayGridMonth',
                         initialEvents: [],
                         editable: true,
@@ -94,9 +93,9 @@
                     if (dateTimeStr) return new Date(dateTimeStr).toLocaleTimeString();
                     return "";
                 },
-                getClockInfo() {
+                getAttendance() {
                     let self = this;
-                    axios("/mobile/api/Shift/schedule").then(res => {
+                    axios("/mobile/api/attendance/all").then(res => {
                         console.log(res.data);
                         for (let event of res.data) {
                             self.$refs.calendar.getApi().addEvent({
@@ -104,7 +103,9 @@
                                 title: event.title,
                                 start: event.start,
                                 end: event.end,
-                                allDay: event.allDay
+                                allDay: event.allDay,
+                                display: 'block',
+                                backgroundColor: event.backgroundColor,
                             });
                         }
                     })
@@ -117,7 +118,7 @@
                 },
             },
             mounted() {
-                this.getClockInfo();
+                this.getAttendance();
             }
         }).component('full-calendar', FullCalendar.Vue.default).mount("#app");
     </script>
