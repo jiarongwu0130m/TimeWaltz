@@ -63,6 +63,7 @@ namespace WebApplication1.Models.ApplicationFormViewModels
         public string Reason { get; set; }
         public string ApprovalStatus { get; set; }
         public string ApprovalEmpName { get; set; }
+        public string? ApprovalRemark { get; set; }
     }
     public class CompRequestGetEmpIdName
     {
