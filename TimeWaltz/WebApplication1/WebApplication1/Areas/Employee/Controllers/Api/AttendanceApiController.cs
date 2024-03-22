@@ -7,6 +7,7 @@ using Repository.Enums;
 using Repository.Models;
 using WebApplication1.Helpers;
 using WebApplication1.Models.ApplicationFormViewModels;
+using WebApplication1.Models.BasicSettingViewModels;
 using WebApplication1.Models.PersonalRecordViewModels;
 using WebApplication1.Services;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
@@ -44,28 +45,23 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             var approvalIds = _approvalRepository.GetId(RequestStatusEnum.簽核完成, TableTypeEnum.請假單);
             var leave = _db.LeaveRequests.AsNoTracking().Where(x => x.EmployeesId == User.GetId() && x.StartTime <= DateTime.Now.Date && approvalIds.Contains(x.Id)).ToList();
 
-            var clocks = _db.Clocks.Where(x => x.EmployeesId == User.GetId()).GroupBy(x => x.Date.Date)
+            var clocks = _db.Clocks.AsNoTracking().Where(x => x.EmployeesId == User.GetId()).GroupBy(x => x.Date.Date)
                 .ToDictionary(k => k.Key, v => new
                 {
                     On = v.Where(x => x.Status == ClockStatusEnum.上班打卡).MinBy(x => x.Date),
                     Off = v.Where(x => x.Status == ClockStatusEnum.下班打卡).MaxBy(x => x.Date)
                 });
 
-            var notExist = shifts.Where(x => leave.Any(z => z.StartTime <= x.ShiftsDate && x.ShiftsDate <= z.EndTime));
+            var removedOverlapShifts = shifts.Where(x => !leave.Any(l => x.ShiftsDate >= l.StartTime && x.ShiftsDate <= l.EndTime));
 
-            shifts.Except(notExist);
-            
-            var aa = leave.Select(x => new CalendarEventDto
-            {
-                Start = x.StartTime.ToISODateTimeString(),
-                End = x.EndTime.ToISODateTimeString(),
-                Title = "請假"
-            }) ;
 
-            var result = notExist.AsParallel().Select(x =>
+            var result = removedOverlapShifts.AsParallel().Select(x =>
             {
                 var scheduleStart = x.ShiftsDate.Date + x.ShiftSchedule.StartTime.TimeOfDay;
                 var scheduleEnd = x.ShiftsDate.Date + x.ShiftSchedule.EndTime.TimeOfDay;
+
+
+
                 if (!clocks.TryGetValue(x.ShiftsDate.Date, out var work)) return new CalendarEventDto
                 {
                     Start = scheduleStart.ToISODateTimeString(),
@@ -83,9 +79,14 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             });
             //todo 計算請假時段 移除打卡紀錄
 
+            var leaveRange = leave.Select(x => new CalendarEventDto
+            {
+                Start = x.StartTime.ToISODateTimeString(),
+                End = x.EndTime.ToISODateTimeString(),
+                Title = "請假"
+            });
 
-            var temp = aa.Concat(result).ToList();
-            return temp.Select((x,idx) => new CalendarEventDto 
+            return leaveRange.Concat(result).Select((x, idx) => new CalendarEventDto
             {
                 Id = idx,
                 End = x.End,
@@ -166,9 +167,9 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 return Ok(new { status = false });
             }
 
-        }        
+        }
     }
-    public class CalendarEventDto 
+    public class CalendarEventDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
