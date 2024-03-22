@@ -34,8 +34,11 @@ namespace WebApplication1
             builder.Services.AddScoped<SpecialHolidayDaysService>();
             builder.Services.AddScoped<SpecialVacationService>();
             builder.Services.AddScoped<ApprovalService>();
-            builder.Services.AddScoped<ApprovalRepository>();
-            
+            builder.Services.AddScoped<ApprovalRepository>(); 
+            builder.Services.AddScoped<ShiftsRepository>();
+            builder.Services.AddScoped<FlextimesRepository>(); 
+
+
             builder.Services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                 .UseSimpleAssemblyNameTypeSerializer()

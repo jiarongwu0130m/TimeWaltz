@@ -9,24 +9,18 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class ApprovalRepository
+    public class FlextimesRepository
     {
         private readonly TimeWaltzContext db;
 
-        public ApprovalRepository(TimeWaltzContext db)
+        public FlextimesRepository(TimeWaltzContext db)
         {
             this.db = db;
         }
 
-        /// <summary>
-        /// 看三小
-        /// </summary>
-        /// <param name="requestStatus"></param>
-        /// <param name="tableType"></param>
-        /// <returns></returns>
-        public List<int> GetId(Enum.RequestStatusEnum requestStatus, TableTypeEnum tableType)
+        public Flextime GetSetting()
         {
-            return db.Approvals.AsNoTracking().Where(x => x.Status == requestStatus && x.TableType == (int)tableType).Select(x => x.TableId).ToList();
+            return db.Flextimes.AsNoTracking().First();
         }
     }
 }
