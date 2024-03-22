@@ -1,44 +1,106 @@
-﻿@model WebApplication1.Models.BasicSettingViewModels.ShiftSchedulesCreateViewModel
-@{
+﻿@{
     ViewData["Title"] = "新增班別設定";
 }
 
 
-<div class="row">
+<div class="row" id="app">
     <div class="col-12">
-        <div class="card">
-            <form asp-action="ShiftScheduleCreate" asp-asp-controller="BasicSetting" method="post">
+        <form asp-action="ShiftScheduleCreate" asp-asp-controller="BasicSetting" method="post">
+            <div class="card">
                 <div class="card-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="ShiftName" class="control-label"></label>
-                        <input asp-for="ShiftName" class="form-control col-3" />
-                        <span asp-validation-for="ShiftName" class="text-danger"></span>
+                        <label name="shiftsName" class="control-label">班別名稱</label>
+                        <input name="shiftsName" class="form-control col-3" v-model="shiftsName" />
+                        <span class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="StartTime" class="control-label"></label>
-                        <input type="time" name="StartTime" value="@DateTime.Now.ToString("09:00 A")" class="form-control col-3" />
-                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                        <label name="StartTime" class="control-label">開始時間</label>
+                        <input type="time" name="StartTime" value="" class="form-control col-3" v-model="startTime" />
+                        <span class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="EndTime" class="control-label"></label>
-                        <input type="time" name="EndTime" value="@DateTime.Now.ToString("06:00 P")" class="form-control col-3" />
-                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                        <label name="EndTime" class="control-label">結束時間</label>
+                        <input type="time" name="EndTime" value="" class="form-control col-3" v-model="endTime" />
+                        <span class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="MaxAdditionalClockIn" class="control-label"></label>
-                        <input asp-for="MaxAdditionalClockIn" type="number" class="form-control col-3" />
-                        <span asp-validation-for="MaxAdditionalClockIn" class="text-danger"></span>
+                        <label name="MaxAdditionalClockIn" class="control-label">補卡上限次數</label>
+                        <input name="MaxAdditionalClockIn" type="number" class="form-control col-3" v-model.number="maxAdditionalClockIn" />
+                        <span class="text-danger"></span>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <input type="submit" value="送出" class="btn btn-primary" />
+                    <input type="button" value="送出" @@click="send" class="btn btn-primary" />
                     <a asp-controller="BasicSetting" asp-action="ShiftSchedule" class="btn btn-outline-dark">返回</a>
                 </div>
-            </form>
-            
-            
-        </div>
+            </div>
+        </form>
     </div>
 </div>
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    shiftsName: '',
+                    startTime: '',
+                    endTime: '',
+                    maxAdditionalClockIn: '',
+                }
+            },
+            methods: {
+                getToday() {
+                    var now = moment();
+                    var today = now.format('YYYY-MM-DD');
+                    return today;
+                },
+                send() {
+                    let self = this;
+                    console.log(self.shiftsName, this.getToday() + ' ' + self.startTime, this.getToday() + ' ' + self.endTime, self.maxAdditionalClockIn)
+                    axios.post('/api/ShiftScheduleapi/create', {
+                        shiftsName: self.shiftsName,
+                        startTime: new Date(this.getToday() + ' ' + self.startTime),
+                        endTime: new Date(this.getToday() + ' ' + self.endTime),
+                        maxAdditionalClockIn: self.maxAdditionalClockIn,
+                    })
+                        .then((response) => {
+                            if (response.status) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "新增成功!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                }).then((result) => {
+                                    if (result.value) {
+                                        location.href = "/basicsetting/ShiftSchedule";
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "新增失敗!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                });
+                            }
+                        })
+                        .then((error) => console.log(error));
+                },
+            },
+            mounted() {
+
+            },
+        }).mount('#app');
+    </script>
+}
 
