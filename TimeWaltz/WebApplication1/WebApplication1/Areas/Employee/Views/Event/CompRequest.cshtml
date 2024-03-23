@@ -31,8 +31,8 @@
                 </div>
 
                 <template v-if="search.clockData && search.shiftData">
-                    
-                        <div class="row form-group basic">
+
+                    <div class="row form-group basic">
                         <div class="chip chip-media">
                             <i class="chip-icon bg-warning">
                                 <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
@@ -80,17 +80,15 @@
 
             </div>
             <div class="card-footer">
-
                 <div class="row justify-content-around">
                     <button type="button" class="btn btn-facebook" @@click="checkCompStatus">
-                        <ion-icon name="notifications-outline" role="img" class="md hydrated" aria-label="logo facebook"></ion-icon>
-                        送出
+                        <ion-icon name="checkmark-done-outline" role="img"
+                        class="md hydrated" aria-label="checkmark done outline"></ion-icon>送出
                     </button>
-                    <button type="button" class="btn btn-github" @@click="toList">
-                        <ion-icon name="arrow-back-circle-outline"></ion-icon>
-                        瀏覽單據
+                    <button type="button" class="btn btn-dribbble" @@click="toList">
+                        <ion-icon name="close-outline" role="img"
+                                  class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
                     </button>
-                    
                 </div>
 
             </div>
@@ -245,7 +243,7 @@
                                     self.search.shiftStart = startTime;
                                     self.search.shiftEnd = endTime;
                                     self.search.shiftData = true;
-                                    
+
                                 }
                             });
 
@@ -259,16 +257,16 @@
                                     self.search.clockData = true;
                                     self.search.clockStart = startTime;
                                     self.search.clockEnd = endTime;
-                                    
+
                                 }
                             });
                             console.log("self.search.shiftData " + self.search.shiftData);
                             console.log("self.search.shiftStart " + self.search.shiftStart);
                             console.log("self.search.shiftEnd " + self.search.shiftEnd);
 
-                                console.log("self.search.clockData "+ self.search.clockData );
-                                console.log("self.search.clockStart "+ self.search.clockStart );
-                                console.log("self.search.clockEnd " + self.search.clockEnd);
+                            console.log("self.search.clockData " + self.search.clockData);
+                            console.log("self.search.clockStart " + self.search.clockStart);
+                            console.log("self.search.clockEnd " + self.search.clockEnd);
                         }));
                 },
                 checkCompStatus() {
