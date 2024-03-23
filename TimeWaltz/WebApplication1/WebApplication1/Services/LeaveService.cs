@@ -116,7 +116,7 @@ namespace WebApplication1.Services
             var result = new LeaveEditDto
             {
                 Id = leaveRequest.x.Id,
-                TimeRange = leaveRequest.x.StartTime.ToString("yyyy-MM-dd HH:mm") + "-" + leaveRequest.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
+                TimeRange = leaveRequest.x.StartTime.ToString("yyyy-MM-dd HH:mm") + " ~ " + leaveRequest.x.EndTime.ToString("yyyy-MM-dd HH:mm"),
                 Reason = leaveRequest.x.Reason,
                 EmployeeName = leaveRequest.x.Employees.Name,
                 AgentEmployeeName = leaveRequest.x.AgentEmployee.Name,
