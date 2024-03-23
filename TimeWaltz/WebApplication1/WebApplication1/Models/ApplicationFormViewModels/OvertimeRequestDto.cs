@@ -19,15 +19,29 @@ namespace WebApplication1.Models.ApplicationFormViewModels
         public int ApprovalEmployeeId { get; set; }
 
     }
-
+    /// <summary>
+    /// 加班單_新增
+    /// </summary>
     public class OvertimeRequestCreateDto
     {
         public int EmployeeId { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public string Reason { get; set; }
+        public string Reason { get; set; }        
         public bool Status { get; set; }
         public int ApprovalEmployeeId { get; set; }
+
+    }
+    /// <summary>
+    /// 加班單_瀏覽
+    /// </summary>
+    public class OvertimeListDto
+    {
+        public int Id { get; set; }
+        public int EmployeesId { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string ApprovalStatus { get; set; }
 
     }
 
