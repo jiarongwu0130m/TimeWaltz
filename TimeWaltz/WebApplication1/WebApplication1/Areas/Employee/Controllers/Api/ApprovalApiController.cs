@@ -22,24 +22,35 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             _TWdb = TWdb;
             _ApprovalService = ApprovalService;
         }
+
+        [HttpGet]
+        [Route("{id}")]
         public object GetApprovalData(int id)
         {
-            var query = _TWdb.Approvals.Where(x => x.Id == id && x.Status == Repository.Enum.RequestStatusEnum.簽核中)
+            var query = _TWdb.Approvals.Where(x => x.Id == id)
                 .Select(x => new
                 {
                     x.TableId,
                     x.TableType
-                }).ToList(); 
+                }).ToList();
             return query;
         }
-        public void ApprovalEdit(ApprovaEditDto model)
+        public bool ApprovalEdit(ApprovaEditDto model)
         {
-            var entity = _TWdb.Approvals.FirstOrDefault(x => x.Id == model.Id);
-            entity.Remark = model.Remark;
-            entity.Status = (Repository.Enum.RequestStatusEnum?)model.Status;
+            try
+            {
+                var entity = _TWdb.Approvals.FirstOrDefault(x => x.Id == model.Id);
+                entity.Remark = model.Remark;
+                entity.Status = (Repository.Enum.RequestStatusEnum?)model.Status;
 
-            _TWdb.SaveChanges();
+                _TWdb.SaveChanges();
 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         public object GetAllApprovalData()
         {
@@ -253,9 +264,9 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                                     x.ApprovalData.TableType,
                                     x.ApprovalData.TableId,
                                     EmployeeName = x.Employee.Name,
-                                    EmployeeId=x.Employee.Id,
+                                    EmployeeId = x.Employee.Id,
                                 }
-                            ).Where(x=>x.EmployeeId ==User.GetId())
+                            ).Where(x => x.EmployeeId == User.GetId())
                             .ToList();
 
 
