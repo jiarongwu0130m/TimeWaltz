@@ -205,7 +205,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             //              .ToList();
 
 
-            var queryResult = _TWdb.Approvals
+            var queryResult = _TWdb.Approvals.Where(x => x.Status == Repository.Enum.RequestStatusEnum.簽核中)
                             .Join(
                                 _TWdb.OvertimeApplications,
                                 approval => new { Id = approval.TableId, Type = 0 },
