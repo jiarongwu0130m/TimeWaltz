@@ -53,5 +53,9 @@ namespace WebApplication1.Areas.Employee.Controllers
         {
             return View();
         }
+        public IActionResult OvertimeDetail()
+        {
+            return View();
+        }
     }
 }

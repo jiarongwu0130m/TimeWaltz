@@ -1,0 +1,305 @@
+﻿@{
+    ViewBag.title = "加班申請單據";
+}
+
+<div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>加班申請單據</span>
+            </h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row form-group basic">
+                <label class="col-form-label">申請人</label>
+                <input type="text" class="form-control" v-model="employeeName" readonly>
+
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+            <div class="row form-group basic">
+                <label class="col-form-label">加班申請期間</label>
+                <input type="text" class="form-control" value="" v-model="ovettimeRange" readonly>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+            <div class="row form-group basic">
+                <div class="chip chip-media">
+                    <i class="chip-icon bg-warning">
+                        <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
+                    </i>
+                    <span class="chip-label">加班時數：{{ overtimeResult }}</span>
+                </div>
+            </div>
+            <div class="row form-group basic">
+                <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" id="ovetimeCheck" v-model="status" readonly>
+                    <label class="custom-control-label" for="ovetimeCheck">加班轉補休</label>
+                </div>
+            </div>
+            <div class="row form-group basic">
+                <label class="col-form-label">加班原因</label>
+                <textarea class="form-control" rows="3"
+                          control-id="ControlID-13" v-model="reason" readonly></textarea>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>                
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label text-danger">簽核狀態</label>
+                    <input type="text" class="form-control" v-model="approvalStatus" readonly>
+                </div>
+            </div>
+
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label text-danger">簽核備註</label>
+                    <input type="text" class="form-control" v-model="approvalRemark" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row justify-content-around">
+                <button type="button" class="btn btn-dribbble" @@click="toList">
+                    <ion-icon name="close-outline" role="img"
+                              class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
+                </button>
+            </div>
+        </div>
+
+
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    employeeName: '',
+                    startTime: '',
+                    endTime: '',
+                    ovettimeRange: '',
+                    status: '',
+                    reason: '',
+                    approvalStatus: '',
+                    approvalRemark: '',
+                    overtimeResult:'',
+                }
+            },
+            mounted() {
+                this.checkId();
+                this.getOvertimeRequestData();
+
+            },
+            methods: {
+                checkId() {
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        this.Id = lastNumber;
+
+                    } else {
+                        location.href = "/employee/query/Overtime";
+                    }
+                },
+                getOvertimeRequestData() {
+                    let self = this;
+                    axios(`/mobile/api/Overtime/GetOvertimeRequestDetail/${this.Id}`)
+                        .then(response => {
+                            console.log(response.data);
+                            self.ovettimeRange = response.data.startTime + " - " + response.data.endTime;
+                            self.employeeName = response.data.employeeName;
+                            self.startTime = response.data.startTime;
+                            self.endTime = response.data.endTime;
+                            self.status = response.data.status;
+                            self.reason = response.data.reason;
+                            self.approvalStatus = response.data.approvalStatus;
+                            self.approvalRemark = response.data.approvalRemark;
+                            self.countOvertimeMins();
+                        });
+                },
+                toList() {
+                    location.href = "/employee/query/Overtime";
+                },
+                countOvertimeMins() {
+                    let self = this;
+                    self.overtimeResult = '';
+                    if (self.startTime && self.endTime) {
+                        const durationmilliseconds = new Date(self.endTime) - new Date(self.startTime);
+                        const durationminutes = Math.floor(durationmilliseconds / (60 * 1000));
+                        const hours = Math.floor(durationminutes / 60);
+                        const minutes = durationminutes % 60;
+                        if (hours === 0) {
+                            self.overtimeResult = `${minutes} 分鐘`;
+                        } else if (minutes === 0) {
+                            self.overtimeResult = `${hours} 小時`;
+                        } else {
+                            self.overtimeResult = `${hours} 小時 ${minutes} 分鐘`;
+                        }
+                    } else {
+                        self.overtimeResult = '';
+                    }
+
+                },
+            },
+        }).mount("#app");
+
+    </script>
+}
+
+@* <div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row form-group basic">
+                <label class="col-form-label">加班申請日期區間</label>
+                <input type="text" class="form-control" value="" v-model="additionalTime" readonly>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label">補卡時段</label>
+                    <input type="text" class="form-control" v-model="status" readonly>
+                </div>
+            </div>
+
+            <div class="row form-group basic">
+                <label class="col-form-label">補打卡原因</label>
+                <textarea class="form-control" rows="3"
+                          control-id="ControlID-13" v-model="reason" readonly></textarea>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label text-danger">簽核狀態</label>
+                    <input type="text" class="form-control" v-model="approvalStatus" readonly>
+                </div>
+            </div>
+
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label text-danger">簽核備註</label>
+                    <input type="text" class="form-control" v-model="approvalRemark" readonly>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer">
+
+            <div class="row justify-content-around">
+                <button type="button" class="btn btn-dribbble" @@click="toList">
+                    <ion-icon name="close-outline" role="img"
+                              class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div> *@
+
+@* @section Scripts {
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    employeeName: '',
+                    additionalTime: '',
+                    status: '',
+                    reason: '',
+                    ApprovalEmpName: '',
+                    shifts: [],
+                    allcompRequest: [],
+                    search: {
+                        date: '',
+                        startTime: '',
+                        endTime: '',
+                        clockStart: '',
+                        clockEnd: ''
+                    }
+                }
+            },
+            mounted() {
+                this.checkId();
+                this.getCompRequestData();
+
+            },
+            methods: {
+                checkId() {
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        this.Id = lastNumber;
+
+                    } else {
+                        location.href = "/employee/query/Complement";
+                    }
+                },
+                getCompRequestData() {
+                    let self = this;
+
+                    axios.all([
+                        axios(`/mobile/api/Complement/GetCompRequestDetail/${this.Id}`),
+                        axios("/mobile/api/Complement/DropDownList")
+                    ]).then(([compRequest, dropdownList]) => {
+                        self.allcompRequest = compRequest.data;
+                        self.status = dropdownList.data.clockStatusSelectItems.filter(x => x.value == compRequest.data.status)[0]?.text;
+                        self.originalCompRequests = compRequest.data;
+                        self.additionalTime = self.allcompRequest.additionalTime.split('T')[0];
+                        self.approvalEmpName = self.allcompRequest.approvalEmpName;
+                        self.approvalStatus = self.allcompRequest.approvalStatus;
+                        self.employeeName = self.allcompRequest.employeeName;
+                        self.reason = self.allcompRequest.reason;
+                    });
+                },
+                fetchShifts() {
+                    fetch(`/api/ShiftApi/GetEmpShifts/${this.EmpId}?date=${this.search.date}`)
+                        .then(res => res.json())
+                        .then(result => {
+                            this.shifts = result;
+                            this.search.date = result[0].shiftsDate;
+                            this.search.startTime = result[0].shiftSchedule.startTime;
+                            this.search.endTime = result[0].shiftSchedule.endTime;
+                        });
+
+                    fetch(`/api/ClockApi/GetEmpClocks/${this.EmpId}?date=${this.search.date}`)
+                        .then(res => res.json())
+                        .then(results => {
+                            results.forEach(record => {
+                                if (record.status === 0) {
+                                    console.log('員工上班打卡');
+                                    this.search.clockStart = record.date;
+                                } else if (record.status === 1) {
+                                    console.log('員工下班打卡');
+                                    this.search.clockEnd = record.date;
+                                } else {
+                                    console.log('未知的打卡狀態');
+                                }
+                            });
+                        });
+
+                },
+                toList() {
+                    location.href = "/employee/query/Complement";
+                },
+            }
+        }).mount("#app");
+    </script>
+} *@

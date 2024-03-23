@@ -29,7 +29,7 @@
                         <tr v-for="(item,index) in allOvertime">
                             <td>{{++index}}</td>
                             <td>{{formatDate(item.startTime)}}</td>
-                            <td>{{countOvertimeMins(item.startTime,item.endTime)}}</td>
+                            <td v-if="item.startTime && item.endTime">{{ countOvertimeMins(item.startTime, item.endTime) }}</td>
                             <td>{{item.approvalStatus}}</td>
                             <td>
                                 <a href="#" @@click="toDetail(item.id,$event)">詳細</a>
@@ -91,11 +91,11 @@
                     this.allOvertime = filteredCompRequests;
                 },
                 toCreate() {
-                    location.href = "/employee/event/CompRequest";
+                    location.href = "/employee/event/OverTimeRequest";
                 },
                 toDetail(id, event) {
                     event.preventDefault();
-                    location.href = `/employee/query/ComplementDetail/${id}`;
+                    location.href = `/employee/query/OvertimeDetail/${id}`;
                 },
                 getListData() {
                     let self = this;
@@ -106,28 +106,22 @@
                 },
                 countOvertimeMins(start, end) {
                     let self = this;
-                    self.overtimeResult = '';
-                    console.log(start);
-                    console.log(end);
                     if (start && end) {
-                        const start = new Date(start);
-                        const end = new Date(end);
-                        console.log(start);
-                        console.log(end);
-                        const durationmilliseconds = end - start;
+                        const durationmilliseconds = new Date(end) - new Date(start);
                         const durationminutes = Math.floor(durationmilliseconds / (60 * 1000));
                         const hours = Math.floor(durationminutes / 60);
                         const minutes = durationminutes % 60;
                         if (hours === 0) {
-                            self.overtimeResult = `${minutes} 分鐘`;
+                            return `${minutes} 分鐘`;
                         } else if (minutes === 0) {
-                            self.overtimeResult = `${hours} 小時`;
+                            return `${hours} 小時`;
                         } else {
-                            self.overtimeResult = `${hours} 小時 ${minutes} 分鐘`;
+                            return `${hours} 小時 ${minutes} 分鐘`;
                         }
                     } else {
-                        self.overtimeResult = '';
+                        return '';
                     }
+
                 },
             },
             mounted() {
