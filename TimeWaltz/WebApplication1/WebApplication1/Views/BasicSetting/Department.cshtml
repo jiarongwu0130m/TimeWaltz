@@ -42,7 +42,7 @@
                             <td>{{item.departmentName}}</td>
                             <td>{{item.employeesName}}</td>
                             <td>
-                                    <a href="#" @@click="edit(item.id,$event)" class="btn btn-outline-primary">編輯</a> |
+                                    <a href="#" @@click="edit(item.id,$event)" class="btn btn-outline-primary">編輯</a> 
                                 <a href="#" @@click="checkIsDelete(item.id ,$event)" class="btn btn-outline-danger">刪除</a>
                             </td>
                         </tr>                
@@ -53,15 +53,6 @@
     </div
 </div>
 
-<script>
-    function confirmDelete() {
-        // 使用 confirm 函數顯示確認視窗
-        var result = confirm("確定要刪除嗎?");
-
-        // 如果用戶確定，返回 true，否則返回 false
-        return result;
-    }
-</script>
 
 @section Scripts {
 

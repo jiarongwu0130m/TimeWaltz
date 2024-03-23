@@ -45,7 +45,7 @@
                 <div class="row float-right">
                     <div class="col ">                        
                         <input @@click="send" type="button" value="送出" class="btn btn-primary" />
-                        <a asp-action="VacationType" asp-controller="BasicSetting" class="btn btn-primary">返回</a>
+                        <a asp-action="VacationType" asp-controller="BasicSetting" class="btn btn-dark">返回</a>
                     </div>
                 </div>
             </div>
@@ -108,16 +108,17 @@
                     })
                 },
                 getEditVacationData() {
-
-                    fetch(`/api/VacationDetailsApi/GetVacationEditData/${this.Id}`)
+                    let self = this;
+                    console.log(self.id)
+                    fetch(`/api/VacationDetailsApi/GetVacationEditData/${self.id}`)
                         .then(res => res.json())
                         .then(result => {
                             console.log(result)
-                            this.cycle = result.cycle;
-                            this.gender = result.gender;
-                            this.vacationType = result.vacationType;
-                            this.minVacationHours = result.minVacationHours;
-                            this.numberOfDays = result.numberOfDays;
+                            self.cycle = result.cycle;
+                            self.gender = result.gender;
+                            self.vacationType = result.vacationType;
+                            self.minVacationHours = result.minVacationHours;
+                            self.numberOfDays = result.numberOfDays;
 
                         })
                 },
@@ -127,8 +128,21 @@
                         .then(result => {
                             this.genderSelectItems = result.genderSelectItems;
                             this.cycleSelectItems = result.cycleSelectItems;
-                        }
-                        )
+                        })
+                },
+                checkId() {
+                    let self = this;
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        self.id = lastNumber;
+                        console.log(self.id);
+                    } else {
+                        location.href = "/BasicSetting/VacationTypeEdit";
+                    }
+
                 },
             },
             mounted() {
