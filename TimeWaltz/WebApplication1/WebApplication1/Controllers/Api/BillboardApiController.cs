@@ -10,23 +10,32 @@ namespace WebApplication1.Controllers.Api
     [ApiController]
     public class BillboardApiController : ControllerBase
     {
-        private readonly TimeWaltzContext _timeWaltzDb;
+        private readonly TimeWaltzContext _db;
         private readonly BillboardService _billboardService;
 
-        public BillboardApiController(TimeWaltzContext timeWaltzDb, BillboardService billboardService)
+        public BillboardApiController(TimeWaltzContext db, BillboardService billboardService)
         {
-            _timeWaltzDb = timeWaltzDb;
+            _db = db;
             _billboardService = billboardService;
         }
 
         [HttpPost]
-        public bool Create(BillboardCreat dto)
+        public bool Create(BillboardCreat model)
         {
             try
             {
-                var entity = ViewModelHelper.ToEntity(dto);
-                entity.EmployeesId = User.GetId();
-                _billboardService.CreateBillboard(entity);
+                model.EmployeesID = User.GetId();
+                
+                var entity = new Billboard
+                {
+                    EmployeesId = model.EmployeesID,
+                    StartTime = model.StartTime,
+                    EndTime = model.EndTime,
+                    Title = model.Title,
+                    Content = model.Content,
+                };
+                _db.Billboards.Add(entity);
+                _db.SaveChanges();
                 return true;
             }
             catch (Exception)

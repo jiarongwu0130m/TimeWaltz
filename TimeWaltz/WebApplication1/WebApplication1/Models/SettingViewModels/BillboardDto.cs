@@ -30,6 +30,8 @@
 
     public class BillboardCreat
     {
+        public int EmployeesID { get; set; }
+
         public string Title { get; set; }
 
         public string? Content { get; set; }
