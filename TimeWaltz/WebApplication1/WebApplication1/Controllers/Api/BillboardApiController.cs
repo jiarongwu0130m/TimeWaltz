@@ -28,7 +28,7 @@ namespace WebApplication1.Controllers.Api
                 
                 var entity = new Billboard
                 {
-                    EmployeesId = model.EmployeesID,
+                    EmployeesId = 5,
                     StartTime = model.StartTime,
                     EndTime = model.EndTime,
                     Title = model.Title,
