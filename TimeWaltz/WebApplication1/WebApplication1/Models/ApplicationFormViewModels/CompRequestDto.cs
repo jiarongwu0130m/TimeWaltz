@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace WebApplication1.Models.ApplicationFormViewModels
 {
     /// <summary>
-    /// 資料表：AdditionalClockIn
     /// 原始entity資料型別
+    /// 資料表：AdditionalClockIn
     /// </summary>
     public class CompRequestDto
     {

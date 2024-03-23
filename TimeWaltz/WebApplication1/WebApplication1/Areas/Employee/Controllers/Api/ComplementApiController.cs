@@ -44,7 +44,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 var entity = new AdditionalClockIn
                 {
                     EmployeesId = model.EmployeesId,
-                    ApprovalEmployeeId = model.ApprovalEmployeeId,
+                    ApprovalEmployeeId = model.ApprovalEmployeeId,                    
                     AdditionalTime = model.AdditionalTime,
                     Status = (int)model.Status,
                     Reason = model.Reason,
@@ -211,23 +211,6 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
 
             return Ok(clocks);
         }
-
-        //[HttpGet("{date}")]
-        //public IActionResult GetEmpClocks(DateTime date)
-        //{
-        //    var UserId = User.GetId();
-
-        //    var clockResult = _timeWaltzDb.Clocks
-        //        .Where(x => x.EmployeesId == UserId && x.Date.Date == date);
-
-        //    if (clockResult == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(clockResult);
-        //}
-
 
     }
 }
