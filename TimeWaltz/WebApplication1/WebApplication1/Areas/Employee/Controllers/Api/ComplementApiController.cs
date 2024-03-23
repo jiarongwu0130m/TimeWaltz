@@ -44,7 +44,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 var entity = new AdditionalClockIn
                 {
                     EmployeesId = model.EmployeesId,
-                    ApprovalEmployeeId = model.ApprovalEmployeeId,
+                    ApprovalEmployeeId = model.ApprovalEmployeeId,                    
                     AdditionalTime = model.AdditionalTime,
                     Status = (int)model.Status,
                     Reason = model.Reason,
@@ -180,6 +180,36 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             };
 
             return UserAndName;
+        }
+
+        /// <summary>
+        ///取得員工打卡紀錄
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public object GetEmpClocks()
+        {
+            var clocks = _db.Clocks.AsNoTracking()
+                      .Where(x => x.EmployeesId == User.GetId())
+                      .ToList()
+                      .GroupBy(x => x.Date.Date)
+                      .Select(g =>
+                      {
+                          var date = g.Key.ToString("yyyy-MM-dd");
+                          var on = g.FirstOrDefault(x => x.Status == ClockStatusEnum.上班打卡)?.Date.ToString("HH:mm:ss");
+                          var off = g.Where(x => x.Status == ClockStatusEnum.下班打卡)
+                                     .OrderByDescending(x => x.Date)
+                                     .FirstOrDefault()?.Date.ToString("HH:mm:ss");
+                          return new { date, on, off };
+                      })
+                      .ToList();
+
+            if (clocks == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(clocks);
         }
 
     }

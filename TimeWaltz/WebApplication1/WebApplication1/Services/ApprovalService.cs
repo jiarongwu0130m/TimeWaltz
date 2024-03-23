@@ -24,22 +24,22 @@ namespace WebApplication1.Services
             _timeWaltzContext.SaveChanges();
 
         }
-        public void NewApproval_補打卡(int empId)
+        public void NewApproval_補打卡(int Id)
         {
             _timeWaltzContext.Approvals.Add(new Approval
             {
-                TableId = empId,
+                TableId = Id,
                 TableType = (int)TableTypeEnum.補卡單,
                 Status = Repository.Enum.RequestStatusEnum.簽核中,
             });
             _timeWaltzContext.SaveChanges();
         }
         
-        public void NewApproval_加班單(int empId)
+        public void NewApproval_加班單(int Id)
         {
             _timeWaltzContext.Approvals.Add(new Approval
             {
-                TableId = empId,
+                TableId = Id,
                 TableType = (int)TableTypeEnum.加班單,
                 Status = Repository.Enum.RequestStatusEnum.簽核中,
             });

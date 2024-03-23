@@ -6,7 +6,6 @@
     <div class="card">
         <form method="post" id="app">
             <div class="card-header">
-
                 <h3 class="card-title d-flex justify-content-between">
                     <span>補打卡申請</span>
                 </h3>
@@ -16,7 +15,7 @@
 
                 <div class="row form-group basic">
                     <label class="col-form-label">申請人</label>
-                    <input type="text" class="form-control" :value="name" readonly>
+                    <input type="text" class="form-control" :value="name" disabled>
 
                     <i class="clear-input">
                         <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
@@ -31,16 +30,20 @@
                     </i>
                 </div>
 
-                <template>
-                    <div class="row form-group basic" v-if="search.clockData && search.shiftData">
-                        <div class="chip chip-media m-1">
+                <template v-if="search.clockData && search.shiftData">
+
+                    <div class="row form-group basic">
+                        <div class="chip chip-media">
                             <i class="chip-icon bg-warning">
                                 <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
                             </i>
                             <span class="chip-label">當日打卡時間：{{ search.clockStart }} - {{ search.clockEnd }}</span>
                         </div>
+                    </div>
 
-                        <div class="chip chip-media m-1">
+                    <div class="row form-group basic">
+
+                        <div class="chip chip-media">
                             <i class="chip-icon bg-warning">
                                 <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
                             </i>
@@ -77,17 +80,15 @@
 
             </div>
             <div class="card-footer">
-
                 <div class="row justify-content-around">
                     <button type="button" class="btn btn-facebook" @@click="checkCompStatus">
-                        <ion-icon name="notifications-outline" role="img" class="md hydrated" aria-label="logo facebook"></ion-icon>
-                        送出
+                        <ion-icon name="checkmark-done-outline" role="img"
+                        class="md hydrated" aria-label="checkmark done outline"></ion-icon>送出
                     </button>
-                    <button type="button" class="btn btn-github" @@click="toList">
-                        <ion-icon name="arrow-back-circle-outline"></ion-icon>
-                        瀏覽單據
+                    <button type="button" class="btn btn-dribbble" @@click="toList">
+                        <ion-icon name="close-outline" role="img"
+                                  class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
                     </button>
-                    
                 </div>
 
             </div>
@@ -118,7 +119,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-icon text-danger">
-                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                 </div>
                 <div class="modal-header">
                     <h5 class="modal-title">送出失敗</h5>
@@ -229,9 +230,10 @@
 
                     axios.all([
                         axios("/mobile/api/Shift/Schedule"),
-                        axios("/mobile/api/Attendance/all")
+                        axios("/mobile/api/Complement/GetEmpClocks")
                     ])
                         .then(axios.spread(function (response1, response2) {
+                            console.log(response2.data);
                             response1.data.forEach(item => {
                                 const startDate = item.start.split('T')[0];
                                 const startTime = item.start.split('T')[1];
@@ -241,22 +243,30 @@
                                     self.search.shiftStart = startTime;
                                     self.search.shiftEnd = endTime;
                                     self.search.shiftData = true;
+
                                 }
                             });
 
                             response2.data.forEach(item => {
 
-                                const startDate = item.start.split('T')[0];
-                                const startTime = item.start.split('T')[1];
-                                const endDate = item.end.split('T')[0];
-                                const endTime = item.end.split('T')[1];
+                                const clockDate = item.date;
+                                const startTime = item.on;
+                                const endTime = item.off;
 
-                                if (startDate === self.date && endDate === self.date) {
+                                if (clockDate === self.date) {
                                     self.search.clockData = true;
-                                    self.search.clockStart = startTime.split('Z')[0];
-                                    self.search.clockEnd = endTime.split('Z')[0];
+                                    self.search.clockStart = startTime;
+                                    self.search.clockEnd = endTime;
+
                                 }
                             });
+                            console.log("self.search.shiftData " + self.search.shiftData);
+                            console.log("self.search.shiftStart " + self.search.shiftStart);
+                            console.log("self.search.shiftEnd " + self.search.shiftEnd);
+
+                            console.log("self.search.clockData " + self.search.clockData);
+                            console.log("self.search.clockStart " + self.search.clockStart);
+                            console.log("self.search.clockEnd " + self.search.clockEnd);
                         }));
                 },
                 checkCompStatus() {

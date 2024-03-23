@@ -11,21 +11,21 @@
             </h3>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive text-center">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">項次</th>
-                            <th scope="col">請假日期</th>
-                            <th scope="col">假別</th>
-                            <th scope="col">狀態</th>
-                            <th scope="col">詳細</th>
+                            <th v-bind:title="title('now')" >{{ title('now') }}</th>
+                            <th v-bind:title="title('date')">{{ title('date') }}</th>
+                            <th v-bind:title="title('vacationType')">{{ title('vacationType') }}</th>
+                            <th v-bind:title="title('approvalStatus')">{{ title('approvalStatus') }}</th>
+                            <th v-bind:title="title('Details')">{{ title('Details') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in leaveRequestListData">
                             <td>{{++index}}</td>
-                            <td class="dtr-control">{{item.date}}</td>
+                            <td>{{item.date}}</td>
                             <td>{{item.vacationType}}</td>
                             <td>{{item.approvalStatus}}</td>
                             <td>
@@ -52,6 +52,21 @@
                     vacationType: '',
                     approvalStatus: '',
                 }
+            },
+            computed: {
+                title() {
+                    return key => {
+                        const localizationData = {
+                            'now': '項次',
+                            'date': '請假日期',
+                            'vacationType': '假別名稱',
+                            'approvalStatus': '審核狀態',
+                            'Details': '詳細資料'
+                        };
+                        return localizationData[key] || key;
+                    };
+                }
+
             },
             methods: {
                 edit(id, event) {

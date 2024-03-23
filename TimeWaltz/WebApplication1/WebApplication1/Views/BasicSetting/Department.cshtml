@@ -3,58 +3,56 @@
     ViewBag.title = "部門瀏覽";
 }
 <div class="row" id="app">
-    <div class="col-12 mb-3">
-        <div class="row">
-            <label class="col-form-label col-auto">部門名稱查詢：</label>
-            <form asp-action="Department" asp-controller="BasicSetting" method="post">
-                <div class="row form-group">
-                    <input name="QueryDepartment" class="form-control col-6" type="text" autocomplete="off" v-model="queryDepartmentName">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <div class="row">
+                        <div class="col">
+                        <div class="form-group">
+                        <label>部門名稱查詢：</label>
+                            <input name="QueryDepartment" class="form-control" type="text" v-model="queryDepartmentName">
+                        </div>
+                    </div>
+                </h3>
+                <div class="card-tools">
+                    <div class="input-group">
+                        <div class="input-group-append">
+                            <a asp-controller="BasicSetting" asp-action="DepartmentCreate" class="btn btn-outline-success">新增</a>
+                        </div>
+                    </div>
                 </div>
-            </form>
-            <div class="col-auto ml-auto">
-                <a asp-controller="BasicSetting" asp-action="DepartmentCreate" class="btn btn-outline-success pull-right">新增</a>
             </div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <table id="example2" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>
-                        部門名稱
-                    </th>
-                    <th>
-                        部門主管
-                    </th>
-                    <th scope="col">詳細資料</th>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>
+                                部門名稱
+                            </th>
+                            <th>
+                                部門主管
+                            </th>
+                            <th></th>
 
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="text-center" v-for="item in filterByDepartmentName()">
-                    <td>{{item.departmentName}}</td>
-                    <td>{{item.employeesName}}</td>
-                    <td>
-                        <a href="#" @@click="edit(item.id,$event)">檢視</a> |
-                        <a href="#" @@click="checkIsDelete(item.id ,$event)">刪除</a>
-                    </td>
-                </tr>
-                
-            </tbody>
-
-        </table>
-    </div>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center" v-for="item in filterByDepartmentName()">
+                            <td>{{item.departmentName}}</td>
+                            <td>{{item.employeesName}}</td>
+                            <td>
+                                    <a href="#" @@click="edit(item.id,$event)" class="btn btn-outline-primary">編輯</a> 
+                                <a href="#" @@click="checkIsDelete(item.id ,$event)" class="btn btn-outline-danger">刪除</a>
+                            </td>
+                        </tr>                
+                    </tbody>
+                </table>
+            </div>
+        </div>       
+    </div
 </div>
 
-<script>
-    function confirmDelete() {
-        // 使用 confirm 函數顯示確認視窗
-        var result = confirm("確定要刪除嗎?");
-
-        // 如果用戶確定，返回 true，否則返回 false
-        return result;
-    }
-</script>
 
 @section Scripts {
 

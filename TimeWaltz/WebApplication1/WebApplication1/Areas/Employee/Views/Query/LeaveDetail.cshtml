@@ -3,75 +3,96 @@
     ViewData["Title"] = "請假申請";
 }
 
-<form id="app">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="name">申請人</label>
-                    <input class="form-control" disabled id="employeeName" :value="employeeName">
+<div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>請假單申請單據</span>
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row form-group basic">
+                <label class="col-form-label">申請人</label>
+                <input type="text" class="form-control" disabled id="employeeName" v-model="employeeName" readonly>
+
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label">請假期間</label>
+                    <input class="form-control" v-model="timeRange" readonly>
+
+                        <i class="clear-input">
+                            <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                        </i>                                        
                 </div>
-                <div class="form-group">
-                    <label for="TimeRange">請假期間</label>
-                    <label></label>
-                    <input class="form-control" disabled id="timeRange" :value="timeRange">
-                </div>
-                <div class="form-group">
-                    <label for="vacationType">假別</label>
-                    <label></label>
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label" for="vacationType">假別</label>
                     <input class="form-control" disabled id="vacationType" :value="vacationType">
-                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
-                          dir="ltr" style="width: 100%;">
-                        <span class="selection"></span>
-                    </span>
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
-                <div class="form-group">
-                    <label for="agentEmployeeName">代理人選擇</label>
-                    <label></label>
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label" for="agentEmployeeName">代理人選擇</label>
                     <input class="form-control" disabled id="agentEmployeeName" :value="agentEmployeeName">
-                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
-                          dir="ltr" style="width: 100%;">
-                        <span class="selection"></span>
-                    </span>
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
-                <div class="form-group">
-                    <label for="approvalEmpName">代理人選擇</label>
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label" for="approvalEmpName">代理人選擇</label>
                     <label></label>
                     <input class="form-control" disabled id="approvalEmpName" :value="approvalEmpName">
-                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
-                          dir="ltr" style="width: 100%;">
-                        <span class="selection"></span>
-                    </span>
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
-                <div class="form-group">
-                    <label for="approvalEmpName">審核階段：</label>
-                    <label></label>
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label" for="approvalEmpName">審核階段</label>
                     <input class="form-control" disabled id="approvalEmpName" :value="approvalStatus">
-                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
-                          dir="ltr" style="width: 100%;">
-                        <span class="selection"></span>
-                    </span>
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-body">
-                <div class="form-group">
-                    <label>原因：</label>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label">原因</label>
                     <textarea disabled v-model="reason" class="form-control" rows="3"
-                              control-id="ControlID-13"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>審核備註：</label>
-                    <textarea disabled v-model="approvalRemark" class="form-control" rows="3"
-                              control-id="ControlID-13"></textarea>
+                              control-id="ControlID-13" readonly></textarea>
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
             </div>
         </div>
+
+        <div class="card-footer">
+
+            <div class="row justify-content-around">
+                <button type="button" class="btn btn-dribbble" @@click="toList">
+                    <ion-icon name="close-outline" role="img"
+                              class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
+                </button>
+            </div>
+        </div>
     </div>
-</form>
+</div>
 @section Scripts {
 
     <script>
@@ -91,6 +112,9 @@
                 }
             },
             methods: {
+                toList() {
+                    location.href = 'employee/query/leave'
+                },
                 getLeaveData() {
                     let self = this;
                     fetch(`/mobile/LeaveApi/Edit/${self.id}`).then(res => res.json()).then(result => {
@@ -104,6 +128,7 @@
                         self.timeRange = result.timeRange
                         self.vacationType = result.vacationType
                         self.reason = result.reason
+                        console.log(self.timeRange)
                     })
                 },
                 checkId() {

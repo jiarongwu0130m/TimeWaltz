@@ -71,9 +71,9 @@
 
                                 </td>
                                 <td class="text-center">
-                                    <a href="#" @@click="edit(vacation.id, $event)">編輯</a> |
+                                    <a href="#" @@click="edit(vacation.id, $event)" class="btn btn-outline-dark">編輯</a> |
                                     @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
-                                    <a href="#" @@click="getOut(vacation.id, $event)">刪除</a>
+                                    <a href="#" @@click="getOut(vacation.id, $event)" class="btn btn-outline-danger">刪除</a>
 
                                 </td>
                             </tr>
@@ -98,9 +98,8 @@
 
                                 </td>
                                 <td class="text-center">
-                                    <a href="#" @@click="edit(vacation.id, $event)">修改</a> |
-                                    @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
-                                    <a href="#" @@click="getOut(vacation.id, $event)">刪除</a>
+                                    <a href="#" @@click="edit(vacation.id, $event)" class="btn btn-outline-primary">編輯</a> 
+                                    <a href="#" @@click="getOut(vacation.id, $event)" class="btn btn-outline-secondary">刪除</a>
                                 </td>
                             </tr>
                         </template>

@@ -1,5 +1,152 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "_Layout";
+    ViewBag.title = "加班單據";
+}
+
+<div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>加班單據查詢</span>
+                <a @@click="toCreate" class="iconedbox bg-success">
+                    <ion-icon name="add" role="img" class="md hydrated" aria-label="add"></ion-icon>
+                </a>
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive text-center">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th v-bind:title="title('now')">{{ title('now') }}</th>
+                            <th v-bind:title="title('OvertimeDate')">{{ title('OvertimeDate') }}</th>
+                            <th v-bind:title="title('OvertimeResult')">{{ title('OvertimeResult') }}</th>
+                            <th v-bind:title="title('Approval')">{{ title('Approval') }}</th>
+                            <th v-bind:title="title('Details')">{{ title('Details') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in allOvertime">
+                            <td>{{++index}}</td>
+                            <td>{{formatDate(item.startTime)}}</td>
+                            <td>{{countOvertimeMins(item.startTime,item.endTime)}}</td>
+                            <td>{{item.approvalStatus}}</td>
+                            <td>
+                                <a href="#" @@click="toDetail(item.id,$event)">詳細</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    search: {
+                        date: "",
+                        status: "",
+                    },
+                    allOvertime: [],
+                    clockStatusSelectItems: [],
+                    originalOvertime: []
+                }
+            },
+            computed: {
+                title() {
+                    return key => {
+                        const localizationData = {
+                            'now': '項次',
+                            'OvertimeDate': '加班日期',
+                            'OvertimeResult': '加班時數',
+                            'Approval': '審核狀態',
+                            'Details': '詳細資料'
+                        };
+                        return localizationData[key] || key;
+                    };
+                }
+
+            },
+            methods: {
+                formatDate(dateTimeString) {
+                    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                    const date = new Date(dateTimeString);
+                    return date.toLocaleDateString('zh-TW', options);
+                },
+                formatTime(dateTimeString) {
+                    const options = { hour: '2-digit', minute: '2-digit' };
+                    const date = new Date(dateTimeString);
+                    return date.toLocaleTimeString('zh-TW', options);
+                },
+                searchCompRequests() {
+                    const filteredCompRequests = this.originalOvertime.filter(item => {
+                        const requestDate = new Date(item.additionalTime);
+                        const selectedDate = new Date(this.search.date);
+                        return requestDate >= selectedDate;
+                    });
+                    this.allOvertime = filteredCompRequests;
+                },
+                toCreate() {
+                    location.href = "/employee/event/CompRequest";
+                },
+                toDetail(id, event) {
+                    event.preventDefault();
+                    location.href = `/employee/query/ComplementDetail/${id}`;
+                },
+                getListData() {
+                    let self = this;
+                    axios("/mobile/api/Overtime/List").then(response => {
+                        self.allOvertime = response.data;
+                        self.countOvertimeMins();
+                    });
+                },
+                countOvertimeMins(start, end) {
+                    let self = this;
+                    self.overtimeResult = '';
+                    console.log(start);
+                    console.log(end);
+                    if (start && end) {
+                        const start = new Date(start);
+                        const end = new Date(end);
+                        console.log(start);
+                        console.log(end);
+                        const durationmilliseconds = end - start;
+                        const durationminutes = Math.floor(durationmilliseconds / (60 * 1000));
+                        const hours = Math.floor(durationminutes / 60);
+                        const minutes = durationminutes % 60;
+                        if (hours === 0) {
+                            self.overtimeResult = `${minutes} 分鐘`;
+                        } else if (minutes === 0) {
+                            self.overtimeResult = `${hours} 小時`;
+                        } else {
+                            self.overtimeResult = `${hours} 小時 ${minutes} 分鐘`;
+                        }
+                    } else {
+                        self.overtimeResult = '';
+                    }
+                },
+            },
+            mounted() {
+                this.getListData();
+
+                const dateInputRef = document.querySelector('#reservationdate');
+
+                $(dateInputRef).daterangepicker({
+                    singleDatePicker: true,
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    }
+                }).on('apply.daterangepicker', (ev, picker) => {
+                    this.search.date = picker.startDate.format('YYYY/MM/DD');
+                    dateInputRef.value = this.search.date;
+                    this.searchCompRequests();
+                });
+
+            }
+        }).mount('#app')
+    </script>
 }
