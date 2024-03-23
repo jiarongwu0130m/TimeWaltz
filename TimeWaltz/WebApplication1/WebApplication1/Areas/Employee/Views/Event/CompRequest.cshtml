@@ -31,16 +31,20 @@
                     </i>
                 </div>
 
-                <template>
-                    <div class="row form-group basic" v-if="search.clockData && search.shiftData">
-                        <div class="chip chip-media m-1">
+                <template v-if="search.clockData && search.shiftData">
+                    
+                        <div class="row form-group basic">
+                        <div class="chip chip-media">
                             <i class="chip-icon bg-warning">
                                 <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
                             </i>
                             <span class="chip-label">當日打卡時間：{{ search.clockStart }} - {{ search.clockEnd }}</span>
                         </div>
+                    </div>
 
-                        <div class="chip chip-media m-1">
+                    <div class="row form-group basic">
+
+                        <div class="chip chip-media">
                             <i class="chip-icon bg-warning">
                                 <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
                             </i>
@@ -232,7 +236,7 @@
                         axios("/mobile/api/Complement/GetEmpClocks")
                     ])
                         .then(axios.spread(function (response1, response2) {
-                            console.log(response2);
+                            console.log(response2.data);
                             response1.data.forEach(item => {
                                 const startDate = item.start.split('T')[0];
                                 const startTime = item.start.split('T')[1];
@@ -242,23 +246,27 @@
                                     self.search.shiftStart = startTime;
                                     self.search.shiftEnd = endTime;
                                     self.search.shiftData = true;
-                                    return;
+                                    
                                 }
                             });
 
                             response2.data.forEach(item => {
 
-                                const startDate = item.data.split('T')[0];
-                                const startTime = item.data.on.date.split('T')[1];
-                                const endTime = item.data.off.date.split('T')[1];
+                                const clockDate = item.date;
+                                const startTime = item.on;
+                                const endTime = item.off;
 
-                                if (startDate === self.date && endDate === self.date) {
+                                if (clockDate === self.date) {
                                     self.search.clockData = true;
                                     self.search.clockStart = startTime;
                                     self.search.clockEnd = endTime;
-                                    return;
+                                    
                                 }
                             });
+                            console.log("self.search.shiftData " + self.search.shiftData);
+                            console.log("self.search.shiftStart " + self.search.shiftStart);
+                            console.log("self.search.shiftEnd " + self.search.shiftEnd);
+
                                 console.log("self.search.clockData "+ self.search.clockData );
                                 console.log("self.search.clockStart "+ self.search.clockStart );
                                 console.log("self.search.clockEnd " + self.search.clockEnd);

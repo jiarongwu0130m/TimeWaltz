@@ -189,14 +189,20 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
         [HttpGet]
         public object GetEmpClocks()
         {
-            var UserId = User.GetId();
-
-            var clocks = _db.Clocks.AsNoTracking().Where(x => x.EmployeesId == User.GetId()).GroupBy(x => x.Date.Date)
-            .ToDictionary(k => k.Key, v => new
-            {
-                On = v.Where(x => x.Status == ClockStatusEnum.上班打卡).MinBy(x => x.Date),
-                Off = v.Where(x => x.Status == ClockStatusEnum.下班打卡).MaxBy(x => x.Date)
-            });
+            var clocks = _db.Clocks.AsNoTracking()
+                      .Where(x => x.EmployeesId == User.GetId())
+                      .ToList()
+                      .GroupBy(x => x.Date.Date)
+                      .Select(g =>
+                      {
+                          var date = g.Key.ToString("yyyy-MM-dd");
+                          var on = g.FirstOrDefault(x => x.Status == ClockStatusEnum.上班打卡)?.Date.ToString("HH:mm:ss");
+                          var off = g.Where(x => x.Status == ClockStatusEnum.下班打卡)
+                                     .OrderByDescending(x => x.Date)
+                                     .FirstOrDefault()?.Date.ToString("HH:mm:ss");
+                          return new { date, on, off };
+                      })
+                      .ToList();
 
             if (clocks == null)
             {
@@ -205,6 +211,22 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
 
             return Ok(clocks);
         }
+
+        //[HttpGet("{date}")]
+        //public IActionResult GetEmpClocks(DateTime date)
+        //{
+        //    var UserId = User.GetId();
+
+        //    var clockResult = _timeWaltzDb.Clocks
+        //        .Where(x => x.EmployeesId == UserId && x.Date.Date == date);
+
+        //    if (clockResult == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(clockResult);
+        //}
 
 
     }
