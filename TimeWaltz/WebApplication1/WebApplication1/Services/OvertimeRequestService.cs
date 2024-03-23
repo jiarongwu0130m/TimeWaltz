@@ -1,21 +1,37 @@
-﻿using Repository.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Repository.Models;
 namespace WebApplication1.Services
 {
     public class OvertimeRequestService
     {
-        private readonly TimeWaltzContext _timeWaltzDb;
+        private readonly TimeWaltzContext _db;
         private readonly ApprovalService _approvalService;
 
-        public OvertimeRequestService(TimeWaltzContext timeWaltzDb,ApprovalService approvalService)
+        public OvertimeRequestService(TimeWaltzContext db,ApprovalService approvalService)
         {
-            _timeWaltzDb = timeWaltzDb;
+            _db = db;
             _approvalService = approvalService;
         }
 
+        /// <summary>
+        /// 取得簽核人資料
+        /// </summary>
+        /// <param name="empId"></param>
+        /// <returns></returns>
+        public int GetApprovalEmp(int empId)
+        {
+            return _db.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == empId).Department.EmployeeId;
+        }
+
+
+
+
+
+
         public OvertimeApplication CreateOvertimeRequest(OvertimeApplication entity)
         {
-            _timeWaltzDb.OvertimeApplications.Add(entity);
-            _timeWaltzDb.SaveChanges();
+            _db.OvertimeApplications.Add(entity);
+            _db.SaveChanges();
 
             _approvalService.NewApproval_加班單(entity.Id);
             return entity;
@@ -23,19 +39,19 @@ namespace WebApplication1.Services
 
         public List<OvertimeApplication> GetOvertimeList()
         {
-            return _timeWaltzDb.OvertimeApplications.ToList();
+            return _db.OvertimeApplications.ToList();
         }
 
         public OvertimeApplication? GetOvertimeRequestTypeOrNull(int id)
         {
-            return _timeWaltzDb.OvertimeApplications.FirstOrDefault(x => x.Id == id);
+            return _db.OvertimeApplications.FirstOrDefault(x => x.Id == id);
 
         }
 
 
         public Employee? GetNameOrNull(int id)
         {
-            return _timeWaltzDb.Employees.FirstOrDefault(x => x.Id == id);
+            return _db.Employees.FirstOrDefault(x => x.Id == id);
 
         }
     }

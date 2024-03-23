@@ -44,10 +44,6 @@ namespace WebApplication1.Services
         {
             return _db.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == empId).Department.EmployeeId;
         }
-        /// <summary>
-        /// 取得補打卡單List
-        /// </summary>
-        /// <param name="empId"></param>
         
     }
 }
