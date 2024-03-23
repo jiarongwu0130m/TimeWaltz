@@ -53,6 +53,16 @@ namespace WebApplication1.Areas.Employee.Controllers
         {
             return View();
         }
+        public IActionResult BillBoardEdit()
+        {
+            return View();
+        }
+        public IActionResult BillBoardCreate()
+        {
+            return View();
+        }
+        
+
         public IActionResult OvertimeDetail()
         {
             return View();

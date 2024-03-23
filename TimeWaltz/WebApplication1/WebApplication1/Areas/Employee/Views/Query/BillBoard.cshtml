@@ -1,5 +1,133 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewBag.Title = "公佈欄";
+}
+@section Styles
+{
+}
+<div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>公佈欄</span>
+                <a class="iconedbox bg-info" @@click="toCreate">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                </a>
+            </h3>
+        </div>
+        <div class="card-body">
+        <table id="example2" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th v-bind:title="title('list')">{{ title('list') }}</th>
+                    <th v-bind:title="title('startTime')">{{ title('startTime') }}</th>
+                    <th v-bind:title="title('employeesID')">{{ title('employeesID') }}</th>
+                    <th v-bind:title="title('title')">{{ title('title') }}</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr class="text-center align-middle" v-for="item in allBillBoard">
+                        <td class="align-middle">{{item.id}}</td>
+                        <td class="align-middle">{{formatToDateTime(item.startTime)}}</td>
+                        <td class="align-middle">{{item.employeeId}}</td>
+                        <td class="align-middle">{{item.title}}</td>
+                        <td class="align-middle">
+                        <button @@click="toDetail(item.id,$event)" class="btn btn-outline-primary">編輯</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    allBillBoard: [],
+                    originalBillBoard: [],
+                    search: {
+                        date: '',
+                    },
+                }
+            },
+            computed: {
+                title() {
+                    return key => {
+                        const localizationData = {
+                            'list': '項次',
+                            'title': '主旨',
+                            'startTime': '公告開始時間',
+                            'employeesID': '發布人',
+                        };
+                        return localizationData[key] || key;
+                    };
+                }
+            },
+            methods: {
+                getSearchTime() {
+                    let self = this;
+                    const dateInputRef = document.querySelector('#reservationdate');
+
+                    $(dateInputRef).daterangepicker({
+                        singleDatePicker: true,
+                        locale: {
+                            format: 'YYYY-MM-DD'
+                        }
+                    }).on('apply.daterangepicker', (ev, picker) => {
+                        self.search.date = picker.startDate.format('YYYY-MM-DD');
+                        dateInputRef.value = self.search.date;
+                        self.searchBillBoard();
+                    });
+
+                },
+                searchBillBoard() {
+                    if (this.search.date.trim() !== '') {
+                        const filteredBillBoard = this.originalBillBoard.filter(item => {
+                            const requestDate = new Date(item.startTime);
+                            const selectedDate = new Date(this.search.date);
+                            return requestDate >= selectedDate;
+                        });
+                        this.allBillBoard = filteredBillBoard;
+                    }
+                },
+                getToday() {
+                    return moment();
+                },
+                toCreate() {
+                    location.href = "/employee/query/BillBoardCreate";
+                },
+                getBillBoardData() {
+                    axios("/api/BillboardApi/GetBillboardList").then(response => {
+                        this.allBillBoard = response.data;
+                        this.originalBillBoard = response.data;
+                    });
+                },
+                formatToDateTime(dateTimeString) {
+                    const options = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                    };
+                    const dateTime = new Date(dateTimeString);
+                    return dateTime.toLocaleTimeString('zh', options).replaceAll('/', '-');
+                },
+                toDetail(id, event) {
+                    event.preventDefault();
+                    location.href = `/employee/query/BillBoardEdit/${id}`;
+                }
+            },
+            mounted() {
+                this.getSearchTime();
+                this.getBillBoardData();
+            }
+        }).mount("#app");
+    </script>
 }
