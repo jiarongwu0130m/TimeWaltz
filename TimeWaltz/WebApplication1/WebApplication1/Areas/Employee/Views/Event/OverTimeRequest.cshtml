@@ -22,7 +22,7 @@
             </div>
             <div class="row form-group basic">
                 <label class="col-form-label">加班期間</label>
-                <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="" autocomplete="off">
+                <Vue-Date-Picker v-model="dateRange" autocomplete="off" class="form-control" model-auto range @@change="change"></Vue-Date-Picker>
                 <i class="clear-input">
                     <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                 </i>
@@ -117,6 +117,7 @@
         Vue.createApp({
             data() {
                 return {
+                    dateRange: [],
                     employeeId:'',
                     name: '',
                     startTime: '',
@@ -131,6 +132,15 @@
                 }
             },
             methods: {
+                change(){
+                    let self = this;
+                    self.startTime = self.dateRange[0]
+                    self.endTime = self.dateRange[1]
+                    this.countOvertimeMins()
+                },
+                toList() {
+                    location.href = '/employee/query/overtime'
+                },
                 getEmpName() {
                     let self = this;
                     axios("/mobile/api/Overtime/GetEmployeeName").then(response => {
@@ -138,32 +148,13 @@
                         self.name = response.data.employeeName;
                     });
                 },
-                getDateTimeRange() {
-                    let self = this;
-                    $('#timeRange').daterangepicker({
-                        "startDate": this.getToday(),
-                        "endDate": this.getToday(),
-                        timePicker: true,
-                        timePickerIncrement: 15,
-                        locale: {
-                            format: 'YYYY-MM-DD HH:mm'
-                        }
-                    },
-                        function (start, end, _) {
-                            self.startTime = start;
-                            self.endTime = end;
-                            self.countOvertimeMins();
-                        });
-                },
-                getToday() {
-                    return moment().format("YYYY-MM-DD HH:mm")
-                },
                 countOvertimeMins() {
-                    let self = this;
+                    let self = this;                    
+                    console.log(self.startTime, self.endTime)
                     self.overtimeResult = '';
                     if (self.startTime && self.endTime) {
-                        const start = self.startTime;
-                        const end = self.endTime;
+                        const start = self.dateRange[0];
+                        const end = self.dateRange[1];
                         const durationmilliseconds = end - start;
                         const durationminutes = Math.floor(durationmilliseconds / (60 * 1000));
                         const hours = Math.floor(durationminutes / 60);
@@ -193,12 +184,13 @@
                 },
                 sendOvertimeRequest() {
                     let self = this;
-                    self.startTime = self.startTime.utc(true).toISOString();
-                    self.endTime = self.endTime.utc(true).toISOString();
+                    self.startTime = moment(this.timeRange[0]).format('YYYY-MM-DD')
+                    self.endTime = moment(this.timeRange[1]).format('YYYY-MM-DD')
+                    console.log(self.startTime, self.endTime)
                     axios.post("/mobile/api/Overtime/RequestCreate", {
                         employeeId: self.employeeId,
-                        startTime: self.startTime,
-                        endTime : self.endTime,
+                        startTime: new moment(self.startTime).format('YYYY-MM-DDTHH:mm:ss').toString();
+                        endTime: new moment(self.endTime).format('YYYY-MM-DDTHH:mm:ss').toString();
                         status : self.status,
                         reason : self.reason,
                         overtimeResult: self.overtimeResult,
@@ -223,8 +215,7 @@
             },
             mounted() {
                 this.getEmpName();
-                this.getDateTimeRange();
             },
-        }).mount("#app");
+        }).component('VueDatePicker', VueDatePicker).mount("#app");
     </script>
 }

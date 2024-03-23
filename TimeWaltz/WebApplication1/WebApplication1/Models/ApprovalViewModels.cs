@@ -23,6 +23,15 @@ namespace WebApplication1.Models
 
         public RequestStatusEnum? Status { get; set; }
     }
+    public class ApprovaEditDto
+    {
+        public int Id { get; set; }
+        public int Status { get; set; }
+        
+        [StringLength(50)]
+        public string? Remark { get; set; }
+
+    }
 
 
 }

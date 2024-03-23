@@ -28,33 +28,21 @@
                            aria-describedby="example2_info">
                         <thead>
                             <tr>
-                                <th class="sorting sorting_asc" tabindex="0" rowspan="1"
-                                    colspan="1">
-                                    表單名稱
-                                </th>
-                                <th class="sorting" rowspan="1" colspan="1">
-                                    申請人
-                                </th>
-                                <th class="sorting" rowspan="1" colspan="1">
-                                    簽核
-                                </th>
+                                <th >表單名稱</th>
+                                <th>申請人</th>
+                                <th>簽核</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <template v-if="isSwitch">
-                                <tr v-for="vacation in filterByVacationType">
-                                    <td>
-                                        {{vacation.vacationType}}
-                                    </td>
-                                    <td>
-                                        {{vacation.gender}}
-                                    </td>
-                                    <td>
-                                        <a href="#" @@click="edit(vacation.id, $event)">簽核</a> 
-                                    </td>
-                                </tr>
-                            </template>
-
+                            <tr v-for="ApprlList in ApprovalList">
+                                <td class="text-center">{{tableTypeName(ApprlList.tableType)}}</td>
+                                <td class="text-center">{{ApprlList.employeeName}}</td>
+                                <td>
+                                    <a :href="'/employee/query/ApprovalCreate/'+ApprlList.id" class="btn btn-outline-dark">
+                                        簽核
+                                    </a>
+                                </td>
+                            </tr>
                         </tbody>
 
                     </table>
@@ -66,38 +54,35 @@
 </div>
 @section Scripts {
 
+    <script src="https://unpkg.com/vuejs-paginate-next@latest/dist/vuejs-paginate-next.umd.js"></script>
     <script>
         Vue.createApp({
             data() {
                 return {
                     ApprovalList: [],
                     search: '',
-                    isSwitch: false,
                 }
             },
             methods: {
-                changeSwitch() {
-                    this.isSwitch = !this.isSwitch;
-                },
-                filterByVacationType() {
-                    if (this.search != '') return this.vacationList.filter(x => x.vacationType.includes(this.search));
-                    return this.vacationList;
-                },
-                edit(id, event) {
-                    event.preventDefault();
-                    location.href = `/Query/ApprovalEdit/${id}`
-                },
-                getVacationListData() {
-                    let self = this
-                    fetch("api/Approval/GetApprovalData").then(res => res.json()).then(result => {
-                        console.log(result)
-                        self.vacationList = result
 
-                    });
+                filterByVacationType() {
+                    if (this.search != '') return this.ApprovalList.filter(x => x.vacationType.includes(this.search));
+                    return this.ApprovalList;
+                },
+
+                getApprovalListData() {
+                    let self = this
+                    axios("/mobile/api/Approval/GetAllApprovalData").then(res => {
+                        console.log(res.data);
+                        self.ApprovalList = res.data;
+                    })
+                },
+                tableTypeName(tableType) {
+                    return tableType === 0 ? "加班單" : tableType === 1?"請假單":"補打卡單"
                 },
             },
             mounted() {
-                this.getVacationListData()
+                this.getApprovalListData()
             }
         }).mount("#app");
 
