@@ -184,11 +184,13 @@
                 },
                 sendOvertimeRequest() {
                     let self = this;
+                    self.startTime = moment(this.timeRange[0]).format('YYYY-MM-DD')
+                    self.endTime = moment(this.timeRange[1]).format('YYYY-MM-DD')
                     console.log(self.startTime, self.endTime)
                     axios.post("/mobile/api/Overtime/RequestCreate", {
                         employeeId: self.employeeId,
-                        startTime: new moment(self.dateRange[0]).format('YYYY-MM-DDTHH:mm:ss').toString(),
-                        endTime: new moment(self.dateRange[1]).format('YYYY-MM-DDTHH:mm:ss').toString(),
+                        startTime: new moment(self.startTime).format('YYYY-MM-DDTHH:mm:ss').toString();
+                        endTime: new moment(self.endTime).format('YYYY-MM-DDTHH:mm:ss').toString();
                         status : self.status,
                         reason : self.reason,
                         overtimeResult: self.overtimeResult,
