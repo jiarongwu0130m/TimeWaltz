@@ -40,10 +40,13 @@ namespace WebApplication1.Services
         /// </summary>
         /// <param name="empId"></param>
         /// <returns></returns>
-        public int GetApprovalEmp(int empId)
+        public int GetApprovalEmp(int empId)//todo 部門主管
         {
+            return 1;
             return _db.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == empId).Department.EmployeeId;
         }
-        
+
+
+
     }
 }

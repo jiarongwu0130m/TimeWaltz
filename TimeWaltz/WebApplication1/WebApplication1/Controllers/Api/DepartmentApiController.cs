@@ -47,7 +47,7 @@ namespace WebApplication1.Controllers.Api
                 var entity = new Department
                 {
                     DepartmentName = dto.DepartmentName,
-                    EmployeeId = dto.EmployeesId,
+                    //EmployeeId = dto.EmployeesId, //todo 部門主管
                 };
                 _departmentService.CreateDepartment(entity);
                 return Ok(new { status = true });
@@ -70,7 +70,7 @@ namespace WebApplication1.Controllers.Api
                     {
                         Id = id,
                         DepartmentName = entity.DepartmentName,
-                        EmployeesId = entity.EmployeeId,
+                        //EmployeesId = entity.EmployeeId,//todo 部門主管
                     };
                     return model;
                 }
@@ -117,7 +117,7 @@ namespace WebApplication1.Controllers.Api
                     {
                         Id = entity.Id,
                         DepartmentName = entity.DepartmentName,
-                        EmployeesName = emp.FirstOrDefault(x=>x.Id == entity.EmployeeId).Name ,
+                        //EmployeesName = emp.FirstOrDefault(x=>x.Id == entity.EmployeeId).Name,//todo 部門主管
                     });
                 }
                 return models;

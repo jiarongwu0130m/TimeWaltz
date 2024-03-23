@@ -92,11 +92,11 @@ namespace WebApplication1.Services
         /// 取得簽核人資料
         /// </summary>
         /// <param name="empId"></param>
-        /// <returns></returns>
-        public int GetApprovalEmp(int empId)
-        {
-            return _timeWaltzContext.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == empId).Department.EmployeeId;
-        }
+        /// <returns></returns>//todo 部門主管
+        //public int GetApprovalEmp(int empId)
+        //{
+        //    return _timeWaltzContext.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == empId).Department.EmployeeId;
+        //}
         /// <summary>
         /// 取得請假詳細資料
         /// </summary>

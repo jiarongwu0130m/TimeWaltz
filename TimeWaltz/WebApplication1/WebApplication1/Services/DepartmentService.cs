@@ -50,7 +50,7 @@ namespace WebApplication1.Services
             var entity = _timeWaltzDb.Departments.FirstOrDefault(x => x.Id == model.Id);
 
             entity.DepartmentName = model.DepartmentName;
-            entity.EmployeeId = model.EmployeesId;
+            //entity.EmployeeId = model.EmployeesId;//todo 部門主管
 
             _timeWaltzDb.SaveChanges();
         }

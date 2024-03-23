@@ -32,7 +32,7 @@ public partial class Employee
     public string Email { get; set; }
 
     public int Gender { get; set; }
-
+    public bool IsManager { get; set; }
     [Required]
     [StringLength(50)]
     public string EmployeesNo { get; set; }
