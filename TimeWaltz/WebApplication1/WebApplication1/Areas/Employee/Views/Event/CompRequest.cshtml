@@ -24,7 +24,10 @@
 
                 <div class="row form-group basic">
                     <label class="col-form-label">補打卡日期</label>
-                    <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="" autocomplete="off">
+                    @*<input id="timeRange" name="dateRange" type="datetime" class="form-control" value="" autocomplete="off">*@
+
+                    <Vue-Date-Picker v-model="additionalTime" class="form-control" time-picker-inline></Vue-Date-Picker>
+
                     <i class="clear-input">
                         <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                     </i>
@@ -83,7 +86,7 @@
                 <div class="row justify-content-around">
                     <button type="button" class="btn btn-facebook" @@click="checkCompStatus">
                         <ion-icon name="checkmark-done-outline" role="img"
-                        class="md hydrated" aria-label="checkmark done outline"></ion-icon>送出
+                                  class="md hydrated" aria-label="checkmark done outline"></ion-icon>送出
                     </button>
                     <button type="button" class="btn btn-dribbble" @@click="toList">
                         <ion-icon name="close-outline" role="img"
@@ -149,7 +152,7 @@
                     status: null,
                     reason: '',
                     shifts: [],
-                    date: '',
+                    additionalTime: '',
                     search: {
                         date: '',
                         shiftStart: '',
@@ -281,11 +284,10 @@
                     }
                 },
                 send() {
-                    let self = this;
-
+                    let self = this;                    
                     axios.post("/mobile/api/Complement/CompRequestCreate", {
                         employeesId: self.employeesId,
-                        additionalTime: self.date,
+                        additionalTime: new moment(self.additionalTime).format('YYYY-MM-DDTHH:mm:ss').toString(),
                         status: self.status,
                         reason: self.reason,
                     }).then(response => {
@@ -307,6 +309,6 @@
                     location.href = "/employee/query/Complement";
                 },
             }
-        }).mount("#app");
+        }).component('VueDatePicker', VueDatePicker).mount("#app");
     </script>
 }

@@ -83,7 +83,7 @@ namespace WebApplication1.Services
                 Id = xy.x.Id,
                 EmployeesId = xy.x.EmployeesId,
                 VacationType = xy.x.VacationDetails.VacationType,
-                Date = xy.x.StartTime.ToString("yyyy-MM-dd") + "-" + xy.x.EndTime.ToString("yyyy-MM-dd"),
+                Date = xy.x.StartTime.ToString("yyyy-MM-dd") + " ~ " + xy.x.EndTime.ToString("yyyy-MM-dd"),
                 ApprovalStatus = xy.y.Status.ToString(),
             }).ToList();            
         }

@@ -41,7 +41,7 @@
             </div>
             <div class="form-group basic">
                 <div class="input-wrapper">
-                    <label class="col-form-label" for="agentEmployeeName">代理人選擇</label>
+                    <label class="col-form-label" for="agentEmployeeName">代理人</label>
                     <input class="form-control" disabled id="agentEmployeeName" :value="agentEmployeeName">
 
                     <i class="clear-input">
@@ -51,7 +51,7 @@
             </div>
             <div class="form-group basic">
                 <div class="input-wrapper">
-                    <label class="col-form-label" for="approvalEmpName">代理人選擇</label>
+                    <label class="col-form-label" for="approvalEmpName">簽核人</label>
                     <label></label>
                     <input class="form-control" disabled id="approvalEmpName" :value="approvalEmpName">
 
@@ -113,7 +113,7 @@
             },
             methods: {
                 toList() {
-                    location.href = 'employee/query/leave'
+                    location.href = /employee/query/leave'
                 },
                 getLeaveData() {
                     let self = this;

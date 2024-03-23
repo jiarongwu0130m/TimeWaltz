@@ -45,7 +45,12 @@
                     <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                 </i>
             </div>
-
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label">簽核人</label>
+                    <input type="text" class="form-control" v-model="approvalEmpName" readonly>
+                </div>
+            </div>
             <div class="form-group basic">
                 <div class="input-wrapper">
                     <label class="col-form-label text-danger">簽核狀態</label>
@@ -121,11 +126,12 @@
                         axios(`/mobile/api/Complement/GetCompRequestDetail/${this.Id}`),
                         axios("/mobile/api/Complement/DropDownList")
                     ]).then(([compRequest, dropdownList]) => {
+                        console.log([compRequest, dropdownList])
                         self.allcompRequest = compRequest.data;
                         self.status = dropdownList.data.clockStatusSelectItems.filter(x => x.value == compRequest.data.status)[0]?.text;
                         self.originalCompRequests = compRequest.data;
                         self.additionalTime = self.allcompRequest.additionalTime.split('T')[0];
-                        self.approvalEmpName = self.allcompRequest.approvalEmpName;
+                        self.approvalEmpName = self.allcompRequest.approvalEmpName;                            ;
                         self.approvalStatus = self.allcompRequest.approvalStatus;
                         self.employeeName = self.allcompRequest.employeeName;
                         self.reason = self.allcompRequest.reason;
