@@ -45,6 +45,23 @@ namespace WebApplication1.Models.ApplicationFormViewModels
 
     }
 
+    /// <summary>
+    /// 加班單_詳細
+    /// </summary>
+    public class OvertimeDetailDto
+    {
+        public int Id { get; set; }
+        public string EmployeeName { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string Reason { get; set; }
+        public bool Status { get; set; }
+        public string ApprovalStatus { get; set; }
+        public string ApprovalEmpName { get; set; }
+        public string? ApprovalRemark { get; set; }
+
+    }
+
     public class OvertimeRequestGetEmpIdName
     {
         public int EmployeeId { get; set; }
