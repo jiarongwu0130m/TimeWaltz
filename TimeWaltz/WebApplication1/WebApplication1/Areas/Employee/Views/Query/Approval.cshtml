@@ -87,6 +87,14 @@
                     event.preventDefault();
                     location.href = `/Query/ApprovalEdit/${id}`
                 },
+                getVacationListData() {
+                    let self = this
+                    fetch("api/Approval/GetApprovalData").then(res => res.json()).then(result => {
+                        console.log(result)
+                        self.vacationList = result
+
+                    });
+                },
             },
             mounted() {
                 this.getVacationListData()
