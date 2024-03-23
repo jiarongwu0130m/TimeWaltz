@@ -9,12 +9,10 @@
                 <h3 class="card-title">
                     <div class="row">
                         <div class="col">
-                            <form asp-action="specialVacation" asp-controller="BasicSetting" method="post">
-                                <div class="form-group">
-                                    <label name="Date">時間區間查詢</label>
-                                    <input name="Date" class="form-control" id="dateInput">
-                                </div>
-                            </form>                            
+                            <div class="form-group">
+                                <label name="Date">時間區間查詢</label>
+                                <input name="Date" class="form-control" id="dateInput">
+                            </div>
                         </div>
                     </div>
                 </h3>
@@ -28,7 +26,6 @@
             </div>
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
-                    <thead>
                     <thead>
                         <tr>
                             <th>
@@ -49,8 +46,8 @@
                                 {{item.date}}
                             </td>
                             <td>
-                                <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-dark">編輯</a> |
-                                <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-danger">刪除</a>
+                                <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-primary">編輯</a> 
+                                <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-secondary">刪除</a>
                             </td>
                         </tr>
 
