@@ -117,8 +117,10 @@
         Vue.createApp({
             data() {
                 return {
+                    approvalEmployeeList: [],
                     dateRange: [],
-                    employeeId:'',
+                    approvalEmployeeId: null,
+                    employeeId: '',
                     name: '',
                     startTime: '',
                     endTime: '',
@@ -132,7 +134,13 @@
                 }
             },
             methods: {
-                change(){
+                getApprovalDropDownList() {
+                    let self = this;
+                    axios("/mobile/EmployeeApi/GetApprovalList").then((response) => {
+                        self.approvalEmployeeList = response.data
+                    }).catch((error) => console.log(error));
+                },
+                change() {
                     let self = this;
                     self.startTime = self.dateRange[0]
                     self.endTime = self.dateRange[1]
@@ -149,7 +157,7 @@
                     });
                 },
                 countOvertimeMins() {
-                    let self = this;                    
+                    let self = this;
                     console.log(self.startTime, self.endTime)
                     self.overtimeResult = '';
                     if (self.startTime && self.endTime) {
@@ -189,10 +197,11 @@
                     console.log(self.startTime, self.endTime)
                     axios.post("/mobile/api/Overtime/RequestCreate", {
                         employeeId: self.employeeId,
-                        startTime: new moment(self.startTime).format('YYYY-MM-DDTHH:mm:ss').toString();
-                        endTime: new moment(self.endTime).format('YYYY-MM-DDTHH:mm:ss').toString();
-                        status : self.status,
-                        reason : self.reason,
+                        startTime: new moment(self.startTime).format('YYYY-MM-DDTHH:mm:ss').toString(),
+                        endTime: new moment(self.endTime).format('YYYY-MM-DDTHH:mm:ss').toString(),
+                        status: self.status,
+                        reason: self.reason,
+                        approvalEmployeeId: self.approvalEmployeeId,
                         overtimeResult: self.overtimeResult,
                     }).then(response => {
                         if (response.data == true) {

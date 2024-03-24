@@ -96,16 +96,13 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                     EndTime = dto.EndTime,
                     VacationDetailsId = dto.VacationDetailsId,
                     Reason = dto.Reason,
-                    AgentEmployeeId = dto.AgentEmployeeId
+                    AgentEmployeeId = dto.AgentEmployeeId,
+                    ApprovalEmployeeId = dto.ApprovalEmployeeId, 
                 };
 
                 var relativePath = _leaveService.GetRelativeFileRoute(dto.FileRoute);
 
                 model.RelativeFileRoute = relativePath;
-
-                var approvalEmp = _leaveService.GetApprovalEmp(model.EmployeesId);
-
-                model.ApprovalEmployeeId = approvalEmp;
 
                 model.LeaveMinutes = _leaveService.AddLeaveTime2(model);
 

@@ -29,6 +29,7 @@ namespace WebApplication1.Models.PersonalRecordViewModels
 
     public class LeaveCreateDto
     {
+        public int ApprovalEmployeeId { get; set; }
         public int EmployeesId { get; set; }
         public DateTime StartTime { get; set; }
 

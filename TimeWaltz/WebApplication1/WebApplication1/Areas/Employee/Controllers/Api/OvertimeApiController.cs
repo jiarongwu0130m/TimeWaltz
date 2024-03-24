@@ -54,8 +54,6 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
         {
             try
             {
-                var approvalEmp = _overtimeRequestService.GetApprovalEmp(model.EmployeeId);
-                model.ApprovalEmployeeId = approvalEmp;
 
                 var entity = new OvertimeApplication
                 {

@@ -68,7 +68,14 @@
 
                     </div>
                 </div>
-
+                <div class="form-group basic">
+                    <label class="col-form-label">審核人選擇</label>
+                    <select class="form-control select2-blue select2-hidden-accessible" style="width: 100%;" data-select2-id="1" tabindex="-1"
+                            aria-hidden="true" v-model.number="approvalEmployeeId">
+                        <option value="">---請選擇---</option>
+                        <option v-for="item in approvalEmployeeList" :value="item.value">{{item.text}}</option>
+                    </select>
+                </div>
                 <div class="row form-group basic">
                     <label class="col-form-label">附加檔案上傳</label>
                     <div class="custom-file-upload">
@@ -108,27 +115,7 @@
             </div>
         </form>
     </div>
-
-    <div class="modal fade dialogbox" id="DialogIconedDanger" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-icon text-danger">
-                    <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                </div>
-                <div class="modal-header">
-                    <h5 class="modal-title">送出成功</h5>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <div class="btn-inline">
-                        <a href="#" class="btn" data-dismiss="modal" id="successBack">返回</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+  
     <div class="modal fade dialogbox" id="DialogIconedDanger" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -148,6 +135,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade dialogbox" id="DialogIconedSuccess" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -197,13 +185,15 @@
         const vueLeave = Vue.createApp({
             data() {
                 return {
-                    agentDropDownList: '',
-                    vacationDropDownList: '',
+                    approvalEmployeeList: [],
+                    agentDropDownList: [],
+                    vacationDropDownList: [],
                     name: '',
                     employeeId: null,
                     startTime: null,
                     endTime: null,
                     vacationDetailsId: null,
+                    approvalEmployeeId: null,
                     reason: '',
                     fileRoute: '',
                     agentEmployeeId: null,
@@ -219,6 +209,12 @@
                 }
             },
             methods: {
+                getApprovalDropDownList() {
+                    let self = this;
+                    axios("/mobile/EmployeeApi/GetApprovalList").then((response) => {
+                        self.approvalEmployeeList = response.data;
+                    }).catch((error) => console.log(error));
+                },
                 validateAndSubmit() {
                     let isValid = true;
                     this.validation.vacationDetailsId = this.vacationDetailsId == null ? false : true;
@@ -238,13 +234,14 @@
                     return moment().format("YYYY-MM-DD HH:mm")
                 },
                 backToQuery(){
-                    location.href = "/employee/query/Leave";
+                    window.location.href = '/employee/query/Leave';
                 },
-                send() {
+                send() {                    
                     let self = this;
+
                     self.startTime = moment(this.timeRange[0]).format('YYYY-MM-DD')
                     self.endTime = moment(this.timeRange[1]).format('YYYY-MM-DD')
-                    console.log(self.employeesId, self.startTime, self.endTime, self.vacationDetailsId, self.agentEmployeeId, self.reason, self.fileRoute)
+                    console.log(self.employeesId, self.startTime, self.endTime, self.vacationDetailsId, self.agentEmployeeId, self.reason, self.fileRoute, self.approvalEmployeeId)
                     if (self.leaveHours == null) {
                         self.leaveHours = 0;
                     }
@@ -257,13 +254,17 @@
                     formData.append('reason', self.reason);
                     formData.append('fileRoute', self.fileRoute);
                     formData.append('leaveHours', self.leaveHours);
-                    axios.post("/api/LeaveApi/Create", formData).then((response) => {
-                        console.log(response.data.status)
+                    formData.append('approvalEmployeeId', self.approvalEmployeeId);
+                    axios.post("/mobile/LeaveApi/Create", formData).then((response) => {
+                        console.log(response.data)
                         if (response.data.status == true) {
                             console.log('trueture')
                             console.log($);
                             $('#DialogIconedSuccess').modal('show');
-                            this.backToQuery();
+                            $('#successBack').click(function () {
+                                $('#DialogIconedSuccess').modal('hide');
+                                window.location.href = "/employee/query/leave";
+                            });
                         } else {
                             console.log('fslaefalse')
 
@@ -322,7 +323,7 @@
                 this.getTimeRange();
                 this.getNameAndId();
                 this.getDefaultTime();
-                console.log(this.timeRange);
+                this.getApprovalDropDownList();
             }
         }).component('VueDatePicker', VueDatePicker).mount("#app");
 

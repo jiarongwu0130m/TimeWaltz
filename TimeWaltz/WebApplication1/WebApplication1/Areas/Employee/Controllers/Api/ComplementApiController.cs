@@ -36,11 +36,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
         public bool CompRequestCreate(CompRequestCreateDto model)
         {
             try
-            {
-                //找出單據簽核主管
-                var approvalEmp = _compRequestService.GetApprovalEmp(model.EmployeesId);
-                model.ApprovalEmployeeId = approvalEmp;
-
+            {                
                 var entity = new AdditionalClockIn
                 {
                     EmployeesId = model.EmployeesId,
@@ -62,6 +58,8 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 return false;
             }
         }
+       
+
         /// <summary>
         /// 取得補打卡單所有單據
         /// </summary>
