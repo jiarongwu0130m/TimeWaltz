@@ -34,7 +34,7 @@
                         <div class="form-group">
                             <label class="control-label">E-mail</label>
                             <input type="email" class="form-control col-5" :class="validation.email" v-model.lazy="email" />
-                            <div class="invalid-feedback">
+                            <div class="text-danger" v-if="!validation.gender">
                                 Email格式錯誤!
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                     this.validation.gender = this.gender == '' ? false : true;
                     this.validation.departmentId = this.departmentId == '' ? false : true;
                     this.validation.employeesNo = this.employeesNo == '' ? false : true;
-                    this.validation.shiftScheduleId = this.shiftScheduleId == '' ? false : true;
+                    this.validation.shiftScheduleId = this.shiftScheduleId == null ? false : true;
                     this.validation.email = this.email == null ? false : true;
                     if (this.validation.name && this.validation.gender && this.validation.departmentId && this.validation.employeesNo && this.validation.email) {
                         this.send();

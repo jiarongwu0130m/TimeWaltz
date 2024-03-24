@@ -18,7 +18,6 @@
                     <form asp-action="PublicHolidayEdit" asp-asp-controller="BasicSetting" method="post" id="app">
                         <section class="content">
                             <div class="card-body">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-group">
                                     <label name="HolidayName" class="control-label"></label>
                                     <input name="HolidayName" class="form-control" v-model="holidayName" />
@@ -58,7 +57,12 @@
                     holidayName: '',
                 }
             },
-            methods: {
+            methods: {                
+                getToday() {
+                    var now = moment();
+                    var today = now.format('YYYY-MM-DD');
+                    return today;
+                },
                 getEditData() {
                     let self = this;
                     console.log(self.id);
@@ -67,14 +71,14 @@
                         self.holidayName = response.data.holidayName;
                         self.date = response.data.date;
                         self.id = response.data.id;
-                    }).then((error) => console.log(error));
+                    }).then(() => self.getDateRangePicker()).then((error) => console.log(error));
                 },
                 send() {
                     let self = this;
                     axios.post(`/api/PublicHolidayApi/Edit`, {
                         id: self.id,
                         holidayName: self.holidayName,
-                        date: self.date,
+                        date: new moment(self.date).format('YYYY-MM-DD').toString(),
                     })
                         .then((response) => {
                             if (response.status) {
@@ -111,10 +115,12 @@
                 },
                 getDateRangePicker() {
                     let self = this;
+                    self.date = new moment(self.date).format('YYYY-MM-DD')
                     $('#dateInput').daterangepicker({
                         singleDatePicker: true,
+                        'startDate': this.date,
                         locale: {
-                            format: 'YYYY/MM/DD'
+                            format: 'YYYY-MM-DD'
                         }
                     }, function (start, _, _) {
                         self.date = start
@@ -137,7 +143,7 @@
             mounted() {
                 this.checkId();
                 this.getEditData();
-                this.getDateRangePicker();
+                
             },
         }).mount('#app');
     </script>

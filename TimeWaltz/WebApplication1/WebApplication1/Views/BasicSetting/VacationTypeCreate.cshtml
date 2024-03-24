@@ -117,10 +117,33 @@
                         },
                     }).then(res => res.json()).then(result => {
                         if (result.status) {
-                            alert("新增成功")
-                            location.href = "/BasicSetting/VacationType"
+                            Swal.fire({
+                                icon: "success",
+                                title: "新增成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    location.href = "/BasicSetting/vacationtype";
+                                }
+                            });
                         } else {
-                            alert("新增失敗")
+                            Swal.fire({
+                                icon: "error",
+                                title: "新增失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
                         }
                     })
                 },
