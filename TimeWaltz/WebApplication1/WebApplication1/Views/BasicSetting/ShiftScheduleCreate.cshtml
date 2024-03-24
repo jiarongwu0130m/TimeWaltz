@@ -1,42 +1,57 @@
 ﻿@{
-    ViewData["Title"] = "新增班別設定";
+    Layout = "_Layout";
+    ViewData["Title"] = "班別設定 | ";
 }
 
-
-<div class="row" id="app">
-    <div class="col-12">
-        <form asp-action="ShiftScheduleCreate" asp-asp-controller="BasicSetting" method="post">
-            <div class="card">
-                <div class="card-body">
-                    <div class="form-group">
-                        <label name="shiftsName" class="control-label">班別名稱</label>
-                        <input name="shiftsName" class="form-control col-3" v-model="shiftsName" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label name="StartTime" class="control-label">開始時間</label>
-                        <input type="time" name="StartTime" value="" class="form-control col-3" v-model="startTime" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label name="EndTime" class="control-label">結束時間</label>
-                        <input type="time" name="EndTime" value="" class="form-control col-3" v-model="endTime" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label name="MaxAdditionalClockIn" class="control-label">補卡上限次數</label>
-                        <input name="MaxAdditionalClockIn" type="number" class="form-control col-3" v-model.number="maxAdditionalClockIn" />
-                        <span class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <input type="button" value="送出" @@click="send" class="btn btn-primary" />
-                    <a asp-controller="BasicSetting" asp-action="ShiftSchedule" class="btn btn-outline-dark">返回</a>
-                </div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">新增班別</h1>
             </div>
-        </form>
+        </div>
     </div>
 </div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row" id="app">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label name="shiftsName" class="control-label">班別名稱</label>
+                            <input name="shiftsName" class="form-control col-3" v-model="shiftsName" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label name="StartTime" class="control-label">開始時間</label>
+                            <input type="time" name="StartTime" value="" class="form-control col-3" v-model="startTime" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label name="EndTime" class="control-label">結束時間</label>
+                            <input type="time" name="EndTime" value="" class="form-control col-3" v-model="endTime" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label name="MaxAdditionalClockIn" class="control-label">補卡上限次數</label>
+                            <input name="MaxAdditionalClockIn" type="number" class="form-control col-3" v-model.number="maxAdditionalClockIn" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="button" value="送出" @@click="send" class="btn btn-primary" />
+                        <a asp-controller="BasicSetting" asp-action="ShiftSchedule" class="btn btn-outline-dark">返回</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
 @section Scripts {
     <script>
         Vue.createApp({
@@ -55,8 +70,7 @@
                     return today;
                 },
                 send() {
-                    let self = this;
-                    console.log(self.shiftsName, this.getToday() + ' ' + self.startTime, this.getToday() + ' ' + self.endTime, self.maxAdditionalClockIn)
+                    let self = this;                    
                     axios.post('/api/ShiftScheduleapi/create', {
                         shiftsName: self.shiftsName,
                         startTime: new Date(this.getToday() + ' ' + self.startTime),
