@@ -26,7 +26,7 @@
                     <label class="col-form-label">請假期間</label>
                     @* <input id="timeRange" name="dateRange" type="datetime" class="form-control" value="" autocomplete="off"> *@
 
-                    <Vue-Date-Picker v-model="timeRange" autocomplete="off" class="form-control" model-auto range></Vue-Date-Picker>
+                    <Vue-Date-Picker v-model="timeRange" autocomplete="off" class="form-control border-0" model-auto range></Vue-Date-Picker>
 
                     <i class="clear-input">
                         <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
@@ -94,8 +94,7 @@
                             </span>
                         </label>
                     </div>
-                </div> *@
-                
+                </div> *@                
 
                 <div class="row form-group basic">
                     <label class="col-form-label">原因</label>
@@ -112,8 +111,12 @@
 
                 <div class="row justify-content-around">
                     <button type="button" class="btn btn-facebook" @@click="validateAndSubmit">
-                        <ion-icon name="notifications-outline" role="img" class="md hydrated" aria-label="logo facebook"></ion-icon>
-                        送出
+                        <ion-icon name="checkmark-done-outline" role="img"
+                                  class="md hydrated" aria-label="checkmark done outline"></ion-icon>送出
+                    </button>
+                    <button type="button" class="btn btn-dribbble" @@click="toList">
+                        <ion-icon name="close-outline" role="img"
+                                  class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
                     </button>
                 </div>
 
@@ -298,19 +301,14 @@
                         }
                     },
                         function (start, end, _) {
-                            console.log('selected', start, end)
                             self.startTime = start.format('YYYY-MM-DD HH:mm')
                             self.endTime = end.format('YYYY-MM-DD HH:mm')
-
-                            console.log(self.startTime, self.endTime)
                         }
                     );
                 },
                 getDropDownList() {
                     let self = this;
                     fetch("/mobile/LeaveApi/GetDropDownList").then(res => res.json()).then(result => {
-                        console.log(result);
-                        //一個物件裡面有兩個陣列
                         self.agentDropDownList = result.agentDropDownList
                         self.vacationDropDownList = result.vacationDropDownList
                     })
@@ -318,12 +316,14 @@
                 getNameAndId() {
                     let self = this;
                     fetch("/mobile/LeaveApi/GetEmployeeName").then(res => res.json()).then(result => {
-                        console.log(result);
                         self.name = result.employeeName;
                         self.employeesId = result.employeeId;
 
                     })
                 },
+                toList() {
+                    location.href = "/employee/query/Leave";
+                }
             },
             mounted() {
                 this.getDropDownList();

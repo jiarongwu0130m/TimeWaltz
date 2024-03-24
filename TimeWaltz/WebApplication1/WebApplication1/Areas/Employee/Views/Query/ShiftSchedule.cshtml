@@ -11,17 +11,10 @@
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
                 <span>班表查詢</span>
-                <a @@click="shiftScheduleShow" class="iconedbox bg-info">
-                    <ion-icon name="information-circle-outline"></ion-icon>
-                </a>
             </h3>
         </div>
         <div class="card-body">
             <full-calendar class='demo-app-calendar' ref="calendar" :options='calendarOptions'>
-                <!-- <template v-slot:event-content='arg'>
-                    <b>{{ arg.timeText }}</b>
-                    <i>XXX{{ arg.event.title }}XXX</i>
-                </template> -->
             </full-calendar>
         </div>
         <div class="card-footer">

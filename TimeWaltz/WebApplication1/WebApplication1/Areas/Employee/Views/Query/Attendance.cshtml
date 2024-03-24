@@ -11,21 +11,13 @@
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
                 <span>出缺勤查詢</span>
-                <a @@click="shiftScheduleShow" class="iconedbox bg-info">
-                    <ion-icon name="information-circle-outline"></ion-icon>
-                </a>
             </h3>
         </div>
         <div class="card-body h-100">
             <full-calendar class='demo-app-calendar' ref="calendar" :options='calendarOptions'>
-                <!-- <template v-slot:event-content='arg'>
-                    <b>{{ arg.timeText }}</b>
-                    <i>XXX{{ arg.event.title }}XXX</i>
-                </template> -->
             </full-calendar>
         </div>
     </div>
-
     <div class="modal fade dialogbox" id="shiftSchedule" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -33,7 +25,7 @@
                     <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="checkmark circle"></ion-icon>
                 </div>
                 <div class="modal-header">
-                    <h5 class="modal-title">我愛上班</h5>
+                    <h5 class="modal-title">當日班表</h5>
                 </div>
                 <div class="modal-body">
                     <div>班別:{{selectedEvent.title}}</div>
@@ -71,7 +63,7 @@
                             center: 'title',
                             right: 'dayGridMonth'
                         },
-                        height:'auto',
+                        height: 'auto',
                         initialView: 'dayGridMonth',
                         initialEvents: [],
                         editable: true,

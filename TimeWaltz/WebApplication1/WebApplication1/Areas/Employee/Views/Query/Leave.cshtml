@@ -8,6 +8,9 @@
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
                 <span>請假申請查詢</span>
+                <a @@click="toCreate" class="iconedbox bg-success">
+                    <ion-icon name="add" role="img" class="md hydrated" aria-label="add"></ion-icon>
+                </a>
             </h3>
         </div>
         <div class="card-body">
@@ -71,7 +74,7 @@
             methods: {
                 edit(id, event) {
                     event.preventDefault();
-                    location.href = `/employee/query/leavedetail/${id}`
+                    location.href = `/employee/query/leavedetail/${id}`;
                 },
                 getListData() {
                     let self = this;
@@ -79,6 +82,9 @@
                         console.log(result)
                         self.leaveRequestListData = result;
                     })
+                },
+                toCreate() {
+                    location.href = `/employee/event/LeaveRequest`;
                 },
             },
             mounted() {

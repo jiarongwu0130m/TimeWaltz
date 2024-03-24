@@ -11,7 +11,7 @@ namespace WebApplication1.Areas.Employee.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("clock", "event");
         }
     }
 }
