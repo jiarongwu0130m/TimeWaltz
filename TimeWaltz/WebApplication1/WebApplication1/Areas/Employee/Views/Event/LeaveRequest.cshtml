@@ -75,8 +75,13 @@
                         <option value="">---請選擇---</option>
                         <option v-for="item in approvalEmployeeList" :value="item.value">{{item.text}}</option>
                     </select>
+                    <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus"
+                              dir="ltr" style="width: 100%;">
+                            <span class="selection"></span>
+                        </span>
+                        <span class="text-danger" v-if="!validation.approvalEmployeeId">審核人選擇不得為空!</span>
                 </div>
-                <div class="row form-group basic">
+               @*  <div class="row form-group basic">
                     <label class="col-form-label">附加檔案上傳</label>
                     <div class="custom-file-upload">
                         <input type="file" id="fileuploadInput" accept=".png, .jpg, .jpeg" @@click="change">
@@ -89,7 +94,7 @@
                             </span>
                         </label>
                     </div>
-                </div>
+                </div> *@
                 
 
                 <div class="row form-group basic">
@@ -203,6 +208,7 @@
                         vacationDetailsId: true,
                         reason: true,
                         agentEmployeeId: true,
+                        approvalEmployeeId: true,
 
                     },
                     timeRange: [this.getToday(), this.getToday()],
@@ -220,7 +226,8 @@
                     this.validation.vacationDetailsId = this.vacationDetailsId == null ? false : true;
                     this.validation.reason = this.reason == '' ? false : true;
                     this.validation.agentEmployeeId = this.agentEmployeeId == null ? false : true;
-                    if (this.validation.vacationDetailsId && this.validation.reason && this.validation.agentEmployeeId) {
+                    this.validation.approvalEmployeeId  = this.approvalEmployeeId == null ? false : true;
+                    if (this.validation.vacationDetailsId && this.validation.reason && this.validation.agentEmployeeId, this.validation.approvalEmployeeId) {
                         this.send();
                     }
                 },
@@ -239,8 +246,8 @@
                 send() {                    
                     let self = this;
 
-                    self.startTime = moment(this.timeRange[0]).format('YYYY-MM-DD')
-                    self.endTime = moment(this.timeRange[1]).format('YYYY-MM-DD')
+                    self.startTime = moment(this.timeRange[0]).format('YYYY-MM-DD HH:mm')
+                    self.endTime = moment(this.timeRange[1]).format('YYYY-MM-DD HH:mm')
                     console.log(self.employeesId, self.startTime, self.endTime, self.vacationDetailsId, self.agentEmployeeId, self.reason, self.fileRoute, self.approvalEmployeeId)
                     if (self.leaveHours == null) {
                         self.leaveHours = 0;

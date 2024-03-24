@@ -16,6 +16,10 @@
                 <div class="row form-group boxed">
                     <label class="col-form-label col-md-auto font-weight-bold">上班時間</label>
                     <input :value="timeFormat(startClockInDate)" type="text" class="form-control col-md-6" id="startTime" readonly>
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
                 <div class="row form-group boxed">
                     <label class="col-form-label col-md-auto font-weight-bold">打卡地點</label>
@@ -24,10 +28,18 @@
                             <div class="col-6">
                                 <label class="col-form-label col-md-auto">經度：</label>
                                 <input v-model="startClockInLongitude" type="text" class="form-control" id="StartAddLng" readonly>
+
+                                <i class="clear-input">
+                                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                                </i>
                             </div>
                             <div class="col-6">
                                 <label class="col-form-label col-md-auto">緯度：</label>
                                 <input v-model="startClockInLatitude" type="text" class="form-control" id="StartAddLat" readonly>
+
+                                <i class="clear-input">
+                                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                                </i>
                             </div>
                         </div>
                     </div>
@@ -36,6 +48,10 @@
                 <div class="row form-group boxed">
                     <label class="col-form-label col-md-auto font-weight-bold">下班時間</label>
                     <input :value="timeFormat(endClockInDate)" type="text" class="form-control col-md-6" id="endTime" readonly>
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
                 </div>
                 <div class="row form-group boxed">
                     <label class="col-form-label col-md-auto font-weight-bold">打卡地點</label>
@@ -44,10 +60,18 @@
                             <div class="col-6">
                                 <label class="col-form-label col-md-auto">經度：</label>
                                 <input v-model="endClockInLongitude" type="text" class="form-control" id="EndAddLng" readonly>
+
+                                <i class="clear-input">
+                                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                                </i>
                             </div>
                             <div class="col-6">
                                 <label class="col-form-label col-md-auto">緯度：</label>
                                 <input v-model="endClockInLatitude" type="text" class="form-control" id="EndAddLat" readonly>
+
+                                <i class="clear-input">
+                                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                                </i>
                             </div>
                         </div>
                     </div>

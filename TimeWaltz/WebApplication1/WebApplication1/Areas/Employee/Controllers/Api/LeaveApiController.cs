@@ -100,9 +100,9 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                     ApprovalEmployeeId = dto.ApprovalEmployeeId, 
                 };
 
-                var relativePath = _leaveService.GetRelativeFileRoute(dto.FileRoute);
+                //var relativePath = _leaveService.GetRelativeFileRoute(dto.FileRoute);
 
-                model.RelativeFileRoute = relativePath;
+                //model.RelativeFileRoute = relativePath;
 
                 model.LeaveMinutes = _leaveService.AddLeaveTime2(model);
 
