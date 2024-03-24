@@ -1,47 +1,66 @@
 ﻿@model WebApplication1.Models.SettingViewModels.UserEditViewModel;
 @{
     Layout = "_Layout";
-    ViewBag.title = "帳號修改";
+    ViewBag.title = "帳號設定 | ";
 }
 
-<div class="container">
 
-    <form asp-action="AccountEdit" asp-controller="Setting" method="post">
-        <input asp-for="Id" class="form-control" hidden/>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="Password" class="control-label">密碼</label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-                <label style="color:red">*</label>
-                <label class="control-label">修改密碼才需要輸入!</label>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="EmployeesName" class="control-label">姓名</label>
-                <input asp-for="EmployeesName" class="form-control"></input>
-                <span class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="DepartmentName" class="control-label">單位</label>
-                <select asp-for="DepartmentName" class="form-control" asp-items="@Model.DepartmentNameSelectList"></select>
-                <span class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="Stop" class="control-label">啟用/停用</label>
-                <select asp-for="Stop" class="form-control" asp-items="@Model.StopSelectList"></select>
-                <span class="text-danger"></span>
-            </div>
-        </div>
+<div class="content-header">
+    <div class="container-fluid">
         <div class="row">
-            <input id="select" type="submit" class="nav-link" value="修改" />
-            <a asp-controller="Setting" asp-action="Account" class="nav-link">返回</a>
+            <div class="col-sm-6">
+                <h1 class="m-0">帳號修改</h1>
+            </div>
         </div>
-    </form>
+    </div>
 </div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <form asp-action="AccountEdit" asp-controller="Setting" method="post">
+                        <div class="card-body">
+
+                            <input asp-for="Id" class="form-control" hidden />
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="EmployeesName" class="control-label">姓名</label>
+                                    <input asp-for="EmployeesName" class="form-control"></input>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="DepartmentName" class="control-label">單位</label>
+                                    <select asp-for="DepartmentName" class="form-control" asp-items="@Model.DepartmentNameSelectList"></select>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Stop" class="control-label">啟用/停用</label>
+                                    <select asp-for="Stop" class="form-control" asp-items="@Model.StopSelectList"></select>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Password" class="control-label">修改密碼</label>
+                                    <input asp-for="Password" class="form-control" placeholder="若要修改密碼才需輸入" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="select" type="submit" class="btn btn-primary" value="修改" />
+                            <a asp-controller="Setting" asp-action="Account" class="btn btn-outline-dark">返回</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 

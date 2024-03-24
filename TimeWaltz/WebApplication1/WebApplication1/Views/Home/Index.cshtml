@@ -1,24 +1,114 @@
-﻿
-<div id="callBillBoard">
-    <div class="row mb-2 d-flex justify-content-around">
-        <div class="col-2">
-            <button @@click="toClock" class="btn btn-lg btn-block bg-danger">
-                <i class="fa-regular fa-clock mr-2"></i>打卡
-            </button>
+﻿<div class="content-header">
+    
+</div>
+<section class="content">
+    <div class="container-fluid">
+
+        <h5 class="mb-2">人事相關</h5>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/BasicSetting/PersonalData">
+                    <span class="info-box-icon bg-lightblue"><i class="fa-solid fa-person-shelter"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">員工資料</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/BasicSetting/Department">
+                    <span class="info-box-icon bg-lightblue"><i class="fa-solid fa-people-group"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">部門設定</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/BasicSetting/SpecialGrade">
+                    <span class="info-box-icon bg-lightblue"><i class="fa-solid fa-chart-line"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">年資級距</span>
+                    </div>
+                </a>
+            </div>
         </div>
 
-        <div class="col-2">
-            <button @@click="toLeave" class="btn btn-lg btn-block bg-success">
-                <i class="fa-regular fa-pen-to-square mr-2"></i>請假
-            </button>
+        <h5 class="mb-2">班表相關</h5>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/BasicSetting/ShiftSchedule">
+                    <span class="info-box-icon bg-success"><i class="fa-solid fa-calendar-days"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">班別設定</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/BasicSetting/Flextime">
+                    <span class="info-box-icon bg-success"><i class="fa-solid fa-timeline"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">彈性上班</span>
+                    </div>
+                </a>
+            </div>
         </div>
 
-        <div class="col-2">
-            <button @@click="toOvertimeRequest" class="btn btn-lg btn-block bg-info">
-                <i class="fa-regular fa-bell mr-2"></i>加班
-            </button>
+        <h5 class="mb-2">休假相關</h5>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/BasicSetting/VacationType">
+                    <span class="info-box-icon bg-secondary"><i class="fa-solid fa-calendar-days"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">假別設定</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/BasicSetting/PublicHoliday">
+                    <span class="info-box-icon bg-secondary"><i class="fa-solid fa-calendar-day"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">國定假日</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/BasicSetting/SpecialVacation">
+                    <span class="info-box-icon bg-secondary"><i class="fa-solid fa-calendar-check"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">特殊假日</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <h5 class="mb-2">系統設定</h5>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/Setting/Account">
+                    <span class="info-box-icon bg-pink"><i class="fa-solid fa-person-circle-plus"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">帳號設定</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <a class="info-box shadow" href="/Setting/Access">
+                    <span class="info-box-icon bg-pink"><i class="fa-solid fa-lock"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number">帳號權限</span>
+                    </div>
+                </a>
+            </div>
+
         </div>
     </div>
+</section>
+
+
+
+
+
+@* <div id="callBillBoard">
+
 
     <div class="row mx-2 my-5">
         <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
@@ -36,11 +126,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> *@
 
-@section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+@* @section Scripts {
     <script>
         Vue.createApp({
             data() {
@@ -123,4 +212,4 @@
         }).mount("#callBillBoard");
 
     </script>
-}
+} *@
