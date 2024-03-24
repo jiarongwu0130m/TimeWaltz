@@ -2,57 +2,70 @@
     Layout = "_Layout";
     ViewData["Title"] = "假別設定";
 }
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <form asp-action="VacationTypeCreate" asp-asp-controller="BasicSetting" method="post" id="app">
-                <div class="content">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="control-label">假別名稱</label>
-                            <input name="VacationType" class="form-control" :class="validation.vacationType" v-model="vacationType" />
-                            <span class="text-danger" v-if="!validation.vacationType">假別名稱不得為空!</span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">可請性別限制</label>
-                            <select name="Gender" class="form-control" :class="validation.gender" v-model.number="gender">
-                                <option value="">請選擇</option>
-                                <option v-for="item in genderSelectItems" :value="item.value">{{item.text}}</option>
-                            </select>
-                            <span class="text-danger" v-if="!validation.gender">性別限制不得為空!</span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">可請周期</label>
-                            <select name="Cycle" class="form-control" :class="validation.cycle" v-model.number="cycle">
-                                <option value="">請選擇</option>
-                                <option v-for="item in cycleSelectItems" :value="item.value">{{item.text}}</option>
-                            </select>
-                            <span class="text-danger" v-if="!validation.cycle">周期不得為空!</span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">可請天數</label>
-                            <input type="number" name="NumberOfDays" class="form-control" :class="validation.numberOfDays" v-model.number="numberOfDays" />
-                            <span class="text-danger" v-if="!validation.numberOfDays">可請天數不得為空!</span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">最小可請時數</label>
-                            <input type="number" name="MinVacationHours" class="form-control" :class="validation.minVacationHours" v-model.number="minVacationHours" />
-                            <span class="text-danger" v-if="!validation.minVacationHours">最小可請時數最小可請時數不得為空!</span>
-                        </div>
-                        <div class="form-group">
-                        </div>
 
-                        <div class="card-footer">
-                            <input @@click="validateAndSubmit" type="button" value="送出" class="btn btn-primary" />
-                            <a asp-controller="BasicSetting" asp-action="VacationType" class="btn btn-outline-dark">返回</a>
-                        </div>
-                    </div>
-                </div>
-            </form>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">新增假別</h1>
+            </div>
         </div>
     </div>
 </div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row" id="app">
+            <div class="col-12">
+                <div class="card">
+                    <form asp-action="VacationTypeCreate" asp-asp-controller="BasicSetting" method="post">
+                        <div class="content">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="control-label">假別名稱</label>
+                                    <input name="VacationType" class="form-control" :class="validation.vacationType" v-model="vacationType" />
+                                    <span class="text-danger" v-if="!validation.vacationType">假別名稱不得為空!</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">可請性別限制</label>
+                                    <select name="Gender" class="form-control" :class="validation.gender" v-model.number="gender">
+                                        <option value="">請選擇</option>
+                                        <option v-for="item in genderSelectItems" :value="item.value">{{item.text}}</option>
+                                    </select>
+                                    <span class="text-danger" v-if="!validation.gender">性別限制不得為空!</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">可請周期</label>
+                                    <select name="Cycle" class="form-control" :class="validation.cycle" v-model.number="cycle">
+                                        <option value="">請選擇</option>
+                                        <option v-for="item in cycleSelectItems" :value="item.value">{{item.text}}</option>
+                                    </select>
+                                    <span class="text-danger" v-if="!validation.cycle">周期不得為空!</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">可請天數</label>
+                                    <input type="number" name="NumberOfDays" class="form-control" :class="validation.numberOfDays" v-model.number="numberOfDays" />
+                                    <span class="text-danger" v-if="!validation.numberOfDays">可請天數不得為空!</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">最小可請時數</label>
+                                    <input type="number" name="MinVacationHours" class="form-control" :class="validation.minVacationHours" v-model.number="minVacationHours" />
+                                    <span class="text-danger" v-if="!validation.minVacationHours">最小可請時數最小可請時數不得為空!</span>
+                                </div>
+                                <div class="form-group">
+                                </div>
 
+                            </div>
+                            <div class="card-footer">
+                                <input @@click="validateAndSubmit" type="button" value="送出" class="btn btn-primary" />
+                                <a asp-controller="BasicSetting" asp-action="VacationType" class="btn btn-outline-dark">返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     <script>

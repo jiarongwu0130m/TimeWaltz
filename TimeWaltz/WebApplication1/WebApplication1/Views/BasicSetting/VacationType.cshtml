@@ -1,8 +1,18 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["Title"] = "假別瀏覽";
+    ViewData["Title"] = "假別設定 | ";
 }
-
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">假別瀏覽</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="content">
+    <div class="container-fluid">
 <div id="app" class="row">
     <div class="col-12">
         <div class="card">
@@ -12,7 +22,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label>假別名稱查詢：</label>
-                                <input name="QueryVacationType" v-model="search" type="text">
+                                <input name="QueryVacationType" v-model="search" type="text" class="">
                                 <button class="btn btn-outline-info" @@click="changeSwitch">查詢</button>
                             </div>
                         </div>
@@ -114,6 +124,9 @@
 
     
 </div>
+
+    </div>
+</section>
 @section Scripts {
 
     <script>

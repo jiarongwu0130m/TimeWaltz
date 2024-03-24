@@ -1,57 +1,72 @@
 ﻿@{
     Layout = "_Layout";
-    ViewBag.title = "部門瀏覽";
+    ViewBag.title = "部門設定 | ";
 }
-<div class="row" id="app">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <div class="row">
-                        <div class="col">
-                        <div class="form-group">
-                        <label>部門名稱查詢：</label>
-                            <input name="QueryDepartment" class="form-control" type="text" v-model="queryDepartmentName">
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">部門設定</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row" id="app">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>部門名稱查詢：</label>
+                                        <input name="QueryDepartment" class="form-control" type="text" v-model="queryDepartmentName">
+                                    </div>
+                                </div>
+                            </div>
+                        </h3>
+                        <div class="card-tools">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <a asp-controller="BasicSetting" asp-action="DepartmentCreate" class="btn btn-outline-success">新增</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </h3>
-                <div class="card-tools">
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <a asp-controller="BasicSetting" asp-action="DepartmentCreate" class="btn btn-outline-success">新增</a>
-                        </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        部門名稱
+                                    </th>
+                                    <th>
+                                        部門主管
+                                    </th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" v-for="item in filterByDepartmentName()">
+                                    <td>{{item.departmentName}}</td>
+                                    <td>{{item.employeesName}}</td>
+                                    <td>
+                                        <a href="#" @@click="edit(item.id,$event)" class="btn btn-outline-primary">編輯</a>
+                                        <a href="#" @@click="checkIsDelete(item.id ,$event)" class="btn btn-outline-danger">刪除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
-                    <thead>
-                        <tr>
-                            <th>
-                                部門名稱
-                            </th>
-                            <th>
-                                部門主管
-                            </th>
-                            <th></th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="text-center" v-for="item in filterByDepartmentName()">
-                            <td>{{item.departmentName}}</td>
-                            <td>{{item.employeesName}}</td>
-                            <td>
-                                    <a href="#" @@click="edit(item.id,$event)" class="btn btn-outline-primary">編輯</a> 
-                                <a href="#" @@click="checkIsDelete(item.id ,$event)" class="btn btn-outline-danger">刪除</a>
-                            </td>
-                        </tr>                
-                    </tbody>
-                </table>
-            </div>
-        </div>       
-    </div
-</div>
+        </div>
+    </div>
+</section>
 
 
 @section Scripts {
@@ -112,13 +127,13 @@
                         }
                     });
                 },
-                getOut(id,e) {
+                getOut(id, e) {
                     e.preventDefault();
                     let self = this;
                     axios.post(`/api/DepartmentApi/Delete/${id}`)
                         .then((response) => {
                             console.log(response)
-                            if (response.status) {                                
+                            if (response.status) {
                                 Swal.fire({
                                     icon: "success",
                                     title: "刪除成功!",
@@ -134,7 +149,7 @@
                                         this.getListData();
                                     }
                                 });
-                            }else{
+                            } else {
                                 Swal.fire({
                                     icon: "error",
                                     title: "刪除失敗!",
