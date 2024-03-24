@@ -48,7 +48,7 @@ namespace WebApplication1.Areas.Employee.Controllers
         {
             return View();
         }
-        public IActionResult ApprovalEdit()
+        public IActionResult ApprovalDetail()
         {
             return View();
         }

@@ -10,29 +10,31 @@
             </h3>
         </div>
         <div class="card-body">
-                <div class="table-responsive text-center">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th >表單名稱</th>
-                                <th>申請人</th>
-                                <th>簽核</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="ApprlList in ApprovalList">
-                                <td>{{tableTypeName(ApprlList.tableType)}}</td>
-                                <td>{{ApprlList.employeeName}}</td>
-                                <td>
-                                    <a :href="'/employee/query/ApprovalCreate/'+ApprlList.id">
-                                        簽核
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-responsive text-center">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>項次</th>
+                            <th>表單類別</th>
+                            <th>申請人</th>
+                            <th>簽核</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(ApprlList,index) in ApprovalList">
+                            <td>{{++index}}</td>
+                            <td>{{tableTypeName(ApprlList.tableType)}}</td>
+                            <td>{{ApprlList.employeeName}}</td>
+                            <td>
+                                <a :href="'/employee/query/ApprovalCreate/'+ApprlList.id">
+                                    簽核
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+        </div>
     </div>
     <div class="card">
         <div class="card-header">
@@ -41,27 +43,29 @@
             </h3>
         </div>
         <div class="card-body">
-                <div class="table-responsive text-center">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>表單名稱</th>
-                                <th>申請人</th>
-                                <th>簽核</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="HistoryList in ApprovalHistoryList">
+            <div class="table-responsive text-center">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>項次</th>
+                            <th>表單類別</th>
+                            <th>申請人</th>
+                            <th>簽核</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(HistoryList,index) in ApprovalHistoryList">
+                            <td>{{++index}}</td>
                             <td>{{tableTypeName(HistoryList.tableType)}}</td>
                             <td>{{HistoryList.employeeName}}</td>
-                                <td>
+                            <td>
                                 <a href="#" @@click="toDetail(HistoryList.id,$event)">詳細</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+        </div>
     </div>
 </div>
 
@@ -92,7 +96,7 @@
                     })
                 },
                 tableTypeName(tableType) {
-                    return tableType === 0 ? "加班單" : tableType === 1?"請假單":"補打卡單"
+                    return tableType === 0 ? "加班單" : tableType === 1 ? "請假單" : "補打卡單"
                 },
 
                 getApprovalHistoryListData() {
@@ -104,7 +108,7 @@
                 },
                 toDetail(id, event) {
                     event.preventDefault();
-                    location.href = `/employee/query/ApprovalEdit/${id}`;
+                    location.href = `/employee/query/ApprovalDetail/${id}`;
                 },
 
             },
