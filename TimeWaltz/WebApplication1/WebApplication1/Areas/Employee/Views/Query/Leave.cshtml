@@ -72,6 +72,10 @@
 
             },
             methods: {
+                toCreate(){
+                    event.preventDefault();
+                    location.href = '/employee/event/leaverequest'
+                },
                 edit(id, event) {
                     event.preventDefault();
                     location.href = `/employee/query/leavedetail/${id}`;

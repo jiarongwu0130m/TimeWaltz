@@ -50,7 +50,7 @@
         Vue.createApp({
             data() {
                 return {
-                    date: this.getToday(),
+                    date: null,
                     specialVacationName: '',
                     validation: {
                         specialVacationName: true,
@@ -80,11 +80,6 @@
                         }
                     })
                         .catch((error) => console.log(error));
-                },
-                getToday() {
-                    var now = moment();
-                    var today = now.format('YYYY-MM-DD');
-                    return today;
                 },
                 getDatePicker() {
                     $('#dateInput').daterangepicker({

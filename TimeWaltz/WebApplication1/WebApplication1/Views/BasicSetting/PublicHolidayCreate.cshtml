@@ -69,7 +69,7 @@
                     let self = this;
                     axios.post('/api/publicholidayapi/create', {
                         holidayName: self.holidayName,
-                        date: self.date,
+                        date: new moment(self.date).format('YYYY-MM-DD').toString(),
                     })
                         .then((response) => {
                             if (response.status) {

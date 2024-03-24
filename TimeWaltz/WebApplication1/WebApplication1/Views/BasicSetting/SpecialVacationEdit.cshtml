@@ -77,7 +77,7 @@
                         console.log(response);
                         self.specialVacationName = response.data.specialVacationName;
                         self.date = response.data.date
-                    }).catch((error) => console.log(error));
+                    }).then(() => self.getDateRangePicker()).catch((error) => console.log(error));
                 },
                 send() {
                     let self = this;
@@ -108,8 +108,10 @@
                 },
                 getDateRangePicker() {
                     let self = this;
+                    self.date = new moment(self.date).format('YYYY-MM-DD')
                     $('#dateInput').daterangepicker({
                         singleDatePicker: true,
+                        'startDate': self.date,
                         locale: {
                             format: 'YYYY-MM-DD'
                         }
@@ -121,8 +123,8 @@
             },
             mounted() {
                 this.checkId();
-                this.getEditData();
-                this.getDateRangePicker();
+                this.getEditData(); 
+                
 
             },
         }).mount('#app');
