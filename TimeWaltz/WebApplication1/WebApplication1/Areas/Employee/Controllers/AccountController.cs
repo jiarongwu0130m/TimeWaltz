@@ -58,7 +58,7 @@ namespace WebApplication1.Areas.Employee.Controllers
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync("EmployeeAuthScheme",claimsPrincipal);
-            return RedirectToAction("Event", "Clock");
+            return RedirectToAction("Clock","Event");
         }
     }
 }
