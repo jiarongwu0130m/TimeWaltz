@@ -248,9 +248,8 @@
                 },
                 send() {                    
                     let self = this;
-
-                    self.startTime = moment(this.timeRange[0]).format('YYYY-MM-DD HH:mm')
-                    self.endTime = moment(this.timeRange[1]).format('YYYY-MM-DD HH:mm')
+                    self.startTime = moment(this.timeRange[0]).format('YYYY-MM-DDTHH:mm')
+                    self.endTime = moment(this.timeRange[1]).format('YYYY-MM-DDTHH:mm')
                     console.log(self.employeesId, self.startTime, self.endTime, self.vacationDetailsId, self.agentEmployeeId, self.reason, self.fileRoute, self.approvalEmployeeId)
                     if (self.leaveHours == null) {
                         self.leaveHours = 0;

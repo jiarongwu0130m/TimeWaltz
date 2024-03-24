@@ -22,9 +22,18 @@
                 <input type="text" class="form-control" v-model="title">
                 <span class="text-danger font-weight-bold col-form-label" v-if="!dataValid.title">請輸入主旨</span>
             </div>
-            <div class="row form-group basic">
+            @* <div class="row form-group boxed">
                 <label class="col-form-label">公告期間：</label>
                 <input id="timeRange" type="datetime" class="form-control">
+            </div> *@
+            <div class="row form-group basic">
+                <label class="col-form-label">公告期間：</label>
+
+                <Vue-Date-Picker v-model="timeRange" autocomplete="off" class="form-control border-0" model-auto range></Vue-Date-Picker>
+
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
             </div>
             <div class="row form-group basic">
                 <label class="col-form-label">發布人：</label>
@@ -96,6 +105,7 @@
         Vue.createApp({
             data() {
                 return {
+                    timeRange: '',
                     empName: '',
                     startTime: '',
                     endTime: '',
@@ -174,8 +184,8 @@
                 },
                 sendBillBoard() {
                     let self = this;
-                    self.startTime = self.startTime.utc(true).toISOString();
-                    self.endTime = self.endTime.utc(true).toISOString();
+                    self.startTime = new moment(this.timeRange[0]).format('YYYY-MM-DD HH:mm').toString()
+                    self.endTime = new moment(this.timeRange[1]).format('YYYY-MM-DD HH:mm').toString()
 
                     axios.post("/mobile/api/Billboard/Create", {
                         startTime: self.startTime,
@@ -203,9 +213,8 @@
             },
             mounted() {
                 this.getEmpId();
-                this.getTimeRange();
                 this.showCkEditor();
             }
-        }).mount("#app");
+        }).component('VueDatePicker', VueDatePicker).mount("#app");
     </script>
 }
