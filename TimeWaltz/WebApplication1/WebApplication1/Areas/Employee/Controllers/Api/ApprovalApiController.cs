@@ -54,6 +54,8 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
         }
         public object GetAllApprovalData()
         {
+            #region 暫存，研究資料
+
             //var query = _TWdb.Approvals
             //        .Where(x => x.Status == Repository.Enum.RequestStatusEnum.簽核中)
             //        .Join(_TWdb.OvertimeApplications, a => a.TableId, oa => oa.Id, (a, oa) => new { Approval = a, Overtime = oa })
@@ -204,7 +206,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             //              )
             //              .ToList();
 
-
+            #endregion
             var queryResult = _TWdb.Approvals.Where(x => x.Status == Repository.Enum.RequestStatusEnum.簽核中)
                             .Join(
                                 _TWdb.OvertimeApplications,
@@ -265,8 +267,80 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                                     x.ApprovalData.TableId,
                                     EmployeeName = x.Employee.Name,
                                     EmployeeId = x.Employee.Id,
+                                    x.ApprovalData.AgentEmployeeId,
                                 }
-                            ).Where(x => x.EmployeeId == User.GetId())
+                            ).Where(x => x.EmployeeId == User.GetId() || x.AgentEmployeeId == User.GetId())
+                            .ToList();
+
+
+            return queryResult;
+        }
+        public object GetHistoryAllApprovalData()
+        {
+
+            var queryResult = _TWdb.Approvals.Where(x => x.Status != Repository.Enum.RequestStatusEnum.簽核中)
+                            .Join(
+                                _TWdb.OvertimeApplications,
+                                approval => new { Id = approval.TableId, Type = 0 },
+                                ot => new { Id = ot.Id, Type = 0 },
+                                (approval, ot) => new { Approval = approval, OvertimeApp = ot, Type = 0 }
+                            )
+                            .Join(
+                                _TWdb.LeaveRequests,
+                                combined => new { Id = combined.Approval.TableId, Type = 1 },
+                                lr => new { Id = lr.Id, Type = 1 },
+                                (combined, lr) => new { combined.Approval, combined.OvertimeApp, LeaveReq = lr, Type = 1 }
+                            )
+                            .Join(
+                                _TWdb.AdditionalClockIns,
+                                combined => new { Id = combined.Approval.TableId, Type = 2 },
+                                clock => new { Id = clock.Id, Type = 2 },
+                                (combined, clock) => new { combined.Approval, combined.OvertimeApp, combined.LeaveReq, ClockIns = clock, Type = 2 }
+                            )
+                            .ToList()
+                            .GroupBy(
+                                combined => new { combined.Approval.Id, combined.Approval.TableType, combined.Approval.TableId },
+                                (key, group) => new
+                                {
+                                    ApprovalData = group.Select(x => x.Approval).FirstOrDefault(),
+                                    OvertimeApp = group.Select(x => x.OvertimeApp).FirstOrDefault(),
+                                    LeaveReq = group.Select(x => x.LeaveReq).FirstOrDefault(),
+                                    ClockIns = group.Select(x => x.ClockIns).FirstOrDefault(),
+                                    AgentEmployeeId = group.Select(x => x.LeaveReq.AgentEmployeeId).FirstOrDefault()
+                                }
+                            )
+                            .Select(result =>
+                                new
+                                {
+                                    result.ApprovalData.Id,
+                                    result.ApprovalData.TableType,
+                                    result.ApprovalData.TableId,
+                                    Eid = result.ApprovalData.TableType == 0 ? result.OvertimeApp.EmployeesId :
+                                          result.ApprovalData.TableType == 1 ? result.LeaveReq.EmployeesId :
+                                          result.ClockIns.EmployeesId,
+                                    result.AgentEmployeeId
+                                }
+                            )
+                            .Join(
+                                _TWdb.Employees,
+                                x => x.Eid,
+                                emp => emp.Id,
+                                (x, emp) => new { ApprovalData = x, Employee = emp }
+                            )
+                            .Join(
+                                _TWdb.Employees,
+                                x => x.ApprovalData.AgentEmployeeId,
+                                emp2 => emp2.Id,
+                                (x, emp2) => new
+                                {
+                                    x.ApprovalData.Id,
+                                    x.ApprovalData.TableType,
+                                    x.ApprovalData.TableId,
+                                    EmployeeName = x.Employee.Name,
+                                    EmployeeId = x.Employee.Id,
+                                    x.ApprovalData.AgentEmployeeId,
+                                }
+                            ).Where(x => x.EmployeeId == User.GetId() || x.AgentEmployeeId== User.GetId())
                             .ToList();
 
 

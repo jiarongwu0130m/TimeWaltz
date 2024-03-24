@@ -48,6 +48,10 @@ namespace WebApplication1.Areas.Employee.Controllers
         {
             return View();
         }
+        public IActionResult ApprovalEdit()
+        {
+            return View();
+        }
 
         public IActionResult BillBoard()
         {
