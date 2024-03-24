@@ -18,7 +18,7 @@ namespace WebApplication1
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<TimeWaltzContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("TimeWaltz")));
 
-            builder.Services.AddTransient<VacationTypeService>();
+            builder.Services.AddScoped<VacationTypeService>();
             builder.Services.AddScoped<ShiftScheduleService>();
             builder.Services.AddScoped<FlextimeService>();
             builder.Services.AddScoped<GradeTableService>();
@@ -27,7 +27,7 @@ namespace WebApplication1
             builder.Services.AddScoped<DepartmentService>();
             builder.Services.AddScoped<CompRequestService>();
             builder.Services.AddScoped<OvertimeRequestService>();
-            builder.Services.AddTransient<ClockService>();
+            builder.Services.AddScoped<ClockService>();
             builder.Services.AddScoped<PublicHolidayService>();
             builder.Services.AddScoped<LeaveService>();
             builder.Services.AddScoped<RequestStatusService>();
