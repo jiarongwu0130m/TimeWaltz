@@ -73,8 +73,8 @@
                     let self = this;                    
                     axios.post('/api/ShiftScheduleapi/create', {
                         shiftsName: self.shiftsName,
-                        startTime: new Date(this.getToday() + ' ' + self.startTime),
-                        endTime: new Date(this.getToday() + ' ' + self.endTime),
+                        startTime: new moment(this.getToday() + ' ' + self.startTime).format('YYYY-MM-DDTHH:mm').toString(),
+                        endTime: new moment(this.getToday() + ' ' + self.endTime).format('YYYY-MM-DDTHH:mm').toString(),
                         maxAdditionalClockIn: self.maxAdditionalClockIn,
                     })
                         .then((response) => {
