@@ -15,6 +15,7 @@ public class SettingController : Controller
     private readonly DropDownBasicSettingService _dropDownBasicSettingService;
     private readonly UserService _UserService;
 
+    [TimeWaltzAuthorize]
     public SettingController(TimeWaltzContext db, UserService UserService,
         DropDownBasicSettingService dropDownBasicSettingService)
     {
@@ -56,7 +57,6 @@ public class SettingController : Controller
     ///     帳號查詢select
     /// </summary>
     /// <returns></returns>
-        [TimeWaltzAuthorize]
 
     public IActionResult Account()
     {
@@ -210,7 +210,6 @@ public class SettingController : Controller
     ///     公佈欄-瀏覽頁面
     /// </summary>
     /// <returns></returns>
-        [TimeWaltzAuthorize]
     public IActionResult BillBoard()
     {
         return View();

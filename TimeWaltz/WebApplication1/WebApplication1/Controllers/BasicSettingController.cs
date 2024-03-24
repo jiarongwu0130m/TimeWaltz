@@ -19,7 +19,7 @@ namespace WebApplication1.Controllers
         private readonly PublicHolidayService _publicHolidayService;
         private readonly FlextimeService _flextimeService;
         private readonly DepartmentService _departmentService;
-
+        [TimeWaltzAuthorize]
         public BasicSettingController(PersonalDataService personalDataService, GradeTableService gradeTableService, SpecialHolidayService specialHolidayService, VacationTypeService vacationTypeService, PublicHolidayService publicHolidayService, ShiftScheduleService shiftScheduleService, FlextimeService flextimeService, DepartmentService departmentService)
         {
 
@@ -32,7 +32,7 @@ namespace WebApplication1.Controllers
             _flextimeService = flextimeService;
             _departmentService = departmentService;
         }
-        [TimeWaltzAuthorize]
+        
         [HttpGet]
         public IActionResult SpecialVacation()
         {
@@ -51,7 +51,6 @@ namespace WebApplication1.Controllers
         }
 
         //[Authorize]
-        [TimeWaltzAuthorize]
         [HttpGet]
         public IActionResult PersonalData()
         {
@@ -97,7 +96,6 @@ namespace WebApplication1.Controllers
             return RedirectToAction("SpecialGrade");
         }
 
-        [TimeWaltzAuthorize]
         [HttpGet]
         public IActionResult SpecialGrade()
         {
@@ -140,7 +138,6 @@ namespace WebApplication1.Controllers
             _gradeTableService.EditGradeTable(model);
             return RedirectToAction("SpecialGrade");
         }
-        [TimeWaltzAuthorize]
         [HttpGet]
         public IActionResult SpecialHoliday()
         {
@@ -182,7 +179,6 @@ namespace WebApplication1.Controllers
             return RedirectToAction("PublicHoliday");
         }
 
-        [TimeWaltzAuthorize]
         public IActionResult PublicHoliday()
         {
             var entities = _publicHolidayService.GetPublicHolidayList();
@@ -225,7 +221,6 @@ namespace WebApplication1.Controllers
             _shiftScheduleService.CreateShiftSchedule(entity);
             return RedirectToAction("ShiftSchedule");
         }
-        [TimeWaltzAuthorize]
         public IActionResult ShiftSchedule()
         {
             return View();
@@ -287,7 +282,6 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [TimeWaltzAuthorize]
         [HttpGet]
         public IActionResult VacationType()
         {
@@ -306,7 +300,6 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [TimeWaltzAuthorize]
         public IActionResult Flextime()
         {
             return View();
@@ -317,7 +310,6 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [TimeWaltzAuthorize]
         [HttpGet]
         public IActionResult Department()
         {

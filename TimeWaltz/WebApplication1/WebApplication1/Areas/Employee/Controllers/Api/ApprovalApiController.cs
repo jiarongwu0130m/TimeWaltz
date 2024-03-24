@@ -224,7 +224,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                                 clock => new { Id = clock.Id, Type = 2 },
                                 (combined, clock) => new { combined.Approval, combined.OvertimeApp, combined.LeaveReq, ClockIns = clock, Type = 2 }
                             )
-                            .ToList() // 將結果讀取到記憶體中
+                            .ToList()
                             .GroupBy(
                                 combined => new { combined.Approval.Id, combined.Approval.TableType, combined.Approval.TableId },
                                 (key, group) => new
