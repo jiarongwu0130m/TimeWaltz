@@ -4,6 +4,7 @@
 @section Styles
 {
 }
+
 <div class="secion mt-2" id="app">
     <div class="card">
         <div class="card-header">
@@ -15,29 +16,30 @@
             </h3>
         </div>
         <div class="card-body">
-        <table id="example2" class="table table-responsive">
-            <thead>
-                <tr>
-                    <th v-bind:title="title('list')">{{ title('list') }}</th>
-                    <th v-bind:title="title('startTime')">{{ title('startTime') }}</th>
-                    <th v-bind:title="title('employeesID')">{{ title('employeesID') }}</th>
-                    <th v-bind:title="title('title')">{{ title('title') }}</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                    <tr class="text-center align-middle" v-for="item in allBillBoard">
-                        <td class="align-middle">{{item.id}}</td>
-                        <td class="align-middle">{{formatToDateTime(item.startTime)}}</td>
-                        <td class="align-middle">{{item.employeeId}}</td>
-                        <td class="align-middle">{{item.title}}</td>
-                        <td class="align-middle">
-                        <button @@click="toDetail(item.id,$event)" class="btn btn-outline-primary">編輯</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
+            <div class="table-responsive text-center">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th v-bind:title="title('list')">{{ title('list') }}</th>
+                            <th v-bind:title="title('startTime')">{{ title('startTime') }}</th>
+                            <th v-bind:title="title('employeesID')">{{ title('employeesID') }}</th>
+                            <th v-bind:title="title('title')">{{ title('title') }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center align-middle" v-for="(item,index) in allBillBoard">
+                            <td class="align-middle">{{++index}}</td>
+                            <td class="align-middle">{{formatToDateTime(item.startTime)}}</td>
+                            <td class="align-middle">{{item.employeeId}}</td>
+                            <td class="align-middle">{{item.title}}</td>
+                            <td class="align-middle">
+                                <button @@click="toDetail(item.id,$event)" class="btn btn-outline-primary">編輯</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="card-footer">
         </div>

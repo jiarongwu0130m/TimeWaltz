@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "新增公佈欄";
+    ViewBag.Title = "公佈欄";
 }
 @section Styles
 {
@@ -14,35 +14,81 @@
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
                 <span>新增公佈欄</span>
-                <a class="iconedbox bg-info" @@click="toCreate">
-                    <ion-icon name="add-circle-outline"></ion-icon>
-                </a>
             </h3>
         </div>
         <div class="card-body">
-            <div class="row form-group boxed">
+            <div class="row form-group basic">
                 <label class="col-form-label">主旨：</label>
                 <input type="text" class="form-control" v-model="title">
                 <span class="text-danger font-weight-bold col-form-label" v-if="!dataValid.title">請輸入主旨</span>
             </div>
-            <div class="row form-group boxed">
+            <div class="row form-group basic">
                 <label class="col-form-label">公告期間：</label>
                 <input id="timeRange" type="datetime" class="form-control">
             </div>
-            <div class="row form-group boxed">
+            <div class="row form-group basic">
                 <label class="col-form-label">發布人：</label>
                 <input type="text" class="form-control" v-model="empName" readonly>
             </div>
-            <div class="form-group boxed">
+            <div class="form-group basic">
                 <label class="col-form-label">內容：</label>
                 <textarea style="height:max-content" ref="editor" v-model="content"></textarea>
             </div>
         </div>
         <div class="card-footer">
-            <input type="button" @@click="checkIsValidData" class="btn btn-outline-primary" value="送出" />
-            <input type="button" @@click="toList" class="btn btn-outline-dark" value="取消" />            
+            <div class="row justify-content-around">
+                <button type="button" class="btn btn-facebook" @@click="checkIsValidData">
+                    <ion-icon name="checkmark-done-outline" role="img"
+                              class="md hydrated" aria-label="checkmark done outline"></ion-icon>送出
+                </button>
+                <button type="button" class="btn btn-dribbble" @@click="toList">
+                    <ion-icon name="close-outline" role="img"
+                              class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
+                </button>
+            </div>
         </div>
     </div>
+
+    <div class="modal fade dialogbox" id="DialogIconedSuccess" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-icon text-success">
+                    <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="checkmark circle"></ion-icon>
+                </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">送出成功</h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-inline">
+                        <a href="#" class="btn" data-dismiss="modal" id="successBack">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade dialogbox" id="DialogIconedDanger" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-icon text-danger">
+                    <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">送出失敗</h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-inline">
+                        <a href="#" class="btn" data-dismiss="modal" id="dangerBack">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 @section Scripts {
     <script src="/js/ckeditor.js"></script>
@@ -131,45 +177,28 @@
                     self.startTime = self.startTime.utc(true).toISOString();
                     self.endTime = self.endTime.utc(true).toISOString();
 
-                    axios.post("/api/BillboardApi/Create", {
+                    axios.post("/mobile/api/Billboard/Create", {
                         startTime: self.startTime,
                         endTime: self.endTime,
                         content: self.content,
                         title: self.title,
                     }).then(response => {
                         if (response.data == true) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "新增成功!",
-                                confirmButtonText: '返回',
-                                showClass: {
-                                    popup: `animate__animated animate__fadeInUp animate__faster`
-                                },
-                                hideClass: {
-                                    popup: `animate__animated animate__fadeOutDown animate__faster`
-                                }
-                            }).then((result) => {
-                                if (result.value) {
-                                    location.href = "/Setting/BillBoard";
-                                }
+                            $('#DialogIconedSuccess').modal('show');
+                            $('#successBack').click(function () {
+                                $('#DialogIconedSuccess').modal('hide');
+                                window.location.href = "/employee/query/BillBoard";
                             });
                         } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "新增失敗!",
-                                confirmButtonText: '返回',
-                                showClass: {
-                                    popup: `animate__animated animate__fadeInUp animate__faster`
-                                },
-                                hideClass: {
-                                    popup: `animate__animated animate__fadeOutDown animate__faster`
-                                }
+                            $('#DialogIconedDanger').modal('show');
+                            $('#dangerBack').click(function () {
+                                $('#DialogIconedDanger').modal('hide');
                             });
                         }
                     });
                 },
                 toList() {
-                    location.href = "/Setting/BillBoard";
+                    location.href = "/employee/query/BillBoard";
                 }
             },
             mounted() {
