@@ -86,57 +86,11 @@ public class SettingController : Controller
     /// <returns></returns>
     public IActionResult AccountCreate()
     {
-        var model = new UserCreateViewModel
-        {
-            EmployeesNameSelectList = DropDownHelper
-                .GetEmployeeNameDropDownList(_dropDownBasicSettingService.GetEmployeeDropDownData()),
-            DepartmentNameSelectList = DropDownHelper
-                .GetDepartmentNameDropDownList(_dropDownBasicSettingService.GetDropDownData())
-        };
-        return View(model);
+
+        return View();
     }
 
-    /// <summary>
-    ///     新增帳號
-    /// </summary>
-    /// <param name="model"></param>
-    /// <returns></returns>
-    [HttpPost]
-    public IActionResult AccountCreate(UserCreateModel model)
-    {
-        var u = _db.Users.FirstOrDefault(x => x.Account == model.Account);
-        //帳號是否重複
-        if (u != null)
-        {
-            ModelState.AddModelError(string.Empty, "帳號重複");
-            return View(model);
-        }
-
-        //密碼鹽
-        var Salts = _UserService.GenerateSalt();
-        //密碼雜湊
-        model.Password = _UserService.SHA256EncryptString(model.Password + Salts);
-
-        _db.Users.Add(new User
-        {
-            Account = model.Account,
-            Password = model.Password,
-            Stop = model.Stop,
-            Salt = Salts,
-            RoleId = 2,
-            Employee = new Employee()
-            {
-                DepartmentId = model.DepartmentName,
-                HireDate = DateTime.Now,
-                Name = model.EmployeesName,
-                EmployeesNo = DateTime.Now.Ticks.ToString()
-            },
-            PasswordDate = DateTime.Now
-        });
-        _db.SaveChanges();
-
-        return RedirectToAction("Account", "Setting");
-    }
+    
 
 
 
