@@ -2,29 +2,17 @@
     ViewBag.title = "簽核";
 }
 
-<style>
-    .thinkcss-right {
-        text-align: right;
-    }
-</style>
-<div id="app">
-    <div class="row">
-        <div class="form-inline col-sm-6 col-md-8">
-            <div class="form-group col-sm-12">
-            </div>
+<div class="secion mt-2" id="app">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>簽核單據列表</span>
+            </h3>
         </div>
-    </div>
-
-    <div class="card-body">
-        <div id="example2-wrapper" class="dataTables_wrapper dt-bootstrap4">
-            <div class="row">
-                <div class="col-sm-12 col-md-6"></div>
-                <div class="col-sm-12 col-md-6"></div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
+        <div class="card-body">
+                <div   class="table-responsive text-center">
                     <table id="example2"
-                           class="table table-bordered table-hover dataTable dtr-inline"
+                           class="table"
                            aria-describedby="example2_info">
                         <thead>
                             <tr>
@@ -44,14 +32,43 @@
                                 </td>
                             </tr>
                         </tbody>
-
                     </table>
                 </div>
             </div>
-
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>歷史簽核單據列表</span>
+            </h3>
         </div>
+        <div class="card-body">
+                <div class="table-responsive text-center">
+                    <table id="example2"
+                           class="table"
+                           aria-describedby="example2_info">
+                        <thead>
+                            <tr>
+                                <th>表單名稱</th>
+                                <th>申請人</th>
+                                <th>簽核</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="HistoryList in ApprovalHistoryList">
+                            <td class="text-center">{{tableTypeName(HistoryList.tableType)}}</td>
+                            <td class="text-center">{{HistoryList.employeeName}}</td>
+                                <td>
+                                <a :href="'/employee/query/ApprovalEdit/'+HistoryList.id" class="btn btn-outline-dark">
+                                        詳細
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
     </div>
 </div>
+
 @section Scripts {
 
     <script src="https://unpkg.com/vuejs-paginate-next@latest/dist/vuejs-paginate-next.umd.js"></script>
@@ -60,6 +77,7 @@
             data() {
                 return {
                     ApprovalList: [],
+                    ApprovalHistoryList: [],
                     search: '',
                 }
             },
@@ -80,9 +98,19 @@
                 tableTypeName(tableType) {
                     return tableType === 0 ? "加班單" : tableType === 1?"請假單":"補打卡單"
                 },
+
+                getApprovalHistoryListData() {
+                    let self = this
+                    axios("/mobile/api/Approval/GetHistoryAllApprovalData").then(res => {
+                        console.log(res.data);
+                        self.ApprovalHistoryList = res.data;
+                    })
+                },
+
             },
             mounted() {
                 this.getApprovalListData()
+                this.getApprovalHistoryListData()
             }
         }).mount("#app");
 
