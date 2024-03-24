@@ -1,11 +1,9 @@
-﻿@model WebApplication1.Models.SettingViewModels.UserEditViewModel;
-@{
-    Layout = "_Layout";
+﻿@{
     ViewBag.title = "帳號設定 | ";
 }
 
 
-<div class="content-header">
+<div  class="content-header">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
@@ -14,47 +12,49 @@
         </div>
     </div>
 </div>
-<section class="content">
+<section id="app" class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <form asp-action="AccountEdit" asp-controller="Setting" method="post">
+                    <form method="post">
                         <div class="card-body">
-
-                            <input asp-for="Id" class="form-control" hidden />
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label asp-for="EmployeesName" class="control-label">姓名</label>
-                                    <input asp-for="EmployeesName" class="form-control"></input>
-                                    <span class="text-danger"></span>
+                                    <label for="EmployeesName" class="control-label">姓名</label>
+                                    <input id="EmployeesName" class="form-control" v-model="info.EmployeesName" />
+                                    <span class="text-danger" v-if="validation.EmployeesName">姓名不得為空</span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label asp-for="DepartmentName" class="control-label">單位</label>
-                                    <select asp-for="DepartmentName" class="form-control" asp-items="@Model.DepartmentNameSelectList"></select>
-                                    <span class="text-danger"></span>
+                                    <label for="DepartmentName" class="control-label">單位</label>
+                                    <select id="DepartmentName" class="form-control" v-model.number="info.DepartmentName" required>
+                                        <option value="-1" disabled>請選擇</option>
+                                        <option v-for="item in department" :value="item.value">{{item.text}}</option>
+                                    </select>
+                                    <span class="text-danger" v-if="validation.DepartmentName">單位不得為空</span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label asp-for="Stop" class="control-label">啟用/停用</label>
-                                    <select asp-for="Stop" class="form-control" asp-items="@Model.StopSelectList"></select>
-                                    <span class="text-danger"></span>
+                                    <label for="Stop" class="control-label">啟用/停用</label>
+                                    <select id="Stop" class="form-control" v-model="info.Stop">
+                                        <option value="false">啟用</option>
+                                        <option value="true">停用</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label asp-for="Password" class="control-label">修改密碼</label>
-                                    <input asp-for="Password" class="form-control" type="password" placeholder="若要修改密碼才需輸入" />
-                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                    <label for="Password" class="control-label">修改密碼</label>
+                                    <input id="Password" type="password" class="form-control" placeholder="若要修改密碼才需輸入" v-model="info.Password"/>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <input id="select" type="submit" class="btn btn-primary" value="送出" />
-                            <a asp-controller="Setting" asp-action="Account" class="btn btn-outline-dark">返回</a>
+                            <input id="select" type="button" class="btn btn-primary" value="送出" @@click="EditAccount" />
+                            <a href="/Setting/Account" class="btn btn-outline-dark">返回</a>
                         </div>
                     </form>
                 </div>
@@ -64,3 +64,98 @@
 </section>
 
 
+@section Scripts
+{
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    department: [],
+                    validation: {
+                        Password: false,
+                        EmployeesName: false,
+                        DepartmentName: false,
+                    },
+                    info: {
+                        Password: "",
+                        EmployeesName: "",
+                        DepartmentName: -1,
+                        Stop: "false"
+                    }
+
+                }
+            },
+            watch: {
+                'info.EmployeesName'(nval) { this.validation.EmployeesName = nval == "" },
+                'info.DepartmentName'(nval) { this.validation.DepartmentName = nval == -1 },
+            },
+            computed: {
+            },
+            methods: {
+                validationForm() {
+                    if (this.info.EmployeesName == "") { this.validation.EmployeesName = true; return false; }
+                    if (this.info.DepartmentName == -1) { this.validation.DepartmentName = true; return false; }
+                    return true;
+                },
+                getDepartmentDropDownList() {
+                    let self = this;
+                    axios('/api/DepartmentApi/GetAll').then(res => {
+                        console.log(res.data);
+                        self.department = res.data;
+                    })
+                },
+                getEmpInfo(){
+                    let self = this;
+                    axios('/api/setting/AccountEdit/@ViewBag.userId').then(res => {
+                        self.info.EmployeesName = res.data.employeesName;
+                        self.info.DepartmentName = res.data.departmentName;
+                        self.info.Stop = res.data.stop;
+                    })
+                },
+                EditAccount() {
+                    if (this.validationForm()) {
+                        this.info.Stop = this.info.Stop == "true";
+                        this.info.id = @ViewBag.userId;
+                        axios.post('/api/Setting/AccountEdit', this.info).then(res => {
+                            if (res.data.status) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "修改成功!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: "animate__animated animate__fadeInUp animate__faster"
+                                    },
+                                    hideClass: {
+                                        popup: "animate__animated animate__fadeOutDown animate__faster"
+                                    }
+                                }).then((result) => {
+                                    if (result.value) {
+                                        location.href = "/setting/account";
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "修改失敗!",
+                                    text: res.data.msg,
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: "animate__animated animate__fadeInUp animate__faster"
+                                    },
+                                    hideClass: {
+                                        popup: "animate__animated animate__fadeOutDown animate__faster"
+                                    }
+                                });
+                            }
+
+                        })
+                    }
+                }
+            },
+            mounted() {
+                this.getDepartmentDropDownList();
+                this.getEmpInfo();
+            }
+        }).mount('#app')
+    </script>
+}

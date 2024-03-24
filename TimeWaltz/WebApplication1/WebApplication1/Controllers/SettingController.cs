@@ -114,39 +114,11 @@ public class SettingController : Controller
                 new("啟用","0"),
             }
         };
+        ViewBag.userId = id;
         return View(model);
     }
 
-    /// <summary>
-    ///     修改帳號頁
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    [HttpPost]
-    public IActionResult AccountEdit(UserEditModel model)
-    {
-        var user = _db.Users.Include(x=>x.Employee).ThenInclude(x=>x.Department).FirstOrDefault(x => x.Id == model.Id);
-        if (user == null) return RedirectToAction("Account", "Setting");
-
-        try
-        {
-            if (model.Password != null)
-            {
-                var salts = _UserService.GenerateSalt();
-                user.Password = _UserService.SHA256EncryptString(model.Password + salts);
-            }
-
-            user.Employee.Name = model.EmployeesName;
-            user.Stop = Convert.ToBoolean(model.Stop);
-            user.Employee.DepartmentId = model.DepartmentName;
-            _db.SaveChanges();
-            return RedirectToAction("AccountEdit", "Setting",new {id = model.Id});
-        }
-        catch (Exception e)
-        {
-            return RedirectToAction("Account", "Setting");
-        }
-    }
+    
 
 
     public IActionResult DepartmentDelete(int id)

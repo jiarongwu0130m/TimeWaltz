@@ -109,5 +109,50 @@ namespace WebApplication1.Controllers.Api
             }
         }
 
+
+
+        [HttpGet("{id}")]
+        public object AccountEdit(int id)
+        {
+            var user = _db.Users.AsNoTracking().Include(x => x.Employee).FirstOrDefault(x => x.Id == id);
+            return new
+            {
+                Id = user.Id,
+                Stop = user.Stop,
+                EmployeesName = user.Employee.Name,
+                DepartmentName = user.Employee.DepartmentId,
+            };
+        }
+
+        /// <summary>
+        ///     修改帳號頁
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult AccountEdit(UserEditModel model)
+        {
+            var user = _db.Users.Include(x => x.Employee).ThenInclude(x => x.Department).FirstOrDefault(x => x.Id == model.Id);
+            if (user == null) return Ok(new { status = false, msg = "查無資料" });
+
+            try
+            {
+                if (model.Password != null)
+                {
+                    var salts = _userService.GenerateSalt();
+                    user.Password = _userService.SHA256EncryptString(model.Password + salts);
+                }
+
+                user.Employee.Name = model.EmployeesName;
+                user.Stop = model.Stop;
+                user.Employee.DepartmentId = model.DepartmentName;
+                _db.SaveChanges();
+                return Ok(new { status = true, msg = "修改成功" });
+            }
+            catch (Exception e)
+            {
+                return Ok(new { status = false, msg = "失敗" });
+            }
+        }
     }
 }

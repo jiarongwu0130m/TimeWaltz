@@ -87,7 +87,7 @@ namespace WebApplication1.Models.SettingViewModels
         public string? Password { get; set; }
         public string EmployeesName { get; set; }
         public int DepartmentName { get; set; }
-        public int Stop { get; set; }
+        public bool Stop { get; set; }
 
 
     }
