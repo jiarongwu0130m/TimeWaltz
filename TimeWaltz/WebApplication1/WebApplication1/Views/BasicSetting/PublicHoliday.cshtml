@@ -1,68 +1,84 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["Title"] = "國定假日一覽";
+    ViewData["Title"] = "國定假日設定 | ";
 }
-<div class="row" id="app">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>國定假日名稱查詢：</label>
-                                <form asp-action="PublicHoliday" asp-controller="BasicSetting" method="post">
-                                    <div class="input-group col">
-                                        <div class="input-group-prepend">
-                                            <input name="QueryHolidayName" class="form-control" type="text" v-model="queryHolidayName">
-                                        </div>                                        
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </h3>
-                <div class="card-tools">
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <a asp-controller="BasicSetting" asp-action="PublicHolidayCreate" class="btn btn-outline-success">新增</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
-                    <thead>
-                    <thead>
-                        <tr>
-                            <th>
-                                假別名稱
-                            </th>
-                            <th>
-                                日期
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item in filterByDepartmentName()">
-                            <td>
-                                {{item.holidayName}}
-                            </td>
-                            <td>
-                                {{item.date}}
-                            </td>
-                            <td>
-                                <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-primary">編輯</a>
-                                <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-secondary">刪除</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">國定假日設定</h1>
             </div>
         </div>
     </div>
 </div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row" id="app">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>國定假日名稱查詢：</label>
+                                        <form asp-action="PublicHoliday" asp-controller="BasicSetting" method="post">
+                                            <div class="input-group col">
+                                                <div class="input-group-prepend">
+                                                    <input name="QueryHolidayName" class="form-control" type="text" v-model="queryHolidayName">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </h3>
+                        <div class="card-tools">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <a asp-controller="BasicSetting" asp-action="PublicHolidayCreate" class="btn btn-outline-success">新增</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        假別名稱
+                                    </th>
+                                    <th>
+                                        日期
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in filterByDepartmentName()">
+                                    <td>
+                                        {{item.holidayName}}
+                                    </td>
+                                    <td>
+                                        {{item.date}}
+                                    </td>
+                                    <td>
+                                        <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-primary">編輯</a>
+                                        <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-secondary">刪除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 @section Scripts {
     <script>
         Vue.createApp({
@@ -152,7 +168,7 @@
                         }
                     })
                 },
-                edit(id, event){
+                edit(id, event) {
                     event.preventDefault();
                     location.href = `/basicsetting/publicholidayedit/${id}`
                 },

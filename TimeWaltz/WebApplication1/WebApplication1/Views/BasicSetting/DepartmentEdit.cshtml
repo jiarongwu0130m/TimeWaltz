@@ -1,37 +1,60 @@
 ﻿@{
     Layout = "_Layout";
-    ViewBag.title = "部門修改";
+    ViewBag.title = "部門設定 | ";
 }
-<form asp-controller="BasicSetting" asp-action="DepartmentEdit" method="post" id="app">
-    <section class="content">
-        <div class="card-body">
-            <input name="Id" type="hidden" />
 
-            <div class="form-group">
-                <label name="DepartmentName" class="control-label">部門名稱</label>
-                <input name="DepartmentName" class="form-control col-sm-3" v-model="departmentName" />
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">部門修改</h1>
             </div>
-            <div class="form-group">
-                <label class="control-label">部門主管</label>
-                <select class="form-control  col-sm-3" name="EmployeesId" v-model="employeesId">
-                    <option value="" disabled>--請選擇--</option>
-                    <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
-                </select>
-                <span class="text-danger"></span>
-            </div>
+        </div>
+    </div>
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <form asp-controller="BasicSetting" asp-action="DepartmentEdit" method="post" id="app">
+
+                        <div class="card-body">
+                            <input name="Id" type="hidden" />
+
+                            <div class="form-group">
+                                <label name="DepartmentName" class="control-label">部門名稱</label>
+                                <input name="DepartmentName" class="form-control col-sm-3" v-model="departmentName" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">部門主管</label>
+                                <select class="form-control  col-sm-3" name="EmployeesId" v-model="employeesId">
+                                    <option value="" disabled>--請選擇--</option>
+                                    <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
+                                </select>
+                                <span class="text-danger"></span>
+                            </div>
 
 
-            <div class="card-footer">
-                <div class="row float-right">
-                    <div class="col">
-                        <input type="button" value="送出" @@click="send" class="btn btn-primary" />
-                        <a asp-controller="BasicSetting" asp-action="Department" class="btn btn-outline-dark">返回</a>
-                    </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="button" value="送出" @@click="send" class="btn btn-primary" />
+                                    <a asp-controller="BasicSetting" asp-action="Department" class="btn btn-outline-dark">返回</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
-</form>
+    </div>
+</section>
+
+
+
 @section Scripts {
     <script>
         Vue.createApp({

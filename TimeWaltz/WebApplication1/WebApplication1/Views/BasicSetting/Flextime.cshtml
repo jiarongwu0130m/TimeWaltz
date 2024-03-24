@@ -1,44 +1,55 @@
-﻿
-@{
-    ViewBag.title = "彈性上班設定";
+﻿@{
+    Layout = "_Layout";
+    ViewBag.title = "彈性上班設定 | ";
 }
 
-
-<div class="row" id="app">
-    <div class="col-12">
-        <div class="card">
-            <form method="post">
-                <div class="card-body">
-                    <div class="row mb-2">
-                        <label class="col-form-label">彈性上下班時間：</label>
-                        <input type="text" v-model="flexibleTime" class="col-sm-1 form-control form-control-border">
-                        <span class="input-group-text">分鐘</span>
-                    </div>
-
-                    <div class="row mb-2">
-                        <input class=" mr-2" type="checkbox" id="flexCheck" v-model="moveUp">
-                        <label class="col-form-label" for="flexCheck">可提前上班</label>
-                    </div>
-
-                </div>
-                <div class="card-footer">
-                    <input @@click="saveFlextime" type="button" class="btn btn-primary" value="儲存" />
-                    
-                </div>
-
-            </form>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">彈性上班設定</h1>
+            </div>
         </div>
     </div>
-
 </div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row" id="app">
+            <div class="col-12">
+                <div class="card">
+                    <form method="post">
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <label class="col-form-label">彈性上下班時間：</label>
+                                <input type="text" v-model="flexibleTime" class="col-sm-1 form-control form-control-border">
+                                <span class="input-group-text">分鐘</span>
+                            </div>
 
+                            <div class="row mb-2">
+                                <input class=" mr-2" type="checkbox" id="flexCheck" v-model="moveUp">
+                                <label class="col-form-label" for="flexCheck">可提前上班</label>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <input @@click="saveFlextime" type="button" class="btn btn-primary" value="儲存" />
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     <script>
         Vue.createApp({
             data() {
                 return {
-                    id:'',
+                    id: '',
                     flexibleTime: '',
                     moveUp: false,
                 }
@@ -53,10 +64,10 @@
                             self.moveUp = response.data.moveUp;
                         });
                 },
-                saveFlextime(){
+                saveFlextime() {
                     let self = this;
                     axios.post("/api/FlextimeApi/saveFelxtime", {
-                        id:self.id,
+                        id: self.id,
                         flexibleTime: self.flexibleTime,
                         moveUp: self.moveUp,
                     }).then(response => {

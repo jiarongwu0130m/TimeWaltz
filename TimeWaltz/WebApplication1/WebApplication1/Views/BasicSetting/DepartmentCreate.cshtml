@@ -1,33 +1,52 @@
 ﻿@{
     Layout = "_Layout";
-    ViewBag.title = "新增部門";
+    ViewBag.title = "部門設定 | ";
 }
-<div class="row" id="app">
-    <div class="col-md">
-        <form asp-action="DepartmentCreate" asp-asp-controller="BasicSetting" method="post">
 
-            <div class="card-body">
-                <div class="form-group">
-                    <label name="DepartmentName" class="control-label">部門名稱</label>
-                    <input name="DepartmentName" class="form-control col-sm-3" v-model="departmentName"/>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">部門主管</label>
-                    <select class="form-control col-sm-3" v-model="employeesId">
-                        <option value="" disabled>--請選擇--</option>
-                        <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
-                    </select>
-                    <span class="text-danger"></span>
-                </div>                
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">部門新增</h1>
             </div>
-            <div class="card-footer">
-                <input type="button" value="送出" @@click="send" class="btn btn-primary" />
-                <a asp-controller="BasicSetting" asp-action="Department" class="btn btn-outline-dark">返回</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-@section Scripts{
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row" id="app">
+            <div class="col-12">
+                <div class="card">
+
+                    <form asp-action="DepartmentCreate" asp-asp-controller="BasicSetting" method="post">
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label name="DepartmentName" class="control-label">部門名稱</label>
+                                <input name="DepartmentName" class="form-control col-sm-3" v-model="departmentName" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">部門主管</label>
+                                <select class="form-control col-sm-3" v-model="employeesId">
+                                    <option value="" disabled>--請選擇--</option>
+                                    <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
+                                </select>
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input type="button" value="送出" @@click="send" class="btn btn-primary" />
+                            <a asp-controller="BasicSetting" asp-action="Department" class="btn btn-outline-dark">返回</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+@section Scripts {
 
     <script>
         Vue.createApp({
@@ -42,12 +61,12 @@
                 send() {
                     let self = this;
                     axios.post("/api/DepartmentApi/Create", {
-                        departmentName : self.departmentName,
-                        employeesId : self.employeesId,
+                        departmentName: self.departmentName,
+                        employeesId: self.employeesId,
                     })
                         .then((response) => {
                             console.log(response)
-                            if(response.status){
+                            if (response.status) {
                                 Swal.fire({
                                     icon: "success",
                                     title: "新增成功!",
@@ -64,7 +83,7 @@
                                     }
                                 });
 
-                            }else{
+                            } else {
                                 Swal.fire({
                                     icon: "error",
                                     title: "新增失敗!",
@@ -76,17 +95,17 @@
                                         popup: `animate__animated animate__fadeOutDown animate__faster`
                                     }
                                 });
-                            }                            
+                            }
                         })
                         .catch((error) => console.log(error));
                 },
                 getDropDownList() {
                     let self = this;
                     axios.get("/api/DepartmentApi/GetDropDownList")
-                    .then((response) => {
-                        console.log(response);
+                        .then((response) => {
+                            console.log(response);
                             self.employeeNameSelectList = response.data.employeeNameSelectList;
-                    }).then((error) => console.log(error));
+                        }).then((error) => console.log(error));
                 }
             },
             mounted() {
