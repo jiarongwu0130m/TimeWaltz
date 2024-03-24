@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Models;
+using WebApplication1.Models.SettingViewModels;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Api
 {
@@ -10,10 +12,12 @@ namespace WebApplication1.Controllers.Api
     public class SettingApiController : ControllerBase
     {
         private readonly TimeWaltzContext _db;
+        private readonly UserService _userService;
 
-        public SettingApiController(TimeWaltzContext db)
+        public SettingApiController(TimeWaltzContext db,UserService userService)
         {
             _db = db;
+            _userService = userService;
         }
         public bool DelEmployee(int id)
         {
@@ -59,6 +63,96 @@ namespace WebApplication1.Controllers.Api
                     x.Id
                 }).ToList();
         }
-        
+
+
+        /// <summary>
+        ///     新增帳號
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult AccountCreate(UserCreateModel model)
+        {
+            try
+            {
+                var u = _db.Users.FirstOrDefault(x => x.Account == model.Account);
+                //帳號是否重複
+                if (u != null) return Ok(new { status = false, msg = "帳號重複" });
+
+                //密碼鹽
+                var Salts = _userService.GenerateSalt();
+                //密碼雜湊
+                model.Password = _userService.SHA256EncryptString(model.Password + Salts);
+
+                _db.Users.Add(new User
+                {
+                    Account = model.Account,
+                    Password = model.Password,
+                    Stop = model.Stop,
+                    Salt = Salts,
+                    RoleId = 2,
+                    Employee = new Employee()
+                    {
+                        DepartmentId = model.DepartmentName,
+                        HireDate = DateTime.Now,
+                        Name = model.EmployeesName,
+                        EmployeesNo = DateTime.Now.Ticks.ToString()
+                    },
+                    PasswordDate = DateTime.Now
+                });
+                _db.SaveChanges();
+                return Ok(new { status = true, msg = "新增成功" });
+            }
+            catch (Exception e)
+            {
+                return Ok(new { status = false, msg = "錯誤請聯絡管理員" });
+            }
+        }
+
+
+
+        [HttpGet("{id}")]
+        public object AccountEdit(int id)
+        {
+            var user = _db.Users.AsNoTracking().Include(x => x.Employee).FirstOrDefault(x => x.Id == id);
+            return new
+            {
+                Id = user.Id,
+                Stop = user.Stop,
+                EmployeesName = user.Employee.Name,
+                DepartmentName = user.Employee.DepartmentId,
+            };
+        }
+
+        /// <summary>
+        ///     修改帳號頁
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult AccountEdit(UserEditModel model)
+        {
+            var user = _db.Users.Include(x => x.Employee).ThenInclude(x => x.Department).FirstOrDefault(x => x.Id == model.Id);
+            if (user == null) return Ok(new { status = false, msg = "查無資料" });
+
+            try
+            {
+                if (model.Password != null)
+                {
+                    var salts = _userService.GenerateSalt();
+                    user.Password = _userService.SHA256EncryptString(model.Password + salts);
+                }
+
+                user.Employee.Name = model.EmployeesName;
+                user.Stop = model.Stop;
+                user.Employee.DepartmentId = model.DepartmentName;
+                _db.SaveChanges();
+                return Ok(new { status = true, msg = "修改成功" });
+            }
+            catch (Exception e)
+            {
+                return Ok(new { status = false, msg = "失敗" });
+            }
+        }
     }
 }

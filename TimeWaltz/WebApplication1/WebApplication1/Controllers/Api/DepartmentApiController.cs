@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Repository.Models;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Filters;
 using WebApplication1.Helpers;
 using WebApplication1.Models.BasicSettingViewModels;
@@ -21,6 +22,21 @@ namespace WebApplication1.Controllers.Api
             _db = timeWaltzContext;
             _departmentService = departmentService;
         }
+
+        [HttpGet]
+        public ActionResult GetAll()
+        {
+            try
+            {
+                var result =  _db.Departments.Select(x => new SelectListItem(x.DepartmentName, x.Id.ToString())).ToList();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet]
         public ActionResult<DepartmentCreateShowDto> GetDropDownList()
         {

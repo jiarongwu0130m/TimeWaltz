@@ -28,21 +28,10 @@ namespace WebApplication1.Models.SettingViewModels
     }
     public class UserCreateModel
     {
-        [Required]
-        [Display(Name = "帳號")]
         public string Account { get; set; }
-
-        [Required]
-        [Display(Name = "密碼")]
         public string Password { get; set; }
-
-        [Display(Name = "姓名")]
         public string EmployeesName { get; set; }
-
-        [Display(Name = "單位")]
         public int DepartmentName { get; set; }
-
-        [Display(Name = "停用/啟用")]
         public bool Stop { get; set; }
 
     }
@@ -98,7 +87,7 @@ namespace WebApplication1.Models.SettingViewModels
         public string? Password { get; set; }
         public string EmployeesName { get; set; }
         public int DepartmentName { get; set; }
-        public int Stop { get; set; }
+        public bool Stop { get; set; }
 
 
     }

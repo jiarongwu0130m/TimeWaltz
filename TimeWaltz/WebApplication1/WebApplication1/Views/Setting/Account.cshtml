@@ -116,7 +116,8 @@
             data() {
                 return {
                     currentPage: 1,
-                    pageSize: 10,
+                    totalCount:0,
+                    pageSize: 5,
                     search: {
                         account: "",
                         department: "",
@@ -128,7 +129,7 @@
             },
             computed: {
                 totalPages() {
-                    return Math.ceil(this.filterEmp.length / this.pageSize);
+                    return Math.ceil(this.totalCount / this.pageSize);
                 },
                 filterEmp() {
                     let emp = this.employee;
@@ -143,6 +144,7 @@
                     }
                     const start = (this.currentPage - 1) * this.pageSize;
                     const end = start + this.pageSize;
+                    this.totalCount = emp.length;
                     return emp.slice(start, end);
                 }
             },
