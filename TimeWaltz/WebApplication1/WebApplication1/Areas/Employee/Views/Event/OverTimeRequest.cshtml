@@ -21,8 +21,8 @@
                 </i>
             </div>
             <div class="row form-group basic">
-                <label class="col-form-label">加班期間</label>
-                <Vue-Date-Picker v-model="dateRange" autocomplete="off" class="form-control" model-auto range @@change="change"></Vue-Date-Picker>
+                <label class="col-form-label">加班期間</label>                
+                <Vue-Date-Picker v-model="dateRange" class="form-control" model-auto range @@update:model-value="dateTimeChange" />
                 <i class="clear-input">
                     <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                 </i>
@@ -117,8 +117,8 @@
         Vue.createApp({
             data() {
                 return {
+                    employeeId: '',
                     dateRange: [],
-                    employeeId:'',
                     name: '',
                     startTime: '',
                     endTime: '',
@@ -128,18 +128,17 @@
                     dataValid: {
                         overtimeResult: true,
                         reason: true,
-                    }
+                    },
+                    datePicker:'',
+
                 }
             },
             methods: {
-                change(){
+                dateTimeChange() {
                     let self = this;
-                    self.startTime = self.dateRange[0]
-                    self.endTime = self.dateRange[1]
-                    this.countOvertimeMins()
-                },
-                toList() {
-                    location.href = '/employee/query/overtime'
+                    self.startTime = self.dateRange[0];
+                    self.endTime = self.dateRange[1];                    
+                    self.countOvertimeMins();
                 },
                 getEmpName() {
                     let self = this;
@@ -149,8 +148,9 @@
                     });
                 },
                 countOvertimeMins() {
-                    let self = this;                    
-                    console.log(self.startTime, self.endTime)
+                    let self = this;
+                    console.log(self.startTime);
+                    console.log(self.endTime);
                     self.overtimeResult = '';
                     if (self.startTime && self.endTime) {
                         const start = self.dateRange[0];
@@ -184,15 +184,12 @@
                 },
                 sendOvertimeRequest() {
                     let self = this;
-                    self.startTime = moment(this.timeRange[0]).format('YYYY-MM-DD')
-                    self.endTime = moment(this.timeRange[1]).format('YYYY-MM-DD')
-                    console.log(self.startTime, self.endTime)
                     axios.post("/mobile/api/Overtime/RequestCreate", {
                         employeeId: self.employeeId,
-                        startTime: new moment(self.startTime).format('YYYY-MM-DDTHH:mm:ss').toString();
-                        endTime: new moment(self.endTime).format('YYYY-MM-DDTHH:mm:ss').toString();
-                        status : self.status,
-                        reason : self.reason,
+                        startTime: new moment(self.startTime).format('YYYY-MM-DDTHH:mm:ss').toString(),
+                        endTime: new moment(self.endTime).format('YYYY-MM-DDTHH:mm:ss').toString(),
+                        status: self.status,
+                        reason: self.reason,
                         overtimeResult: self.overtimeResult,
                     }).then(response => {
                         if (response.data == true) {
