@@ -10,10 +10,8 @@
             </h3>
         </div>
         <div class="card-body">
-                <div   class="table-responsive text-center">
-                    <table id="example2"
-                           class="table"
-                           aria-describedby="example2_info">
+                <div class="table-responsive text-center">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th >表單名稱</th>
@@ -23,10 +21,10 @@
                         </thead>
                         <tbody>
                             <tr v-for="ApprlList in ApprovalList">
-                                <td class="text-center">{{tableTypeName(ApprlList.tableType)}}</td>
-                                <td class="text-center">{{ApprlList.employeeName}}</td>
+                                <td>{{tableTypeName(ApprlList.tableType)}}</td>
+                                <td>{{ApprlList.employeeName}}</td>
                                 <td>
-                                    <a :href="'/employee/query/ApprovalCreate/'+ApprlList.id" class="btn btn-outline-dark">
+                                    <a :href="'/employee/query/ApprovalCreate/'+ApprlList.id">
                                         簽核
                                     </a>
                                 </td>
@@ -35,6 +33,8 @@
                     </table>
                 </div>
             </div>
+    </div>
+    <div class="card">
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
                 <span>歷史簽核單據列表</span>
@@ -42,9 +42,7 @@
         </div>
         <div class="card-body">
                 <div class="table-responsive text-center">
-                    <table id="example2"
-                           class="table"
-                           aria-describedby="example2_info">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>表單名稱</th>
@@ -54,12 +52,10 @@
                         </thead>
                         <tbody>
                         <tr v-for="HistoryList in ApprovalHistoryList">
-                            <td class="text-center">{{tableTypeName(HistoryList.tableType)}}</td>
-                            <td class="text-center">{{HistoryList.employeeName}}</td>
+                            <td>{{tableTypeName(HistoryList.tableType)}}</td>
+                            <td>{{HistoryList.employeeName}}</td>
                                 <td>
-                                <a :href="'/employee/query/ApprovalEdit/'+HistoryList.id" class="btn btn-outline-dark">
-                                        詳細
-                                    </a>
+                                <a href="#" @@click="toDetail(HistoryList.id,$event)">詳細</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -105,6 +101,10 @@
                         console.log(res.data);
                         self.ApprovalHistoryList = res.data;
                     })
+                },
+                toDetail(id, event) {
+                    event.preventDefault();
+                    location.href = `/employee/query/ApprovalEdit/${id}`;
                 },
 
             },
