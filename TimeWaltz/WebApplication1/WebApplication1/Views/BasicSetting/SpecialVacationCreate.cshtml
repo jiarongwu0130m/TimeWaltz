@@ -1,36 +1,49 @@
 ﻿@{
-    ViewData["Title"] = "新增特殊假日";
+    Layout = "_Layout";
+    ViewBag.title = "特殊假日設定 | ";
 }
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <form asp-action="SpecialVacationCreate" asp-asp-controller="BasicSetting" method="post" id="app">
-                <div class="card-body">
-                    <div class="form-group">
-                        <label name="SpecialVacationName" class="control-label"></label>
-                        <input name="SpecialVacationName" v-model="specialVacationName" class="form-control col-3" :class="validation.specialVacationName" />
-                        <span class="text-danger" v-if="!validation.specialVacationName"></span>
-                    </div>
-                    <div class="form-group">
-                        <label name="Date" class="control-label"></label>
-                        <input id="dateInput" name="Date" class="form-control col-3" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col">
-                                <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit"/>
-                                <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-dark">返回</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">新增特殊假日</h1>
+            </div>
         </div>
     </div>
 </div>
-
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <form asp-action="SpecialVacationCreate" asp-asp-controller="BasicSetting" method="post" id="app">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="control-label">特殊假名稱</label>
+                                <input name="SpecialVacationName" v-model="specialVacationName" class="form-control col-3" :class="validation.specialVacationName" />
+                                <span class="text-danger" v-if="!validation.specialVacationName"></span>
+                            </div>
+                            <div class="form-group">
+                                <label name="Date" class="control-label">日期</label>
+                                <input id="dateInput" name="Date" class="form-control col-3" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit" />
+                                        <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-dark">返回</a>
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     <script>

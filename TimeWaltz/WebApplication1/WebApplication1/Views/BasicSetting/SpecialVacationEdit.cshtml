@@ -1,33 +1,48 @@
 ﻿@{
-    ViewData["Title"] = "編輯特殊假日";
+    Layout = "_Layout";
+    ViewBag.title = "特殊假日設定 | ";
 }
 
-<form asp-action="SpecialVacationEdit" asp-asp-controller="BasicSetting" method="post" id="app">
-    <section class="content">
-        <div class="card-body">
-            <div class="form-group">
-                <label name="SpecialVacationName" class="control-label">特殊假假別名稱：</label>
-                <input name="SpecialVacationName" v-model="specialVacationName" class="form-control" :class="validation.specialVacationName" />
-                <span class="text-danger" v-if="!validation.specialVacationName"></span>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">編輯特殊假日</h1>
             </div>
-            <div class="form-group">
-                <label name="Date" class="control-label">日期</label>
-                <input name="Date" id="dateInput" class="form-control"/>
-                <span class="text-danger"></span>
-            </div>
-
-
-            <div class="card-footer">
-                <div class="row float-right">
-                    <div class="col ">
-                        <input type="button" @@click="validateAndSubmit()" value="送出" class="btn btn-primary" />
-                        <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-dark">返回</a>
+        </div>
+    </div>
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row" id="app">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label name="SpecialVacationName" class="control-label">特殊假假別名稱：</label>
+                            <input name="SpecialVacationName" v-model="specialVacationName" class="form-control" :class="validation.specialVacationName" />
+                            <span class="text-danger" v-if="!validation.specialVacationName"></span>
+                        </div>
+                        <div class="form-group">
+                            <label name="Date" class="control-label">日期</label>
+                            <input name="Date" id="dateInput" class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col ">
+                                <input type="button" @@click="validateAndSubmit()" value="送出" class="btn btn-primary" />
+                                <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-dark">返回</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
-    </section>
-</form>
+    </div>
+</section>
 
 @section Scripts {
     <script>
@@ -55,7 +70,7 @@
                         location.href = "/BasicSetting/specialvaction";
                     }
 
-                },                
+                },
                 getEditData() {
                     let self = this;
                     axios.get(`/api/SpecialVacationApi/GetEditData/${this.id}`).then((response) => {
@@ -68,20 +83,20 @@
                     let self = this;
                     console.log(self.specialVacationName, self.date, this.date)
                     axios.post(`/api/SpecialVacationApi/edit/${self.id}`,
-                    {
-                        id: self.id,
-                        specialVacationName: self.specialVacationName,
-                        date: self.date,
-                    })
-                    .then((response) => {
-                        if (response.status) {
-                            alert('修改成功')
-                            location.href = `/basicsetting/SpecialVacation`
-                        } else {
-                            alert('修改失敗')
-                        }
-                    })
-                    .catch((error) => console.log(error));
+                        {
+                            id: self.id,
+                            specialVacationName: self.specialVacationName,
+                            date: self.date,
+                        })
+                        .then((response) => {
+                            if (response.status) {
+                                alert('修改成功')
+                                location.href = `/basicsetting/SpecialVacation`
+                            } else {
+                                alert('修改失敗')
+                            }
+                        })
+                        .catch((error) => console.log(error));
                 },
                 validateAndSubmit() {
                     let isValid = true;
@@ -100,13 +115,13 @@
                         }
                     }, function (start, _, _) {
                         self.date = start.format('YYYY-MM-DD');
-        
+
                     });
                 },
             },
             mounted() {
                 this.checkId();
-                this.getEditData(); 
+                this.getEditData();
                 this.getDateRangePicker();
 
             },

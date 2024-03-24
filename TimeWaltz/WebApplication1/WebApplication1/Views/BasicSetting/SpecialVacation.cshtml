@@ -1,89 +1,102 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["Title"] = "特殊假日一覽";
+    ViewData["Title"] = "特殊假日設定 | ";
 }
-<div class="row" id="app">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label name="Date">時間區間查詢</label>
-                                <input name="Date" class="form-control" id="dateInput">
-                            </div>
-                        </div>
-                    </div>
-                </h3>
-                <div class="card-tools">
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <a asp-controller="BasicSetting" asp-action="specialVacationCreate" class="btn btn-outline-success">新增</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
-                    <thead>
-                        <tr>
-                            <th>
-                                特殊假日名稱
-                            </th>
-                            <th>
-                                日期
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item in filterDate">
-                            <td>
-                                {{item.specialVacationName}}
-                            </td>
-                            <td>
-                                {{item.date}}
-                            </td>
-                            <td>
-                                <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-primary">編輯</a> 
-                                <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-secondary">刪除</a>
-                            </td>
-                        </tr>
 
-                    </tbody>
-                </table>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-0">特殊假日一覽</h1>
             </div>
         </div>
     </div>
-    
-
-    
-
 </div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row" id="app">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label name="Date">時間區間查詢</label>
+                                        <input name="Date" class="form-control" id="dateInput">
+                                    </div>
+                                </div>
+                            </div>
+                        </h3>
+                        <div class="card-tools">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <a asp-controller="BasicSetting" asp-action="specialVacationCreate" class="btn btn-outline-success">新增</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        特殊假日名稱
+                                    </th>
+                                    <th>
+                                        日期
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in filterDate">
+                                    <td>
+                                        {{item.specialVacationName}}
+                                    </td>
+                                    <td>
+                                        {{item.date}}
+                                    </td>
+                                    <td>
+                                        <a href="#" @@click="edit(item.id, $event)" class="btn btn-outline-primary">編輯</a>
+                                        <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-secondary">刪除</a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
 @section Scripts {
     <script>
         Vue.createApp({
             data() {
                 return {
                     specialVacationList: [],
-                    search:{
+                    search: {
                         startDate: null,
                         endDate: null,
                     }
                 }
             },
             computed: {
-                filterDate(){
+                filterDate() {
                     let data = this.specialVacationList
                     if (this.search.startDate) {
                         data = data
-                        .filter(x => new Date(x.date) >= new Date(this.search.startDate))
+                            .filter(x => new Date(x.date) >= new Date(this.search.startDate))
 
                     }
                     if (this.search.endDate) {
                         data = data
-                        .filter(x => new Date(x.date) <= new Date(this.search.endDate))
+                            .filter(x => new Date(x.date) <= new Date(this.search.endDate))
                     }
                     console.log(data)
                     return data;
@@ -161,7 +174,7 @@
                                     this.getListData();
                                 }
                             });
-                            
+
                         } else {
                             Swal.fire({
                                 icon: "error",
