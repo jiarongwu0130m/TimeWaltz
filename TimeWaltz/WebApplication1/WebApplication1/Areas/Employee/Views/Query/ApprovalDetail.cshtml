@@ -6,7 +6,7 @@
     <div class="card" v-if=" tableType == 0 ">
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
-                <span>加班單據簽核</span>
+                <span>加班單據歷史簽核</span>
             </h3>
         </div>
         <div class="card-body">
@@ -56,7 +56,7 @@
     <div class="card" v-else-if="tableType==1">
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
-                <span>請假單申請單據</span>
+                <span>請假單申請歷史簽核</span>
             </h3>
         </div>
         <div class="card-body">
@@ -107,7 +107,7 @@
         <div class="card-header">
 
             <h3 class="card-title d-flex justify-content-between">
-                <span>補打卡申請單據</span>
+                <span>補打卡申請歷史簽核</span>
             </h3>
 
         </div>
@@ -151,26 +151,19 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
-                <span class="text-danger">簽核</span>
+                <span class="text-danger">歷史簽核紀錄</span>
             </h3>
         </div>
         <div class="card-body">
             <div class="form-group basic">
                 <div class="input-wrapper">
-                    <label class="col-form-label text-danger">簽核備註</label>
+                    <label class="col-form-label text-danger">歷史簽核備註</label>
                     <input type="text" class="form-control" v-model="approvalRemark">
                 </div>
             </div>
         </div>
         <div class="card-footer">
-            <div class="row justify-content-around">
-                <button type="button" class="btn btn-facebook" @@click="approvalOk">
-                    <ion-icon name="checkmark-done-outline" role="img"
-                              class="md hydrated" aria-label="checkmark done outline"></ion-icon>簽核
-                </button>
-                <button type="button" class="btn btn-secondary " @@click="approvalNo">
-                    <ion-icon name="backspace-outline"></ion-icon>退回
-                </button>
+            <div class="row justify-content-around">                
                 <button type="button" class="btn btn-dribbble" @@click="toList">
                     <ion-icon name="close-outline" role="img"
                               class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
@@ -179,45 +172,6 @@
         </div>
     </div>
 
-    <div class="modal fade dialogbox" id="DialogIconedSuccess" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-icon text-success">
-                    <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="checkmark circle"></ion-icon>
-                </div>
-                <div class="modal-header">
-                    <h5 class="modal-title">送出成功</h5>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <div class="btn-inline">
-                        <a href="#" class="btn" data-dismiss="modal" id="successBack">返回</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade dialogbox" id="DialogIconedDanger" data-backdrop="static" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-icon text-danger">
-                    <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                </div>
-                <div class="modal-header">
-                    <h5 class="modal-title">送出失敗</h5>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <div class="btn-inline">
-                        <a href="#" class="btn" data-dismiss="modal" id="dangerBack">返回</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 

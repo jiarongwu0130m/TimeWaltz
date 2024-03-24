@@ -13,118 +13,111 @@
 </div>
 <section class="content">
     <div class="container-fluid">
-<div id="app" class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>假別名稱查詢：</label>
-                                <input name="QueryVacationType" v-model="search" type="text" class="">
-                                <button class="btn btn-outline-info" @@click="changeSwitch">查詢</button>
+        <div id="app" class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>假別名稱查詢：</label>
+                                        <input name="QueryVacationType" v-model="search" type="text" class="">
+                                        <button class="btn btn-outline-info" @@click="changeSwitch">查詢</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </h3>
+                        <div class="card-tools">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <a asp-controller="BasicSetting" asp-action="VacationTypeCreate" class="btn btn-outline-success">新增</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </h3>
-                <div class="card-tools">
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <a asp-controller="BasicSetting" asp-action="VacationTypeCreate" class="btn btn-outline-success">新增</a>
-                        </div>
+                    <div class="card-body  table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th class="sorting sorting_asc" tabindex="0" rowspan="1"
+                                        colspan="1">
+                                        假別名稱
+                                    </th>
+                                    <th class="sorting" rowspan="1" colspan="1">
+                                        可請性別
+                                    </th>
+                                    <th class="sorting" rowspan="1" colspan="1">
+                                        可請周期
+                                    </th>
+                                    <th class="sorting" rowspan="1" colspan="1">
+                                        天數
+                                    </th>
+                                    <th class="sorting" rowspan="1" colspan="1">
+                                        最小可請時數
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template v-if="isSwitch">
+                                    <tr v-for="vacation in filterByVacationType()">
+                                        <td class="text-center">
+                                            {{vacation.vacationType}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{vacation.gender}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{vacation.cycle}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{vacation.numberOfDays}}
+
+                                        </td>
+                                        <td class="text-center">
+                                            {{vacation.minVacationHours}}
+
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#" @@click="edit(vacation.id, $event)" class="btn btn-outline-dark">編輯</a> |
+                                            @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
+                                            <a href="#" @@click="checkIsDelete(vacation.id, $event)" class="btn btn-outline-danger">刪除</a>
+
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template v-else>
+                                    <tr v-for="vacation in vacationList">
+                                        <td class="text-center">
+                                            {{vacation.vacationType}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{vacation.gender}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{vacation.cycle}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{vacation.numberOfDays}}
+
+                                        </td>
+                                        <td class="text-center">
+                                            {{vacation.minVacationHours}}
+
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#" @@click="edit(vacation.id, $event)" class="btn btn-outline-primary">編輯</a>
+                                            <a href="#" @@click="checkIsDelete(vacation.id, $event)" class="btn btn-outline-secondary">刪除</a>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <div class="card-body  table-responsive p-0">
-                <table class="table table-hover text-nowrap text-center">
-                    <thead>
-                        <tr>
-                            <th class="sorting sorting_asc" tabindex="0" rowspan="1"
-                                colspan="1">
-                                假別名稱
-                            </th>
-
-                            <th class="sorting" rowspan="1" colspan="1">
-                                可請性別
-                            </th>
-                            <th class="sorting" rowspan="1" colspan="1">
-                                可請周期
-                            </th>
-                            <th class="sorting" rowspan="1" colspan="1">
-                                天數
-                            </th>
-                            <th class="sorting" rowspan="1" colspan="1">
-                                最小可請時數
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template v-if="isSwitch">
-                            <tr v-for="vacation in filterByVacationType()">
-                                <td class="text-center">
-                                    {{vacation.vacationType}}
-                                </td>
-                                <td class="text-center">
-                                    {{vacation.gender}}
-                                </td>
-                                <td class="text-center">
-                                    {{vacation.cycle}}
-                                </td>
-                                <td class="text-center">
-                                    {{vacation.numberOfDays}}
-
-                                </td>
-                                <td class="text-center">
-                                    {{vacation.minVacationHours}}
-
-                                </td>
-                                <td class="text-center">
-                                    <a href="#" @@click="edit(vacation.id, $event)" class="btn btn-outline-dark">編輯</a> |
-                                    @* @Html.ActionLink("刪除", "DeleteVacationType", new { id = item.Id }) *@
-                                    <a href="#" @@click="getOut(vacation.id, $event)" class="btn btn-outline-danger">刪除</a>
-
-                                </td>
-                            </tr>
-                        </template>
-                        <template v-else>
-                            <tr v-for="vacation in vacationList">
-                                <td class="text-center">
-                                    {{vacation.vacationType}}
-                                </td>
-                                <td class="text-center">
-                                    {{vacation.gender}}
-                                </td>
-                                <td class="text-center">
-                                    {{vacation.cycle}}
-                                </td>
-                                <td class="text-center">
-                                    {{vacation.numberOfDays}}
-
-                                </td>
-                                <td class="text-center">
-                                    {{vacation.minVacationHours}}
-
-                                </td>
-                                <td class="text-center">
-                                    <a href="#" @@click="edit(vacation.id, $event)" class="btn btn-outline-primary">編輯</a> 
-                                    <a href="#" @@click="getOut(vacation.id, $event)" class="btn btn-outline-secondary">刪除</a>
-                                </td>
-                            </tr>
-                        </template>
-
-                    </tbody>
-
-                </table>
-
-            </div>
         </div>
-    </div>
-
-    
-</div>
-
     </div>
 </section>
 @section Scripts {
@@ -139,15 +132,47 @@
                 }
             },
             methods: {
+                checkIsDelete(id, e) {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger"
+                        },
+                        buttonsStyling: false
+                    });
+                    swalWithBootstrapButtons.fire({
+                        title: "確定刪除?",
+                        text: "此刪除可能無法回復",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "是",
+                        cancelButtonText: "否",
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.getOut(id, e);
+                            swalWithBootstrapButtons.fire({
+                                title: "成功刪除!",
+                                icon: "success"
+                            });
+                            this.getVacationListData();
+                        } else if (
+                            /* Read more about handling dismissals below */
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire({
+                                title: "取消",
+                                icon: "error"
+                            });
+                        }
+                    });
+                },
                 changeSwitch() {
                     this.isSwitch = !this.isSwitch;
                 },
                 filterByVacationType() {
                     if (this.search != '') return this.vacationList.filter(x => x.vacationType.includes(this.search));
                     return this.vacationList;
-                },
-                hello() {
-                    console.log('')
                 },
                 getOut(id, event) {
                     let self = this
@@ -161,11 +186,33 @@
 
                     }).then(res => res.json()).then(result => {
                         if (result.status) {
-                            alert("刪除成功")
-                            self.getVacationListData()
-
+                            Swal.fire({
+                                icon: "success",
+                                title: "刪除成功!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            }).then((result) => {
+                                if (result.value) {
+                                    this.getVacationListData();
+                                }
+                            });
                         } else {
-                            alert("刪除失敗")
+                            Swal.fire({
+                                icon: "error",
+                                title: "刪除失敗!",
+                                confirmButtonText: '返回',
+                                showClass: {
+                                    popup: `animate__animated animate__fadeInUp animate__faster`
+                                },
+                                hideClass: {
+                                    popup: `animate__animated animate__fadeOutDown animate__faster`
+                                }
+                            });
                         }
                     })
 
