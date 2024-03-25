@@ -26,14 +26,6 @@
                                 <label name="DepartmentName" class="control-label">部門名稱</label>
                                 <input name="DepartmentName" class="form-control col-sm-3" v-model="departmentName" />
                             </div>
-                            <div class="form-group">
-                                <label class="control-label">部門主管</label>
-                                <select class="form-control  col-sm-3" name="EmployeesId" v-model="employeesId">
-                                    <option value="" disabled>--請選擇--</option>
-                                    <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
-                                </select>
-                                <span class="text-danger"></span>
-                            </div>
 
 
                         </div>
