@@ -31,10 +31,10 @@
                         <tr class="text-center align-middle" v-for="(item,index) in allBillBoard">
                             <td class="align-middle">{{++index}}</td>
                             <td class="align-middle">{{formatToDateTime(item.startTime)}}</td>
-                            <td class="align-middle">{{item.employeeId}}</td>
+                            <td class="align-middle">{{item.name}}</td>
                             <td class="align-middle">{{item.title}}</td>
                             <td class="align-middle">
-                                <button @@click="toDetail(item.id,$event)" class="btn btn-outline-primary">編輯</button>
+                                <a href="#" @@click="toDetail(item.id,$event)">編輯</a>
                             </td>
                         </tr>
                     </tbody>
@@ -104,7 +104,7 @@
                     location.href = "/employee/query/BillBoardCreate";
                 },
                 getBillBoardData() {
-                    axios("/api/BillboardApi/GetBillboardList").then(response => {
+                    axios("/mobile/api/Billboard/GetList").then(response => {
                         this.allBillBoard = response.data;
                         this.originalBillBoard = response.data;
                     });

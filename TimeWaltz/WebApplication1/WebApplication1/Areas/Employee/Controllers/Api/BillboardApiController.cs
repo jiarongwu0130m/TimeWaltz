@@ -21,6 +21,17 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             _db = db;
         }
 
+        [HttpGet]
+        public object GetList()
+        {
+            return _db.Billboards.AsNoTracking().Include(x => x.Employees).Select(x => new
+            {
+                x.Id,
+                x.Employees.Name,
+                x.StartTime,
+                x.Title
+            });
+        }
 
         [HttpGet]
         public object All()

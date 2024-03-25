@@ -1,4 +1,5 @@
-﻿using Repository.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Repository.Models;
 using WebApplication1.Models.SettingViewModels;
 
 namespace WebApplication1.Services
@@ -34,7 +35,7 @@ namespace WebApplication1.Services
 
         public List<Billboard> GetBillboardList()
         {
-            return _timeWaltzDb.Billboards.ToList();
+            return _timeWaltzDb.Billboards.Include(x => x.Employees).AsNoTracking().ToList();
         }
 
         public Billboard? GetBillboardTypeOrNull(int id)
