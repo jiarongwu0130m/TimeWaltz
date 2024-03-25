@@ -45,11 +45,11 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             var UserId = User.GetId();
 
             var vacation = _vacationTypeService.GetVacationDetailsList();
-            var agent = _db.Employees.Include(x => x.Department).FirstOrDefault(x => x.Id == UserId);
+            var agent = _db.Employees.Include(x=>x.Department).FirstOrDefault(x=>x.Id == UserId).Department.Employees.ToList();
 
             var dto = new LeaveDropDownDto
             {
-                AgentDropDownList = agent.Department.Employees.Select(e => new SelectListItem
+                AgentDropDownList = agent.Select(e => new SelectListItem
                 {
                     Value = e.Id.ToString(),
                     Text = e.Name,

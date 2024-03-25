@@ -63,7 +63,6 @@ namespace WebApplication1.Controllers.Api
                 var entity = new Department
                 {
                     DepartmentName = dto.DepartmentName,
-                    //EmployeeId = dto.EmployeesId, //todo 部門主管
                 };
                 _departmentService.CreateDepartment(entity);
                 return Ok(new { status = true });

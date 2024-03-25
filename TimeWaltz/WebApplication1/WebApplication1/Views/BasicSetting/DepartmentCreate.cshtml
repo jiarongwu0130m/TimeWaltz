@@ -26,14 +26,14 @@
                                 <label name="DepartmentName" class="control-label">部門名稱</label>
                                 <input name="DepartmentName" class="form-control col-sm-3" v-model="departmentName" />
                             </div>
-                            <div class="form-group">
+                            @* <div class="form-group">
                                 <label class="control-label">部門主管</label>
                                 <select class="form-control col-sm-3" v-model="employeesId">
                                     <option value="" disabled>--請選擇--</option>
                                     <option v-for="item in employeeNameSelectList" :value="item.value">{{item.text}}</option>
                                 </select>
                                 <span class="text-danger"></span>
-                            </div>
+                            </div> *@
                         </div>
                         <div class="card-footer">
                             <input type="button" value="送出" @@click="send" class="btn btn-primary" />
@@ -62,7 +62,7 @@
                     let self = this;
                     axios.post("/api/DepartmentApi/Create", {
                         departmentName: self.departmentName,
-                        employeesId: self.employeesId,
+                        // employeesId: self.employeesId,
                     })
                         .then((response) => {
                             console.log(response)
