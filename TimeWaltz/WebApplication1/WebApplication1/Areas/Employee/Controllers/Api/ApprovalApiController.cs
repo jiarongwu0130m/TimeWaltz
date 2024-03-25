@@ -31,7 +31,8 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                 .Select(x => new
                 {
                     x.TableId,
-                    x.TableType
+                    x.TableType,
+                    x.Remark,
                 }).ToList();
             return query;
         }
@@ -299,7 +300,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                             )
                             .ToList()
                             .GroupBy(
-                                combined => new { combined.Approval.Id, combined.Approval.TableType, combined.Approval.TableId },
+                                combined => new { combined.Approval.Id, combined.Approval.TableType, combined.Approval.TableId, combined.Approval.Status },
                                 (key, group) => new
                                 {
                                     ApprovalData = group.Select(x => x.Approval).FirstOrDefault(),
@@ -315,6 +316,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                                     result.ApprovalData.Id,
                                     result.ApprovalData.TableType,
                                     result.ApprovalData.TableId,
+                                    result.ApprovalData.Status,
                                     Eid = result.ApprovalData.TableType == 0 ? result.OvertimeApp.EmployeesId :
                                           result.ApprovalData.TableType == 1 ? result.LeaveReq.EmployeesId :
                                           result.ClockIns.EmployeesId,
@@ -336,6 +338,8 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
                                     x.ApprovalData.Id,
                                     x.ApprovalData.TableType,
                                     x.ApprovalData.TableId,
+
+                                    x.ApprovalData.Status,
                                     EmployeeName = x.Employee.Name,
                                     EmployeeId = x.Employee.Id,
                                     x.ApprovalData.AgentEmployeeId,

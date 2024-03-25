@@ -1,0 +1,369 @@
+﻿@{
+    ViewBag.title = "簽核";
+}
+
+<div  id="app">
+    <div class="card" v-if=" tableType == 0 ">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>加班申請單據</span>
+            </h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row form-group basic">
+                <label class="col-form-label">申請人</label>
+                <input type="text" class="form-control" v-model="employeeName" readonly>
+
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+            <div class="row form-group basic">
+                <label class="col-form-label">加班申請期間</label>
+                <input type="text" class="form-control" value="" v-model="ovettimeRange" readonly>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+            <div class="row form-group basic">
+                <div class="chip chip-media">
+                    <i class="chip-icon bg-warning">
+                        <ion-icon name="alarm" role="img" class="md hydrated" aria-label="alarm"></ion-icon>
+                    </i>
+                    <span class="chip-label">加班時數：{{ overtimeResult }}</span>
+                </div>
+            </div>
+            <div class="row form-group basic">
+                <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" id="ovetimeCheck" v-model="status" readonly>
+                    <label class="custom-control-label" for="ovetimeCheck">加班轉補休</label>
+                </div>
+            </div>
+            <div class="row form-group basic">
+                <label class="col-form-label">加班原因</label>
+                <textarea class="form-control" rows="3"
+                          control-id="ControlID-13" v-model="reason" readonly></textarea>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="card" v-else-if="tableType==1">
+        <div class="card-header">
+            <h3 class="card-title d-flex justify-content-between">
+                <span>請假單申請單據</span>
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row form-group basic">
+                <label class="col-form-label">申請人</label>
+                <input type="text" class="form-control" disabled id="employeeName" v-model="employeeName" readonly>
+
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label">請假期間</label>
+                    <input class="form-control" v-model="timeRange" readonly>
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
+                </div>
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label" for="vacationType">假別</label>
+                    <input class="form-control" disabled id="vacationType" :value="vacationType">
+
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
+                </div>
+            </div>
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label">原因</label>
+                    <textarea disabled v-model="reason" class="form-control" rows="3"
+                              control-id="ControlID-13" readonly></textarea>
+                    <i class="clear-input">
+                        <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                    </i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="card" v-else-if="tableType==2">
+        <div class="card-header">
+
+            <h3 class="card-title d-flex justify-content-between">
+                <span>補打卡申請單據</span>
+            </h3>
+
+        </div>
+        <div class="card-body">
+
+            <div class="row form-group basic">
+                <label class="col-form-label">申請人</label>
+                <input type="text" class="form-control" v-model="employeeName" readonly>
+
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+
+            <div class="row form-group basic">
+                <label class="col-form-label">補打卡日期</label>
+                <input type="text" class="form-control" value="" v-model="additionalTime" readonly>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+
+            <div class="form-group basic">
+                <div class="input-wrapper">
+                    <label class="col-form-label">補卡時段</label>
+                    <input type="text" class="form-control" v-model="status" readonly>
+                </div>
+            </div>
+
+            <div class="row form-group basic">
+                <label class="col-form-label">補打卡原因</label>
+                <textarea class="form-control" rows="3"
+                          control-id="ControlID-13" v-model="reason" readonly></textarea>
+                <i class="clear-input">
+                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                </i>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group basic">
+        <div class="input-wrapper">
+            <label class="col-form-label text-danger">簽核備註</label>
+            <input type="text" class="form-control" v-model="approvalRemark">
+        </div>
+    </div>
+
+    <div class="row justify-content-around">
+        <button type="button" class="btn btn-dribbble" @@click="toList">
+            <ion-icon name="close-outline" role="img"
+                      class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
+        </button>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    id: '',
+                    tableType: 0,
+                    tableId: '',
+                    approvalList: [],
+                    sendStatus: 0,
+
+
+                    employeeName: '',
+                    startTime: '',
+                    endTime: '',
+                    ovettimeRange: '',
+                    status: '',
+                    reason: '',
+                    approvalStatus: '',
+                    approvalRemark: '',
+                    overtimeResult: '',
+
+
+                    //id: '',
+                    // employeeName: '',
+                    timeRange: '',
+                    vacationType: '',
+                    // reason: '',
+                    approvalEmpName: '',
+                    agentEmployeeName: '',
+                    leaveHours: '',
+                    // approvalStatus: '',
+                    // approvalRemark: '',
+
+
+
+                    // employeeName: '',
+                    additionalTime: '',
+                    // status: '',
+                    // reason: '',
+                    // ApprovalEmpName: '',
+                    shifts: [],
+                    allcompRequest: [],
+                    search: {
+                        date: '',
+                        startTime: '',
+                        endTime: '',
+                        clockStart: '',
+                        clockEnd: ''
+                    }
+                }
+            },
+            methods: {
+                //加班單
+                getOvertimeRequestData() {
+                    let self = this;
+                    axios(`/mobile/api/Overtime/GetOvertimeRequestDetail/${self.approvalList[0].tableId}`)
+                        .then(response => {
+                            console.log(response.data);
+                            self.ovettimeRange = response.data.startTime + " - " + response.data.endTime;
+                            self.employeeName = response.data.employeeName;
+                            self.startTime = response.data.startTime;
+                            self.endTime = response.data.endTime;
+                            self.status = response.data.status;
+                            self.reason = response.data.reason;
+                            self.approvalStatus = response.data.approvalStatus;
+                            self.approvalRemark = response.data.approvalRemark;
+                            self.countOvertimeMins();
+                        });
+                },
+                countOvertimeMins() {
+                    let self = this;
+                    self.overtimeResult = '';
+                    if (self.startTime && self.endTime) {
+                        const durationmilliseconds = new Date(self.endTime) - new Date(self.startTime);
+                        const durationminutes = Math.floor(durationmilliseconds / (60 * 1000));
+                        const hours = Math.floor(durationminutes / 60);
+                        const minutes = durationminutes % 60;
+                        if (hours === 0) {
+                            self.overtimeResult = `${minutes} 分鐘`;
+                        } else if (minutes === 0) {
+                            self.overtimeResult = `${hours} 小時`;
+                        } else {
+                            self.overtimeResult = `${hours} 小時 ${minutes} 分鐘`;
+                        }
+                    } else {
+                        self.overtimeResult = '';
+                    }
+                },
+
+                //請假單
+                getLeaveData() {
+                    let self = this;
+                    fetch(`/mobile/LeaveApi/Edit/${self.approvalList[0].tableId}`).then(res => res.json()).then(result => {
+                        self.agentEmployeeName = result.agentEmployeeName
+                        self.approvalEmpName = result.approvalEmpName
+                        self.approvalRemark = result.approvalRemark
+                        self.approvalStatus = result.approvalStatus
+                        self.leaveHours = result.leaveHours
+                        self.employeeName = result.employeeName
+                        self.timeRange = result.timeRange
+                        self.vacationType = result.vacationType
+                        self.reason = result.reason
+                    })
+                },
+
+                ///補打卡
+                getCompRequestData() {
+                    let self = this;
+
+                    axios.all([
+                        axios(`/mobile/api/Complement/GetCompRequestDetail/${self.approvalList[0].tableId}`),
+                        axios("/mobile/api/Complement/DropDownList")
+                    ]).then(([compRequest, dropdownList]) => {
+                        self.allcompRequest = compRequest.data;
+                        self.status = dropdownList.data.clockStatusSelectItems.filter(x => x.value == compRequest.data.status)[0]?.text;
+                        self.originalCompRequests = compRequest.data;
+                        self.additionalTime = self.allcompRequest.additionalTime.split('T')[0];
+                        self.approvalEmpName = self.allcompRequest.approvalEmpName;
+                        self.approvalStatus = self.allcompRequest.approvalStatus;
+                        self.employeeName = self.allcompRequest.employeeName;
+                        self.reason = self.allcompRequest.reason;
+                    });
+                },
+                fetchShifts() {
+                    fetch(`/api/ShiftApi/GetEmpShifts/${this.EmpId}?date=${this.search.date}`)
+                        .then(res => res.json())
+                        .then(result => {
+                            this.shifts = result;
+                            this.search.date = result[0].shiftsDate;
+                            this.search.startTime = result[0].shiftSchedule.startTime;
+                            this.search.endTime = result[0].shiftSchedule.endTime;
+                        });
+
+                    fetch(`/api/ClockApi/GetEmpClocks/${this.EmpId}?date=${this.search.date}`)
+                        .then(res => res.json())
+                        .then(results => {
+                            results.forEach(record => {
+                                if (record.status === 0) {
+                                    console.log('員工上班打卡');
+                                    this.search.clockStart = record.date;
+                                } else if (record.status === 1) {
+                                    console.log('員工下班打卡');
+                                    this.search.clockEnd = record.date;
+                                } else {
+                                    console.log('未知的打卡狀態');
+                                }
+                            });
+                        });
+                },
+
+                toList() {
+                    location.href = "/employee/query/Approval";
+                },
+                queyGetData() {
+                    let self = this
+
+                    if (self.tableType == 0) {
+                        this.getOvertimeRequestData();
+                    }
+                    else if (self.tableType == 1) {
+                        this.getLeaveData();
+                    }
+                    else if (self.tableType == 2) {
+                        this.getCompRequestData();
+                    }
+                },
+                checkId() {
+                    var url = location.pathname;
+                    var match = url.match(/\/(\d+)$/);
+
+                    if (match) {
+                        var lastNumber = parseInt(match[1]);
+                        this.id = lastNumber;
+                    } else {
+                        location.href = "/employee/Query/Approval";
+                    }
+                    let self = this
+                    axios("/mobile/api/Approval/GetApprovalData/" + self.id).then(res => {
+                        self.approvalList = res.data;
+                        self.tableType = self.approvalList[0].tableType;
+                        self.tableId = self.approvalList[0].tableId;
+                        self.approvalRemark = self.approvalList[0].approvalRemark;
+                        self.queyGetData();
+                    });
+                },
+            },
+            mounted() {
+                this.checkId();
+
+
+
+            }
+        }).mount("#app");
+
+
+    </script>
+
+}
+

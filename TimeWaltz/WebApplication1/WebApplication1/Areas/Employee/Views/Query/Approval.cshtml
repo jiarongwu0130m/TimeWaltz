@@ -50,7 +50,7 @@
                             <th>項次</th>
                             <th>表單類別</th>
                             <th>申請人</th>
-                            <th>簽核</th>
+                            <th>簽核狀態</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -59,6 +59,7 @@
                             <td>{{tableTypeName(HistoryList.tableType)}}</td>
                             <td>{{HistoryList.employeeName}}</td>
                             <td>
+                                {{tableStatus(HistoryList.status)}}|
                                 <a href="#" @@click="toDetail(HistoryList.id,$event)">詳細</a>
                             </td>
                         </tr>
@@ -110,6 +111,10 @@
                     event.preventDefault();
                     location.href = `/employee/query/ApprovalDetail/${id}`;
                 },
+                tableStatus(status) {
+                    return status === 2 ? "退回" : "簽核完成"
+                },
+
 
             },
             mounted() {
