@@ -34,8 +34,11 @@
                         <div class="form-group">
                             <label class="control-label">E-mail</label>
                             <input type="email" class="form-control col-5" :class="validation.email" v-model.lazy="email" />
-                            <div class="text-danger" v-if="!validation.gender">
+                            <div class="text-danger" v-if="!validation.emailFormat">
                                 Email格式錯誤!
+                            </div>
+                            <div class="text-danger" v-if="!validation.email">
+                                Email不可為空!
                             </div>
                         </div>
                         <div class="form-group">
@@ -62,7 +65,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit()" />
+                        <input type="button" value="送出" class="btn btn-primary" @@click="send" />
                         <a href="/BasicSetting/PersonalData" class="btn btn-outline-dark">返回</a>
                     </div>
                 </div>
@@ -94,20 +97,30 @@
                         email: null,
                         name: true,
                         shiftScheduleId: true,
+                        emailFormat: true,
                     },
                 }
             },
             watch: {
-                "email": {
-                    handler(newval, oldval) {
-                        if (newval != null) {
-                            this.validation.email = newval.includes('@@') ? "is-valid" : "is-invalid";
-                        }
-                    },
-                    immediate: false
-                },
+                "email"(nval) { this.validation.email = nval == "" },
+                "gender"(nval) { this.validation.gender = nval == "" },
+                "departmentId"(nval) { this.validation.departmentId = nval == "" },
+                "employeesNo"(nval) { this.validation.employeesNo = nval == "" },
+                "name"(nval) { this.validation.name = nval == "" },
+                "shiftScheduleId"(nval) { this.validation.shiftScheduleId = nval == "" },
+                "emailFormat"(nval) { this.validation.emailFormat = nval.includes('@@') == "" },
             },
             methods: {
+                validationForm() {
+                    if (this.validation.email == "") { this.validation.email = true; return false; }
+                    if (this.validation.gender == "") { this.validation.gender = true; return false; }
+                    if (this.validation.departmentId == "") { this.validation.departmentId = true; return false; }
+                    if (this.validation.employeesNo == -1) { this.validation.employeesNo = true; return false; }
+                    if (this.validation.name == -1) { this.validation.name = true; return false; }
+                    if (this.validation.shiftScheduleId == -1) { this.validation.shiftScheduleId = true; return false; }
+                    if (this.validation.emailFormat == "") { this.validation.emailFormat = false; return true; }
+                    return true;
+                },
                 getDateRangePicker() {
                     let self = this;
                     $('#dateInput').daterangepicker({
@@ -119,69 +132,73 @@
                         self.hireDate = start.format('YYYY-MM-DD')
                     });
                 },
-                validateAndSubmit() {
-                    let isValid = true;
-                    this.validation.name = this.name == '' ? false : true;
-                    this.validation.gender = this.gender == '' ? false : true;
-                    this.validation.departmentId = this.departmentId == '' ? false : true;
-                    this.validation.employeesNo = this.employeesNo == '' ? false : true;
-                    this.validation.shiftScheduleId = this.shiftScheduleId == null ? false : true;
-                    this.validation.email = this.email == null ? false : true;
-                    if (this.validation.name && this.validation.gender && this.validation.departmentId && this.validation.employeesNo && this.validation.email) {
-                        this.send();
-                    }
-                },
+                // validateAndSubmit() {
+                //     let isValid = true;
+                //     this.validation.name = this.name == '' ? false : true;
+                //     this.validation.gender = this.gender == '' ? false : true;
+                //     this.validation.departmentId = this.departmentId == '' ? false : true;
+                //     this.validation.employeesNo = this.employeesNo == '' ? false : true;
+                //     this.validation.shiftScheduleId = this.shiftScheduleId == null ? false : true;
+                //     this.validation.email = this.email == null ? false : true;
+                //     if (this.validation.name && this.validation.gender && this.validation.departmentId && this.validation.employeesNo && this.validation.email) {
+                //         this.send();
+                //     }
+                // },
                 send() {
-                    let self = this;
-                    fetch(`/api/PersonalDataApi/Edit/${self.id}`, {
-                        method: "POST",
-                        body: JSON.stringify({
-                            id: self.id,
-                            name: self.name,
-                            email: self.email,
-                            gender: self.gender,
-                            departmentId: self.departmentId,
-                            shiftScheduleId: self.shiftScheduleId,
-                            employeesNo: self.employeesNo,
-                            hireDate: self.hireDate,
 
-                        }),
-                        headers: {
-                            "content-type": "application/json",
-                        },
-                    }).then(res => res.json()).then(result => {
-                        console.log(result)
-                        if (result.status) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "修改成功!",
-                                confirmButtonText: '返回',
-                                showClass: {
-                                    popup: `animate__animated animate__fadeInUp animate__faster`
-                                },
-                                hideClass: {
-                                    popup: `animate__animated animate__fadeOutDown animate__faster`
-                                }
-                            }).then((result) => {
-                                if (result.value) {
-                                    location.href = "/BasicSetting/PersonalData";
-                                    this.getListData();
-                                }
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "修改失敗!",
-                                confirmButtonText: '返回',
-                                showClass: {
-                                    popup: `animate__animated animate__fadeInUp animate__faster`
-                                },
-                                hideClass: {
-                                    popup: `animate__animated animate__fadeOutDown animate__faster`
-                                }
-                            });
-                        }
-                    });
+                    if (this.validationForm()) {
+                        let self = this;
+                        fetch(`/api/PersonalDataApi/Edit/${self.id}`, {
+                            method: "POST",
+                            body: JSON.stringify({
+                                id: self.id,
+                                name: self.name,
+                                email: self.email,
+                                gender: self.gender,
+                                departmentId: self.departmentId,
+                                shiftScheduleId: self.shiftScheduleId,
+                                employeesNo: self.employeesNo,
+                                hireDate: self.hireDate,
+
+                            }),
+                            headers: {
+                                "content-type": "application/json",
+                            },
+                        }).then(res => res.json()).then(result => {
+                            console.log(result)
+                            if (result.status) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "修改成功!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                }).then((result) => {
+                                    if (result.value) {
+                                        location.href = "/BasicSetting/PersonalData";
+                                        this.getListData();
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "修改失敗!",
+                                    confirmButtonText: '返回',
+                                    showClass: {
+                                        popup: `animate__animated animate__fadeInUp animate__faster`
+                                    },
+                                    hideClass: {
+                                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    
                 },
                 getDropDownListData() {
                     let self = this;

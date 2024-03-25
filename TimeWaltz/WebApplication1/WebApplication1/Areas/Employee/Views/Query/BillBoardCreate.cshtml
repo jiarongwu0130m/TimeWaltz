@@ -184,8 +184,8 @@
                 },
                 sendBillBoard() {
                     let self = this;
-                    self.startTime = new moment(this.timeRange[0]).format('YYYY-MM-DD HH:mm').toString()
-                    self.endTime = new moment(this.timeRange[1]).format('YYYY-MM-DD HH:mm').toString()
+                    self.startTime = new moment(this.timeRange[0]).format('YYYY-MM-DDTHH:mm').toString()
+                    self.endTime = new moment(this.timeRange[1]).format('YYYY-MM-DDTHH:mm').toString()
 
                     axios.post("/mobile/api/Billboard/Create", {
                         startTime: self.startTime,
