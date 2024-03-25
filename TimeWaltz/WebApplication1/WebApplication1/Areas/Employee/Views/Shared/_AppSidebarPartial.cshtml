@@ -8,7 +8,7 @@
                         <img src="/img/logo_circle.png" alt="image" class="imaged rounded">
                     </div>
                     <div class="in">
-                        <strong>Reds Wang</strong>
+                        <strong>@User.Claims.FirstOrDefault(x => x.Type == "Name")?.Value</strong>
                         <div class="text-muted">
                             <ion-icon name="location"></ion-icon>
                             Taipei

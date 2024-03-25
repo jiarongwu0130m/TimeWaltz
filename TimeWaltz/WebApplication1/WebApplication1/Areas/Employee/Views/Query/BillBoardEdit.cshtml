@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.title = "編輯公佈欄";
 }
+
 @section Styles
 {
     <style>
@@ -41,11 +42,13 @@
             <div class="row justify-content-around">
                 <button type="button" class="btn btn-facebook" @@click="checkIsValidData">
                     <ion-icon name="checkmark-done-outline" role="img"
-                              class="md hydrated" aria-label="checkmark done outline"></ion-icon>送出
+                              class="md hydrated" aria-label="checkmark done outline">
+                    </ion-icon>送出
                 </button>
                 <button type="button" class="btn btn-dribbble" @@click="toList">
                     <ion-icon name="close-outline" role="img"
-                              class="md hydrated" aria-label="close outline"></ion-icon>瀏覽單據
+                              class="md hydrated" aria-label="close outline">
+                    </ion-icon>瀏覽單據
                 </button>
             </div>
         </div>
@@ -58,7 +61,7 @@
                     <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="checkmark circle"></ion-icon>
                 </div>
                 <div class="modal-header">
-                    <h5 class="modal-title">送出成功</h5>
+                    <h5 class="modal-title">修改成功</h5>
                 </div>
                 <div class="modal-body">
                 </div>
@@ -78,7 +81,7 @@
                     <ion-icon name="checkmark-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                 </div>
                 <div class="modal-header">
-                    <h5 class="modal-title">送出失敗</h5>
+                    <h5 class="modal-title">修改失敗</h5>
                 </div>
                 <div class="modal-body">
                 </div>
@@ -92,12 +95,14 @@
     </div>
 
 </div>
+
 @section Scripts {
     <script src="/js/ckeditor.js"></script>
     <script>
         Vue.createApp({
             data() {
                 return {
+                    postId: "",
                     empName: '',
                     startTime: '',
                     endTime: '',
@@ -118,10 +123,9 @@
                 },
                 getTimeRange() {
                     let self = this;
-
                     $('#timeRange').daterangepicker({
-                        "startDate": this.getToday(),
-                        "endDate": this.getTodayEnd(),
+                        "startDate": moment(self.startTime),
+                        "endDate": moment(self.endTime),
                         timePicker: true,
                         timePickerIncrement: 15,
                         locale: {
@@ -132,16 +136,6 @@
                             self.startTime = start;
                             self.endTime = end;
                         });
-                },
-                getToday() {
-                    let self = this;
-                    self.startTime = moment();
-                    return moment();
-                },
-                getTodayEnd() {
-                    let self = this;
-                    self.endTime = moment().day(7);
-                    return moment().day(7)
                 },
                 showCkEditor() {
                     let self = this;
@@ -158,6 +152,7 @@
                     })
                         .then(editor => {
                             editor.ui.view.editable.element.style.height = '500px';
+                            editor.setData(self.content);
                             editor.model.document.on('change:data', () => {
                                 self.content = editor.getData();
                             });
@@ -176,14 +171,13 @@
                 },
                 sendBillBoard() {
                     let self = this;
-                    self.startTime = self.startTime.utc(true).toISOString();
-                    self.endTime = self.endTime.utc(true).toISOString();
-
-                    axios.post("/mobile/api/Billboard/Create", {
+                    console.log(self.content)
+                    axios.post("/mobile/api/Billboard/Edit", {
                         startTime: self.startTime,
                         endTime: self.endTime,
                         content: self.content,
                         title: self.title,
+                        id:self.postId,
                     }).then(response => {
                         if (response.data == true) {
                             $('#DialogIconedSuccess').modal('show');
@@ -204,18 +198,20 @@
                 },
                 getBillboardData() {
                     let self = this;
-                    axios(`/mobile/api/Billboard/GetBillBoardData/${this.Id}`).then(response => {
+                    axios(`/mobile/api/Billboard/GetBillBoardData/${self.postId}`).then(response => {
                         console.log(response);
                         self.empId = response.data.employeesID;
                         self.startTime = response.data.startTime;
-                        self.originData.startTime = response.data.startTime;
                         self.endTime = response.data.endTime;
-                        self.originData.endTime = response.data.endTime;
+                        // self.originData.startTime = response.data.startTime;
+                        // self.originData.endTime = response.data.endTime;
                         self.content = response.data.content;
                         self.title = response.data.title;
-                        self.getTimeRange();
-                        self.showCkEditor();
-                    });
+                        // self.getTimeRange();
+                        // self.showCkEditor();
+                    })
+                        .then(() => self.getTimeRange())
+                        .then(() => self.showCkEditor());
                 },
                 checkId() {
                     var url = location.pathname;
@@ -223,7 +219,7 @@
 
                     if (match) {
                         var lastNumber = parseInt(match[1]);
-                        this.Id = lastNumber;
+                        this.postId = lastNumber;
 
                     } else {
                         location.href = "/employee/query/BillBoard";
@@ -234,7 +230,6 @@
                 this.checkId();
                 this.getBillboardData();
                 this.getEmpId();
-                this.getTimeRange();
             }
         }).mount("#app");
     </script>
