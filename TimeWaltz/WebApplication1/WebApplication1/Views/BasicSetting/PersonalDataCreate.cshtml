@@ -118,23 +118,23 @@
                 },
             },
             methods: {
-                getToday() {
-                    var now = moment();
-                    var newNow = now.format("YYYY-MM-DD")
-                    return newNow;
-                },
-                getDateTimeRangePicker() {
-                    let self = this;
-                    $('#hireDate').daterangepicker({
-                        "startDate": self.getToday(),
-                        singleDatePicker: true,
-                        locale: {
-                            format: 'YYYY-MM-DD'
-                        }
-                    }, function (start, _, _) {
-                        self.hireDate = start.format("YYYY-MM-DD");
-                    });
-                },
+                // getToday() {
+                //     var now = moment();
+                //     var newNow = now.format("YYYY-MM-DD")
+                //     return newNow;
+                // },
+                // getDateTimeRangePicker() {
+                //     let self = this;
+                //     $('#hireDate').daterangepicker({
+                //         "startDate": self.getToday(),
+                //         singleDatePicker: true,
+                //         locale: {
+                //             format: 'YYYY-MM-DD'
+                //         }
+                //     }, function (start, _, _) {
+                //         self.hireDate = start.format("YYYY-MM-DD");
+                //     });
+                // },
                 validateAndSubmit() {
                     let isValid = true;
                     this.validation.name = this.name == '' ? false : true;
@@ -223,8 +223,7 @@
             mounted() {
                 this.getGenderDropDownList();
                 this.getDepAndShfDropDownList();
-                this.getDateTimeRangePicker();
             }
-        }).mount("#app");
+        }).component('VueDatePicker', VueDatePicker).mount("#app");
     </script>
 }

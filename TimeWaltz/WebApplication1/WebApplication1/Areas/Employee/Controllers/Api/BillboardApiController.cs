@@ -98,6 +98,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             try
             {
                 var entity = _db.Billboards.FirstOrDefault(x => x.Id == id);
+                if (entity == null) return new BillboardEditDto();
                 var model = new BillboardEditDto
                 {
                     Id = entity.Id,
