@@ -19,7 +19,7 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public List<SpecialGradeDto> GetListData()
         {
-            var entity =  _db.SpecialGrade.ToList();
+            var entity =  _db.SpecialGrade.OrderBy(x=>x.ServiceLength).ToList();
             var models = new List<SpecialGradeDto>();
             foreach (var model in entity)
             {
