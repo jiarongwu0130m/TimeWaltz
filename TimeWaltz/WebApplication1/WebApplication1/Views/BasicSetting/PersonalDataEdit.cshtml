@@ -21,41 +21,46 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label class="control-label">姓名</label>
-                            <input class="form-control col-3" :class="validation.name" v-model="name" />
+                            <input class="form-control" :class="validation.name" v-model="name" />
                             <span class="text-danger" v-if="validation.name">姓名不得為空</span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">性別</label>
-                            <select class="form-control col-3" v-model="gender">
-                                <option v-for="item in genderSelectItems" :value="item.value">{{item.text}}</option>
+                            <select class="form-control" v-model="gender">
+                                <template v-for="(item,idx) in genderSelectItems">
+                                    <option v-if="idx==0" disabled :value="item.value">{{item.text}}</option>
+                                    <option v-else :value="item.value">{{item.text}}</option>
+                                </template>
+                                
                             </select>
                             <span class="text-danger" v-if="validation.gender">性別不得為無</span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">E-mail</label>
-                            <input type="email" class="form-control col-5" :class="validation.email" v-model="email" />
+                            <input type="email" class="form-control" :class="validation.email" v-model="email" />
                             <div class="text-danger" v-if="validation.email">
                                 Email格式不符規定或為空!
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">到職日期</label>
-                            <input type="text" id="dateInput" class="form-control col-3" :value="hireDate" />
+                            @* <input type="text" id="dateInput" class="form-control col-3" :value="hireDate" /> *@
+                            <Vue-Date-Picker v-model="hireDate" class="border-0" :enable-time-picker="false"></Vue-Date-Picker>
                         </div>
                         <div class="form-group">
                             <label class="control-label">員工編號</label>
-                            <input type="text" class="form-control col-3" v-model="employeesNo" />
+                            <input type="text" class="form-control" v-model="employeesNo" />
                         </div>
                         <div class="form-group">
                             <label class="control-label">部門</label>
-                            <select class="form-control col-3" :class="validation.departmentId" v-model="departmentId">
+                            <select class="form-control" :class="validation.departmentId" v-model="departmentId">
                                 <option v-for="item in departmentNameSelectItem" :value="item.value">{{item.text}}</option>
                             </select>
                             <span class="text-danger" v-if="validation.departmentId">部門不得為空</span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">班別</label>
-                            <select class="form-control col-3" v-model="shiftScheduleId">
+                            <select class="form-control" v-model="shiftScheduleId">
                                 <option v-for="item in shiftNameSelectItems" :value="item.value">{{item.text}}</option>
                             </select>
                             <span class="text-danger" v-if="validation.shiftScheduleId">班別不得為空</span>
@@ -83,7 +88,7 @@
                     shiftScheduleId: null,
                     hireDate: '',
                     employeesNo: '',
-                    gender: '',
+                    gender: '0',
                     email: '',
                     name: '',
                     departmentId: '',
@@ -99,27 +104,30 @@
             },
             watch: {
                 "email"(nval) { 
-                    console.log("nval", nval);
                     const regx = new RegExp(/^[A-Za-z0-9._+\-\']+@@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/);
-                    console.log("match", regx.test(nval));
                     if (nval == '' || !regx.test(nval)) {
                         this.validation.email = true
                     } else {
                         this.validation.email = false
                     }                    
                 },
-                "gender"(nval) { this.validation.gender = nval == "" },
+                "gender"(nval) { this.validation.gender = nval == "0" },
                 "departmentId"(nval) { this.validation.departmentId = nval == "" },
                 "name"(nval) { this.validation.name = nval == "" },
                 "shiftScheduleId"(nval) { this.validation.shiftScheduleId = nval == "" },
             },
             methods: {
                 validationForm() {
-                    if (this.validation.email == "") { this.validation.email = true; return false; }
-                    if (this.validation.gender == "") { this.validation.gender = true; return false; }
-                    if (this.validation.departmentId == -1) { this.validation.departmentId = true; return false; }
-                    if (this.validation.name == "") { this.validation.name = true; return false; }
-                    if (this.validation.shiftScheduleId == -1) { this.validation.shiftScheduleId = true; return false; }
+                    const regx = new RegExp(/^[A-Za-z0-9._+\-\']+@@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/);
+
+                    if (this.email == "" || !regx.test(this.email)) {
+                        this.validation.email = true;
+                        return false;
+                    }                    
+                    if (this.gender == "0") { this.validation.gender = true; return false; }
+                    if (this.departmentId == -1) { this.validation.departmentId = true; return false; }
+                    if (this.name == "") { this.validation.name = true; return false; }
+                    if (this.shiftScheduleId == -1) { this.validation.shiftScheduleId = true; return false; }
                     return true;
                 },
                 getDateRangePicker() {
