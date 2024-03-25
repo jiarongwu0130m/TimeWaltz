@@ -45,7 +45,7 @@ namespace WebApplication1.Areas.Employee.Controllers.Api
             var UserId = User.GetId();
 
             var vacation = _vacationTypeService.GetVacationDetailsList();
-            var agent = _db.Employees.Include(x=>x.Department).FirstOrDefault(x=>x.Id == UserId).Department.Employees.ToList();
+            var agent = _db.Employees.Include(x=>x.Department).ThenInclude(x => x.Employees).FirstOrDefault(x=>x.Id == UserId).Department.Employees.ToList();
 
             var dto = new LeaveDropDownDto
             {
