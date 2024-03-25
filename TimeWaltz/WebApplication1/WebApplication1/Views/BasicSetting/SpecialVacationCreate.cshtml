@@ -3,6 +3,7 @@
     ViewBag.title = "特殊假日設定 | ";
 }
 
+
 <div class="content-header">
     <div class="container-fluid">
         <div class="row">
@@ -24,20 +25,22 @@
                                 <input name="SpecialVacationName" v-model="specialVacationName" class="form-control col-3" :class="validation.specialVacationName" />
                                 <span class="text-danger" v-if="!validation.specialVacationName"></span>
                             </div>
-                            <div class="form-group">
-                                <label name="Date" class="control-label">日期</label>
-                                <input id="dateInput" name="Date" class="form-control col-3" />
-                                <span class="text-danger"></span>
+                            <div class="row form-group basic">
+                                <label class="col-form-label">日期</label>
+                                <Vue-Date-Picker v-model="date" class="form-control  border-0" :enable-time-picker="false"/>
+                                <i class="clear-input">
+                                    <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                                </i>
                             </div>
                         </div>
-                            <div class="card-footer">
-                                <div class="row">
-                                    <div class="col">
-                                        <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit" />
-                                        <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-dark">返回</a>
-                                    </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="button" value="送出" class="btn btn-primary" @@click="validateAndSubmit" />
+                                    <a asp-controller="BasicSetting" asp-action="SpecialVacation" class="btn btn-outline-dark">返回</a>
                                 </div>
                             </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -46,11 +49,12 @@
 </section>
 
 @section Scripts {
+    <script src="https://unpkg.com/@@vuepic/vue-datepicker@latest"></script>
     <script>
         Vue.createApp({
             data() {
                 return {
-                    date: null,
+                    date: '',
                     specialVacationName: '',
                     validation: {
                         specialVacationName: true,
@@ -69,8 +73,8 @@
                     let self = this;
                     console.log(this.specialVacationName, this.date)
                     axios.post('/api/specialvacationapi/create', {
-                        specialVacationName: this.specialVacationName,
-                        date: this.date,
+                        specialVacationName: self.specialVacationName,
+                        date: new moment(self.date).format('YYYY-MM-DDTHH:mm').toString(),
                     }).then((response) => {
                         if (response.status) {
                             alert('新增成功')
@@ -81,22 +85,24 @@
                     })
                         .catch((error) => console.log(error));
                 },
-                getDatePicker() {
-                    $('#dateInput').daterangepicker({
-                        singleDatePicker: true,
-                        locale: {
-                            format: 'YYYY/MM/DD'
-                        }
-                    }, function (start, _, _) {
-                        this.date = start.format('YYYY-MM-DD');
-                    });
-                },
+                // getDatePicker() {
+                //     let self = this;
+                //     $('#dateInput').daterangepicker({
+                //         singleDatePicker: true,
+                //         'startDate': this.getToday(),
+                //         locale: {
+                //             format: 'YYYY/MM/DD'
+                //         }
+                //     }, function (start, _, _) {
+                //         self.date = start.format('YYYY-MM-DD');
+                //     });
+                // },
             },
             mounted() {
-                this.getDatePicker();
+                //this.getDatePicker();
             },
 
-        }).mount('#app');
+        }).component('VueDatePicker', VueDatePicker).mount('#app');
 
 
     </script>
