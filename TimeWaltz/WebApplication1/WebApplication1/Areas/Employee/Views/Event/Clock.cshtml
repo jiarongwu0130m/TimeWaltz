@@ -162,7 +162,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="email1">上班時間</label>
-                            <input type="text" class="form-control" :value="shiftScheduleStartTime" readonly>
+                            <input type="text" class="form-control" :value="formatDate(shiftScheduleStartTime)" readonly>
                             <i class="clear-input">
                                 <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                             </i>
@@ -171,7 +171,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="password1">下班時間</label>
-                            <input type="text" class="form-control" :value="shiftScheduleEndTime" readonly>
+                            <input type="text" class="form-control" :value="formatDate(shiftScheduleEndTime)" readonly>
                             <i class="clear-input">
                                 <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                             </i>
@@ -205,6 +205,9 @@
                     }
                 },
                 methods: {
+                    formatDate(data) {
+                    return new Date(data).toLocaleTimeString()
+                    },
                     timeFormat(datetime) {
                         if (datetime) {
                             const formatter = new Intl.DateTimeFormat('zh-TW', {
