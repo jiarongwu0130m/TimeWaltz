@@ -7,13 +7,13 @@
           integrity="sha256-5veQuRbWaECuYxwap/IOE/DAwNxgm4ikX7nrgsqYp88=" crossorigin="anonymous">
 }
 <div class="secion mt-2" id="app">
-    <div class="card">
+    <div class="card h-100">
         <div class="card-header">
             <h3 class="card-title d-flex justify-content-between">
                 <span>班表查詢</span>
             </h3>
         </div>
-        <div class="card-body">
+        <div class="card-body h-100">
             <full-calendar class='demo-app-calendar' ref="calendar" :options='calendarOptions'>
             </full-calendar>
         </div>
@@ -66,6 +66,7 @@
                             center: 'title',
                             right: 'dayGridMonth,timeGridDay'
                         },
+                        height:"auto",
                         initialView: 'dayGridMonth',
                         initialEvents: [],
                         editable: true,

@@ -20,6 +20,13 @@ namespace WebApplication1.Areas.Employee.Controllers
             this.db = db;
             _userService = userService;
         }
+        
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("EmployeeAuthScheme");
+            return RedirectToAction("index","home");
+        }
         [HttpGet]
         public IActionResult Login()
         {
