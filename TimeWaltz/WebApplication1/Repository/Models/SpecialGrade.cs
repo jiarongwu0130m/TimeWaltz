@@ -14,6 +14,7 @@ public partial class SpecialGrade
     [Key]
     public int Id { get; set; }
 
+    [Precision(11, 8)]
     public decimal ServiceLength { get; set; }
 
     public int Days { get; set; }
