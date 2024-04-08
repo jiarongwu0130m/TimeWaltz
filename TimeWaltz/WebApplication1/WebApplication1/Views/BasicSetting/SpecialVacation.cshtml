@@ -62,7 +62,6 @@
                                         <a href="#" @@click="checkIsDelete(item.id, $event)" class="btn btn-outline-secondary">刪除</a>
                                     </td>
                                 </tr>
-
                             </tbody>
                         </table>
                     </div>
@@ -158,7 +157,7 @@
                     let self = this
                     event.preventDefault();
                     axios.post(`/api/specialvacationapi/Delete/${id}`).then((response) => {
-                        if (response.status) {
+                        if (response.data.status) {
                             Swal.fire({
                                 icon: "success",
                                 title: "刪除成功!",

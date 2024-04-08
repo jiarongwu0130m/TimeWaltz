@@ -89,7 +89,7 @@
                             date: self.date,
                         })
                         .then((response) => {
-                            if (response.status) {
+                            if (response.data.status) {
                                 alert('修改成功')
                                 location.href = `/basicsetting/SpecialVacation`
                             } else {

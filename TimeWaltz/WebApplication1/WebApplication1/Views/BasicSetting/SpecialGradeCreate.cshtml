@@ -57,7 +57,7 @@
                         serviceLength: this.serviceLength,
                         days: this.days,
                     }).then((response) => {
-                        if (response.status) {
+                        if (response.data.status) {
                             Swal.fire({
                                 icon: "success",
                                 title: "新增成功!",

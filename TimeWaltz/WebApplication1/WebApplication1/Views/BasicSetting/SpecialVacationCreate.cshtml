@@ -76,7 +76,7 @@
                         specialVacationName: self.specialVacationName,
                         date: new moment(self.date).format('YYYY-MM-DDTHH:mm').toString(),
                     }).then((response) => {
-                        if (response.status) {
+                        if (response.data.status) {
                             alert('新增成功')
                             location.href = '/basicsetting/specialVacation'
                         } else {

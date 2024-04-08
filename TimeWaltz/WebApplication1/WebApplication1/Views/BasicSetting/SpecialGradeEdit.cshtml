@@ -86,7 +86,7 @@
                         serviceLength: self.serviceLength,
                         days: self.days,
                     }).then((response) => {
-                        if (response.status) {
+                        if (response.data.status) {
                             Swal.fire({
                                 icon: "success",
                                 title: "編輯成功!",
